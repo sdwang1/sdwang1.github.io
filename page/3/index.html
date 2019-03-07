@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析十四之控制器类文件Controller-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/28/CodeIgniter框架源码解析十四之控制器类文件Controller-php/">CodeIgniter框架源码解析十四之控制器类文件Controller.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/28/CodeIgniter框架源码解析十四之控制器类文件Controller-php/" class="archive-article-date">
+  	<time datetime="2018-03-28T03:47:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>超级控制器类文件CI_Controller.php，这个就是我们通常所说的MVC中的C，我们在开发项目过程中开发控制器是所有的控制器类都要继承自这个文件。在经过路由分发之后，实际的应用Controller接管用户的所有请求，并负责与用户数据的交互。CI中所有的应用控制器都应该是CI_Controller的子类(除非你扩展了CI的核心，那么你的Controller父类可以是MY_Controller)。</p>
+<p>在应用控制器中，我们经常会用到这样的代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加载配置文件    </span></span><br><span class="line"><span class="keyword">$this</span>-&gt;load-&gt;config(<span class="string">"config_app"</span>);    </span><br><span class="line"><span class="comment">//加载model    </span></span><br><span class="line"><span class="keyword">$this</span>-&gt;load-&gt;model(<span class="string">"user"</span>);    </span><br><span class="line"><span class="comment">//加载视图    </span></span><br><span class="line"><span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">"index"</span>);    </span><br><span class="line"><span class="comment">//获取post    </span></span><br><span class="line"><span class="keyword">$this</span>-&gt;input-&gt;post(<span class="string">"data"</span>,<span class="keyword">true</span>);   </span><br><span class="line"><span class="comment">//清除xss    </span></span><br><span class="line"><span class="keyword">$this</span>-&gt;security-&gt;xss_clean($data);</span><br></pre></td></tr></table></figure></p>
+<p>这些是如何实现的？我们接下来就简单跟踪下，尽管这个类的结构很简单，但是这个类非常重要。我们先来看下CI框架中安全类的实现框架：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Reference to the CI singleton</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> $instance;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> &amp;<span class="title">get_instance</span><span class="params">()</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/03/28/CodeIgniter框架源码解析十四之控制器类文件Controller-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/28/CodeIgniter框架源码解析十四之控制器类文件Controller-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析十三之语言类文件Lang-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -859,88 +937,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析八之地址解析类文件URI-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/">CodeIgniter框架源码解析八之地址解析类文件URI.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/" class="archive-article-date">
-  	<time datetime="2018-03-10T08:17:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>URI类主要处理地址字符串，将uri分解成对应的片段，存到segments数组中。querystring分解后存到<code>$_GET</code>数组，ROUTER路由类在之后的解析路由动作中，也主要依靠URI类的segments属性数组来获取当前上下文的请求URI信息。为了合理的分解URI，我们有必要先简要了解下CodeIgniter URL：</p>
-<ul>
-<li>默认情况下，CodeIgniter 中的URL是基于段的方法设计的，不同于使用标准的“查询字符串”方法，形如<code>example.com/class/function/ID</code>。事实上，你的URL中默认还会包含index.php文件，比如<code>example.com/index.php/news/article/my_article</code>。</li>
-<li>如果你的config/config.php 文件中已经指定了url_suffix，比如html，那么某个页面URL可能是这个样子：<code>example.com/index.php/products/view/shoes.html</code>；</li>
-<li>如果你在application/config.php 配置文件中启用了enable_query_string,它就会通过你设置的 trigger 关键字来访问你的控制器和方法，url形如<code>index.php?c=products&amp;m=view&amp;id=345</code>;</li>
-</ul>
-<p>CI框架体系中的方法参数都是从URI片段中取的,并按顺序传递给方法参数。$config[‘uri_protocol’]配置不但决定以哪个函数处理URI，同时决定了从哪个全局变量里获取当前上下文的uri地址。其对应关系是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&apos;REQUEST_URI&apos;    使用 $_SERVER[&apos;REQUEST_URI&apos;]，取用url地址中主机头后面所有的字符</span><br><span class="line">&apos;QUERY_STRING&apos;   使用 $_SERVER[&apos;QUERY_STRING&apos;]，取用url地址中&quot;?&quot;后面的部分</span><br><span class="line">&apos;PATH_INFO&apos;      使用 $_SERVER[&apos;PATH_INFO&apos;]，取用url地址中脚本文件($_SERVER[&apos;SCRIPT_NAME&apos;])之后&quot;?&quot;之前的字符内容</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1050,15 +1046,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1074,15 +1070,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1090,15 +1082,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
             
             <div class="clearfix"></div>

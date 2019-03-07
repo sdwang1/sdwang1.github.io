@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>简单粗暴的文件上传漏洞 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。 首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：123456789101112131415161">
+  <meta name="description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：1234567891011121314151617">
 <meta name="keywords" content="网络安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简单粗暴的文件上传漏洞">
 <meta property="og:url" content="http://www.sdwangblog.cn/2018/04/04/简单粗暴的文件上传漏洞/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。 首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：123456789101112131415161">
+<meta property="og:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：1234567891011121314151617">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/upload_file_competition_vulnerability.png">
-<meta property="og:updated_time" content="2019-03-06T03:34:31.509Z">
+<meta property="og:updated_time" content="2019-03-07T01:44:29.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简单粗暴的文件上传漏洞">
-<meta name="twitter:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。 首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：123456789101112131415161">
+<meta name="twitter:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：1234567891011121314151617">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/upload_file_competition_vulnerability.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -177,7 +177,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 <strong>由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用</strong>。 首先看一段PHP代码，假设对于上传的文件可在<code>/var/www/hackable/uploads/</code>目录下找到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))&#123;</span><br><span class="line">  $target_path = $CONFIG-&gt;basePath.<span class="string">"uploads/"</span>;</span><br><span class="line">  $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  <span class="comment">// $_FILES[‘file’][‘name’] 客户端文件名称;    </span></span><br><span class="line">  $upload_name = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  $uploaded_ext = strtolower(substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>));</span><br><span class="line">  $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (in_array($uploaded_ext,[<span class="string">'jpg'</span>,<span class="string">'gif'</span>,<span class="string">'jpeg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>]) &amp;&amp; $uploaded_size &lt; <span class="number">100000</span>)&#123;</span><br><span class="line">    <span class="comment">//$_FILES[‘file’][‘tmp_name’] 文件被上传后在服务器端临时文件名，可以在php.ini中指定，脚本运行完毕，自动删除临时文件</span></span><br><span class="line">    <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $target_path))&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;'</span>.$target_path . <span class="string">' succesfully uploaded!&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Fail to move uploaded file to '</span>.$target_path;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Please upload a proper image file&lt;/pre&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 <strong>由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用</strong>。<br>首先看一段PHP代码，假设对于上传的文件可在<code>/var/www/hackable/uploads/</code>目录下找到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))&#123;</span><br><span class="line">  $target_path = $CONFIG-&gt;basePath.<span class="string">"uploads/"</span>;</span><br><span class="line">  $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  <span class="comment">// $_FILES[‘file’][‘name’] 客户端文件名称;    </span></span><br><span class="line">  $upload_name = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  $uploaded_ext = strtolower(substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>));</span><br><span class="line">  $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (in_array($uploaded_ext,[<span class="string">'jpg'</span>,<span class="string">'gif'</span>,<span class="string">'jpeg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>]) &amp;&amp; $uploaded_size &lt; <span class="number">100000</span>)&#123;</span><br><span class="line">    <span class="comment">//$_FILES[‘file’][‘tmp_name’] 文件被上传后在服务器端临时文件名，可以在php.ini中指定，脚本运行完毕，自动删除临时文件</span></span><br><span class="line">    <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $target_path))&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;'</span>.$target_path . <span class="string">' succesfully uploaded!&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Fail to move uploaded file to '</span>.$target_path;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Please upload a proper image file&lt;/pre&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上例代码看起来似乎不错，<strong>为了避免webshell上传到服务器，谨慎地——甚至“贴心地”考虑到中文名的编码问题——验证上传文件的扩展名和大小后，才将其移动到服务器target_path路径下。当然相较于不做任何验证的“裸奔者“，这算不错了，然鹅问题还是出现了，因为iconv函数在转码过程中，可能存在字符串截断问题</strong>：</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在iconv转码的过程中,utf-&gt;gb2312(其他部分编码之间转换同样存在这个问题)会导致字符串被截断，如：$filename=&quot;shell.php(hex).jpg&quot;;(hex为0x80-0x99)，经过iconv转码后会变成$filename=&quot;shell.php &quot;</span><br></pre></td></tr></table></figure>
@@ -188,7 +188,7 @@
 <h3 id="服务端MIME类型检测"><a href="#服务端MIME类型检测" class="headerlink" title="服务端MIME类型检测"></a>服务端MIME类型检测</h3><p>通过文件头content-type字段校验，验证代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>($_FILE[<span class="string">'userfile'</span>][<span class="string">'type'</span>] != <span class="string">"image/gif"</span>)&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">"sorry,we only allow uploading GIF images"</span>;</span><br><span class="line">  <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>绕过姿势：使用<a href="https://www.bookstack.cn/read/Burp_Suite_Doc_zh_cn/Burp_Suite_Documentation-Getting_Started-Launching_Burp.md" target="_blank" rel="noopener">Burp</a>截取上传数据包，修改Content-Type的值，改为image/gif即可成功绕过上传webshell</strong>。</p>
 <h3 id="服务端文件扩展名检测"><a href="#服务端文件扩展名检测" class="headerlink" title="服务端文件扩展名检测"></a>服务端文件扩展名检测</h3><p>验证代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$fileext = pathinfo($_FILE[<span class="string">'file'</span>][<span class="string">'name'</span>], PATHINFO_EXTENSION);</span><br><span class="line"><span class="keyword">if</span>(!in_array($fileext,$type))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"upload success!"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>绕过姿势1：配合Apache的.htaccess文件（.htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置）上传解析漏洞</strong>。有些服务器在上传认证没有拦截.htaccess文件上传，就会造成恶意用户利用上传.htaccess文件解析漏洞，来绕过验证进行上传WEBShell，从而达到控制网站服务器的目的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 首先我们编写一个.htaccess文件。打开记事本，编写代码“AddType application/x-httpd-php .jpg”，然后点击文件选中另存为，编写文件名为.htaccess，选择保存类型为所有文件，最后将其进行上传。</span><br><span class="line">2. 然后制造一个“一句话”木马文件，如取名为yijuhua.php。因为之前上传成功到服务器的.htaccess文件里的代码可以让 .jpg后缀名文件格式的文件名以php格式解析，因此达到了可执行的效果。所以我们把yijuhua.php文件的后缀名改为.jpg格式,让.htaccess文件解析yijuhua.jpg文件里的php代码，从而使木马上传成功并达到可执行的目的。</span><br></pre></td></tr></table></figure></p>
+<p><strong>绕过姿势1：配合Apache的.htaccess文件（.htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置）上传解析漏洞</strong>。有些服务器在上传认证没有拦截.htaccess文件上传，就会造成恶意用户利用上传.htaccess文件解析漏洞，来绕过验证进行上传WEBShell，从而达到控制网站服务器的目的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 首先我们编写一个.htaccess文件。打开记事本，编写代码“AddType application/x-httpd-php .jpg”，然后点击文件选中另存为，编写文件名为.htaccess，选择保存类型为所有文件，最后将其进行上传。</span><br><span class="line"></span><br><span class="line">2. 然后制造一个“一句话”木马文件，如取名为yijuhua.php。因为之前上传成功到服务器的.htaccess文件里的代码可以让 .jpg后缀名文件格式的文件名以php格式解析，因此达到了可执行的效果。所以我们把yijuhua.php文件的后缀名改为.jpg格式,让.htaccess文件解析yijuhua.jpg文件里的php代码，从而使木马上传成功并达到可执行的目的。</span><br></pre></td></tr></table></figure></p>
 <p><strong>绕过姿势2：Apache站上的解析缺陷绕过上传漏洞</strong>。Apache是从后面开始检查后缀，按最后一个合法后缀执行（<strong>Apache 会从文件名为x1.x2.x3的x3的位置往x1的位置开始尝试解析，如果x3不属于Apache能解析的扩展名，那么Apache会尝试去解析x2的位置，这样直往前尝试，直到遇到一个能解析的扩展名为止</strong>），整个漏洞的关键就是Apache的合法后缀到底是哪些，不是合法后缀的都可以被利用，所以将木马的后缀进行修改为允许上传的类型后，即可成功绕过验证，最终执行脚本。</p>
 <p>比如新建待上传的“一句话”木马文件命名为yijuhua.php，然后在文件后缀处添加jpg，就有可能绕过验证上传成功，然后通过菜刀类工具访问即可。</p>
 <h3 id="服务端检测文件内容"><a href="#服务端检测文件内容" class="headerlink" title="服务端检测文件内容"></a>服务端检测文件内容</h3><p>当校验规则只校验文件后缀名为asp/php/jsp的文件内容是否为木马时，<strong>绕过姿势：食用<a href="https://thief.one/2017/04/10/2/" target="_blank" rel="noopener">配合文件包含漏洞</a>，此漏洞主要存在于php中</strong>。</p>
@@ -321,11 +321,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/04/07/SQL、XML和CRLF注入攻击/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mac的Nginx+php-fpm+php5.6.3环境下升级为php7.2.4
+          SQL、XML和CRLF注入攻击
         
       </div>
     </a>
@@ -483,15 +483,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -507,15 +507,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -523,15 +519,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
             
             <div class="clearfix"></div>
