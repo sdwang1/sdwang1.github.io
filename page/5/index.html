@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-HTTP原理之服务器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/17/HTTP原理之服务器/">HTTP原理之服务器</a>
+    </h1>
+  
+
+        
+        <a href="/2018/01/17/HTTP原理之服务器/" class="archive-article-date">
+  	<time datetime="2018-01-17T01:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具<br>体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的<br>TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续<br>探究HTTP事务的目的端——Web服务器。</p>
+<p>Web服务器有着各种不同的风格，形状和尺寸，比如可以在PC机上安装并运行的通用软件Web服务器Apache，Nginx等，已经<br>预装并配置好相关程式的Web服务器设备以及某些便携式的嵌入式Web服务器。但不论功能有何差异，所有的Web 服务器都要<br>能接受请求资源的HTTP请求，将内容回送给客户端。</p>
+        
+          <a class="article-more-a" href="/2018/01/17/HTTP原理之服务器/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">HTTP原理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/17/HTTP原理之服务器/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-字符编码：ASCII，Unicode和UTF-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -843,83 +920,6 @@
 
 
   
-    <article id="post-Linux程序管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/03/Linux程序管理/">Linux程序管理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/03/Linux程序管理/" class="archive-article-date">
-  	<time datetime="2017-11-03T08:36:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在Linux系统中，当程式【通常为binary file，以实体档案的型态存在，比如/bin/cp】被触发后，执行者的权限与属性，程式的程式码等所需资料都会被载入记忆体中，作业系统会给这个记忆体内的单元一个识别码PID且依上信息给予这个PID一组有效的权限设定，即程序就是一个正在运作中的程式。Linux的程序呼叫通常为fork-and-exec的流程，即父进程以fork的方式产生一个一摸一样的子程序，然后被复制出来的子程序【继承了父进程绝大部分环境变量】以exec的方式执行实际要进行的程序，最终成为一个子程序。<br>另外，还有一些常驻在记忆体中的程序，它通常会负责一些系统所提供的功能以服务使用者各项任务，这些常驻程式就会被我们称为服务，比如crond,atd,Apache等等。</p>
-<h2 id="bash环境下的工作管理"><a href="#bash环境下的工作管理" class="headerlink" title="bash环境下的工作管理"></a>bash环境下的工作管理</h2><p>当我们登入bash后，就会取得一个名为bash的PID，而这个环境下所执行的其他指令就几乎都是所谓的子程序了。我们可以在单一终端介面下同时进行多个工作的行为管理，即job control【注：我们无法以job control的方式由tty1的环境去管理tty2的bash!】。<br>假设我们进入了一个终端界面，则出现提示字元让你操作的环境就称为前景（foreground），至于其他工作就可以放入背景（background）去暂停或运作【注：放入背景的工作运作时，必须不能与使用者互动，也不能使用ctrl+c来终止】。同时，bash只能够管理自己的工作而不能管理其他bash的工作。那么实际进行job control的指令有哪些？</p>
-        
-          <a class="article-more-a" href="/2017/11/03/Linux程序管理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/03/Linux程序管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1025,15 +1025,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1045,11 +1041,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux程序管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/03/Linux程序管理/">Linux程序管理</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/03/Linux程序管理/" class="archive-article-date">
+  	<time datetime="2017-11-03T08:36:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在Linux系统中，当程式【通常为binary file，以实体档案的型态存在，比如/bin/cp】被触发后，执行者的权限与属性，程式的程式码等所需资料都会被载入记忆体中，作业系统会给这个记忆体内的单元一个识别码PID且依上信息给予这个PID一组有效的权限设定，即程序就是一个正在运作中的程式。Linux的程序呼叫通常为fork-and-exec的流程，即父进程以fork的方式产生一个一摸一样的子程序，然后被复制出来的子程序【继承了父进程绝大部分环境变量】以exec的方式执行实际要进行的程序，最终成为一个子程序。<br>另外，还有一些常驻在记忆体中的程序，它通常会负责一些系统所提供的功能以服务使用者各项任务，这些常驻程式就会被我们称为服务，比如crond,atd,Apache等等。</p>
+<h2 id="bash环境下的工作管理"><a href="#bash环境下的工作管理" class="headerlink" title="bash环境下的工作管理"></a>bash环境下的工作管理</h2><p>当我们登入bash后，就会取得一个名为bash的PID，而这个环境下所执行的其他指令就几乎都是所谓的子程序了。我们可以在单一终端介面下同时进行多个工作的行为管理，即job control【注：我们无法以job control的方式由tty1的环境去管理tty2的bash!】。<br>假设我们进入了一个终端界面，则出现提示字元让你操作的环境就称为前景（foreground），至于其他工作就可以放入背景（background）去暂停或运作【注：放入背景的工作运作时，必须不能与使用者互动，也不能使用ctrl+c来终止】。同时，bash只能够管理自己的工作而不能管理其他bash的工作。那么实际进行job control的指令有哪些？</p>
+        
+          <a class="article-more-a" href="/2017/11/03/Linux程序管理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/03/Linux程序管理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-学习Shell-Scripts" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -862,83 +939,6 @@
 
 
   
-    <article id="post-vim编辑器的常用按键说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/13/vim编辑器的常用按键说明/">vim编辑器的常用按键说明</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/13/vim编辑器的常用按键说明/" class="archive-article-date">
-  	<time datetime="2017-10-13T06:25:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vim编辑器作为Linux上面预设的程式编辑命令，相信大家都有简单的使用经历。事实上除了简单的i,[Esc],:wq之外，vi还有非常多的按键可以使用哦。vi的三种模式只有一般指令模式可以与编辑、指令列模式切换，编辑模式与指令模式之间不能切换。</p>
-<h2 id="一般指令模式可用的按钮说明"><a href="#一般指令模式可用的按钮说明" class="headerlink" title="一般指令模式可用的按钮说明"></a>一般指令模式可用的按钮说明</h2><p>一般指令模式可用的按钮说明：游标移动，复制粘贴，搜寻替代等；</p>
-        
-          <a class="article-more-a" href="/2017/10/13/vim编辑器的常用按键说明/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/13/vim编辑器的常用按键说明/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -1044,15 +1044,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1064,11 +1060,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
