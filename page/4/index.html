@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析十之输出类文件Output-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/">CodeIgniter框架源码解析十之输出类文件Output.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/" class="archive-article-date">
+  	<time datetime="2018-03-14T02:16:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一般情况下，你可能根本就不会注意到输出类，因为它无需你的干涉， 对你来说完全是透明的。例如，当你使用 加载器 加载一个视图文件时，它会自动传入到输出类，并在系统执行的最后由 CodeIgniter 自动调用。尽管如此，输出类依然是核心类，它的主要功能就是负责向浏览器输出最终结果，如果你开启缓存，它也负责缓存你的 Web 页面。</p>
+<p>⏸️这里不妨也先暂停思考下，如果要负责响应内容到客户端和处理缓存，你写时要打算如何处理呢？。。。。。。</p>
+<p>Output类主要功能负责向浏览器输出最终结果，其中包括从缓存加载内容输出，根据控制器方法产生的内容输出，还包括写缓存、设置头信息、加载CI内部分析器，其结构和方法属性功能描述如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Final output string</span></span><br><span class="line"><span class="keyword">public</span> $final_output;</span><br><span class="line"><span class="comment">//Cache expiration time</span></span><br><span class="line"><span class="keyword">public</span> $cache_expiration = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//List of server headers</span></span><br><span class="line"><span class="keyword">public</span> $headers = <span class="keyword">array</span>();</span><br><span class="line"><span class="comment">//List of mime types</span></span><br><span class="line"><span class="keyword">public</span> $mimes =	<span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Mime-type for the current page</span></span><br><span class="line"><span class="keyword">protected</span> $mime_type = <span class="string">'text/html'</span>;</span><br><span class="line"><span class="comment">//Enable Profiler flag 性能分析器</span></span><br><span class="line"><span class="keyword">public</span> $enable_profiler = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//php.ini zlib.output_compression flag</span></span><br><span class="line"><span class="keyword">protected</span> $_zlib_oc = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//CI output compression flag</span></span><br><span class="line"><span class="keyword">protected</span> $_compress_output = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//List of profiler sections</span></span><br><span class="line"><span class="keyword">protected</span> $_profiler_sections =	<span class="keyword">array</span>();</span><br><span class="line"><span class="comment">//Parse markers flag 分析器变量解析</span></span><br><span class="line"><span class="comment">//Whether or not to parse variables like &#123;elapsed_time&#125; and &#123;memory_usage&#125;.</span></span><br><span class="line"><span class="keyword">public</span> $parse_exec_vars = <span class="keyword">TRUE</span>;</span><br><span class="line"><span class="comment">//mbstring.func_overload flag</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> $func_overload;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析九之路由类文件Router-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -864,91 +942,9 @@
 
 
   
-    <article id="post-PHP安全地获取随机字符串" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/22/PHP安全地获取随机字符串/">PHP安全地获取随机字符串</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/22/PHP安全地获取随机字符串/" class="archive-article-date">
-  	<time datetime="2018-01-22T02:21:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们在日常工作编程中很多场景都会用到获取随机字符串，比如登录时输入的验证码，发送短信验证码，生成随机且唯一订单号等等，这都需要一种简单且安全的解决方案来生成这些随机整数或字符串。对于这种“屡见不鲜”的任务，一些开发人员甚至“自行操刀”设计出了一些随机算法，但却很少有人能正确完成任务，比如涉及到的安全敏感信息的处理（为用户生成随机密码)。</p>
-<h2 id="随机生成器类型"><a href="#随机生成器类型" class="headerlink" title="随机生成器类型"></a>随机生成器类型</h2><p>现有的web 应用程序中使用的随机数生成器，主要可分为两大类：弱随机生成器和强随机生成器，即如下两种。其实这里所谓的“强弱”，是指生成的随机数是否可重复，是否可预测。</p>
-<ul>
-<li>伪随机数生成器, 比如 php 的 rand()、mt_rand()【较rand()随机性更强、更快】、uniqid()和 lcg_value ()；</li>
-<li>密码学安全的伪随机数生成器, 比如/devp/urandom 和 CryptGenRandom；</li>
-</ul>
-<p>事先说明，所有的随机数生成器软件生成 “伪随机” 值，而不是真正的 “随机” 值。这是因为数字计算机是确定性的, 没有专门的硬件来产生真正的随机性，除非你有充分的理由关心这种区别, 否则你可以把这些术语当作可以互换的术语来对待。</p>
-        
-          <a class="article-more-a" href="/2018/01/22/PHP安全地获取随机字符串/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/22/PHP安全地获取随机字符串/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 
@@ -1051,10 +1047,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -1063,7 +1055,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1075,19 +1075,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1095,7 +1087,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">

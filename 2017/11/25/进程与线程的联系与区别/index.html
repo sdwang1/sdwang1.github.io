@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>进程与线程的联系与区别 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如分分钟的多用户请求】。为此就要考虑下”多任务程序设计模式”了，比如多进程程序与多线程程序【事实上一般二者兼用】。">
+  <meta name="description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如高并发的的用户请求】。为此就要考虑下 “多任务程序设计模式” 了，比如多进程程序与多线程程序【事实上一般二者兼用">
 <meta name="keywords" content="随笔">
 <meta property="og:type" content="article">
 <meta property="og:title" content="进程与线程的联系与区别">
 <meta property="og:url" content="http://www.sdwangblog.cn/2017/11/25/进程与线程的联系与区别/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如分分钟的多用户请求】。为此就要考虑下”多任务程序设计模式”了，比如多进程程序与多线程程序【事实上一般二者兼用】。">
+<meta property="og:description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如高并发的的用户请求】。为此就要考虑下 “多任务程序设计模式” 了，比如多进程程序与多线程程序【事实上一般二者兼用">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/process_cpu_status.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/process_life_cycle.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/thread_life_cycle.png">
-<meta property="og:updated_time" content="2017-11-28T02:10:29.861Z">
+<meta property="og:updated_time" content="2019-03-10T12:34:46.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="进程与线程的联系与区别">
-<meta name="twitter:description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如分分钟的多用户请求】。为此就要考虑下”多任务程序设计模式”了，比如多进程程序与多线程程序【事实上一般二者兼用】。">
+<meta name="twitter:description" content="前言近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如高并发的的用户请求】。为此就要考虑下 “多任务程序设计模式” 了，比如多进程程序与多线程程序【事实上一般二者兼用">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/process_cpu_status.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -179,29 +179,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的<br>create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比<br>如分分钟的多用户请求】。为此就要考虑下”多任务程序设计模式”了，比如多进程程序与多线程程序【事实上一般二者兼用】。</p>
-<p>关于”进程与线程的区别”，偶大体上是有些认知的，但如果要考虑系统层面如何实现两种技术及其各自的性能和实现代价，就不<br>得不探究得更细致些了，此也为该篇文章的来由。另注文中大部分信息来自网络资源，如设计侵权等情况，望告知，吾会及时修改。</p>
-<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>对于操作系统而言，进程是核心之核心，整个现代操作系统的根本。当你启动某项服务/应用程序（application）时，它一般是<br>由一个或多个相互协作的进程组成的，比如Visual Studio开发环境就是利用一个进程编辑源文件，并利用另一个进程完成编译<br>工作的应用程序。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期捣鼓《http原理》的时候，接触到了”Web Socket编程”。直观来讲socket API操作原理很简单【比如ServerClient的create，bind，listen，accept，read，write】，但原理只是原始的单进程同步阻塞，完全没考虑实际使用场景啊喂【比如高并发的的用户请求】。为此就要考虑下 <strong>“多任务程序设计模式”</strong> 了，比如多进程程序与多线程程序【事实上一般二者兼用】。</p>
+<p>关于 <strong>“进程与线程的区别”</strong>，我们大体上是有些认知的，但如果要考虑系统层面如何实现两种技术及其各自的性能和实现代价，就不得不探究得更细致些了，此也为该篇文章的来由。另注文中大部分信息来自网络资源，如设计侵权等情况，望告知，吾会及时修改。</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p><strong>对于操作系统而言，进程是核心之核心，整个现代操作系统的根本</strong>。当你启动某项服务/应用程序（application）时，它一般是由一个或多个相互协作的进程组成的，比如Visual Studio开发环境就是利用一个进程编辑源文件，并利用另一个进程完成编译工作的应用程序。</p>
 <a id="more"></a>
-<p>每个进程被创建时，系统都会为他分配存储空间等必要资源，然后在内核管理区为该进程创建管理结点，以便CPU控制调度执<br>行。大部分操作系统的任务调度是采用时间片轮转的抢占调度方式，即一个任务被执行一小段时间【时间片】后就强制暂停去<br>执行下一个任务，每个任务轮流执行，从而给人一种是多个任务在“同时进行”的感觉。其中任务正在执行的状态叫运行状态，<br>任务执行一段时间后被强制暂停的状态就是就绪状态，等待下一个属于它的时间片到来。<br><img src="http://www.sdwangblog.cn/blogimg/process_cpu_status.png" alt><br>稍引申下哦，根据上面的描述，您是不是觉得CPU似乎“同一时间点只能让一个任务在执行”？其实这是不全面的，在多核处理器<br>的情况下，一个处理器被集成多个运算核心，每个处理核心对应一个内核线程KLT。现在的电脑一般都是双核四线程、四核八线<br>程，这是因为采用超线程技术将一个物理处理核心模拟成两个逻辑处理核心，从而对应出两个内核线程。</p>
-<p>进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是操作系统进行资源分配和调度的一个独立单位，<br>是应用程序运行的载体。进程一般由程序、数据集合（程序执行时所需要的数据和工作区）和进程控制块（PCB，进程的描述<br>信息和控制信息，是进程存在的唯一标志）三部分组成。</p>
-<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>早期中的操作系统中并没有线程的概念，进程就是能拥有资源和独立运行的最小单位，但随着计算机发展对CPU要求越来越高，<br>进程间切换开销较大【CPU加载上下文+CPU执行+CPU保存上下文】，已经无法满足越来越复杂的程序要求了，于是发明了”<br>线程”。<br>线程是程序执行中的单一顺序控制流程，是处理器调度的最小单位。一个进程可以有一个或多个线程，同个进程下的各个线<br>程之间共享其所在进程的内存空间（包括代码段，数据集，堆等）及一些进程级资源（如打开文件和信号），这使得他们间<br>很容易实现相互通讯。除此共性外，一个标准的线程由线程ID，当前指令指针PC，寄存器组和线程堆栈（错误返回码，线<br>程信号屏蔽码，线程优先级）组成，这些特性使得他们能被并发执行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">    int detachstate;    //线程的分离状态</span><br><span class="line">    int schedpolicy;    //线程调度策略</span><br><span class="line">    struct sched_param schedparam;    //线程调度参数</span><br><span class="line">    int inheritsched;    //线程的继承性</span><br><span class="line">    int scope;    //线程的作用域</span><br><span class="line">    size_t guardsize;    //线程栈末尾的警戒缓冲区大小</span><br><span class="line">    int stackaddr_set;</span><br><span class="line">    void * stackaddr;    //线程栈的位置</span><br><span class="line">    size_t stacksize;    //线程栈的大小</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>每个进程被创建时，系统都会为他分配存储空间等必要资源，然后在内核管理区为该进程创建管理结点，以便CPU控制调度执行</strong>。大部分操作系统的任务调度是采用时间片轮转的抢占调度方式，即一个任务被执行一小段时间【时间片】后就强制暂停去执行下一个任务，每个任务轮流执行，从而给人一种是多个任务在“同时进行”的感觉。其中任务正在执行的状态叫运行状态，任务执行一段时间后被强制暂停的状态就是就绪状态，等待下一个属于它的时间片到来。<br><img src="http://www.sdwangblog.cn/blogimg/process_cpu_status.png" alt><br>稍引申下哦，根据上面的描述，您是不是觉得 <strong>CPU似乎“同一时间点只能让一个任务在执行”？其实这是不全面的，在多核处理器的情况下，一个处理器被集成多个运算核心，每个处理核心对应一个内核线程KLT</strong>。现在的电脑一般都是双核四线程、四核八线程，这是因为采用超线程技术将一个物理处理核心模拟成两个逻辑处理核心，从而对应出两个内核线程。</p>
+<p><strong>进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是操作系统进行资源分配和调度的一个独立单位，是应用程序运行的载体。进程一般由程序、数据集合（程序执行时所需要的数据和工作区）和进程控制块（PCB，进程的描述信息和控制信息，是进程存在的唯一标志）三部分组成</strong>。</p>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>早期中的操作系统中并没有线程的概念，进程就是能拥有资源和独立运行的最小单位，但随着计算机发展对CPU要求越来越高，进程间切换开销较大【CPU加载上下文+CPU执行+CPU保存上下文】，已经无法满足越来越复杂的程序要求了，于是发明了”线程”。</p>
+<p><strong>线程是程序执行中的单一顺序控制流程，是处理器调度的最小单位。一个进程可以有一个或多个线程，同个进程下的各个线程之间共享其所在进程的内存空间（包括代码段，数据集，堆等）及一些进程级资源（如打开文件和信号），这使得他们间很容易实现相互通讯</strong>。除此共性外，一个标准的线程由线程ID，当前指令指针PC，寄存器组和线程堆栈（错误返回码，线程信号屏蔽码，线程优先级）组成，这些特性使得他们能被并发执行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">    int detachstate;    //线程的分离状态</span><br><span class="line">    int schedpolicy;    //线程调度策略</span><br><span class="line">    struct sched_param schedparam;    //线程调度参数</span><br><span class="line">    int inheritsched;    //线程的继承性</span><br><span class="line">    int scope;    //线程的作用域</span><br><span class="line">    size_t guardsize;    //线程栈末尾的警戒缓冲区大小</span><br><span class="line">    int stackaddr_set;</span><br><span class="line">    void * stackaddr;    //线程栈的位置</span><br><span class="line">    size_t stacksize;    //线程栈的大小</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>此处线程栈的空间开辟在所属进程的堆区，线程与其所属进程共享进程的用户空间，所以线程栈之间可以互访。</p>
-<h2 id="进程与线程的区别"><a href="#进程与线程的区别" class="headerlink" title="进程与线程的区别"></a>进程与线程的区别</h2><h3 id="二者的相同点"><a href="#二者的相同点" class="headerlink" title="二者的相同点"></a>二者的相同点</h3><p>无论是进程还是线程，都是程序员用来实现多任务并发的技术手段。二者都具有各自的实体（process or thread），都可以独<br>立调度（他们所具有的状态也非常相似），所以在系统层面上都可以通过技术手段实现二者的控制。<strong>同时在多任务程序中，子进<br>程(子线程)的调度一般与父进程(父线程)平等竞争。</strong><br><img src="http://www.sdwangblog.cn/blogimg/process_life_cycle.png" alt><br><img src="http://www.sdwangblog.cn/blogimg/thread_life_cycle.png" alt></p>
+<h2 id="进程与线程的区别"><a href="#进程与线程的区别" class="headerlink" title="进程与线程的区别"></a>进程与线程的区别</h2><h3 id="二者的相同点"><a href="#二者的相同点" class="headerlink" title="二者的相同点"></a>二者的相同点</h3><p>无论是进程还是线程，都是程序员用来实现多任务并发的技术手段。二者都具有各自的实体（process or thread），都可以独立调度（他们所具有的状态也非常相似），所以在系统层面上都可以通过技术手段实现二者的控制。<strong>同时在多任务程序中，子进程(子线程)的调度一般与父进程(父线程)平等竞争。</strong><br><img src="http://www.sdwangblog.cn/blogimg/process_life_cycle.png" alt><br><img src="http://www.sdwangblog.cn/blogimg/thread_life_cycle.png" alt></p>
 <h3 id="实现方式的差异"><a href="#实现方式的差异" class="headerlink" title="实现方式的差异"></a>实现方式的差异</h3><p>从上文对进程与线程的概念性描述中，我们可以看出：</p>
 <ul>
 <li>线程是程序执行的最小单位，而进程是操作系统分配资源的最小单位；</li>
 <li>进程个体（资源）间相互独立，但同个进程下的各个线程之间共享程序的内存空间(包括代码段、数据集、堆等)及一些进程级的资<br>源(如打开文件和信号)，某进程内的线程在其它进程中不可见；</li>
 <li>一个进程由一个或多个线程组成，线程是一个进程中代码的不同执行路线：一方面，当操作系统创建一个进程后，该进程会自动申<br>请一个名为主线程或或首要线程的线程，类似于main函数进程，其后所有线程都是他的子线程；另一方面线程只能归属一个进程且它<br>只能访问该进程所拥有的资源（CPU要调度运行某个任务需要有资源，那最起码得有个进程吧）；</li>
 </ul>
-<p>简而言之，<strong>进程的个体间是完全独立的，而线程间是彼此依存的（线程上下文切换比进程上下文切换要快得多）。在多进程环境<br>中，任何一个进程的终止，都不会影响到其他进程。在多线程环境中，主/父线程一旦终止，全部子线程被迫终止(没有了资源)。<br>除此外任何一个子线程终止一般不会影响其他线程，除非子线程执行了exit()系统调用——任何一个子线程执行exit()，全部线程<br>同时灭亡。</strong></p>
-<p>从实际实现角度讲，编写多进程程序时采用调用fork函数<code>pid_t fork(void)</code>，创建子进程实体（fork将父进程的全部资源复制<br>给了子进程），而创建线程时并不使用clone函数<code>int clone(int (*fn)(void *), void *child_stack, int flags, 
-void *arg, ...)</code>，是采用线程库函数，比如POSIX线程库。</p>
-<h3 id="多任务程序设计模式的区别"><a href="#多任务程序设计模式的区别" class="headerlink" title="多任务程序设计模式的区别"></a>多任务程序设计模式的区别</h3><p>由于多进程环境间完全独立，需要做到资源独立管理时就有了天然优势，而线程就显得麻烦多了。比如多进程的TCP程序的服务<br>端，父进程accept()一个客户端连接请求后会返回一个新建立的连接的描述符DES，此时如果fork()一个子进程，将DES带入<br>到子进程空间去处理该连接的请求，父进程就继续accept等待别的客户端连接请求。这样设计非常简练，而且父进程可以用同<br>一变量(val)保存accept()的返回值，因为子进程是复制val到自己空间，父进程再覆盖此前的值不影响子进程工作。但是如<br>果换成多线程，父线程就不能复用一个变量val多次执行accept()了。因为子线程与父线程共享进程的存储空间，如果子线程<br>在读取val时父线程接受了另一个客户端请求覆盖了该值，则子线程无法继续处理上一次的连接任务了（子线程可以及时复制val<br>的值在自己的栈区，但父线程必须保证子线程复制动作完成之后再执行新的accept()，然而因为子线程与父线程的调度是独立<br>的，父线程无法知道子线程何时复制完毕。这就需要得线程间通信，子线程复制完成后主动通知父线程。这样一来父线程的处理<br>动作必然不能连贯，比起多进程环境，父线程显得效率有所下降。</p>
-<p>另一方面，看似缺点的资源不独立，在有的情况下就成了优点。多进程环境间完全独立，要实现通信的话就得采用进程间的通信<br>方式（通常是较耗时的）。而同个进程下的多线程则不用任何手段数据就是共享的，但当多个子线程在同时执行写入操作时需要<br>实现互斥，否则数据就写“脏”了。</p>
+<p>简而言之，<strong>进程的个体间是完全独立的，而线程间是彼此依存的（线程上下文切换比进程上下文切换要快得多）。在多进程环境中，任何一个进程的终止，都不会影响到其他进程。在多线程环境中，主/父线程一旦终止，全部子线程被迫终止(没有了资源)。除此外任何一个子线程终止一般不会影响其他线程，除非子线程执行了exit()系统调用——任何一个子线程执行exit()，全部线程同时灭亡。</strong></p>
+<p>从实际实现角度讲，编写多进程程序时采用调用fork函数<code>pid_t fork(void)</code>，创建子进程实体（fork将父进程的全部资源复制给了子进程），而创建线程时并不使用clone函数<code>int clone(int (*fn)(void *), void *child_stack, int flags, void *arg, ...)</code>，是采用线程库函数，比如POSIX线程库。</p>
+<h3 id="多任务程序设计模式的区别"><a href="#多任务程序设计模式的区别" class="headerlink" title="多任务程序设计模式的区别"></a>多任务程序设计模式的区别</h3><p>由于多进程环境间完全独立，需要做到资源独立管理时就有了天然优势，而线程就显得麻烦多了。比如 <strong>多进程的TCP程序的服务端，父进程accept()一个客户端连接请求后会返回一个新建立的连接的描述符DES，此时如果fork()一个子进程，将DES带入到子进程空间去处理该连接的请求，父进程就继续accept等待别的客户端连接请求。这样设计非常简练，而且父进程可以用同一变量(val)保存accept()的返回值，因为子进程是复制val到自己空间，父进程再覆盖此前的值不影响子进程工作。<br>但是如果换成多线程，父线程就不能复用一个变量val多次执行accept()了。因为子线程与父线程共享进程的存储空间，如果子线程在读取val时父线程接受了另一个客户端请求覆盖了该值，则子线程无法继续处理上一次的连接任务了（子线程可以及时复制val的值在自己的栈区，但父线程必须保证子线程复制动作完成之后再执行新的accept()，然而因为子线程与父线程的调度是独立的，父线程无法知道子线程何时复制完毕。这就需要得线程间通信，子线程复制完成后主动通知父线程。这样一来父线程的处理动作必然不能连贯，比起多进程环境，父线程显得效率有所下降</strong>。</p>
+<p>另一方面，看似缺点的资源不独立，在有的情况下就成了优点。多进程环境间完全独立，要实现通信的话就得采用进程间的通信方式（通常是较耗时的）。而同个进程下的多线程则不用任何手段数据就是共享的，但当多个子线程在同时执行写入操作时需要实现互斥，否则数据就写“脏”了。</p>
 <h3 id="实体间通信方式不同"><a href="#实体间通信方式不同" class="headerlink" title="实体间通信方式不同"></a>实体间通信方式不同</h3><ul>
 <li>进程间的通信方式有如下几种：<br>A.共享内存    B.消息队列    C.信号量    D.有名管道    E.无名管道    F.信号<br>G.文件        H.socket</li>
-<li>线程间的通信方式上述进程间的方式都可沿用，且还有自己独特的几种：<br>A.互斥量      B.自旋锁      C.条件变量  D.读写锁      E.线程信号<br>G.全局变量<h3 id="个体间辈分关系的迥异"><a href="#个体间辈分关系的迥异" class="headerlink" title="个体间辈分关系的迥异"></a>个体间辈分关系的迥异</h3>进程的辈分关系森严，在父进程没有结束前，所有的子进程都尊从父子关系，可使用pstree命令打印进程树。<br>多线程间的关系没有那么严格，不管是父线程还是子线程创建了新的线程，都是共享主线程的资源，所以都可以说是父线程的子线程，可以理解为<br>只存在一个父线程，其余线程都是父线程的子线程。</li>
+<li>线程间的通信方式上述进程间的方式都可沿用，且还有自己独特的几种：<br>A.互斥量      B.自旋锁      C.条件变量  D.读写锁      E.线程信号<br>G.全局变量<h3 id="个体间辈分关系的迥异"><a href="#个体间辈分关系的迥异" class="headerlink" title="个体间辈分关系的迥异"></a>个体间辈分关系的迥异</h3></li>
+<li>进程的辈分关系森严，在父进程没有结束前，所有的子进程都尊从父子关系，可使用pstree命令打印进程树。</li>
+<li>多线程间的关系没有那么严格，<strong>不管是父线程还是子线程创建了新的线程，都是共享主线程的资源，所以都可以说是父线程的子线程，可以理解为只存在一个父线程，其余线程都是父线程的子线程</strong>。</li>
 </ul>
 
       
@@ -475,10 +477,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -487,7 +485,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -499,19 +505,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,7 +517,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">

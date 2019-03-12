@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-一种高级的DoS攻击-Hash碰撞攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">一种高级的DoS攻击-Hash碰撞攻击</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/" class="archive-article-date">
+  	<time datetime="2019-03-10T01:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着RESTful风格的接口普及，程序员默认都会使用json作为数据传递的方式。json格式的数据冗余少，兼容性高，从提出到现在已被广泛的使用，可以说成为了Web的一种标准。无论我们服务端使用什么语言，我们拿到json格式的数据之后都需要做 <strong>jsonDecode(),将json串转换为json对象，而对象默认会存储于Hash Table，而Hash Table很容易被碰撞攻击。也就是说，我们只要将攻击数据（大量的经过“特殊构造”的碰撞数据）放在json中，服务端程序在做jsonDecode()时必定中招，中招后CPU会立刻飙升至100%，从而能达到DoS的目的</strong>。</p>
+<h2 id="背景知识：哈希表"><a href="#背景知识：哈希表" class="headerlink" title="背景知识：哈希表"></a>背景知识：哈希表</h2><p>哈希表是一种查找效率极高的数据结构，PHP中的哈希表用于表示Array数据类型，在Zend虚拟机内部也用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。<br>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为 <strong>碰撞（collision）</strong>。哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，<strong>第一种是根据某种原则将被碰撞数据定为到其它桶</strong>，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；<strong>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树）</strong>，所有碰撞的数据以某种数据结构的形式组织起来。<br>PHP是使用 <strong>单链表存储碰撞的数据</strong>，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。<br><img src="http://www.sdwangblog.cn/blogimg/php_hash_collision.png" alt></p>
+        
+          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP读出Docx文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -897,87 +974,9 @@
 
 
   
-    <article id="post-HTM-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/08/HTM-Tutorial/">HTM Tutorial</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/08/HTM-Tutorial/" class="archive-article-date">
-  	<time datetime="2018-07-08T09:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>HTML(HyperText Markup Language)超文本标记语言</strong>，由一系列的元素（Opening tag,Closing tag,Content）组成，您可以使用它来封装、包装或标记内容的不同部分，使其以某种方式显示，或以某种方式执行。总而言之，<strong>HTML用于告诉浏览器如何构造您访问的页面</strong>。对于后端开发者，因实际使用场景的限制（比如前后端分离而不常实践前端）或许成不了“熟能生巧”的前端“老师傅”，然HTML+CSS+JavaScript亦须作为基本技能掌握。本文的定位就是一篇“入门篇”的HTML概述。</p>
-<h2 id="分析HTML文档"><a href="#分析HTML文档" class="headerlink" title="分析HTML文档"></a>分析HTML文档</h2><p>HTML文件的基本结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;                                   #声明文档类型</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;                                  #根元素标签，lang为文档设定主语言</span><br><span class="line">  &lt;head&gt;                                            </span><br><span class="line">      &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">      &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<p>分析如下：</p>
-        
-          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HTML</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1080,10 +1079,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -1092,7 +1087,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1104,19 +1107,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,7 +1119,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
