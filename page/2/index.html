@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP的数据库扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/31/PHP的数据库扩展/">PHP的数据库扩展</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/31/PHP的数据库扩展/" class="archive-article-date">
+  	<time datetime="2018-07-31T10:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>绝大多数时候你的 PHP 程序都需要使用数据库来长久地保存数据，这时你有一些不同的选择可以来连接并与数据库进行交互。在 <strong>PHP 5.1.0</strong> 之前，我们推荐的方式是使用例如 <a href="http://php.net/mysqli" target="_blank" rel="noopener">mysqli</a>，<a href="http://php.net/pgsql" target="_blank" rel="noopener">pgsql</a>，<a href="http://php.net/mssql" target="_blank" rel="noopener">mssql</a> 等原生驱动。<br>原生驱动是 <strong>在只使用一个数据库的情况下是不错选择</strong>，但如果你同时使用了 MySQL 和一点点 MSSQL，或者你需要使用 Oracle 的数据库，那你就不能够只使用一个数据库驱动了。你需要为每一个数据库去学习各自不同的 API——这样做显然不科学。</p>
+<h2 id="MySQL扩展"><a href="#MySQL扩展" class="headerlink" title="MySQL扩展"></a>MySQL扩展</h2><p>PHP中的<a href="http://php.net/manual/zh/mysql.php" target="_blank" rel="noopener">mysql</a>扩展已经不再进行新的开发了，<strong>在PHP5.0版本中正式标记为废弃，并在7.0正式被移除</strong>。想要辨别 mysql 是否被使用，你不需要到 php.ini 去查看。只需要使用编辑器打开你的项目，然后全局搜索 <code>mysql_*</code> ，如果有类似 mysql_connect() 或者 mysql_query() 方法出现，那么你就使用了 mysql。<br>mysql扩展为连接MySQL4.1之前版本编写，<strong>不支持Bind Column（易于被SQL Injection）和事务等特性</strong>，后来为解决注入风险问题发展出了 <strong>mysql_escape_string(5.3.0之后弃用)以及mysql_real_escape_string()</strong>，但整个叙述变得复杂且丑陋，而且如果机位多了，可以想见会是怎样情形。。。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql_connect($db_host, $db_user, $db_password);  </span><br><span class="line">mysql_select_db($dn_name);</span><br><span class="line"></span><br><span class="line">$query = sprintf(<span class="string">"SELECT * FROM users WHERE user='%s' AND password='%s'"</span>,  </span><br><span class="line">            mysql_real_escape_string($user),  </span><br><span class="line">            mysql_real_escape_string($password));  </span><br><span class="line"></span><br><span class="line">mysql_query($query);</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-HTM-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -851,83 +928,6 @@
 
 
   
-    <article id="post-简单粗暴的文件上传漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/04/简单粗暴的文件上传漏洞/">简单粗暴的文件上传漏洞</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/04/简单粗暴的文件上传漏洞/" class="archive-article-date">
-  	<time datetime="2018-04-04T02:36:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 <strong>由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用</strong>。<br>首先看一段PHP代码，假设对于上传的文件可在<code>/var/www/hackable/uploads/</code>目录下找到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))&#123;</span><br><span class="line">  $target_path = $CONFIG-&gt;basePath.<span class="string">"uploads/"</span>;</span><br><span class="line">  $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  <span class="comment">// $_FILES[‘file’][‘name’] 客户端文件名称;    </span></span><br><span class="line">  $upload_name = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  $uploaded_ext = strtolower(substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>));</span><br><span class="line">  $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (in_array($uploaded_ext,[<span class="string">'jpg'</span>,<span class="string">'gif'</span>,<span class="string">'jpeg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>]) &amp;&amp; $uploaded_size &lt; <span class="number">100000</span>)&#123;</span><br><span class="line">    <span class="comment">//$_FILES[‘file’][‘tmp_name’] 文件被上传后在服务器端临时文件名，可以在php.ini中指定，脚本运行完毕，自动删除临时文件</span></span><br><span class="line">    <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $target_path))&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;'</span>.$target_path . <span class="string">' succesfully uploaded!&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Fail to move uploaded file to '</span>.$target_path;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Please upload a proper image file&lt;/pre&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上例代码看起来似乎不错，<strong>为了避免webshell上传到服务器，谨慎地——甚至“贴心地”考虑到中文名的编码问题——验证上传文件的扩展名和大小后，才将其移动到服务器target_path路径下。当然相较于不做任何验证的“裸奔者“，这算不错了，然鹅问题还是出现了，因为iconv函数在转码过程中，可能存在字符串截断问题</strong>：</p>
-        
-          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1025,11 +1025,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1038,14 +1042,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1061,11 +1057,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1073,11 +1069,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">

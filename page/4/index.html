@@ -152,6 +152,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP输出缓冲区-output-buffer探究" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">PHP输出缓冲区(output buffer)探究</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/15/PHP输出缓冲区-output-buffer探究/" class="archive-article-date">
+  	<time datetime="2018-03-15T02:16:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下内容主要转载自<a href="http://gywbd.github.io/posts/2015/1/php-output-buffer-in-deep.html" target="_blank" rel="noopener">深入理解php的输出缓冲区(output buffer)</a>。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP的输出流包含很多字节，通常都是程序员要PHP输出的文本，这些文本大多是echo语句或者printf()函数输出的。大家可能知道PHP中有一个名为“输出缓冲层”的东西【ob_start,ob_end_flush等系列函数】，那么它到底是个什么东西？PHP内部是怎么实现它的？以及在PHP程序中怎么使用它？事先声明，我们要讨论的东西是基于PHP 5.4（及以上版本），PHP中的OB层从5.4版开始就发生了很多变化，确切说是完全重写了，有些地方可能都不兼容PHP 5.3了。</p>
+<p>对于PHP中的输出缓冲区，你要知道三点内容：</p>
+<ul>
+<li>PHP程序任何会输出点什么东西的函数都会用到输出缓冲区。如果你是编写PHP扩展，你使用的函数（C函数）可能会直接将输出写到SAPI缓冲区层，而不需要经过OB层。你可以在源文件main/php_output.h中了解到这些C函数的API文档，这个文件给我们提供了很多其他的信息，例如默认的缓冲区大小。</li>
+<li>输出缓冲层不是唯一作用于缓冲输出的层，它实际上是只是很多层中的一个；</li>
+<li>输出缓冲层的行为跟你使用的SAPI(web or cli)相关，不同的SAPI可能有不同的行为；</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析十之输出类文件Output-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -866,82 +949,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析一之入口文件index-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/">CodeIgniter框架源码解析一之入口文件index.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/" class="archive-article-date">
-  	<time datetime="2018-02-23T09:32:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>index.php作为CI框架的入口文件，源码分析，自然而然由此开始。在源码分析的过程中，我们并不会逐行进行解释，而只解释核心的功能和实现，如果英文水平很好的话，读过index.php文件的英文注释之后也就基本明白了index.php都做了些什么。基于CodeIgniter-v3.1.7最新版本进行解读分析，index.php文件大体上一共完成了四项工作：<br>① 设置框架应用的环境状态<br>② 配置系统、应用、视图等程序目录<br>③ 系统、应用、视图等目录的正确性验证<br>④ 载入 core/CodeIgniter.php框架核心文件，启动框架</p>
-        
-          <a class="article-more-a" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1039,11 +1046,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1052,14 +1063,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1075,11 +1078,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1087,11 +1090,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">

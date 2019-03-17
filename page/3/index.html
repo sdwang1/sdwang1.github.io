@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-简单粗暴的文件上传漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/04/简单粗暴的文件上传漏洞/">简单粗暴的文件上传漏洞</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/04/简单粗暴的文件上传漏洞/" class="archive-article-date">
+  	<time datetime="2018-04-04T02:36:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 <strong>由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用</strong>。<br>首先看一段PHP代码，假设对于上传的文件可在<code>/var/www/hackable/uploads/</code>目录下找到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))&#123;</span><br><span class="line">  $target_path = $CONFIG-&gt;basePath.<span class="string">"uploads/"</span>;</span><br><span class="line">  $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  <span class="comment">// $_FILES[‘file’][‘name’] 客户端文件名称;    </span></span><br><span class="line">  $upload_name = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  $uploaded_ext = strtolower(substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>));</span><br><span class="line">  $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (in_array($uploaded_ext,[<span class="string">'jpg'</span>,<span class="string">'gif'</span>,<span class="string">'jpeg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>]) &amp;&amp; $uploaded_size &lt; <span class="number">100000</span>)&#123;</span><br><span class="line">    <span class="comment">//$_FILES[‘file’][‘tmp_name’] 文件被上传后在服务器端临时文件名，可以在php.ini中指定，脚本运行完毕，自动删除临时文件</span></span><br><span class="line">    <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $target_path))&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;'</span>.$target_path . <span class="string">' succesfully uploaded!&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Fail to move uploaded file to '</span>.$target_path;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Please upload a proper image file&lt;/pre&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上例代码看起来似乎不错，<strong>为了避免webshell上传到服务器，谨慎地——甚至“贴心地”考虑到中文名的编码问题——验证上传文件的扩展名和大小后，才将其移动到服务器target_path路径下。当然相较于不做任何验证的“裸奔者“，这算不错了，然鹅问题还是出现了，因为iconv函数在转码过程中，可能存在字符串截断问题</strong>：</p>
+        
+          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析十六之加载器类文件Loader-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -848,89 +925,6 @@
 
 
   
-    <article id="post-PHP输出缓冲区-output-buffer探究" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">PHP输出缓冲区(output buffer)探究</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/15/PHP输出缓冲区-output-buffer探究/" class="archive-article-date">
-  	<time datetime="2018-03-15T02:16:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下内容主要转载自<a href="http://gywbd.github.io/posts/2015/1/php-output-buffer-in-deep.html" target="_blank" rel="noopener">深入理解php的输出缓冲区(output buffer)</a>。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP的输出流包含很多字节，通常都是程序员要PHP输出的文本，这些文本大多是echo语句或者printf()函数输出的。大家可能知道PHP中有一个名为“输出缓冲层”的东西【ob_start,ob_end_flush等系列函数】，那么它到底是个什么东西？PHP内部是怎么实现它的？以及在PHP程序中怎么使用它？事先声明，我们要讨论的东西是基于PHP 5.4（及以上版本），PHP中的OB层从5.4版开始就发生了很多变化，确切说是完全重写了，有些地方可能都不兼容PHP 5.3了。</p>
-<p>对于PHP中的输出缓冲区，你要知道三点内容：</p>
-<ul>
-<li>PHP程序任何会输出点什么东西的函数都会用到输出缓冲区。如果你是编写PHP扩展，你使用的函数（C函数）可能会直接将输出写到SAPI缓冲区层，而不需要经过OB层。你可以在源文件main/php_output.h中了解到这些C函数的API文档，这个文件给我们提供了很多其他的信息，例如默认的缓冲区大小。</li>
-<li>输出缓冲层不是唯一作用于缓冲输出的层，它实际上是只是很多层中的一个；</li>
-<li>输出缓冲层的行为跟你使用的SAPI(web or cli)相关，不同的SAPI可能有不同的行为；</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1028,11 +1022,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1041,14 +1039,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1064,11 +1054,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1076,11 +1066,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
