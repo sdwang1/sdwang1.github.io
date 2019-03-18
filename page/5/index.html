@@ -636,8 +636,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>URL是因特网资源的标准化名称，HTTP规范将更通用的概念URI作为其资源标识符，但实际上HTTP应用程序处理的只是<br>URI的URL子集。URL定义了用户所需的特定资源，它位于何处以及如何获取它。</p>
-<h2 id="URL的语法"><a href="#URL的语法" class="headerlink" title="URL的语法"></a>URL的语法</h2><p>URL提供了一种定位网络任意资源的手段，这些资源可以通过各种不同的方案（比如HTTP，FTP，SMTP）访问，故URL语<br>法会随方案的不同而有所不同。事实上，大部分URL都遵循通用的URL语法，而且不同URL方案的风格和语法都有不少重<br>叠。大多数URL方案的URL语法都建立在这个由9部分构成的通用格式上：<br><code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code><br>几乎没有哪个URL包含了所有这些组件，URL最重要的三部分就是：方案，主机和路径。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>URL是因特网资源的标准化名称，HTTP规范将更通用的概念URI作为其资源标识符，但实际上HTTP应用程序处理的只是URI的URL子集。URL定义了用户所需的特定资源，它位于何处以及如何获取它。</p>
+<h2 id="URL的语法"><a href="#URL的语法" class="headerlink" title="URL的语法"></a>URL的语法</h2><p>URL提供了一种定位网络任意资源的手段，这些资源可以通过各种不同的方案（比如HTTP，FTP，SMTP）访问，故URL语法会随方案的不同而有所不同。事实上，大部分URL都遵循通用的URL语法，而且不同URL方案的风格和语法都有不少重叠。大多数URL方案的URL语法都建立在这个由9部分构成的通用格式上：<br><code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code><br>几乎没有哪个URL包含了所有这些组件，URL最重要的三部分就是：方案，主机和路径。</p>
         
           <a class="article-more-a" href="/2017/12/14/HTTP原理之URL与资源/#more">more >></a>
         
@@ -846,29 +846,30 @@
 
 
   
-    <article id="post-PHP-socket编程初窥" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-DNS协议详解及其解析过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/28/PHP-socket编程初窥/">PHP Socket编程初窥</a>
+      <a class="article-title" href="/2017/12/04/DNS协议详解及其解析过程/">DNS协议详解及其解析过程</a>
     </h1>
   
 
         
-        <a href="/2017/11/28/PHP-socket编程初窥/" class="archive-article-date">
-  	<time datetime="2017-11-28T02:12:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-28</time>
+        <a href="/2017/12/04/DNS协议详解及其解析过程/" class="archive-article-date">
+  	<time datetime="2017-12-04T08:15:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期鼓捣《http连接管理》的时候，接触到了”TCP 套接字编程”。Socket API允许用户创建TCP/UDP的端点数据结构，将这些端<br>点与远程服务器的TCP/UDP进行连接，并对数据流进行读写。<strong>本质上讲，Socket API只是一组调用接口，它隐藏了所有底层网<br>络协议的握手细节，以及传输层数据流与IP分组之间的分段和重装细节。它的出现使得程序员能方便的使用TCP/IP协议栈，是对<br>TCP/IP协议的抽象，算不得什么协议级别，大体处于以下的层次关系：</strong><br><img src="http://www.sdwangblog.cn/blogimg/socket_api_level.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>计算机在网络上进行的通讯大部分是基于TCP/IP的，而TCP/IP是基于IP地址的，也就是说它只能识别如“202.96.134.133”之类的IP地址。我们很难记住10个以上IP地址（32位点分十进制表示）的网站，更多是直接在浏览器地址栏中输入域名，就能看到所访问网站的页面。这就是因为DNS(Domain Name System)，即域名系统自动地把我们的域名“翻译”成了相应的IP地址（<strong>类比通信录的“人名与电话号码”</strong>），然后调出IP地址所对应的网页。</p>
+<h2 id="域名结构"><a href="#域名结构" class="headerlink" title="域名结构"></a>域名结构</h2><p>域名系统并不像电话号码通讯录那么简单，在因特网上域名与IP地址之间是 <strong>一一对应</strong> 的，为了达到唯一性的目的，因特网在域名命名的时候 <strong>采用了层次结构的命名方法</strong>。每一个域名都是一个标号序列（labels），用字母、数字（0-9）和连接符（-）组成，标号序列总长度不能超过255个字符。它由点号<code>.</code>分割成一个个的标号（label），每个标号应该在63个字符之内，每个标号都可以看成一个层次的域名（<strong>一个完整的域名由2个或者2个以上的部分组成</strong>）。<br>其中从右至左，第一个<code>.</code>右边部分称为“顶级域名”，也称为一级域名；顶级域名的左边字串到下一个<code>.</code>为止称为“二级域名”。。。。。。依次类推，父级域名会控制它直属下级的域名分配。<br><img src="http://www.sdwangblog.cn/blogimg/domain_space_structure.png" alt></p>
         
-          <a class="article-more-a" href="/2017/11/28/PHP-socket编程初窥/#more">more >></a>
+          <a class="article-more-a" href="/2017/12/04/DNS协议详解及其解析过程/#more">more >></a>
         
       
 
@@ -882,7 +883,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
         		</li>
       		
 		</ul>
@@ -892,7 +893,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/28/PHP-socket编程初窥/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/12/04/DNS协议详解及其解析过程/">展开全文 >></a>
         </p>
       
 
@@ -1019,19 +1020,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1055,6 +1060,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
@@ -1063,23 +1076,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
             
             <div class="clearfix"></div>
