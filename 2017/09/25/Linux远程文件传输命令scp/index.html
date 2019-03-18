@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言在不同的主机间互相备份数据或者迁移数据应该是很屡见不鲜的事情，比如某些情况下目标机上可能已经安装了Nginx或者类似的web server，您可以直接将要传输的文件放到web server目录下，然后在主机上执行如下命令即可。wget https://www.vpser.net/testfile.zip但若目标机上没有安装web server,那可能就要用到一些文件传输相关的协议或命令了。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-21T08:51:29.045Z">
+<meta property="og:updated_time" content="2019-03-18T07:00:01.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux远程文件传输命令scp">
 <meta name="twitter:description" content="前言在不同的主机间互相备份数据或者迁移数据应该是很屡见不鲜的事情，比如某些情况下目标机上可能已经安装了Nginx或者类似的web server，您可以直接将要传输的文件放到web server目录下，然后在主机上执行如下命令即可。wget https://www.vpser.net/testfile.zip但若目标机上没有安装web server,那可能就要用到一些文件传输相关的协议或命令了。">
@@ -185,7 +185,7 @@
 </ul>
 <p>FTP 不受操作系统的限制，但毕竟是早期文件传输协议，存在很多的<a href="http://www.oschina.net/news/25415/ftp-died" target="_blank" rel="noopener"><strong>令人诟病缺点</strong></a>，不建议使用。</p>
 <h3 id="SFTP协议"><a href="#SFTP协议" class="headerlink" title="SFTP协议"></a>SFTP协议</h3><p><code>SFTP(secure file transfer protocol)</code>：安全文件传输协议，SFTP作为SSH的一部分，同样是使用加密传输认证信息和传输数据的方式。现有的SSH软件包中，一般都会包含SFTP(Secure File Transfer Protocol)的安全文件传输子系统。</p>
-<p>关于SSH的相关原理介绍，可以参见<a href="http://www.sdwangblog.cn/2017/09/20/%E4%BA%86%E8%A7%A3SSH%E5%8E%9F%E7%90%86%E4%B8%8E%E8%BF%90%E7%94%A8/"><strong>了解SSH原理与运用</strong></a></p>
+<p>关于SSH的相关原理介绍，可以参见<a href="http://www.sdwangblog.cn/2017/04/20/%E4%BA%86%E8%A7%A3SSH%E5%8E%9F%E7%90%86%E4%B8%8E%E8%BF%90%E7%94%A8/"><strong>了解SSH原理与运用</strong></a></p>
 <h3 id="scp命令"><a href="#scp命令" class="headerlink" title="scp命令"></a>scp命令</h3><p><code>SCP(secure copy)命令</code>：基于ssh登陆进行安全的远程文件拷贝命令，整个复制过程加密，使用和ssh相同的认证方式。</p>
 <h2 id="scp命令使用方法"><a href="#scp命令使用方法" class="headerlink" title="scp命令使用方法"></a>scp命令使用方法</h2><p><code>scp [可选参数] file_source file_target</code></p>
 <p>可选参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-1： 强制scp命令使用协议ssh1</span><br><span class="line">-2： 强制scp命令使用协议ssh2</span><br><span class="line">-4： 强制scp命令只使用IPv4寻址</span><br><span class="line">-6： 强制scp命令只使用IPv6寻址</span><br><span class="line">-B： 使用批处理模式（传输过程中不询问传输口令或短语）</span><br><span class="line">-C： 允许压缩。（将-C标志传递给ssh，从而打开压缩功能）</span><br><span class="line">-p：保留原文件的修改时间，访问时间和访问权限。</span><br><span class="line">-q： 不显示传输进度条。</span><br><span class="line">-r： 递归复制整个目录。</span><br><span class="line">-v：详细方式显示输出。scp和ssh(1)会显示出整个过程的调试信息。这些信息用于调试连接，验证和配置问题。</span><br><span class="line">-c cipher： 以cipher将数据传输进行加密，这个选项将直接传递给ssh。</span><br><span class="line">-F ssh_config： 指定一个替代的ssh配置文件，此参数直接传递给ssh。</span><br><span class="line">-i identity_file： 从指定文件中读取传输时使用的密钥文件，此参数直接传递给ssh。</span><br><span class="line">-l limit： 限定用户所能使用的带宽，以Kbit/s为单位。</span><br><span class="line">-o ssh_option： 如果习惯于使用ssh_config(5)中的参数传递方式</span><br><span class="line">-P port：注意是大写的P, port是指定数据传输用到的端口号</span><br><span class="line">-S program： 指定加密传输时所使用的程序。此程序必须能够理解ssh(1)的选项。</span><br></pre></td></tr></table></figure></p>
@@ -464,19 +464,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -484,7 +476,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -492,11 +484,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -504,7 +496,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -512,7 +512,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
