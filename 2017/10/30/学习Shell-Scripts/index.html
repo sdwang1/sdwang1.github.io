@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shellscripts来处理伺服器的侦测，不会进行大量运算的需求。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-06T02:04:28.277Z">
+<meta property="og:updated_time" content="2019-03-18T07:56:57.995Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习Shell scripts">
 <meta name="twitter:description" content="前言shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shellscripts来处理伺服器的侦测，不会进行大量运算的需求。">
@@ -175,12 +175,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法<br>与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。<br>它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shell<br>scripts来处理伺服器的侦测，不会进行大量运算的需求。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。<br>它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shellscripts来处理伺服器的侦测，不会进行大量运算的需求。</p>
 <h2 id="Shell-Script简单示例"><a href="#Shell-Script简单示例" class="headerlink" title="Shell Script简单示例"></a>Shell Script简单示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir bin;cd bin;</span><br><span class="line">$ vim hello.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#Program:</span><br><span class="line">#   This program shows &quot;Hello World!&quot; in your screen.</span><br><span class="line">#History:</span><br><span class="line"># 2015/07/16 VBird First release</span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin</span><br><span class="line">export PATH</span><br><span class="line">echo -e &quot;Hello World! \a\n&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p>以上这个简单示例可以分解为如下五部分组成：</p>
 <ol>
-<li>第一行#!/bin/bash在宣告这个script使用的shell名称，比如在这个程式被执行时，它能够载入bash的相关环境设定档（一<br>般来说就是non-login shell的～/.bashrc）并且执行bash来使脚本中的指令能够执行。</li>
-<li>除了第一行的『 #! 』是用來宣告shell的之外，其他的#都是『注解』用途，一般来说建议习惯性说明该script的：内容与功<br>能；版本资讯；建档日期；历史记录；作者与联络方式等等。</li>
+<li>第一行#!/bin/bash在宣告这个script使用的shell名称，比如在这个程式被执行时，它能够载入bash的相关环境设定档（一般来说就是non-login shell的～/.bashrc）并且执行bash来使脚本中的指令能够执行。</li>
+<li>除了第一行的『 #! 』是用來宣告shell的之外，其他的#都是『注解』用途，一般来说建议习惯性说明该script的：内容与功能；版本资讯；建档日期；历史记录；作者与联络方式等等。</li>
 <li>主要环境参数的宣告：建议务必将一些必要的环境参数设定好，比如PATH，LANG等，如此就可以直接下达一些外部指令啦；</li>
 <li>主要程式部分；</li>
 <li>执行成果告知（定义回传值）；</li>
@@ -192,11 +192,10 @@
 <li>相对路径：假设工作目录在~/bin，则使用./hello.sh来执行；</li>
 <li>参数【PATH】功能：将hello.sh放在PATH指定的目录内，比如~/bin/，直接输入hello.sh即可执行；</li>
 </ul>
-<p><strong>以bash程式来执行，通过『 bash hello.sh 』或『 sh hello.sh 』【/bin/sh其实就是/bin/bash链接档】来执行，此时你的<br>hello.sh只要具有r权限即可被执行；</strong><br>以上面这两种方式来下达脚本时，该script都会使用一个新的bash环境来执行脚本内的命令，即script是在子程<br>序的bash内执行的，也就是说，当子程序完成后，在子程序内的各项参数或动作将会结束而不会传回到父程序中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sh hello.sh</span><br><span class="line">Hello World !</span><br></pre></td></tr></table></figure></p>
-<p>以此为类比，在<code>认识与学习BASH</code>一节我们还提到过一种利用source（.）来执行脚本，<code>它是直接在父程序中执行，
-即各项动作都会在原本的bash内生效</code>。</p>
-<p><strong>Shell script的预设参数($0,$1…)</strong><br>除此之外，你可能还常用这种形式来执行脚本，举个例子，如果你想要重启系统的网络，可以这样做<br><code>$ /etc/init.d/network restart</code>，那么script是怎么实现这个功能的呢？<br>script针对参数已经有设定好一些参数名称了，对应如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/path/to/scriptname opt1 opt2 opt3 opt4</span><br><span class="line">       $0           $1    $2  $3    $4</span><br></pre></td></tr></table></figure></p>
-<p>这样只要我们在script里面善用$1的话，就可以如上形式简单的立即下达某些指令功能了。除了这些数字的参数<br>之外，还有一些较为特殊的参数可以在script内使用，如下：</p>
+<p><strong>以bash程式来执行，通过『 bash hello.sh 』或『 sh hello.sh 』【/bin/sh其实就是/bin/bash链接档】来执行，此时你的hello.sh只要具有r权限即可被执行；</strong><br>以上面这两种方式来下达脚本时，该script都会使用一个新的bash环境来执行脚本内的命令，即script是在子程序的bash内执行的，也就是说，当子程序完成后，在子程序内的各项参数或动作将会结束而不会传回到父程序中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sh hello.sh</span><br><span class="line">Hello World !</span><br></pre></td></tr></table></figure></p>
+<p>以此类比，在<code>认识与学习BASH</code>一节我们还提到过一种利用source（.）来执行脚本，<code>它是直接在父程序中执行，即各项动作都会在原本的bash内生效</code>。</p>
+<p><strong>Shell script的预设参数($0,$1…)</strong><br>除此之外，你可能还常用这种形式来执行脚本，举个例子，如果你想要重启系统的网络，可以这样做<code>$ /etc/init.d/network restart</code>，那么script是怎么实现这个功能的呢？<br>script针对参数已经有设定好一些参数名称了，对应如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/path/to/scriptname opt1 opt2 opt3 opt4</span><br><span class="line">       $0           $1    $2  $3    $4</span><br></pre></td></tr></table></figure></p>
+<p>这样只要我们在script里面善用$1的话，就可以如上形式简单的立即下达某些指令功能了。除了这些数字的参数之外，还有一些较为特殊的参数可以在script内使用，如下：</p>
 <ul>
 <li><code>$#</code>：代表后接的參數『个数』，以上表為例這裡顯示為『 4 』；</li>
 <li><code>&quot;$@&quot;</code> ：代表『 “$1” “$2” “$3” “$4” 』之意，每個参数是獨立的(用双／单引號括起來)；</li>
@@ -204,7 +203,7 @@
 </ul>
 <p><strong>再来一个示例：通过bc计算pi</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">declare -i total=$&#123;firstnu&#125;*$&#123;secnu&#125;</span><br><span class="line">var=$((運算內容))    都仅支持到整数</span><br><span class="line"></span><br><span class="line">$ vim cal_pi.sh</span><br><span class="line">#!bin/bash</span><br><span class="line">#Provram</span><br><span class="line">#   User input a scale number to calculate pi number.</span><br><span class="line">#History:</span><br><span class="line"># 2017/07/16 VBird First release</span><br><span class="line">PATH=/bin:/sbin/:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin</span><br><span class="line">export PATH</span><br><span class="line">echo -e &quot;This program will calculate pi value\n&quot;</span><br><span class="line">echo -e &quot;You should input a float number to calculate pi value.\n&quot;</span><br><span class="line">read -p &quot;The scale number(10-1000)? &quot; checking</span><br><span class="line">num=$&#123;checking:-&quot;10&quot;&#125;       #开始判断是否有输入数值</span><br><span class="line">echo -e &quot;Starting calculate pi value. Be patient&quot;</span><br><span class="line">time echo &quot;scale=$&#123;num&#125;;4*a(1)&quot; | bc -lq</span><br></pre></td></tr></table></figure></p>
 <p>其中4*a(1)是bc主动提供的一个计算pi的函数，scale则是bc计算结果保留几位小数的意思。</p>
-<h2 id="善用判断式"><a href="#善用判断式" class="headerlink" title="善用判断式"></a>善用判断式</h2><p>在以前的章节中，我们知道<code>$?</code>代表上个命令的返回值，也透过&amp;&amp;及||来作为前一个指令执行回传值对于后一个<br>指令是否要进行的依据。。。那么除此外，是否有更简单的方式来进行【条件判断】呢？</p>
+<h2 id="善用判断式"><a href="#善用判断式" class="headerlink" title="善用判断式"></a>善用判断式</h2><p>在以前的章节中，我们知道<code>$?</code>代表上个命令的返回值，也透过&amp;&amp;及||来作为前一个指令执行回传值对于后一个指令是否要进行的依据。。。那么除此外，是否有更简单的方式来进行【条件判断】呢？</p>
 <h3 id="利用test指令的测试功能"><a href="#利用test指令的测试功能" class="headerlink" title="利用test指令的测试功能"></a>利用test指令的测试功能</h3><ul>
 <li>关于某个档名的【档案类型】判断：</li>
 </ul>
@@ -640,23 +639,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -664,15 +651,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -684,7 +679,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -692,15 +687,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
             
             <div class="clearfix"></div>

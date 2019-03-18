@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="命令概览很多时候，为了便于查阅或统计资料，我们可能需要将其格式化输出，不必要重新以vim编辑，这就要配合下面的printf及awk命令了。 格式化打印命令：printf举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？Name     Chinese">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2017-10-23T01:25:59.000Z">
+<meta property="og:updated_time" content="2019-03-18T07:39:55.645Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux格式化文件命令-printf-awk命令">
 <meta name="twitter:description" content="命令概览很多时候，为了便于查阅或统计资料，我们可能需要将其格式化输出，不必要重新以vim编辑，这就要配合下面的printf及awk命令了。 格式化打印命令：printf举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？Name     Chinese">
@@ -176,7 +176,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p>很多时候，为了便于查阅或统计资料，我们可能需要将其格式化输出，不必要重新以vim编辑，这就要配合下面的printf及awk命令了。</p>
-<h3 id="格式化打印命令：printf"><a href="#格式化打印命令：printf" class="headerlink" title="格式化打印命令：printf"></a>格式化打印命令：printf</h3><p>举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定<br>(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？<br>Name     Chinese   English   Math    Average<br>DmTsai        80        60     92      77.33<br>VBird         75        55     80      70.00<br>Ken           60        90     70      73.33</p>
+<h3 id="格式化打印命令：printf"><a href="#格式化打印命令：printf" class="headerlink" title="格式化打印命令：printf"></a>格式化打印命令：printf</h3><p>举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？<br>Name     Chinese   English   Math    Average<br>DmTsai        80        60     92      77.33<br>VBird         75        55     80      70.00<br>Ken           60        90     70      73.33</p>
 <p><strong>printf 就是幫我們將資料輸出的結果格式化的指令：<code>printf &#39;列印格式&#39; 实际内容</code>。</strong></p>
 <a id="more"></a>
 <ul>
@@ -188,7 +188,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#將剛剛上頭資料的檔案 (printf.txt) 內容僅列出姓名與成績：(用 [tab] 分隔)</span><br><span class="line">$ printf &apos;%s\t %s\t %s\t %s\t %s\t \n&apos; $(cat printf.txt)  &lt;==printf不是管道命令</span><br><span class="line">Name     Chinese         English         Math    Average</span><br><span class="line">DmTsai   80      60      92      77.33</span><br><span class="line">VBird    75      55      80      70.00</span><br><span class="line">Ken      60      90      70      73.33</span><br><span class="line"></span><br><span class="line">#由于标头长度的关系，显示似乎叉位了，不要方，我们将每个档位固定长度就好啦</span><br><span class="line">$ printf &apos;%10s %5i %5i %5i %8.2f \n&apos; $(cat printf.txt | grep -v Name)</span><br></pre></td></tr></table></figure>
 <p>printf除了格式化处理外，还可以依据ASCII的数字与原形对应来显示资料：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ printf &apos;\x45\n&apos;</span><br><span class="line">E</span><br></pre></td></tr></table></figure></p>
 <p>看到这里，是不是觉得printf似乎没什么重要的？但如果你要自行撰写一些软件需要将资料漂亮输出的话，printf是一个很不错的选择哦。</p>
-<h3 id="资料处理工具：awk命令"><a href="#资料处理工具：awk命令" class="headerlink" title="资料处理工具：awk命令"></a>资料处理工具：awk命令</h3><p>相较于sed作用于一整行的处理，awk更倾向于逐行地将一行中分出数个【档位】来处理，一般用来处理小型的数据资料，其通常<br>的工作模式如下：<code>awk &#39;条件类型1{动作1} 条件类型2{动作2} ...&#39; filename</code>。<br>1.awk在处理『每一行的欄位內的資料』，预设的『欄位的分隔符號為 “空白鍵” 或 “[tab]鍵” 』；<br>2.awk后面接两个单引号并加上大括號 {} 來設定想要對資料進行的處理動作；<br>3.awk支持管道命令，可以处理指定的档案，也可以读取来自指令的standard output；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#用last将前五位登录者的资料列出来</span><br><span class="line">$ last -n 5 &lt;==僅取出前五行</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Tue Jul 14 17:32   still logged in</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 23:36 - 02:58  (03:22)</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 17:23 - 23:36  (06:12)</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 08:02 - 08:17  (00:14)</span><br><span class="line">dmtsai   tty1                      Fri May 29 11:55 - 12:11  (00:15)</span><br><span class="line"></span><br><span class="line"># 若我想要取出帳號與登入者的 IP ，且帳號與 IP 之間以 [tab] 隔開</span><br><span class="line">$ last -n 5 | awk &apos;&#123;print $1 &quot;\t&quot; $3&#125;&apos;     &lt;==不論哪一行都要處理，就不需要有 &quot;條件類型&quot; 的限制</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  Fri         &lt;==是不是感觉怪怪的，这个资料格式导致的，所以使用awk时，要先确定下资料中的连续性资料没有空格或 [tab] 在內</span><br></pre></td></tr></table></figure></p>
+<h3 id="资料处理工具：awk命令"><a href="#资料处理工具：awk命令" class="headerlink" title="资料处理工具：awk命令"></a>资料处理工具：awk命令</h3><p>相较于sed作用于一整行的处理，awk更倾向于逐行地将一行中分出数个【档位】来处理，一般用来处理小型的数据资料，其通常的工作模式如下：<code>awk &#39;条件类型1{动作1} 条件类型2{动作2} ...&#39; filename</code>。<br>1.awk在处理『每一行的欄位內的資料』，预设的『欄位的分隔符號為 “空白鍵” 或 “[tab]鍵” 』；<br>2.awk后面接两个单引号并加上大括號 {} 來設定想要對資料進行的處理動作；<br>3.awk支持管道命令，可以处理指定的档案，也可以读取来自指令的standard output；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#用last将前五位登录者的资料列出来</span><br><span class="line">$ last -n 5 &lt;==僅取出前五行</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Tue Jul 14 17:32   still logged in</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 23:36 - 02:58  (03:22)</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 17:23 - 23:36  (06:12)</span><br><span class="line">dmtsai   pts/0     192.168.1.100   Thu Jul  9 08:02 - 08:17  (00:14)</span><br><span class="line">dmtsai   tty1                      Fri May 29 11:55 - 12:11  (00:15)</span><br><span class="line"></span><br><span class="line"># 若我想要取出帳號與登入者的 IP ，且帳號與 IP 之間以 [tab] 隔開</span><br><span class="line">$ last -n 5 | awk &apos;&#123;print $1 &quot;\t&quot; $3&#125;&apos;     &lt;==不論哪一行都要處理，就不需要有 &quot;條件類型&quot; 的限制</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  192.168.1.100</span><br><span class="line">dmtsai  Fri         &lt;==是不是感觉怪怪的，这个资料格式导致的，所以使用awk时，要先确定下资料中的连续性资料没有空格或 [tab] 在內</span><br></pre></td></tr></table></figure></p>
 <p><strong>TIPS：注意例子中的’print $1 “\t” $3’【$0是一整行】，awk后续的所有动作是以单引号『 ‘ 』括住的，所以如果awk中想要print列时，就需要使用雙引號來定義出來</strong></p>
 <p>既然awk是逐行分档位处理，那么它怎么知道这个资料有几行，有几个档位呢？awk有以下的内建参数：</p>
 <table>
@@ -216,9 +216,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ last -n 5 | awk &apos;&#123;print $1 &quot;\t lines: &quot; NR &quot;\t columns: &quot; NF&#125;&apos;  &lt;==注意此间NR，NF的写法</span><br><span class="line">dmtsai   lines: 1        columns: 10</span><br><span class="line">dmtsai   lines: 2        columns: 10</span><br><span class="line">dmtsai   lines: 3        columns: 10</span><br><span class="line">dmtsai   lines: 4        columns: 10</span><br><span class="line">dmtsai   lines: 5        columns: 9</span><br></pre></td></tr></table></figure>
 <h4 id="awk的逻辑运算字元"><a href="#awk的逻辑运算字元" class="headerlink" title="awk的逻辑运算字元"></a>awk的逻辑运算字元</h4><p>回想下前面awk的工作模式，我们现在还未用过awk的<code>条件类型</code>呢，其中awk的”條件” 的類別中支持的逻辑运算字元有：&gt;,&lt;,&gt;=,&lt;=,==,!=。<br>举个例子，我们知道/etc/passwd是以’:’分割的，其中第三个档位为UID，我们现在要UID&lt;10的用户的账号与第三档信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/passwd | awk &apos;&#123;FS=&quot;:&quot;&#125; $3&lt;10 &#123;print $1 &quot;\t&quot; $3&#125;&apos;</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin      1</span><br><span class="line">daemon   2</span><br><span class="line">....(以下省略)....</span><br></pre></td></tr></table></figure>
-<p>是不是很奇怪为什么第一行没有正确的显示出来呢？这是因为虽然我们定义了FS=”:” ，但却在第二行以后才开始生效，读入第一<br>行时依然以预设的空白键为分割符，这时就要用到BEGIN关键字【有意思的是，我们还有END关键字哦】了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/passwd | awk &apos;BEGIN &#123;FS=&quot;:&quot;&#125; $3&lt;10 &#123;print $1 &quot;\t&quot; $3&#125;&apos;</span><br><span class="line">root     0</span><br><span class="line">bin      1</span><br><span class="line">daemon   2</span><br><span class="line">......(以下省略)......</span><br></pre></td></tr></table></figure></p>
+<p>是不是很奇怪为什么第一行没有正确的显示出来呢？这是因为虽然我们定义了FS=”:” ，但却在第二行以后才开始生效，读入第一行时依然以预设的空白键为分割符，这时就要用到BEGIN关键字【有意思的是，我们还有END关键字哦】了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/passwd | awk &apos;BEGIN &#123;FS=&quot;:&quot;&#125; $3&lt;10 &#123;print $1 &quot;\t&quot; $3&#125;&apos;</span><br><span class="line">root     0</span><br><span class="line">bin      1</span><br><span class="line">daemon   2</span><br><span class="line">......(以下省略)......</span><br></pre></td></tr></table></figure></p>
 <h4 id="awk的计算功能"><a href="#awk的计算功能" class="headerlink" title="awk的计算功能"></a>awk的计算功能</h4><p>假设我有一个薪资资料表，档名为pay.txt，内容如下：<br>Name    1st     2nd     3th<br>VBird   23000   24000   25000<br>DMTsai  21000   20000   23000<br>Bird2   43000   42000   41000<br>现在如何计算每个人的总额，并格式化输出呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cat pay.txt | awk &apos;NR==1&#123;printf &quot;%10s %10s %10s %10s %10s\n&quot;,$1,$2,$3,$4,&quot;Total&quot;&#125;</span><br><span class="line">&gt; NR&gt;=2&#123;total=$2+$3+$4</span><br><span class="line">&gt;printf &quot;%10s %10d %10d %10d %10.2f\n&quot;, $1, $2, $3, $4, total&#125;&apos;</span><br><span class="line">      Name        1st        2nd        3th      Total</span><br><span class="line">     VBird      23000      24000      25000   72000.00</span><br><span class="line">    DMTsai      21000      20000      23000   64000.00</span><br><span class="line">     Bird2      43000      42000      41000  126000.00</span><br></pre></td></tr></table></figure></p>
-<p>如上面的awk指令，如果{}内的动作需要有多个指令辅助时，可利用分號『;』间隔，或者直接以 [Enter] 按键來隔开每个指令，比如<br>上例中就按了两次 [enter] 喔！</p>
+<p>如上面的awk指令，如果{}内的动作需要有多个指令辅助时，可利用分號『;』间隔，或者直接以 [Enter] 按键來隔开每个指令，比如上例中就按了两次 [enter] 喔！</p>
 <p>您看，awk这个命令可以帮我们处理很多日常工作了呢【PS：awk的输出格式常以printf来辅助】，是在是好用的很啊，望大家多多练习，熟练掌握喽！</p>
 
       
@@ -484,23 +484,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -508,15 +496,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -528,7 +524,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,15 +532,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
             
             <div class="clearfix"></div>

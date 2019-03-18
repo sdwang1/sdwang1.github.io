@@ -172,7 +172,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期鼓捣《http连接管理》的时候，接触到了”TCP 套接字编程”。Socket API允许用户创建TCP/UDP的端点数据结构，将这些端<br>点与远程服务器的TCP/UDP进行连接，并对数据流进行读写。<strong>本质上讲，Socket API只是一组调用接口，它隐藏了所有底层网<br>络协议的握手细节，以及传输层数据流与IP分组之间的分段和重装细节。它的出现使得程序员能方便的使用TCP/IP协议栈，是对<br>TCP/IP协议的抽象，算不得什么协议级别，大体处于以下的层次关系：</strong><br><img src="http://www.sdwangblog.cn/blogimg/socket_api_level.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期鼓捣《http连接管理》的时候，接触到了”TCP 套接字编程”。Socket API允许用户创建TCP/UDP的端点数据结构，将这些端点与远程服务器的TCP/UDP进行连接，并对数据流进行读写。<strong>本质上讲，Socket API只是一组调用接口，它隐藏了所有底层网络协议的握手细节，以及传输层数据流与IP分组之间的分段和重装细节。它的出现使得程序员能方便的使用TCP/IP协议栈，是对TCP/IP协议的抽象，算不得什么协议级别，大体处于以下的层次关系：</strong><br><img src="http://www.sdwangblog.cn/blogimg/socket_api_level.png" alt></p>
         
           <a class="article-more-a" href="/2017/11/28/PHP-socket编程初窥/#more">more >></a>
         
@@ -326,8 +326,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="ping命令概览"><a href="#ping命令概览" class="headerlink" title="ping命令概览"></a>ping命令概览</h2><p><strong>ping命令是Linux常用的网络命令，它通过发送ICMP(控制报文协议) ECHO_REQUEST数据包到网络主机并显示响应<br>情况，来测试目标主机是否可访问（并非绝对）。有些服务器为了防止通过ping探测到，通过防火墙设置或者内核参数<br>禁止ping，此时就无法通过ping来测试与目标主机的连通性了。</strong></p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   ping用于确定网络和各外部主机的状态，如果目标主机可连通，它就会对回送信号进行响应。每个回送信号请求包含一<br>   个网际协议IP和ICMP头，后面紧跟一个tim结构，以及来填写这个信息包的足够的字节。ping命令每秒发送一个数据报<br>   并且为每个接受到的响应打印一行输出，即计算信号往返时间和（信息）包丢失情况的统计信息，并在完成之后显示一<br>   个简要总结。</p>
+        <h2 id="ping命令概览"><a href="#ping命令概览" class="headerlink" title="ping命令概览"></a>ping命令概览</h2><p><strong>ping命令是Linux常用的网络命令，它通过发送ICMP(控制报文协议，IP层的附属协议——介于IP层和TCP层之间的协议) ECHO_REQUEST数据包到网络主机并显示响应<br>情况，来测试目标主机是否可访问（并非绝对）</strong>。有些服务器为了防止通过ping探测到，通过防火墙设置或者内核参数禁止ping，此时就无法通过ping来测试与目标主机的连通性了。</p>
+<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   ping用于确定网络和各外部主机的状态，如果目标主机可连通，它就会对回送信号进行响应。每个回送信号请求包含一个网际协议IP和ICMP头，后面紧跟一个tim结构，以及来填写这个信息包的足够的字节。ping命令每秒发送一个数据报并且为每个接受到的响应打印一行输出，即计算信号往返时间和（信息）包丢失情况的统计信息，并在完成之后显示一个简要总结。</p>
 <h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping [选项] 主机名或IP地址</span><br></pre></td></tr></table></figure>
         
           <a class="article-more-a" href="/2017/11/14/Linux常用命令-ping命令/#more">more >></a>
@@ -481,12 +481,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法<br>与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。<br>它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shell<br>scripts来处理伺服器的侦测，不会进行大量运算的需求。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。<br>它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shellscripts来处理伺服器的侦测，不会进行大量运算的需求。</p>
 <h2 id="Shell-Script简单示例"><a href="#Shell-Script简单示例" class="headerlink" title="Shell Script简单示例"></a>Shell Script简单示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir bin;cd bin;</span><br><span class="line">$ vim hello.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#Program:</span><br><span class="line">#   This program shows &quot;Hello World!&quot; in your screen.</span><br><span class="line">#History:</span><br><span class="line"># 2015/07/16 VBird First release</span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin</span><br><span class="line">export PATH</span><br><span class="line">echo -e &quot;Hello World! \a\n&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
 <p>以上这个简单示例可以分解为如下五部分组成：</p>
 <ol>
-<li>第一行#!/bin/bash在宣告这个script使用的shell名称，比如在这个程式被执行时，它能够载入bash的相关环境设定档（一<br>般来说就是non-login shell的～/.bashrc）并且执行bash来使脚本中的指令能够执行。</li>
-<li>除了第一行的『 #! 』是用來宣告shell的之外，其他的#都是『注解』用途，一般来说建议习惯性说明该script的：内容与功<br>能；版本资讯；建档日期；历史记录；作者与联络方式等等。</li>
+<li>第一行#!/bin/bash在宣告这个script使用的shell名称，比如在这个程式被执行时，它能够载入bash的相关环境设定档（一般来说就是non-login shell的～/.bashrc）并且执行bash来使脚本中的指令能够执行。</li>
+<li>除了第一行的『 #! 』是用來宣告shell的之外，其他的#都是『注解』用途，一般来说建议习惯性说明该script的：内容与功能；版本资讯；建档日期；历史记录；作者与联络方式等等。</li>
 <li>主要环境参数的宣告：建议务必将一些必要的环境参数设定好，比如PATH，LANG等，如此就可以直接下达一些外部指令啦；</li>
 <li>主要程式部分；</li>
 <li>执行成果告知（定义回传值）；</li>
@@ -647,7 +647,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p>很多时候，为了便于查阅或统计资料，我们可能需要将其格式化输出，不必要重新以vim编辑，这就要配合下面的printf及awk命令了。</p>
-<h3 id="格式化打印命令：printf"><a href="#格式化打印命令：printf" class="headerlink" title="格式化打印命令：printf"></a>格式化打印命令：printf</h3><p>举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定<br>(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？<br>Name     Chinese   English   Math    Average<br>DmTsai        80        60     92      77.33<br>VBird         75        55     80      70.00<br>Ken           60        90     70      73.33</p>
+<h3 id="格式化打印命令：printf"><a href="#格式化打印命令：printf" class="headerlink" title="格式化打印命令：printf"></a>格式化打印命令：printf</h3><p>举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？<br>Name     Chinese   English   Math    Average<br>DmTsai        80        60     92      77.33<br>VBird         75        55     80      70.00<br>Ken           60        90     70      73.33</p>
 <p><strong>printf 就是幫我們將資料輸出的結果格式化的指令：<code>printf &#39;列印格式&#39; 实际内容</code>。</strong></p>
         
           <a class="article-more-a" href="/2017/10/20/Linux格式化文件输出命令-printf-awk命令/#more">more >></a>
@@ -724,7 +724,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="sed命令概览"><a href="#sed命令概览" class="headerlink" title="sed命令概览"></a>sed命令概览</h2><p><strong>sed是一种流编辑器，处理时会将当前处理的行存储在临时缓冲区【模式空间，pattern space】中，接着用sed命令处理缓冲区<br>中的内容并将处理完成后的缓冲区内容送往屏幕，逐行往复。sed是一个管道命令，可以分析standar input，还可以将资料进行<br>取代、删除、新增、提取特定行等。</strong></p>
+        <h2 id="sed命令概览"><a href="#sed命令概览" class="headerlink" title="sed命令概览"></a>sed命令概览</h2><p><strong>sed是一种流编辑器，处理时会将当前处理的行存储在临时缓冲区【模式空间，pattern space】中，接着用sed命令处理缓冲区中的内容并将处理完成后的缓冲区内容送往屏幕，逐行往复。sed是一个管道命令，可以分析standar input，还可以将资料进行取代、删除、新增、提取特定行等。</strong></p>
 <h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   sed可以将资料进行取代、删除、新增，提取特定行等，同时支持分析standar input。</p>
 <h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [-nefr] 动作</span><br></pre></td></tr></table></figure>
         
@@ -882,8 +882,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="sort命令概览"><a href="#sort命令概览" class="headerlink" title="sort命令概览"></a>sort命令概览</h2><p><strong>sort命令可依据不同的资料型态（文字或者数字等）来排序。【PS：排序的资源与语系的编码有关，建议LANG=C来让语系统一】</strong></p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   sort命令可依据不同的资料型态（文字或者数字等）来排序。 </p>
+        <h2 id="sort命令概览"><a href="#sort命令概览" class="headerlink" title="sort命令概览"></a>sort命令概览</h2><p><strong>sort命令可依据不同的资料型态（文字或者数字等）来排序。【PS：排序的资源与语系的编码有关，建议LANG=C来让语系统一】</strong>。</p>
+<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   sort命令可依据不同的资料型态（文字或者数字等）来排序。</p>
 <h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort [-fbMnrtuk] [file or stdin]</span><br></pre></td></tr></table></figure>
         
           <a class="article-more-a" href="/2017/10/19/Linux常用排序命令-sort-uniq命令/#more">more >></a>
@@ -1037,23 +1037,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1061,15 +1049,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1081,7 +1077,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1089,15 +1085,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
             
             <div class="clearfix"></div>
