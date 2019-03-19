@@ -250,7 +250,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>书接上文，本节我们继续探讨doc(x)文件的解析读取。了解了<a href="http://www.sdwangblog.cn/2018/11/07/PHP%E5%86%99%E5%85%A5Word%E6%96%87%E4%BB%B6/">PHP如何写入Doc(x)文件</a>后，我们知道生成doc文件的内容形式可以有两种：原生的二进制格式和兼容的网页格式。“因地制宜”，对于原生的二进制格式同样可以使用Microsoft Office自带的ActiveX/<a href="http://www.php.net/manual/en/class.com.php" target="_blank" rel="noopener">COM组件</a>解析，而对于兼容的网页格式，不同的生成过程对应的逆向过程就是解析方法了（不考虑部分信息丢失），此不再赘述。对比而言，生成docx文件的内容形式就相对统一多了，它是我们本节讨论的主角。</p>
-<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx is an open standard based on XML, and looks like this when unzipped. For our purposes the important file is /word/document.xml. That’s were the textual content of the document is stored.<br><img src="http://www.sdwangblog.cn/blogimg/content_structure_docx_file.png" alt></p>
+<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx 是一个微软开发的基于XML的文字处理文件, 解压缩后文件（夹）内容如下图示。其中，最重要的就是/word/document.xml文件，它存储着文档的真实文本内容。<br><img src="http://www.sdwangblog.cn/blogimg/content_structure_docx_file.png" alt></p>
         
           <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/#more">more >></a>
         
@@ -1072,11 +1072,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1088,7 +1092,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1096,19 +1100,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,11 +1116,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

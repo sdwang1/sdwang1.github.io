@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/parse_http_request_to_struct.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/web_server_IO_structure.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/virtual_host_docroot.png">
-<meta property="og:updated_time" content="2019-03-18T10:00:21.590Z">
+<meta property="og:updated_time" content="2019-03-18T10:07:08.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之服务器">
 <meta name="twitter:description" content="前言基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续探究HTTP事务的目的端——Web服">
@@ -204,7 +204,7 @@
 </ul>
 <p><img src="http://www.sdwangblog.cn/blogimg/web_server_IO_structure.png" alt></p>
 <h3 id="第三步——处理请求"><a href="#第三步——处理请求" class="headerlink" title="第三步——处理请求"></a>第三步——处理请求</h3><p>一旦Web服务器收到了请求，就可以根据方法，资源，首部和可选的主体部分对请求进行处理了。</p>
-<h3 id="第四步——对资源的映射及访问"><a href="#第四步——对资源的映射及访问" class="headerlink" title="第四步——对资源的映射及访问"></a>第四步——对资源的映射及访问</h3><p>Web服务器是资源服务器。在Web服务器将内容传送给客户端之前，要将请求中的URI映射为Web服务器上适当的内容或内容生<br>成器，以识别处内容的源头；</p>
+<h3 id="第四步——对资源的映射及访问"><a href="#第四步——对资源的映射及访问" class="headerlink" title="第四步——对资源的映射及访问"></a>第四步——对资源的映射及访问</h3><p>Web服务器是资源服务器。在Web服务器将内容传送给客户端之前，要将请求中的URI映射为Web服务器上适当的内容或内容生成器，以识别处内容的源头；</p>
 <h4 id="docroot"><a href="#docroot" class="headerlink" title="docroot"></a>docroot</h4><p>Web服务器支持各种不同类型的资源映射，但最简单的资源映射形式就用请求的URI作为名字来访问 Web 服务器文件系统中的文件。通常Web服务器的文件系统中会有一个特殊的文件夹专门用于存放Web内容，这个文件夹被称为文档的根目录（document root 或docroot）。Web服务器从请求报文中获取URI，并将其附加在文档根目录的后面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#配置文件httpd.conf添加一个DocumentRoot就可以为Web服务器设置文档根目录</span><br><span class="line">DocumentRoot /usr/local/httpd/files</span><br><span class="line">#服务器注意不能让相对URL退到docroot之外，比如www.domain.com/../</span><br></pre></td></tr></table></figure></p>
 <p>虚拟托管的Web服务器会在同一台Web服务器上提供多个Web站点，每个站点在服务器上都有自己独有的文档根目录。虚拟托管的Web服务器会根据URI或Host首部的IP地址或主机名来识别要使用的正确文档根目录。<br><img src="http://www.sdwangblog.cn/blogimg/virtual_host_docroot.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#大多数服务器配置虚拟托管文档根目录很简单，比如Apache</span><br><span class="line">&lt;VirtualHost www.joe.com&gt;</span><br><span class="line">    ServerName www.joe.com</span><br><span class="line">    DocumentRoot /doc/joe</span><br><span class="line">    TransferLog /logs/joe.access.log</span><br><span class="line">    ErrorLog /logs/joe.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost www.mary.com&gt;</span><br><span class="line">    ServerName www.mary.com</span><br><span class="line">    DocumentRoot /doc/mary</span><br><span class="line">    TransferLog /logs/marry.access.log</span><br><span class="line">    ErrorLog /logs/marry.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
 <p>Docroot的另一种常见应用是在Web服务器上为人们提供私有的Web站点。通常以/~开始，后面跟用户名的URI映射为此用户的私有文档根目录，比如/～blob/index.html。私有docroot通常是用户主目录下名为public_html的目录，也可以配置为其他值。</p>
@@ -490,11 +490,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -506,7 +510,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,19 +518,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,11 +534,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
