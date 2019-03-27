@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析十一之安全类文件Security-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/">CodeIgniter框架源码解析十一之安全类文件Security.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/" class="archive-article-date">
+  	<time datetime="2018-03-21T03:39:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架安全类包含了一些方法，用于安全的处理输入数据，帮助你创建一个安全的应用。CI框架安全类提供了全局防御<a href="http://www.sdwangblog.cn/2018/03/21/%E6%B5%85%E8%B0%88CSRF%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/"><strong>CSRF攻击</strong></a>和<a href="http://www.sdwangblog.cn/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/"><strong>XSS攻击</strong></a>策略，只需要在配置文件开启即可。此外，CI也提供了一些实用的安全函数，xss_clean()——xss过滤，sanitize_filename()——净化文件名，do_hash()——md5或sha加密等等。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$config[<span class="string">'csrf_protection'</span>] = <span class="keyword">TRUE</span>;</span><br><span class="line">$config[<span class="string">'global_xss_filtering'</span>] = <span class="keyword">TRUE</span>;</span><br></pre></td></tr></table></figure></p>
+<p>我们先来看下CI框架中安全类的实现框架：</p>
+        
+          <a class="article-more-a" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP输出缓冲区-output-buffer探究" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -871,84 +948,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析二之引导文件CodeIgniter-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/24/CodeIgniter框架源码解析二之引导文件CodeIgniter-php/">CodeIgniter框架源码解析二之引导文件CodeIgniter.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/24/CodeIgniter框架源码解析二之引导文件CodeIgniter-php/" class="archive-article-date">
-  	<time datetime="2018-02-24T02:37:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架入口文件index.php会载入 core/CodeIgniter.php框架核心文件（BOOTSTRAP），启动框架。其实把CodeIgniter.php这个文件的代码运行一次，就是整个CI应用都完成了一次完整的运作流程了。这里不妨先自行思考个问题，你觉得处理一次请求需要考虑到哪些方面呢？</p>
-<p>但凡应用程序无非输入，运行，输出三大步：输入要加载某些全局配置，要考虑输入参数安全性（比如CSRF，XSS攻击）； 运行时要考虑加载处理类，Web应用程序自然还要考虑URI和路由的处理，若处理发生异常要考虑错误和日志的处理，还有语言字符集等；输出要考虑输出缓存问题。由此可见Input,Security,Load,Controller,Uri,Router,Log,Exception,Lang,UTF-8,Output这些组件不可或缺。CI框架中这些不同的功能均由不同的组件来完成，这种模块化的方法使得各组件之间耦合性较低，从而也便于扩展。</p>
-<p>CodeIgniter.php会加载一些组件，引入很多外部文件，建议在阅读此文件代码的时候，第一遍先阅读它的大概流程，也就是说不必进入相应的组件、函数文件中去。第二遍看的时候才具体看那些函数、组件里面是怎么实现的（视个人情况而定）。<br>CodeIgniter.php文件大体完成了如下几项工作：<br>① 加载框架常量、函数库以及框架初始化<br>② 加载核心类组件<br>③ 路由的设置与判断<br>④ 解析请求的类，并调用请求的方法<br>⑤ 输出</p>
-        
-          <a class="article-more-a" href="/2018/02/24/CodeIgniter框架源码解析二之引导文件CodeIgniter-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/24/CodeIgniter框架源码解析二之引导文件CodeIgniter-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1046,11 +1045,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1062,15 +1061,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1082,7 +1073,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1094,11 +1101,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

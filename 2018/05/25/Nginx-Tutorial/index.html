@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="以下主要为Nginx中文文档的读书笔记。Nginx是一个高性能的Web和反向代理服务器，它具有很多优越特性（作为Web服务器，作为负载均衡服务器，作为邮件代理服务器；安装简单及配置文件简洁（还支持perl）语法，Bugs非常少），本文就先简要概览下。 Installing NginxUnix环境下，类似于其他开源项目，Nginx使用libtool和autoconf建立编译环境。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-15T03:49:53.994Z">
+<meta property="og:updated_time" content="2019-03-22T02:30:12.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx-Tutorial">
 <meta name="twitter:description" content="以下主要为Nginx中文文档的读书笔记。Nginx是一个高性能的Web和反向代理服务器，它具有很多优越特性（作为Web服务器，作为负载均衡服务器，作为邮件代理服务器；安装简单及配置文件简洁（还支持perl）语法，Bugs非常少），本文就先简要概览下。 Installing NginxUnix环境下，类似于其他开源项目，Nginx使用libtool和autoconf建立编译环境。">
@@ -290,17 +290,12 @@
 <p>截止到这里，相信大家在阅读默认配置文件nginx.conf中server块内容时应该就没多大疑问了。</p>
 <h4 id="Nginx与PHP的工作机制"><a href="#Nginx与PHP的工作机制" class="headerlink" title="Nginx与PHP的工作机制"></a>Nginx与PHP的工作机制</h4><p>不同于<a href="http://www.sdwangblog.cn/2018/05/24/Apache%E4%B8%8EPHP%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/">Apache与PHP的工作机制</a>，Nginx处理PHP文件只有FastCGI 方式，HttpFcgi模块允许Nginx与FastCGI进程交互，并通过传递参数来控制FastCGI进程工作。典型配置实例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">  fastcgi_pass  localhost:9000;           #Sets an address of the FastCGI server，php-fpm连接方式有TCP(listen = 127.0.0.1:9000)和unix domain socket(/dev/shm/php-cgi.sock) 两种，二者接口形式很像，但Unix domain sockets不使用网络底层协议通信而是POSIX操作系统里的一种组件</span><br><span class="line"></span><br><span class="line">  fastcgi_index index.php;                #if a URI ends with a slash, request URI with an index file name configured by the fastcgi_index directive appended to it</span><br><span class="line"></span><br><span class="line">  fastcgi_param SCRIPT_FILENAME /home/www/scripts/$fastcgi_script_name;</span><br><span class="line">  fastcgi_param QUERY_STRING  $query_string;</span><br><span class="line">  fastcgi_param REQUEST_METHOD  $request_method;  #以下这三个附加参数在处理POST请求时是必要的</span><br><span class="line">  fastcgi_param CONTENT_TYPE  $content_type;</span><br><span class="line">  fastcgi_param CONTENT_LENGTH  $content_length;</span><br><span class="line"></span><br><span class="line">  #如果PHP 在编译时使用了--enable-force-cgi-redirect选项，设置参数REDIRECT_STATUS 的值为200是必须</span><br><span class="line">  fastcgi_param  REDIRECT_STATUS  200;</span><br><span class="line">  include fastcgi_params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>为便于对比mark，这里也顺便贴上我本地使用的简单PHP站点配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server / &#123;</span><br><span class="line">  listen  80;</span><br><span class="line">  server_name www.example.com;</span><br><span class="line">  root  /data/www;                       #配置虚拟机的项目根目录</span><br><span class="line">  index index.php;                       #配置默认索引文件</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">    try_files $uri $uri/ /index.php?$query_string;    #try_files file… uri按指定顺序检查文件是否存在，并使用第一个找到的文件来处理请求，处理过程在当前上下文环境中进行，如找不到任何文件，将按最后一个参数指定的uri进行内部跳转</span><br><span class="line">    #autoindex on;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location ~ \.php(.*)$ &#123;</span><br><span class="line">    fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">    fastcgi_index index.php;</span><br><span class="line">    fastcgi_param SCRIPT_FILENAME $docuemnt_root$fastcgi_script_name;</span><br><span class="line">    fastcgi_split_path_info ^((?U).+\.php)(/?.+)$;        #Defines a regular expression that captures values for $fastcgi_script_name and $fastcgi_path_info</span><br><span class="line">    fastcgi_param  PATH_INFO  $fastcgi_path_info;</span><br><span class="line">    fastcgi_param  PATH_TRANSLATED  $document_root;</span><br><span class="line">    include fastcgi_params;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>最后附加个Nginx配置https的示例过程：</p>
+<p>总结下，根据这篇Nginx Tutorial，对比于<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial/">Apache Tutorial</a>，直观来看二者在理念上有很多共通之处，但众人曰：“Nginx承受的高并发压力是Apache 的10++倍”，我一直在想为什么会差别这么大，对比后个人看来有部分原因如下吧：</p>
 <ul>
-<li>首先配置支持https必须让nginx开启http_ssl_module模块，点击查看nginx编译安装参数 ，可以使用nginx -V查看是否开启TLS SNI support enabled。</li>
-<li><p>购买/生成ssl证书，可以使用免费的证书，比如<a href="https://imququ.com/post/letsencrypt-certificate.html" target="_blank" rel="noopener">Let’s Encrypt</a>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># you maybe can generate dummy certificates in local</span><br><span class="line">$ cd /usr/local/nginx/conf</span><br><span class="line">$ openssl genrsa -des3 -out server.key 1024</span><br><span class="line">$ openssl req -new -key server.key -out server.csr</span><br><span class="line">$ cp server.key server.key.org</span><br><span class="line">$ openssl rsa -in server.key.org -out server.key</span><br><span class="line">$ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置某个站点为https：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen 443 ssl;</span><br><span class="line">  server_name www.xxoo.com xxoo.com;</span><br><span class="line"></span><br><span class="line">  #ssl_protocols    SSLv3 TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">  #ssl_session_cache    shared:SSL:1m;</span><br><span class="line">  #ssl_session_timeout    5m;</span><br><span class="line">  #ssl_ciphers    HIGH:!aNULL:!MD5;    </span><br><span class="line">  #ssl_prefer_server_ciphers  on;</span><br><span class="line">  ssl_certificate    /usr/local/nginx/conf/server.crt;</span><br><span class="line">  ssl_certificate_key  /usr/local/nginx/conf/server.key;  </span><br><span class="line"></span><br><span class="line">  # 其他按正常配置处理即可...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li>对于静态资源比如,图片文件，js，css的请求。Nginx可以直接处理，不需用分发到php-fpm，Nginx起一个线程速度非常快。而Apache由于在开启时就初始化了PHP资源，对于静态资源Apache起一个线程产生的消耗远大于nginx，在数量级到百万千万之后就是滚雪球了。</li>
+<li>Apache处理请求是采用select IO接口的方式，而Nginx是采用epoll IO接口的方式。其中select 是轮询阻塞式，而epoll是触发非阻塞式。所以Nginx支持高并发优于Apache。那为什么Apache不换到epoll模式？似乎主要因为Apache的大多数模块都是采用select模式，epoll模式在很多平台无法实现。</li>
 </ul>
-<p>总结下，Nginx Tutorial是对Nginx的简单概览，感兴趣可以对比下<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial/">Apache Tutorial</a>（其实直观来看二者在理念上有很多共通之处的），践行之才是掌握知识的唯一途径。</p>
+<p>当然，这些年的发展Nginx也相当稳定了，而Apache在高并发上也努力着，比如增加了event非阻塞模块。不过我们选择哪款服务器还是应该根据实际情况来看。比如追求稳定和安全就选择Apache，追求高并发和响应速度就选择Nginx。</p>
 
       
 
@@ -565,11 +560,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -581,15 +576,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,7 +588,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -613,11 +616,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

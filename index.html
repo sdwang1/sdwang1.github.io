@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MongoDB-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/22/MongoDB-Tutorial/">MongoDB-Tutorial</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/22/MongoDB-Tutorial/" class="archive-article-date">
+  	<time datetime="2019-03-22T02:03:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“<br>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
+<h2 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h2><p>MongoDB是由C++语言编写的，基于分布式文件存储的开源数据库系统，旨在为WEB应用提供可扩展的高性能数据存储解决方案。<br>在MongoDB中我们把表（Table）称作集合（Collection），表中每一行数据（Row）称作文档（Document），其他的基本沿用关系型数据库的命名。MongoDB文档（<a href="http://bsonspec.org/" target="_blank" rel="noopener">BSON类型</a>）是个以二进制序列化格式存储的类似JSON对象，其数据结构由键值(key=&gt;value)对组成，字段值可以包含其他文档，数组及文档数组。<br><img src="http://www.sdwangblog.cn/blogimg/mongodb_data_structure.png" alt></p>
+        
+          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-一种高级的DoS攻击-Hash碰撞攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -898,83 +975,6 @@
 
 
   
-    <article id="post-HTTPS加密那点事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/22/HTTPS加密那点事/">HTTPS加密那点事</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/22/HTTPS加密那点事/" class="archive-article-date">
-  	<time datetime="2018-08-22T08:06:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下文章内容主要转载自<a href="https://www.tuicool.com/articles/QzQnAnM" target="_blank" rel="noopener">如果这样来理解HTTPS，一篇就够了！</a>。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴于其普及性，尽快拥抱它才是符合技术潮流的。<br>本文将尝试用通俗易懂的语言，一步步还原HTTPS的设计过程，以便您能轻松理解为什么HTTPS最终会是这副模样。但鉴于HTTPS的复杂性，本文的文字主要是为了方便您的理解，而并不代表完全遵从HTTPS的真实设计过程。</p>
-        
-          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1072,11 +1072,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1088,15 +1088,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1108,7 +1100,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,11 +1128,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

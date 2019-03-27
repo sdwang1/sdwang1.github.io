@@ -17,7 +17,7 @@
 <meta property="og:description" content="通过Apache Tutorial我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcg">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/Php_struction.png">
-<meta property="og:updated_time" content="2018-06-13T08:01:07.880Z">
+<meta property="og:updated_time" content="2019-03-22T02:09:29.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apache与PHP的工作机制">
 <meta name="twitter:description" content="通过Apache Tutorial我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcg">
@@ -177,10 +177,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>通过<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial篇一/">Apache Tutorial</a>我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcgi,fpm-fcgi等等。Apache处理PHP文件方式一般有以下三种模式：Apache 模块，CGI模式和FastCGI模式。<br><img src="http://www.sdwangblog.cn/blogimg/Php_struction.png" alt></p>
+        <p>通过<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial篇一/">Apache Tutorial</a>我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcgi,fpm-fcgi等等。Apache处理PHP文件方式一般有以下三种模式：加载mod_php 模块，CGI模式和FastCGI模式。<br><img src="http://www.sdwangblog.cn/blogimg/Php_struction.png" alt></p>
 <a id="more"></a>
 <h2 id="安装Apache"><a href="#安装Apache" class="headerlink" title="安装Apache"></a>安装Apache</h2><p>鉴于在使用Mac自带的Apache httpd服务时，若需要安装某些扩展（比如mod_fastcgi）不知从何下手，故停止Mac OS自带httpd服务，采用源码重新安装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#OS 10.11后httpd为开机自启动，kill -15 $(pidof httpd)并不能全部停止httpd服务</span><br><span class="line">$ sudo apachectl -k stop</span><br><span class="line">$ sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist</span><br><span class="line"></span><br><span class="line">#源码安装    ####APR portability library</span><br><span class="line">$ wget http://mirrors.hust.edu.cn/apache//apr/apr-1.6.3.tar.gz</span><br><span class="line">$ tar -zxvf apr-1.6.3.tar.gz</span><br><span class="line">$ cd apr-1.6.3</span><br><span class="line">$ ./configure</span><br><span class="line">$ sudo make &amp;&amp; sudo make install</span><br><span class="line"></span><br><span class="line">#Maybe you also need install APR-util who provides a number of helpful abstractions on top of APR</span><br><span class="line">$ wget http://mirrors.hust.edu.cn/apache//apr/apr-util-1.6.1.tar.gz</span><br><span class="line">$ tar -zxvf apr-util-1.6.1.tar.gz</span><br><span class="line">$ cd apr-util-1.6.1</span><br><span class="line">$ ./configure</span><br><span class="line">$ sudo make &amp;&amp; sudo make install</span><br><span class="line"></span><br><span class="line">$ wget http://mirrors.hust.edu.cn/apache/</span><br><span class="line">$ tar -jxvf httpd-2.4.33.tar.bz2</span><br><span class="line">$ cd httpd-2.4.33</span><br><span class="line">#关于./configure，一般使用默认配置参数即可； 特别说明下据说Unix系统中MPM会默认编译为prefork工作模式，但不知为何Mac 10.13默认编译出了event工作模式；event工作模式下配置LoadModule php7_module xxx.so时要求PHP为线程安全模式，为此鄙人不得不指定prefork重新编译了一次</span><br><span class="line">$ sudo configure --with-npm=prefork</span><br><span class="line">$ sudo make</span><br><span class="line">$ sudo make install</span><br><span class="line">#修改httpd.conf的Listen 8080（因为本地80已经配置给Nginx了），去掉ServerName注释行，启动httpd服务</span><br><span class="line">$ /usr/local/apache2/bin/apachectl -f /usr/local/apache2/conf/httpd.conf</span><br></pre></td></tr></table></figure></p>
-<h2 id="Apache模块"><a href="#Apache模块" class="headerlink" title="Apache模块"></a>Apache模块</h2><p>mod_php是ApacheHandler的默认值，也是最常用的工作方式。httpd服务启动后，/usr/local/apache2/htdocs目录下新建测试文件phpinfo.php，浏览器输入localhost:8080/phpinfo.php若发现代码直接plain text输出了，并未解释执行，按以下步骤执行配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#检查apache是否已加载mod_php or libphpx.so</span><br><span class="line">$ /usr/local/apache2/bin/apachectl -M</span><br><span class="line">#打开httpd.conf: sudo vim /usr/local/apache2/conf/httpd.conf全局搜索php，并未找到任何结果</span><br><span class="line">#如果是通过phposx安装的PHP，直接在httpd.conf末尾添加如下几行</span><br><span class="line">LoadModule php7_module        /usr/local/php5/libphp7.so</span><br><span class="line">&lt;IfModule mod_php7.c&gt;</span><br><span class="line">   AddType application/x-httpd-php .php</span><br><span class="line">   AddType application/x-httpd-php-source .phps</span><br><span class="line"></span><br><span class="line">   &lt;IfModule mod_dir.c&gt;</span><br><span class="line">        DirectoryIndex index.html index.php</span><br><span class="line">   &lt;/IfModule&gt;</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="mod-php-模块"><a href="#mod-php-模块" class="headerlink" title="mod_php 模块"></a>mod_php 模块</h2><p>mod_php是ApacheHandler的默认值，也是最常用的工作方式。httpd服务启动后，/usr/local/apache2/htdocs目录下新建测试文件phpinfo.php，浏览器输入localhost:8080/phpinfo.php。若发现代码直接plain text输出了，并未解释执行，按以下步骤执行配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#检查apache是否已加载mod_php or libphpx.so</span><br><span class="line">$ /usr/local/apache2/bin/apachectl -M</span><br><span class="line">#打开httpd.conf: sudo vim /usr/local/apache2/conf/httpd.conf全局搜索php，并未找到任何结果</span><br><span class="line">#如果是通过phposx安装的PHP，直接在httpd.conf末尾添加如下几行</span><br><span class="line">LoadModule php7_module        /usr/local/php5/libphp7.so</span><br><span class="line">&lt;IfModule mod_php7.c&gt;</span><br><span class="line">   AddType application/x-httpd-php .php</span><br><span class="line">   AddType application/x-httpd-php-source .phps</span><br><span class="line"></span><br><span class="line">   &lt;IfModule mod_dir.c&gt;</span><br><span class="line">        DirectoryIndex index.html index.php</span><br><span class="line">   &lt;/IfModule&gt;</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
 <p>输出页面上可以看到：Server API =&gt; Apache 2.0 Handler。</p>
 <h2 id="CGI模式"><a href="#CGI模式" class="headerlink" title="CGI模式"></a>CGI模式</h2><p>先了解下普通CGI的工作流程，CGI（common gateway interface），是HTTP服务器与机器上的其他程序进行通信的一个接口，让Web服务器必要时启动额外的程序处理动态内容。Webserver接受客户端的HTTP请求，然后建立进程执行CGI程序，客户端的请求被传递给CGI程序，CGI执行后结果再返回Webserver。 这样做的缺点很明显：每次客户端请求都需要建立和销毁进程，处理请求并发数有限，时间和内存资源消耗也很大。为简单观测目的，配置Apache以允许CGI的执行：</p>
 <ol>
@@ -196,11 +196,9 @@
 <p>这里我们使用Options显式地允许CGI的执行，将上述相关指令放置在&lt;Directory /usr/local/apache2/htdocs&gt;配置段中，重启httpd服务后，/usr/local/apache2/htdocs目录下新建如下phpinfo.php，注意设定可执行CGI程序的shell路径信息，及文件的可读可执行权限（755）；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/php</span><br><span class="line">&lt;?php</span><br><span class="line">echo &quot;Content-type: text/plain\n\n&quot;;</span><br><span class="line">phpinfo();</span><br></pre></td></tr></table></figure></p>
 <p>输出页面上可以看到：Server API =&gt; Command Line Interface。</p>
 <h2 id="FastCGI模式"><a href="#FastCGI模式" class="headerlink" title="FastCGI模式"></a>FastCGI模式</h2><p>CGI模式性能低下的主要原因，是解释进程的反复加载，FastCGI是基于cgi架构的扩展，它的核心思想就是在Web Server和具体CGI程序之间建立一个智能的可持续的中间层，统管cgi程序的运行。这样Web Server只需要将请求提交给这个中间层，此中间层负责派生出几个可复用的解释器子进程【FastCGI进程管理器自身初始化时就启动多个CGI解释器进程以等待来自Web Server的连接】，然后再把请求分发给这些实例，这些实例是可控的，可持续，可复用的， 因此一方面避免了进程反复fork，另一方面又可以通过中间层的控制和探测机制来监视这些实例的运行情况，根据不同的状况fork或者回收实例，达到灵活 性和稳定性兼得的目的。</p>
-<p>查看Apache当前加载模块<code>sudo /usr/local/apache2/bin/apachectl -M</code>，发现并未加载mod_fastcgi，Google搜索Apache mod_fastcgi，直观地只看到了mod_fcgid（诸位千万不要着急安装哟，我初始误以为类似于mod_cgid，mod_fcgid是mod_fastcgi的扩展版），然后就呼呼啦啦地安装了mod_fcgid：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://mirror.bit.edu.cn/apache//httpd/mod_fcgid/mod_fcgid-2.3.9.tar.gz</span><br><span class="line">$ tar -zxvf mod_fcgid-2.3.9.tar.gz</span><br><span class="line">$ cd mod_fcgid-2.3.9</span><br><span class="line">CHANGES-FCGID        Makefile-fcgid.win    NOTICE-FCGID        STATUS-FCGID        configure.apxs        mod_fcgid.dsw</span><br><span class="line">LICENSE-FCGID        Makefile.apxs        README-FCGID        build            docs            modules</span><br><span class="line"></span><br><span class="line">#看到configure.apxs素不素很奇怪？其实apxs是一个为Apache服务器编译和安装扩展模块的工具，用于编译一个或多个源程序或目标代码文件为动态共享文件，使之可以用mod_so提供的LoadModule指令在运行时加载到Apache服务器中（要使用这个扩展机制，你的平台必须支持DSO特性，且httpd内建了mod_so模块）</span><br><span class="line">#According to README-FCGID，copy the entire fcgid source directory tree on top of your existing</span><br><span class="line">httpd source tree , and from the httpd source root directory</span><br><span class="line">$ ./buildconf  (to pick up fcgid)</span><br><span class="line">$ ./configure --enable-fcgid &#123;your usual options&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Apache加载mod_fastcgi后，其会启动多个CGI程序（即php-cgi脚本，具体脚本数目通过配置指定）。当有http请求到来时，httpd进程会选择一个当前空闲php-cgi来执行，执行方式与mod_php类似，也通过php-cgi提供的sapi完成交互，不同的是它是把结果输出到fastcgi提供的stdout上，fastcgi再将数据返回给httpd完成交互。</p>
 <p>基于mod_fastcgi的fastcgi应用共有配置方式有三种：静态（static）、动态（dynamic）和远程（extension），对应于apache配置中的伪指令分别为FastCgiServer,FastCgiConfig及FastCgiExternalServer。对于静态和动态配置方式，Apache通过mod_fastcgi自带的进程管理工具fcgi-pm（Apache启动时自动激活）来管理fastcgi（即php-cgi）程序，而远程模式下php-cgi不由fcgi-pm管理，fastcgi实例和Apache分离开独自运行，甚至可以分开部署，他们之间的通信通过tcp或者unix socket来完成。显然extension模式下也需要个fcgi-pm这样的进程管理工具，就像lighty下的spwn-cgi，幸运的是出现了php-fpm（&gt;PHP 5.3.3 extension），它可以和任何支持远端FastCGI的Web Server工作，且具有更多的优化支持。</p>
-<p>接下来，欲根据<a href="http://httpd.apache.org/docs/2.4/zh-cn/mod/" target="_blank" rel="noopener">Apache 2.4官方文档</a>编辑配置httpd.conf时就很不美妙了，在模块索引处并未找到mod_fastcgi or mod_fcgid模块，指令索引处也并未找到FastCgi*指令的只言片语，所幸在<a href="https://serverfault.com/questions/344171/apache2-fcgid-not-fastcgi-with-php-fpm" target="_blank" rel="noopener">serverfault</a>看到了这段话：<br><code>mod_fastcgi and mod_fcgid are totally different modules and don&#39;t even share a common code-base. They have only the FastCGI protocol in common. That is why Apache Directives are totally different in these two. Besides, mod_fcgid has an adaptive-spawning architecture and it does not support Static servers or External servers.</code></p>
-<p>May be mod_fastcgi is too big or insecure or old？？ 放弃无谓的挣扎，Apache 2.4我们直接转战FastCGI的另一种使用方式 ——<a href="https://wiki.apache.org/httpd/PHP-FPM" target="_blank" rel="noopener">mod_proxy_fcgi 和 PHP-FPM</a> 的方式（现在知道为何不让您着急安装mod_fcgid了吧）：1. 配置启动php-fpm监听tcp 9000端口，此处略过；2. 由于require the base proxy module, 去除modules/mod_proxy.so和modules/mod_proxy_fcgi.so行注释；3. 配置/usr/local/apache2/conf/httpd.conf，末尾添加以下几行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule proxy_module&gt;</span><br><span class="line">    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/usr/local/apache2/htdocs/$1</span><br><span class="line">    DirectoryIndex index.html index.php</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
+<p>查看Apache当前加载模块<code>sudo /usr/local/apache2/bin/apachectl -M</code>，发现并未加载mod_fastcgi，Google搜索Apache mod_fastcgi，直观地只看到了mod_fcgid，⚠️ <strong>诸位千万不要着急安装哟，不要像我一样以为：类似于mod_cgid，mod_fcgid是mod_fastcgi的扩展版</strong>，举引在<a href="https://serverfault.com/questions/344171/apache2-fcgid-not-fastcgi-with-php-fpm" target="_blank" rel="noopener">serverfault</a>看到的这段话：<br><code>mod_fastcgi and mod_fcgid are totally different modules and don&#39;t even share a common code-base. They have only the FastCGI protocol in common. That is why Apache Directives are totally different in these two. Besides, mod_fcgid has an adaptive-spawning architecture and it does not support Static servers or External servers.</code><br>May be mod_fastcgi is too big or insecure or old？？ 放弃无谓的挣扎，Apache 2.4我们直接转战FastCGI的另一种使用方式 ——<a href="https://wiki.apache.org/httpd/PHP-FPM" target="_blank" rel="noopener">mod_proxy_fcgi 和 PHP-FPM</a> 的方式（现在知道为何不让您着急安装mod_fcgid了吧）：1. 配置启动php-fpm监听tcp 9000端口，此处略过；2. 由于require the base proxy module, 去除modules/mod_proxy.so和modules/mod_proxy_fcgi.so行注释；3. 配置/usr/local/apache2/conf/httpd.conf，末尾添加以下几行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule proxy_module&gt;</span><br><span class="line">    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/usr/local/apache2/htdocs/$1</span><br><span class="line">    DirectoryIndex index.html index.php</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
 <p>重启httpd启动，在/usr/local/apache2/htdocs目录下新建测试文件phpinfo.php，浏览器输入localhost:8080/phpinfo.php，输出页面上可以看到：Server API =&gt; FPM/FastCGI。</p>
 <p>最后，关于Apache与PHP的三种工作机制的性能对比测试暂时不做了，感兴趣的可以参考<a href="https://www.cnblogs.com/zl0372/articles/php_4.html" target="_blank" rel="noopener">mod_php、mod_fastcgi和php-fpm的介绍,对比,和性能数据</a>，推荐使用下面的组合方式：Apache + ext + php-fpm(with superwise)，至于与php-fpm的通信方式————tcp or unix socket，如果WebServer和FastCgi部署在同一机器上，在服务器压力不大的情况下，tcp和socket是差别不大，但在压力比较满的时候，用套接字方式效果会较好些；当然如果如果WebServer和FastCgi是分布部署，那就只能使用tcp方式了。</p>
 
@@ -355,7 +353,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Apache"><span class="toc-number">1.</span> <span class="toc-text">安装Apache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apache模块"><span class="toc-number">2.</span> <span class="toc-text">Apache模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CGI模式"><span class="toc-number">3.</span> <span class="toc-text">CGI模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ScriptAlias"><span class="toc-number">3.1.</span> <span class="toc-text">ScriptAlias</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ScriptAlias目录以外的CGI"><span class="toc-number">3.2.</span> <span class="toc-text">ScriptAlias目录以外的CGI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用Options显式地允许CGI的执行"><span class="toc-number">3.2.1.</span> <span class="toc-text">用Options显式地允许CGI的执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#htaccess文件"><span class="toc-number">3.2.2.</span> <span class="toc-text">.htaccess文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastCGI模式"><span class="toc-number">4.</span> <span class="toc-text">FastCGI模式</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Apache"><span class="toc-number">1.</span> <span class="toc-text">安装Apache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mod-php-模块"><span class="toc-number">2.</span> <span class="toc-text">mod_php 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CGI模式"><span class="toc-number">3.</span> <span class="toc-text">CGI模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ScriptAlias"><span class="toc-number">3.1.</span> <span class="toc-text">ScriptAlias</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ScriptAlias目录以外的CGI"><span class="toc-number">3.2.</span> <span class="toc-text">ScriptAlias目录以外的CGI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用Options显式地允许CGI的执行"><span class="toc-number">3.2.1.</span> <span class="toc-text">用Options显式地允许CGI的执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#htaccess文件"><span class="toc-number">3.2.2.</span> <span class="toc-text">.htaccess文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastCGI模式"><span class="toc-number">4.</span> <span class="toc-text">FastCGI模式</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -467,11 +465,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -483,15 +481,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -503,7 +493,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -515,11 +521,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
