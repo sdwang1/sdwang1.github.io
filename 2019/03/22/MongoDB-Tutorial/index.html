@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>MongoDB-Tutorial | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“前景提">
+  <meta name="description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“ 前景">
 <meta name="keywords" content="NoSQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MongoDB-Tutorial">
 <meta property="og:url" content="http://www.sdwangblog.cn/2019/03/22/MongoDB-Tutorial/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“前景提">
+<meta property="og:description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“ 前景">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mongodb_data_structure.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mongodb_embabbed_structrue.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mongodb_reference_structure.png">
-<meta property="og:updated_time" content="2019-03-27T08:49:34.395Z">
+<meta property="og:updated_time" content="2019-03-27T08:52:13.312Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB-Tutorial">
-<meta name="twitter:description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“前景提">
+<meta name="twitter:description" content="前言由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，cronsun“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“ 前景">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mongodb_data_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -179,7 +179,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“<br>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“</p>
+<p>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
 <h2 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h2><p>MongoDB是由C++语言编写的，基于分布式文件存储的开源数据库系统，旨在为WEB应用提供可扩展的高性能数据存储解决方案。<br>在MongoDB中我们把表（Table）称作集合（Collection），表中每一行数据（Row）称作文档（Document），其他的基本沿用关系型数据库的命名。MongoDB文档（<a href="http://bsonspec.org/" target="_blank" rel="noopener">BSON类型</a>）是个以二进制序列化格式存储的类似JSON对象，其数据结构由键值(key=&gt;value)对组成，字段值可以包含其他文档，数组及文档数组。<br><img src="http://www.sdwangblog.cn/blogimg/mongodb_data_structure.png" alt></p>
 <a id="more"></a>
 <p>上例中不难看出使用文档的一些优势：</p>
@@ -651,15 +652,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -667,11 +664,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -679,7 +684,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,15 +692,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -703,11 +700,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -172,7 +172,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“<br>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“</p>
+<p>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
 <h2 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h2><p>MongoDB是由C++语言编写的，基于分布式文件存储的开源数据库系统，旨在为WEB应用提供可扩展的高性能数据存储解决方案。<br>在MongoDB中我们把表（Table）称作集合（Collection），表中每一行数据（Row）称作文档（Document），其他的基本沿用关系型数据库的命名。MongoDB文档（<a href="http://bsonspec.org/" target="_blank" rel="noopener">BSON类型</a>）是个以二进制序列化格式存储的类似JSON对象，其数据结构由键值(key=&gt;value)对组成，字段值可以包含其他文档，数组及文档数组。<br><img src="http://www.sdwangblog.cn/blogimg/mongodb_data_structure.png" alt></p>
         
           <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/#more">more >></a>
@@ -277,6 +278,106 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2019-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码，实在羞愧。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt><br>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
+<ul>
+<li><strong>Server层：包括连接器、查询缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图，函数等</strong>。</li>
+<li><strong>存储引擎：负责数据的存储和读取，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同。现常用的存储引擎是InnoDB，它从MySQL5.5.5版本开始成为默认引擎</strong>。</li>
+</ul>
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。使用客户端工具mysql跟服务端建立连接的命令一般这么写：<code>mysql -h$ip -P$port -u$user -p</code>。<br>在完成TCP握手后，连接器会使用$user+$passwd认证客户端身份，若认证通过连接器会在权限表里查出客户端拥有的权限，之后在这个连接里的权限判断逻辑，都将依赖于此时读到的权限。也就是说，<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。</p>
+<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。客户端如果太长时间【<strong>由参数interactive_timeout和wait_timeout控制</strong>】没动静，连接器会自动将它断开。<strong>特别说明，关于数据库的长连接和短连接</strong>：</p>
+<ul>
+<li>短连接是指每次执行完很少的几次查询就断开连接【<strong>请求消息得到响应后连接关闭</strong>】，下次查询再重新建立一个。</li>
+<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。一般还需要定义 <strong>心跳信息</strong>，即定期发送消息检测连接链路是否异常。</li>
+</ul>
+<p><strong>由于建立连接的过程通常比较复杂，所以建议尽量使用长连接。但全部使用长连接可能会导致MySQL占用内存涨的特别快，这是因为MySQL在执行过程中临时使用的内存是管理在连接对象里面的，这些资源在连接断开时才会释放。如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。解决方案有两种：</p>
+<ol>
+<li>定期断开长连接。使用一段时间，或者程序里判断执行过一个占用内存的大查询后，断开连接，之后查询再重连；</li>
+<li>如果使用的是MySQL版本 &gt;=5.7，可以在每次执行一个较大操作后，通过执行<code>mysql_reset_connection</code>来重新初始化连接资源——将连接恢复到刚刚创建完时的状态。</li>
+</ol>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>连接建立完成后，MYSQL在执行 <strong>查询请求</strong> 的时候，会先查询缓存——以Key-Value的形式直接缓存在内存中，Key是查询语句，Value是结果集。如果查询能直接在缓存中命中Key，其Value就会被直接返回给客户端，否则就继续后面的执行阶段，并在执行完成后将结果存入查询缓存中。</p>
+<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。MySQL提供了这种“按需使用”方式：1. 设置参数query_cache_type = DEMAND，默认SQL语句不使用查询缓存；2. 对于确定使用查询缓存的语句使用SQL_CACHE显式指定：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
+<h3 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h3><p>分析器主要用来解析SQL语句是来干嘛的，通常分为以下几步：</p>
+<ol>
+<li>词法分析，识别出SQL语句中的字符串分别是什么，代表什么，比如select语句中提取出查询的表名，字段名，查询条件等；</li>
+<li>语法分析，根据语法规则得到解析树，并对解析树做进一步分析，判断SQL语句是否满足MySQL语法，比如验证数据表、字段是否存在；</li>
+</ol>
+<h3 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h3><p>优化器就是决定选择使用哪个最优的执行方案（有时候不一定是最优）——怎么做，比如表中有多个索引的时决定使用哪个索引，多表关联查询的时决定各表连接顺序等。</p>
+<h3 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h3><p>通过优化器知道了该怎么做，就进入了执行器阶段：首先判断下用户对表T是否有执行查询的权限，如果没有就返回权限错误（<strong>如果命中查询缓存，会在查询缓存返回结果时做权限验证</strong>），否则就打开表，根据表的引擎定义去使用对应引擎提供的读写接口，完成语句执行。</p>
+<h2 id="SQL语句的查询流程"><a href="#SQL语句的查询流程" class="headerlink" title="SQL语句的查询流程"></a>SQL语句的查询流程</h2><p>SQL语句大体分为两种：查询语句 or 更新语句（增加、更新、删除）。由于更新流程会涉及到一些重要的日志模块——redo log、binlog、undo log及各种锁机制，这里就暂先结合MySQL基础架构，概览下查询语句<code>SELECT * FROM tb_student A WHERE A.age=&#39;18&#39; AND A.name=&#39;张三&#39;;</code>的执行流程：<br><img src="http://www.sdwangblog.cn/blogimg/select_sql_execute_flowchart.png" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/07/一条SQL语句是如何执行的/">展开全文 >></a>
         </p>
       
 
@@ -898,83 +999,6 @@
 
 
   
-    <article id="post-PHP安全的存储用户密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/23/PHP安全的存储用户密码/">PHP安全的存储用户密码</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/23/PHP安全的存储用户密码/" class="archive-article-date">
-  	<time datetime="2018-08-23T07:01:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们已经知道，恶意攻击者使用查询表和彩虹表，暴力破解普通哈希(md5,sha1)是多么得快。为了让查表和彩虹表的方式无法破解hash，大家对“加盐（Adding salt）”技术应该都不陌生：<strong>给密码加一个随机（CSPRNG）的前缀或者后缀，然后再进行hash，这个随机的后缀或者前缀成为“盐”。</strong> 通过加盐，相同的密码每次hash都是完全不一样的字符串。由于后续检查用户输入的密码是否正确的时还需要这个盐，所以它一般都是跟hash一起保存在数据库里，或者作为hash字符串的一部分。</p>
-<h2 id="“加盐”的正确使用"><a href="#“加盐”的正确使用" class="headerlink" title="“加盐”的正确使用"></a>“加盐”的正确使用</h2><p>盐值不需要保密，只要盐值是随机的话，查询表、彩虹表都会失效。因为攻击者无法事先知道盐是什么，也就没有办法预先计算出查询表和彩虹表。如果每个用户都是使用了不同的盐，那么反向查表攻击也没法成功。下面介绍一些盐的常见的错误实现：</p>
-        
-          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1072,15 +1096,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1088,11 +1108,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1100,7 +1128,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1108,15 +1136,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,11 +1144,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
