@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>一条SQL语句是如何执行的 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码，实在羞愧。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《">
+  <meta name="description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一条SQL语句是如何执行的">
 <meta property="og:url" content="http://www.sdwangblog.cn/2019/03/07/一条SQL语句是如何执行的/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码，实在羞愧。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《">
+<meta property="og:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/select_sql_execute_flowchart.png">
-<meta property="og:updated_time" content="2019-04-09T02:01:51.427Z">
+<meta property="og:updated_time" content="2019-04-12T06:03:14.657Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一条SQL语句是如何执行的">
-<meta name="twitter:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码，实在羞愧。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《">
+<meta name="twitter:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -178,25 +178,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码，实在羞愧。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
-<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt><br>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。<br>最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt></p>
+<a id="more"></a>
+<p>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
 <ul>
 <li><strong>Server层：包括连接器、查询缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图，函数等</strong>。</li>
 <li><strong>存储引擎：负责数据的存储和读取，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同。现常用的存储引擎是InnoDB，它从MySQL5.5.5版本开始成为默认引擎</strong>。</li>
 </ul>
 <h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。使用客户端工具mysql跟服务端建立连接的命令一般这么写：<code>mysql -h$ip -P$port -u$user -p</code>。<br>在完成TCP握手后，连接器会使用$user+$passwd认证客户端身份，若认证通过连接器会在权限表里查出客户端拥有的权限，之后在这个连接里的权限判断逻辑，都将依赖于此时读到的权限。也就是说，<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。</p>
-<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。客户端如果太长时间【<strong>由参数interactive_timeout和wait_timeout控制</strong>】没动静，连接器会自动将它断开。<strong>特别说明，关于数据库的长连接和短连接</strong>：</p>
+<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。客户端如果太长时间【<strong>由参数interactive_timeout和wait_timeout控制</strong>】没动静，连接器会自动将它断开。<br><strong>特别说明下，关于数据库的长连接和短连接</strong>：</p>
 <ul>
 <li>短连接是指每次执行完很少的几次查询就断开连接【<strong>请求消息得到响应后连接关闭</strong>】，下次查询再重新建立一个。</li>
 <li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。一般还需要定义 <strong>心跳信息</strong>，即定期发送消息检测连接链路是否异常。</li>
 </ul>
-<p><strong>由于建立连接的过程通常比较复杂，所以建议尽量使用长连接。但全部使用长连接可能会导致MySQL占用内存涨的特别快，这是因为MySQL在执行过程中临时使用的内存是管理在连接对象里面的，这些资源在连接断开时才会释放。如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。解决方案有两种：</p>
+<p><strong>由于建立连接的过程通常比较复杂，所以建议尽量使用长连接</strong>。但全部使用长连接可能会导致MySQL占用内存涨的特别快，这是因为MySQL在执行过程中临时使用的内存是管理在连接对象里面的，这些资源在连接断开时才会释放。<strong>如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。解决方案有两种：</p>
 <ol>
 <li>定期断开长连接。使用一段时间，或者程序里判断执行过一个占用内存的大查询后，断开连接，之后查询再重连；</li>
 <li>如果使用的是MySQL版本 &gt;=5.7，可以在每次执行一个较大操作后，通过执行<code>mysql_reset_connection</code>来重新初始化连接资源——将连接恢复到刚刚创建完时的状态。</li>
 </ol>
 <h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>连接建立完成后，MYSQL在执行 <strong>查询请求</strong> 的时候，会先查询缓存——以Key-Value的形式直接缓存在内存中，Key是查询语句，Value是结果集。如果查询能直接在缓存中命中Key，其Value就会被直接返回给客户端，否则就继续后面的执行阶段，并在执行完成后将结果存入查询缓存中。</p>
-<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。MySQL提供了这种“按需使用”方式：1. 设置参数query_cache_type = DEMAND，默认SQL语句不使用查询缓存；2. 对于确定使用查询缓存的语句使用SQL_CACHE显式指定：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
+<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。<br>MySQL提供了这种“按需使用”方式：1. 设置参数query_cache_type = DEMAND，默认SQL语句不使用查询缓存；2. 对于确定使用查询缓存的语句使用SQL_CACHE显式指定：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
 <h3 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h3><p>分析器主要用来解析SQL语句是来干嘛的，通常分为以下几步：</p>
 <ol>
 <li>词法分析，识别出SQL语句中的字符串分别是什么，代表什么，比如select语句中提取出查询的表名，字段名，查询条件等；</li>
@@ -319,11 +321,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/09/认识MySQL的事务日志/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          一种高级的DoS攻击-Hash碰撞攻击
+          认识MySQL的事务日志
         
       </div>
     </a>
@@ -469,11 +471,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -481,19 +483,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -513,19 +515,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">

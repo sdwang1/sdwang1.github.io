@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">Mac的Nginx+php-fpm+php5.6.3环境下升级为php7.2.4</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/" class="archive-article-date">
+  	<time datetime="2018-04-09T02:38:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了避免OS升级时覆盖php扩展或Apache等配置的隐患，初入坑时鄙人并未使用Mac自带的php软式，而是采用编译源码的方式安装搭建了Nginx+php-fpm+php5.6环境。时光如梭，岁月如歌，php官方版本早就发布到了7.2，项目线上系统php版本也都更新到7.0，与时俱进，欲将本地php5.6.3升级到php7.2.4，并同步更新相关配置。</p>
+<h2 id="源码编译安装php7-2"><a href="#源码编译安装php7-2" class="headerlink" title="源码编译安装php7.2"></a>源码编译安装php7.2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://cn2.php.net/distributions/php-7.2.4.tar.gz</span><br><span class="line">$ tar xzvf php-7.2.4.tar.gz</span><br><span class="line">$ cd php-7.2.4</span><br><span class="line"></span><br><span class="line">#调用 buildconf 生成 configure 文件：</span><br><span class="line">$ ./buildconf --force</span><br></pre></td></tr></table></figure>
+<p>生成了 configure 文件后，我们就需要着手开始进行编译安装的配置，如果你想知道有哪些编译配置选项，仅需 ./configure –help 即可查看。参考配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/php/7.2.4 --with-config-file-path=/usr/local/php/7.2.4/etc --with-config-file-scan-dir=/usr/local/php/7.2.4/etc/conf.d --enable-fpm --with-fpm-user=web --with-fpm-group=www --enable-soap --with-openssl --with-pcre-regex --with-zlib --with-iconv --enable-calendar --with-curl --enable-exif --with-pcre-dir --enable-ftp --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --with-mhash --enable-mbstring --enable-pdo --with-pdo-mysql --with-mysqli --with-libedit --enable-simplexml --enable-sockets --with-libxml-dir --with-xsl --enable-pcntl</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">php杂集</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Dos攻击和DDos攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -848,83 +926,6 @@
 
 
   
-    <article id="post-MYSQL索引详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/22/MYSQL索引详解/">MYSQL索引详解</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/22/MYSQL索引详解/" class="archive-article-date">
-  	<time datetime="2018-03-22T01:56:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。<br>索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升<br>查询性能最有效的手段了。</p>
-<h2 id="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"><a href="#MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）" class="headerlink" title="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"></a>MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）</h2><p>存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引擎的概念，Oracle有OLTP(联机事物处理On-Line Transact<br>ion Processing)和OLAP(联机分析处理On-Line Analytical Processing)模式的区分。不同的存储引擎决定了MYSQL<br>数据库的表可以用不同的方式（数据特点）来存储。<br>简单来说，存储引擎就是指<code>表的类型及表在计算机上的存储方式</code>。在MySQL中存储引擎有很多种，可以通过”SHOW ENGINES”<br>语句来查看。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/03/22/MYSQL索引详解/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/22/MYSQL索引详解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1022,11 +1023,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1034,19 +1035,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1066,19 +1067,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">

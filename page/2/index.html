@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-用openssl签一个证书部署到nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/27/用openssl签一个证书部署到nginx/">用openssl签一个证书部署到nginx</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/27/用openssl签一个证书部署到nginx/" class="archive-article-date">
+  	<time datetime="2018-08-27T07:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SSL(Secure Sockets Layer 安全套接层)协议主要用来提供对用户和服务器的认证；对传送的数据进行加密和隐藏；确保数据在传送中不被改变，即数据 的完整性，现已成为该领域中全球化的标准。由于SSL技术已建立到所有主要的浏览器和WEB服务器程序中，因此，仅需安装服务器证书就可以激活该功能了。<br><strong>一份 SSL 证书包括一个公共密钥和一个私用密钥</strong>。公共密钥用于加密信息，私用密钥用于解译加密的信息。<strong>浏览器指向一个安全域时，SSL 同步确认服务器和客户端，并创建一种加密方式和一个唯一的会话密钥</strong>，它们可以启动一个保证消息的隐私性和完整性的安全会话。</p>
+<p>首先要有一个主证书，然后用主证书来签发服务器证书和客户证书，服务器证书和客户证书是 <strong>平级关系</strong>。SSL所使用的证书可以自己生成，也可以通过一个商业性CA（如Verisign 或 Thawte）签署证书：如果使用的是商业证书，具体的签署方法请查看相关销售商说明；如果是自己签发的证书，<strong>可以使用openssl自带的CA.sh脚本工具【在Debian或者Ubuntu系统中有更加简便的方法制作self-signed证书使用make-ssl-cert命令】</strong>。如果不为单独的客户端签发证书，客户端证书可以不用生成，客户端与服务器端使用相同的证书。</p>
+<p><strong>特别说明下，自签（self-signed）证书没有任何保证，大部分软件遇到这种证书会发出警告，甚至不接受这类证书。使用自签名(self-signed)的证书，它的主要目的不是防伪，而是使用户和系统之间能够进行SSL通信，保证密码等个人信息传输时的安全</strong>。</p>
+        
+          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP安全的存储用户密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -850,84 +928,6 @@
 
 
   
-    <article id="post-Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">Mac的Nginx+php-fpm+php5.6.3环境下升级为php7.2.4</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/" class="archive-article-date">
-  	<time datetime="2018-04-09T02:38:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了避免OS升级时覆盖php扩展或Apache等配置的隐患，初入坑时鄙人并未使用Mac自带的php软式，而是采用编译源码的方式安装搭建了Nginx+php-fpm+php5.6环境。时光如梭，岁月如歌，php官方版本早就发布到了7.2，项目线上系统php版本也都更新到7.0，与时俱进，欲将本地php5.6.3升级到php7.2.4，并同步更新相关配置。</p>
-<h2 id="源码编译安装php7-2"><a href="#源码编译安装php7-2" class="headerlink" title="源码编译安装php7.2"></a>源码编译安装php7.2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://cn2.php.net/distributions/php-7.2.4.tar.gz</span><br><span class="line">$ tar xzvf php-7.2.4.tar.gz</span><br><span class="line">$ cd php-7.2.4</span><br><span class="line"></span><br><span class="line">#调用 buildconf 生成 configure 文件：</span><br><span class="line">$ ./buildconf --force</span><br></pre></td></tr></table></figure>
-<p>生成了 configure 文件后，我们就需要着手开始进行编译安装的配置，如果你想知道有哪些编译配置选项，仅需 ./configure –help 即可查看。参考配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/php/7.2.4 --with-config-file-path=/usr/local/php/7.2.4/etc --with-config-file-scan-dir=/usr/local/php/7.2.4/etc/conf.d --enable-fpm --with-fpm-user=web --with-fpm-group=www --enable-soap --with-openssl --with-pcre-regex --with-zlib --with-iconv --enable-calendar --with-curl --enable-exif --with-pcre-dir --enable-ftp --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --with-mhash --enable-mbstring --enable-pdo --with-pdo-mysql --with-mysqli --with-libedit --enable-simplexml --enable-sockets --with-libxml-dir --with-xsl --enable-pcntl</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">php杂集</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1025,11 +1025,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1037,19 +1037,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1069,19 +1069,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
