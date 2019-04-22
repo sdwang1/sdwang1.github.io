@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-浅谈XSS攻击方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/25/浅谈XSS攻击方式/">浅谈XSS攻击方式</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/25/浅谈XSS攻击方式/" class="archive-article-date">
+  	<time datetime="2018-03-25T01:55:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="XSS是什么"><a href="#XSS是什么" class="headerlink" title="XSS是什么"></a>XSS是什么</h2><p>XSS(Cross Site Scripting，CSS)跨站脚本攻击，是Web程序中常见的漏洞，XSS属于被动式且用于客户端的攻击方式，所以容易被忽略其危害性。它的攻击原理与<code>SQL注入攻击</code>(以SQL语句作为用户输入，从而达到查询/修改/删除数据的目的)类似，<code>通过向有XSS漏洞的网站中输入(传入)恶意的HTML代码，当其它用户浏览该网站时，这段HTML代码会自动执行，从而达到攻击的目的</code>，比如盗取用户Cookie、破坏页面结构、重定向到其它网站等。</p>
+<h2 id="XSS攻击类型"><a href="#XSS攻击类型" class="headerlink" title="XSS攻击类型"></a>XSS攻击类型</h2><p>XSS攻击之前，我们先找到一个存在XSS漏洞的网站，XSS漏洞分为两种：一种是DOM Based XSS漏洞，另一种是Stored XSS漏洞。<strong>理论上，所有可输入的地方没有对输入数据进行处理的话，都会存在XSS漏洞，漏洞的危害取决于攻击代码的威力，攻击代码也不局限于script。</strong></p>
+        
+          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MYSQL索引详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -173,10 +250,57 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。<br>索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升<br>查询性能最有效的手段了。</p>
-<h2 id="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"><a href="#MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）" class="headerlink" title="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"></a>MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）</h2><p>存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引擎的概念，Oracle有OLTP(联机事物处理On-Line Transact<br>ion Processing)和OLAP(联机分析处理On-Line Analytical Processing)模式的区分。不同的存储引擎决定了MYSQL<br>数据库的表可以用不同的方式（数据特点）来存储。<br>简单来说，存储引擎就是指<code>表的类型及表在计算机上的存储方式</code>。在MySQL中存储引擎有很多种，可以通过”SHOW ENGINES”<br>语句来查看。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/03/22/MYSQL索引详解/#more">more >></a>
-        
+<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。</p>
+<h3 id="普通型索引"><a href="#普通型索引" class="headerlink" title="普通型索引"></a>普通型索引</h3><p>最基本的索引类型，没有唯一性之类的限制，普通索引可以通过以下几种方式创建：</p>
+<ul>
+<li>CREATE INDEX 索引的名字 ON tablename (列名1，列名2,…);</li>
+<li>ALTER TABLE tablename ADD INDEX 索引的名字 (列名1，列名2,…);</li>
+<li>CREATE TABLE tablename ( […], INDEX 索引的名字 (列名1，列名2,…) );<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3></li>
+</ul>
+<p>这种索引和前面的“普通索引”基本相同，但区别在于索引列的所有值必须唯一。唯一性索引也可以用以下几种方式创建：</p>
+<ul>
+<li>CREATE UNIQUE INDEX 索引的名字 ON tablename (列的列表);</li>
+<li>ALTER TABLE tablename ADD UNIQUE 索引的名字 (列的列表);</li>
+<li>CREATE TABLE tablename ( […], UNIQUE 索引的名字 (列的列表) );<h3 id="主键"><a href="#主键" class="headerlink" title="主键"></a>主键</h3></li>
+</ul>
+<p>主键是一种唯一性索引，但它必须指定为“PRIMARY KEY”。主键一般在创建表的时候指定，例如“CREATE TABLE tablename ( […], PRIMARY KEY (列的列表) ); ”。但是，我们也可以通过修改表的方式加入主键，例如“ALTER TABLE tablename ADD PRIMARY KEY (列的列表); ” <strong>每个表只能有一个主键。</strong></p>
+<h3 id="单列索引和多列索引（联合索引）"><a href="#单列索引和多列索引（联合索引）" class="headerlink" title="单列索引和多列索引（联合索引）"></a>单列索引和多列索引（联合索引）</h3><p>索引可以是单列索引，也可以是多列索引【多个键值的B+树】，多列索引在以下几中情况下才能有效：</p>
+<ul>
+<li>select * from table where a=xxx and b=xxx 显然可以使用（a,b）这个联合索引；</li>
+<li>select * from table where a=xxx 也可以使用（a,b）索引；</li>
+<li>但对于b列的查询select * from table where b=xxx则不可以使用B+树索引；<br>联合索引的好处是对第二个键值进行了排序处理。<h2 id="索引的方式"><a href="#索引的方式" class="headerlink" title="索引的方式"></a>索引的方式</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a>B-Tree索引</h3>B-Tree是InnoDB和MyISAM引擎的默认索引类型，也可以在创建索引时通过USING BTREE来显示指定。B-Tree是一种多叉平衡树，一般用于数据库的索引，综合效率较高。<h4 id="B-Tree的应用场景"><a href="#B-Tree的应用场景" class="headerlink" title="B-Tree的应用场景"></a>B-Tree的应用场景</h4></li>
+<li>等值匹配：可用于= ，!=，&lt;&gt;，IN， NOT IN，&lt;=&gt;查询语句的优化；</li>
+<li>范围匹配：可用于&gt;，&gt;=,&lt;，&lt;=，BETWEEN AND等范围查询语句优化；</li>
+<li>匹配最左前缀：对于name like bai%这种模糊查询可食用name字段索引来优化查询，但是对name like %bai这种前模糊匹配的查询就无法使用索引了；</li>
+<li>覆盖索引：B-Tree索引的key存放的是字段的值，如果key中包含了所有要查询字段的值，我们称为覆盖索引，覆盖索引能极大的提高性能；</li>
+<li>排序：B-Tree索引是排好序的，可以用来优化order by和group by等操作；<h3 id="HASH索引"><a href="#HASH索引" class="headerlink" title="HASH索引"></a>HASH索引</h3></li>
+</ul>
+<p>哈希索引基于哈希表实现，使用哈希索引可以一次定位，查询效率远高于B-Tree索引，但HASH索引有很多限制：</p>
+<ul>
+<li>只有精确匹配索引所有列查询才有效（因其利用索引的所有列字段值计算哈希值）；</li>
+<li>只支持等值比较查询，不能用于范围查询；</li>
+<li>哈希索引的只包含索引字段的哈希值和指向数据的指针，故不能使用索引中的值来避免读取行；</li>
+<li>哈希索引的数据并不是顺序存储的，无法用于排序；<h3 id="全文索引（FULLTEXT）"><a href="#全文索引（FULLTEXT）" class="headerlink" title="全文索引（FULLTEXT）"></a>全文索引（FULLTEXT）</h3></li>
+</ul>
+<p>全文索引，通过建立倒排索引，快速匹配文档的方式；</p>
+<h3 id="空间索引（SPATIAL）"><a href="#空间索引（SPATIAL）" class="headerlink" title="空间索引（SPATIAL）"></a>空间索引（SPATIAL）</h3><p>MyISAM支持空间索引，可以用作地理数据的存储</p>
+<h2 id="聚集索引、非聚集索引"><a href="#聚集索引、非聚集索引" class="headerlink" title="聚集索引、非聚集索引"></a>聚集索引、非聚集索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>聚集索引并不是一种单独的索引类型，而是一种数据存储方式，InnoDB的聚集索引实际上是将主键（primary key）与数据行存放在同一个文件，一张表只能有一个聚集索引。<br>InnoDB要求表必须有主键（MyISAM可以没有）,如果没有显式指定,则MySQL系统会用一个唯一且不为空的索引列做为主键,如果不存在这种列,则MySQL自动为InnoDB表生成一个隐含字段作为主键。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png" alt><br>InnoDB的普通索引（二级索引）的叶子节点存的的是PRIMARY KEY的值，所以要先查询普通索引（二级索引）的叶子节点找到对应的主键值，然后再根据主键值去聚集索引中查询到对应数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_secondary_index.png" alt></p>
+<ul>
+<li>InnoDB将主键与数据聚集在一起的方式,使得按主键顺序的插入和查询效率会很高,但是更新主键的字段或者不按主键的顺序插入数据的代价会比较高,所以主键的选取很重要(使用AUTO INCREMENT字段或者应用程序生成的顺序递增字段要比无序的UUID好的多);</li>
+<li>二级索引会保存主键的值,所以主键的值不要太大。<h3 id="非聚集"><a href="#非聚集" class="headerlink" title="非聚集"></a>非聚集</h3></li>
+</ul>
+<p>非聚集索引的索引与数据存在不同的文件，比如MyISAM引擎的一张表，会有三种文件：FRM表结构，MYD数据，MYI索引；<br>MYSQL使用索引查询数据时，先到MYI文件中找到数据存储的位置指针，然后再到MYD文件读取数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_unconverage_primary_index.png" alt></p>
+<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2><p>既然索引可以加快查询速度,那么是不是只要是查询语句需要,就建上索引？答案是否定的。因为索引虽然加快了查询速度,但索引也是有代价的:索引文件本身要消耗存储空间,同时索引会加重插入、删除和修改记录时的负担。</p>
+<ul>
+<li><p>索引列不能是表达式的一部分，也不能是函数的参数；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select ...  where id+1=5 //不能使用索引</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>索引的选择性是指不重复的索引值(Cardinality)和数据表的记录总数的比值(0, 1],索引的选择性高(越接近1),查询时能够过滤掉更多的行,效率也更高。</p>
+</li>
+<li>对于字符列,可以使用列的前缀代替整个列作为索引key,当前缀长度合适时,可以做到既使得前缀索引的选择性接近全列索引,同时大大节约索引空间。<br>对于BLOB、TEXT、或者很长的VARCHAR类型的列,必须使用前缀索引。</li>
+<li>MYSQL允许对表上的多个列进行索引。</li>
+</ul>
+
       
 
       
@@ -862,92 +986,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析五之钩子类文件Hooks-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">CodeIgniter框架源码解析五之钩子类文件Hooks.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/" class="archive-article-date">
-  	<time datetime="2018-02-26T08:33:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架可以实现在不修改系统核心文件的基础上来改变或增加系统的核心运行功能（如重写缓存、输出等），这就是Hooks。它的主要作用是 <strong>CI框架下扩展base_system</strong>，能够在CI启动时运行一些开发者定义的一些方法，来实现一些特定的功能。Hooks，是一种事件驱动模式，必然包含两大步骤：1)，事件注册。对于Hook而言，就是指Hook钩子的挂载。(2).事件触发。在特定的时间点call特定的钩子，执行相应的钩子程序。需要注意的是，启动Hook钩子之后，程序的流程可能会发生变化（在一定程度上变得复杂，难以调试），且钩子之间可能有相互调用的可能性，如果处理不当，会有死循环的可能性。</p>
-<p>先看看CI框架有哪些钩子：</p>
-<ul>
-<li>pre_system：系统执行的早期调用.仅仅在benchmark 和 hooks 类 加载完毕的时候，没有执行路由或者其它过程。</li>
-<li>pre_controller：在调用你的任何控制器之前调用，此时所用的基础类,路由选择和安全性检查都已完成。</li>
-<li>post_controller_constructor：在你的控制器实例化之后，任何方法调用之前调用。</li>
-<li>post_controller：在你的控制器完全运行之后调用。</li>
-<li>display_override：覆盖_display()函数，用来在系统执行末尾向web浏览器发送最终页面。这允许你用自己的方法来显示。注意，你需要通过 $this-&gt;CI =&amp; get_instance() 引用 CI 超级对象，然后这样的最终数据可以通过调用 $this-&gt;CI-&gt;output-&gt;get_output() 来获得。</li>
-<li>cache_override：可以让你调用自己的函数来取代output类中的_display_cache() 函数。这可以让你使用自己的缓存显示方法。</li>
-<li>post_system：在最终着色页面发送到浏览器之后，浏览器接收完最终数据的系统执行末尾调用 。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1077,11 +1115,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1089,11 +1127,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">

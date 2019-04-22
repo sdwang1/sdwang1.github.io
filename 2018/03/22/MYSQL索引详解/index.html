@@ -8,23 +8,22 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>MYSQL索引详解 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引">
+  <meta name="description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MYSQL索引详解">
 <meta property="og:url" content="http://www.sdwangblog.cn/2018/03/22/MYSQL索引详解/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引">
+<meta property="og:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_secondary_index.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_unconverage_primary_index.png">
-<meta property="og:updated_time" content="2018-03-28T08:34:56.242Z">
+<meta property="og:updated_time" content="2019-04-12T06:35:55.710Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MYSQL索引详解">
-<meta name="twitter:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png">
+<meta name="twitter:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
+<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -181,136 +180,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。<br>索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升<br>查询性能最有效的手段了。</p>
-<h2 id="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"><a href="#MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）" class="headerlink" title="MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"></a>MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）</h2><p>存储引擎的概念是MySQL的特点，Oracle中没有专门的存储引擎的概念，Oracle有OLTP(联机事物处理On-Line Transact<br>ion Processing)和OLAP(联机分析处理On-Line Analytical Processing)模式的区分。不同的存储引擎决定了MYSQL<br>数据库的表可以用不同的方式（数据特点）来存储。<br>简单来说，存储引擎就是指<code>表的类型及表在计算机上的存储方式</code>。在MySQL中存储引擎有很多种，可以通过”SHOW ENGINES”<br>语句来查看。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png" alt></p>
-<a id="more"></a>
-<p>我们来看几种常用的引擎，如上图示：</p>
-<ul>
-<li>InnoDB存储引擎：</li>
-</ul>
-<p>MYSQL现默认存储引擎，<strong>提供了事务处理，回滚，崩溃修复和多版本并发控制的事务安全，适合更新密集表</strong>；提供行级锁定，<br>支持外键完整性约束；在主内存中缓存数据和索引并维持它自己的缓冲池，读写效率差，占用的数据空间相对较大；</p>
-<p>InnoDB中，创建的表结构存储在.frm文件中，数据和索引存储在innodb_data_home_dir和innodb_data_file_path定义的表空间中；</p>
-<ul>
-<li>MyISAM存储引擎：</li>
-</ul>
-<p>曾经是MYSQL默认存储引擎，其数据文件和索引文件放到了不同目录（需要在创建表的时候通过DATA DIRECTORY和INDEX DIRECTORY语句指定文件绝对路径），但平均分配了IO，具有较快访问速度，<strong>适合插入新纪录和读出记录</strong>；<br>MyISAM的表存储成3个文件，文件名和表名相同，扩展名为frm——存储表结构，MYD——存储数据，MYI——存储索引；</p>
-<p>每个MyISAM类型表都有一个AUTO_INCREMENT的内部列，执行insert或update操作时该列会被同时刷新【MyISAM类型<br>的AUTO_INCREMENT列更新比InnoD的AUTO_INCREMENT列更快】，但MyISAM不提供事务完整性支持和外键约束；</p>
-<p>MyISAM存储引擎的表支持三种不同的存储格式：1.静态型：MyISAM默认存储格式，每个字段固定长度，易于存储和缓存但<br>占用空间通常比较多；2.动态型：允许不定长字段，占用空间较小，但频繁更新删除记录会产生碎片，需要定期执行OPTIM<br>IZE TABLE语句或myisamchk -r命令改善性能；】；3.压缩型；压缩型要用到myisampack工具创建，占用非常小的空<br>间，因为每条记录都是单独压缩的，有非常小的访问开支。</p>
-<ul>
-<li>MEMORY存储引擎：</li>
-</ul>
-<p>比较特殊的存储引擎，每个基于MEMORY存储引擎的表实际对应一个磁盘文件（文件名与表名相同，类型为frm类型），该文<br>件中只存储表的结构，而其数据文件都是存储在内存中。这样有 <strong>利于数据的快速处理，提高整个表的效率，但服务器需要有<br>足够的内存来维持MEMORY存储引擎的表的使用</strong>。<br>MEMORY默认使用哈希索引，当然可以在创建索引时指定B-Tree索引。MEMORY使用一个固定的记录长度格式，不支持BLOB<br>或TEXT列；</p>
-<p>TIPS：MEMORY用到的很少，因为它是把数据存到内存中，如果内存出现异常就会影响数据，所以基于MEMORY的表的生命周<br>期很短，一般是一次性的。<br><strong>不同的存储引擎都各有特点，一个数据库中多个表可以使用不同引擎以满足各种性能和实际需求，使用合适的存储引擎，将会<br>提高整个数据库的性能，总结如下：</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">特点</th>
-<th style="text-align:left">InnoDB</th>
-<th style="text-align:left">MyISAM</th>
-<th>MEMORY</th>
-<th>Archive</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">存储限制</td>
-<td style="text-align:left">64TB</td>
-<td style="text-align:left">没有</td>
-<td>有</td>
-<td>没有</td>
-</tr>
-<tr>
-<td style="text-align:left">事务安全</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left"></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">锁机制</td>
-<td style="text-align:left">行锁</td>
-<td style="text-align:left">表锁</td>
-<td>表锁</td>
-<td>行锁</td>
-</tr>
-<tr>
-<td style="text-align:left">B树索引</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left">支持</td>
-<td>支持</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">哈希索引</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left"></td>
-<td>支持</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">全文索引</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">支持</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">集群索引</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left"></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">数据缓存</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left"></td>
-<td>支持</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">索引缓存</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left">支持</td>
-<td>支持</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">数据可压缩</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">支持</td>
-<td></td>
-<td>支持</td>
-</tr>
-<tr>
-<td style="text-align:left">空间使用</td>
-<td style="text-align:left">高</td>
-<td style="text-align:left">低</td>
-<td>N/A</td>
-<td>非常低</td>
-</tr>
-<tr>
-<td style="text-align:left">内存使用</td>
-<td style="text-align:left">高</td>
-<td style="text-align:left">低</td>
-<td>中等</td>
-<td>低</td>
-</tr>
-<tr>
-<td style="text-align:left">批量插入的速度</td>
-<td style="text-align:left">低</td>
-<td style="text-align:left">高</td>
-<td>高</td>
-<td>非常高</td>
-</tr>
-<tr>
-<td style="text-align:left">支持外键</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left"></td>
-<td></td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
 <h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。</p>
 <h3 id="普通型索引"><a href="#普通型索引" class="headerlink" title="普通型索引"></a>普通型索引</h3><p>最基本的索引类型，没有唯一性之类的限制，普通索引可以通过以下几种方式创建：</p>
 <ul>
@@ -513,7 +382,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是索引"><span class="toc-number">1.</span> <span class="toc-text">什么是索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）"><span class="toc-number">2.</span> <span class="toc-text">MYSQL常见的几种存储引擎（InnoDB、MyISAM、MEMORY…）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的类型"><span class="toc-number">3.</span> <span class="toc-text">索引的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通型索引"><span class="toc-number">3.1.</span> <span class="toc-text">普通型索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#唯一索引"><span class="toc-number">3.2.</span> <span class="toc-text">唯一索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主键"><span class="toc-number">3.3.</span> <span class="toc-text">主键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单列索引和多列索引（联合索引）"><span class="toc-number">3.4.</span> <span class="toc-text">单列索引和多列索引（联合索引）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的方式"><span class="toc-number">4.</span> <span class="toc-text">索引的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Tree索引"><span class="toc-number">4.1.</span> <span class="toc-text">B-Tree索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#B-Tree的应用场景"><span class="toc-number">4.1.1.</span> <span class="toc-text">B-Tree的应用场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HASH索引"><span class="toc-number">4.2.</span> <span class="toc-text">HASH索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全文索引（FULLTEXT）"><span class="toc-number">4.3.</span> <span class="toc-text">全文索引（FULLTEXT）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空间索引（SPATIAL）"><span class="toc-number">4.4.</span> <span class="toc-text">空间索引（SPATIAL）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#聚集索引、非聚集索引"><span class="toc-number">5.</span> <span class="toc-text">聚集索引、非聚集索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#聚集索引"><span class="toc-number">5.1.</span> <span class="toc-text">聚集索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非聚集"><span class="toc-number">5.2.</span> <span class="toc-text">非聚集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">6.</span> <span class="toc-text">高效索引策略</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是索引"><span class="toc-number">1.</span> <span class="toc-text">什么是索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的类型"><span class="toc-number">2.</span> <span class="toc-text">索引的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通型索引"><span class="toc-number">2.1.</span> <span class="toc-text">普通型索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#唯一索引"><span class="toc-number">2.2.</span> <span class="toc-text">唯一索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主键"><span class="toc-number">2.3.</span> <span class="toc-text">主键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单列索引和多列索引（联合索引）"><span class="toc-number">2.4.</span> <span class="toc-text">单列索引和多列索引（联合索引）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的方式"><span class="toc-number">3.</span> <span class="toc-text">索引的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Tree索引"><span class="toc-number">3.1.</span> <span class="toc-text">B-Tree索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#B-Tree的应用场景"><span class="toc-number">3.1.1.</span> <span class="toc-text">B-Tree的应用场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HASH索引"><span class="toc-number">3.2.</span> <span class="toc-text">HASH索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全文索引（FULLTEXT）"><span class="toc-number">3.3.</span> <span class="toc-text">全文索引（FULLTEXT）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空间索引（SPATIAL）"><span class="toc-number">3.4.</span> <span class="toc-text">空间索引（SPATIAL）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#聚集索引、非聚集索引"><span class="toc-number">4.</span> <span class="toc-text">聚集索引、非聚集索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#聚集索引"><span class="toc-number">4.1.</span> <span class="toc-text">聚集索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非聚集"><span class="toc-number">4.2.</span> <span class="toc-text">非聚集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">5.</span> <span class="toc-text">高效索引策略</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -657,11 +526,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,11 +538,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">

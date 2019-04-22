@@ -152,6 +152,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析五之钩子类文件Hooks-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">CodeIgniter框架源码解析五之钩子类文件Hooks.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/" class="archive-article-date">
+  	<time datetime="2018-02-26T08:33:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架可以实现在不修改系统核心文件的基础上来改变或增加系统的核心运行功能（如重写缓存、输出等），这就是Hooks。它的主要作用是 <strong>CI框架下扩展base_system</strong>，能够在CI启动时运行一些开发者定义的一些方法，来实现一些特定的功能。Hooks，是一种事件驱动模式，必然包含两大步骤：1)，事件注册。对于Hook而言，就是指Hook钩子的挂载。(2).事件触发。在特定的时间点call特定的钩子，执行相应的钩子程序。需要注意的是，启动Hook钩子之后，程序的流程可能会发生变化（在一定程度上变得复杂，难以调试），且钩子之间可能有相互调用的可能性，如果处理不当，会有死循环的可能性。</p>
+<p>先看看CI框架有哪些钩子：</p>
+<ul>
+<li>pre_system：系统执行的早期调用.仅仅在benchmark 和 hooks 类 加载完毕的时候，没有执行路由或者其它过程。</li>
+<li>pre_controller：在调用你的任何控制器之前调用，此时所用的基础类,路由选择和安全性检查都已完成。</li>
+<li>post_controller_constructor：在你的控制器实例化之后，任何方法调用之前调用。</li>
+<li>post_controller：在你的控制器完全运行之后调用。</li>
+<li>display_override：覆盖_display()函数，用来在系统执行末尾向web浏览器发送最终页面。这允许你用自己的方法来显示。注意，你需要通过 $this-&gt;CI =&amp; get_instance() 引用 CI 超级对象，然后这样的最终数据可以通过调用 $this-&gt;CI-&gt;output-&gt;get_output() 来获得。</li>
+<li>cache_override：可以让你调用自己的函数来取代output类中的_display_cache() 函数。这可以让你使用自己的缓存显示方法。</li>
+<li>post_system：在最终着色页面发送到浏览器之后，浏览器接收完最终数据的系统执行末尾调用 。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析四之基准测试类文件Benchmark-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -848,83 +934,6 @@
 
 
   
-    <article id="post-HTTP原理之URL与资源" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/14/HTTP原理之URL与资源/">HTTP原理之URL与资源</a>
-    </h1>
-  
-
-        
-        <a href="/2017/12/14/HTTP原理之URL与资源/" class="archive-article-date">
-  	<time datetime="2017-12-14T08:16:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>URL是因特网资源的标准化名称，HTTP规范将更通用的概念URI作为其资源标识符，但实际上HTTP应用程序处理的只是URI的URL子集。URL定义了用户所需的特定资源，它位于何处以及如何获取它。</p>
-<h2 id="URL的语法"><a href="#URL的语法" class="headerlink" title="URL的语法"></a>URL的语法</h2><p>URL提供了一种定位网络任意资源的手段，这些资源可以通过各种不同的方案（比如HTTP，FTP，SMTP）访问，故URL语法会随方案的不同而有所不同。事实上，大部分URL都遵循通用的URL语法，而且不同URL方案的风格和语法都有不少重叠。大多数URL方案的URL语法都建立在这个由9部分构成的通用格式上：<br><code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code><br>几乎没有哪个URL包含了所有这些组件，URL最重要的三部分就是：方案，主机和路径。</p>
-        
-          <a class="article-more-a" href="/2017/12/14/HTTP原理之URL与资源/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">HTTP原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/12/14/HTTP原理之URL与资源/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1054,11 +1063,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1066,11 +1075,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
