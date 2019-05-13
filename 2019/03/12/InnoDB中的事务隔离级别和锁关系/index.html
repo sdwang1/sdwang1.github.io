@@ -20,8 +20,9 @@
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/unrepeatable_read_sample.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/delusion_read_sample.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_four_isolation_level.png">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sample_innoddb_mvcc_phantom.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_cross_insert_deadlock_sample.png">
-<meta property="og:updated_time" content="2019-04-22T06:29:56.944Z">
+<meta property="og:updated_time" content="2019-05-10T06:30:07.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="InnoDB中的事务隔离级别和锁关系">
 <meta name="twitter:description" content="前言提到事务，你肯定会想到事务的四大特性——ACID：  原子性（ Atomicity ）：事务是数据库的逻辑工作单位，事务中包括的诸操作要么全做，要么全不做； 一致性（ Consistency ）：事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的； 隔离性（ Isolation ）：一个事务的执行不能被其他事务干扰； 持续性（ Durability ）">
@@ -210,8 +211,9 @@
 <h3 id="Serializable-串行化"><a href="#Serializable-串行化" class="headerlink" title="Serializable 串行化"></a>Serializable 串行化</h3><p><strong>串行化，是最高的事务隔离级别，同时代价也花费最高，性能很低，一般很少使用。在这种隔离级别下，事务在读取数据时，必须先对其加 表级共享锁，直到事务结束才释放；事务在更新数据时，必须先对其加 表级排他锁，直到事务结束才释放</strong>。</p>
 <p><strong>当隔离级别设置为Serializable时，就可以避免幻读</strong>。当singo的老婆查看其消费记录时，singo就只能查信用卡消费而不能对消费记录做增删改，直到上个事务结束（<strong>事务对表增加了表级共享锁，其他事务只能增加共享锁读取数据，不能进行其他任何操作；事务对表增加了表级排他锁，其他事务不能对表增加共享锁或排他锁，也就无法进行任何操作</strong>）。</p>
 <p>虽然Serializable隔离级别解决了脏读、不可重复读、幻读等读现象，但以直接锁表的方式(类似于Java多线程中的锁)来避免并行访问，执行效率极低。</p>
-<h2 id="设置当前隔离级别"><a href="#设置当前隔离级别" class="headerlink" title="设置当前隔离级别"></a>设置当前隔离级别</h2><p>“凡存在即合理”——哪个隔离级别都有它自己的使用场景，你要根据自己的业务情况来定。上述依次介绍的MySQL四种隔离级别，<strong>随着数据库隔离级别的提高（锁的越严实），数据的并发能力也是逐步下降，如何在并发性和隔离性之间做一个很好的权衡是个至关重要的问题</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_four_isolation_level.png" alt><br>你可以在命令行使用–transaction-isolation选项，或在选项文件(my.cnf)里设置该选项——<code>transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}</code>，为所有连接设置默认隔离级别。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看默认事务隔离级别</span><br><span class="line">mysql&gt; show variables like &apos;tx_isolation&apos;;</span><br><span class="line">+---------------+-----------------+</span><br><span class="line">| tx_isolation  | REPEATABLE-READ |</span><br><span class="line">+---------------+-----------------+</span><br><span class="line"></span><br><span class="line">#使用SET TRNSACTION改变单个会话或者所有新进连接的事务隔离级别</span><br><span class="line">mysql &gt; SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br><span class="line">#使用SESSION关键字表示为当前连接上执行的事务设置隔离级别；使用GLOBAL关键字在全局上所有新连接设置隔离级别(需要SUPER权限)</span><br><span class="line"></span><br><span class="line">#查询全局和会话事务隔离级别</span><br><span class="line">mysql &gt; SELECT @@global.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@session.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure></p>
-<h2 id="事务隔离的实现——MVCC"><a href="#事务隔离的实现——MVCC" class="headerlink" title="事务隔离的实现——MVCC"></a>事务隔离的实现——MVCC</h2><p>由上文可知，数据库通过在不同时刻加不同类型的锁构建出了四种不同行为模式的隔离级别。若是仅仅如此（<strong>加锁实现</strong>），让所有的读者等待写者工作完成，则不论系统的IO能力有多高，都会受限于锁（<strong>悲观锁和乐观锁</strong>）而导致性能低下。<strong>为了优化读取，MVCC（Multiversion Concurrency Control）使用了一种不同的手段——对数据库的任何修改的提交都不会直接覆盖之前的数据，而是产生一个新版本与老版本共存，使得读取数据（除非用SELECT… FOR UPDATE）时可以完全不加锁而是根据隔离级别选择要读取哪个版本的数据</strong>。特别说明的是，MVCC的实现没有固定的规范，每个数据库都会有不同的实现方式，这里主要讨论InnoDB的MVCC实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">悲观锁： 对数据被外界（本系统当前其他事务，及外部系统的事务处理）修改持保守态度。即在整个数据处理的过程中，依靠数据库提供的锁机制将数据处于锁定状态，以保证最大程度的独占性（长事务的性能开销往往无法承受）。</span><br><span class="line"></span><br><span class="line">在悲观保证锁情况下，为了保证事务的隔离性，就需要一致性锁定读：读取数据时给加S锁，其它事务无法修改这些数据；修改删除数据时要加X锁，其它事务无法读取修改这些数据。</span><br><span class="line"></span><br><span class="line">乐观锁：采取了更加宽松的加锁机制，大多是基于数据版本（ Version ）记录机制实现，比如MVCC。</span><br></pre></td></tr></table></figure></p>
+<h2 id="设置当前隔离级别"><a href="#设置当前隔离级别" class="headerlink" title="设置当前隔离级别"></a>设置当前隔离级别</h2><p>“凡存在即合理”——每个隔离级别都有它自己的适用场景，你要根据自己的业务情况来选用。上述依次介绍的MySQL四种隔离级别，<strong>随着数据库隔离级别的提高（锁的越严实），数据的并发能力也是逐步下降，如何在并发性和隔离性之间做一个很好的权衡是个至关重要的问题</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_four_isolation_level.png" alt><br>你可以在命令行使用–transaction-isolation选项，或在选项文件(my.cnf)里设置该选项——<code>transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}</code>，为所有连接设置默认隔离级别。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看默认事务隔离级别</span><br><span class="line">mysql&gt; show variables like &apos;tx_isolation&apos;;</span><br><span class="line">+---------------+-----------------+</span><br><span class="line">| tx_isolation  | REPEATABLE-READ |</span><br><span class="line">+---------------+-----------------+</span><br><span class="line"></span><br><span class="line">#使用SET TRNSACTION改变单个会话或者所有新进连接的事务隔离级别</span><br><span class="line">mysql &gt; SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br><span class="line">#使用SESSION关键字表示为当前连接上执行的事务设置隔离级别；使用GLOBAL关键字在全局上所有新连接设置隔离级别(需要SUPER权限)</span><br><span class="line"></span><br><span class="line">#查询全局和会话事务隔离级别</span><br><span class="line">mysql &gt; SELECT @@global.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@session.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure></p>
+<p><strong>补充说明下，<code>begin/start transaction</code>命令并不是一个事务的起点，在执行它们后的第一个操作InnoDB表的语句，事务才真正启动。如果你想要马上启动一个事务，可以使用<code>start transaction with consistent snapshot</code>命令</strong>。</p>
+<h2 id="事务隔离的实现——MVCC"><a href="#事务隔离的实现——MVCC" class="headerlink" title="事务隔离的实现——MVCC"></a>事务隔离的实现——MVCC</h2><p>由上文可知，数据库通过在不同时刻加不同类型的锁构建出了四种不同行为模式的隔离级别。若是仅仅如此（<strong>基于数据库锁机制</strong>），让所有的读者等待写者工作完成，则不论系统的IO能力有多高，都会受限于锁（<strong>悲观锁</strong>）而导致性能低下。<strong>为了优化读取，MVCC（Multiversion Concurrency Control）使用了一种不同的手段——对数据库的任何修改的提交都不会直接覆盖之前的数据，而是产生一个新版本与老版本共存，使得读取数据（除非用SELECT… FOR UPDATE）时可以完全不加锁而是根据隔离级别选择要读取哪个版本的数据</strong>。特别说明的是，MVCC的实现没有固定的规范，每个数据库都会有不同的实现方式，这里主要讨论InnoDB的MVCC实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">悲观锁：认为被它保护的数据是极其不安全的，每时每刻都有可能变动，一个事务拿到悲观锁后，其他任何事务（本系统当前其他事务，及外部系统的事务处理）都不能对该数据进行修改，只能等待锁被释放才可以执行（长事务的性能开销往往无法承受）。数据库提供的锁机制——行锁、表锁、读锁、写锁都是悲观锁类型。</span><br><span class="line"></span><br><span class="line">乐观锁：认为数据的变动不会太频繁，它允许多个事务同时对数据进行变动，通常利用数据版本（ Version ）记录机制负责多个事务对数据进行修改，比如MVCC。</span><br><span class="line"></span><br><span class="line">参见https://mp.weixin.qq.com/s?__biz=MzI3NzE0NjcwMg==&amp;mid=2650123700&amp;idx=2&amp;sn=1522953f2f887653e5cf0c6bfd05e5a0&amp;chksm=f36bb095c41c39839f79deaef71092d860774f00b4266d91f38993412137e4fb6e270a0fa20a&amp;scene=27#wechat_redirect</span><br></pre></td></tr></table></figure></p>
 <h3 id="MVCC在InnoDB中的实现"><a href="#MVCC在InnoDB中的实现" class="headerlink" title="MVCC在InnoDB中的实现"></a>MVCC在InnoDB中的实现</h3><p>在InnoDB中建表时，每个表都会有三列隐藏记录，其中有两列和MVCC有关系——<strong>数据行的版本号DB_TRX_ID（创建时间）、删除版本号DB_ROLL_PT（过期/删除时间）</strong>，其对应的真实表结构如下示（查询语句看不到隐藏列）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; CREATE TABLE `test_zq` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `test_id` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line"></span><br><span class="line">#使用显式启动事务，避免长连接导致意外的长事务</span><br><span class="line">mysql&gt; show variables like &apos;AUTOCOMMIT&apos;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| autocommit    | ON    |</span><br><span class="line">+---------------+-------+</span><br><span class="line">mysql&gt; set autocommit=0;</span><br></pre></td></tr></table></figure></p>
 <p>假设系统的全局事务ID从1开始，MVCC的插入、删除、更新逻辑实现过程如下示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#插入数据，记录当前全局事务ID到DB_TRX_ID列</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; insert into `test_zq` (`id`, `test_id`) values(&apos;5&apos;,&apos;68&apos;);</span><br><span class="line">mysql &gt; insert into `test_zq` (`id`, `test_id`) values(&apos;6&apos;,&apos;78&apos;);</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | NULL       |</span><br><span class="line">| 6          | 78           | 1          | NULL       |</span><br><span class="line"></span><br><span class="line">#删除数据，数据并未被直接删除，而是记录了删除版本号（假设当前事务ID为3）到DB_ROLL_PT列</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; delete from `test_zq` where id=6;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | NULL       |</span><br><span class="line">| 6          | 78           | 1          | 3          |</span><br><span class="line"></span><br><span class="line">#更新数据，首先复制一条当前记录行数据，同时标记这行数据DB_TRX_ID列为当前事务版本号（假设当前事务ID为10），最后将原来数据行的DB_ROLL_PT列标记为当前事务版本号</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; update test_zq set test_id = 22 where id = 5;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | 10         |</span><br><span class="line">| 6          | 78           | 1          | 3          |</span><br><span class="line">| 5          | 22           | 10         | NULL       |</span><br><span class="line">#当DB_ROLL_PT不为空，且它比当前还没结束的事务ID中最小的一个还要小时，这些多出的“无用数据”会被后台任务（PostgreSQL中叫做“VACUUM”进程，MySQL InnoDB中，叫做“purge“）定时清理掉啦</span><br></pre></td></tr></table></figure></p>
 <p>基于上述实现过程，<strong>MVCC的逻辑流程中数据查询规则有如下两条，只有查询规则1，2同时满足的行记录才能作为查询结果返回</strong>：</p>
@@ -220,13 +222,13 @@
 <li>查找 <strong>删除版本号为NULL或大于当前事务版本号的记录</strong>，这样确保查询出来的数据行记录在事务开启前未被删除；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#假设当前事务版本号为12</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 22           | 10         | NULL       |</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>总的来说，<strong>通过MVCC机制，虽然每条记录都需要额外的存储空间（更新/删除操作），更多的行检查工作以及一些额外的维护工作，但可以使大多数读操作都不用加锁，读数据操作变得高效简单，并且也能保证只会读取到符合标准的行，只锁住必要行</strong>。<br><strong>MVCC中的读操作可以分为两种读</strong>：</p>
+<p>总的来说，<strong>通过MVCC机制，虽然每条记录都需要额外的存储空间（更新/删除操作），更多的行检查工作以及一些额外的维护工作，但可以使大多数读操作（快照读）都不用加锁，读数据操作变得高效简单，并且也能保证只会读取到符合标准的行，只锁住必要行</strong>。<br><strong>MVCC中的读操作可以分为两种读</strong>：</p>
 <ul>
 <li><strong>快照读</strong>：无需加锁的简单select语句读取“历史数据”，<strong>使用MVCC机制非阻塞地读取undo中已经提交的数据（DB_ROLL_PT指向某undo log）</strong>；在RR（可重复读）隔离级别下的快照读，<strong>不是以 begin 事务开始的时间点作为 snapshot 建立时间点，而是以第一条 select 语句的时间点作为 snapshot 建立的时间点</strong>。</li>
 <li><strong>当前读</strong>：需要加锁的update、insert、delete、select for update等语句；</li>
 </ul>
-<h2 id="MySQL的RR隔离级别与幻读现象"><a href="#MySQL的RR隔离级别与幻读现象" class="headerlink" title="MySQL的RR隔离级别与幻读现象"></a>MySQL的RR隔离级别与幻读现象</h2><p>我们知道，Repeatable read（可重复读）事务隔离级别是无法解决幻读的，只有在Serializable级别才能解决这个问题。那么，MySQL的InnoDB中默认RR隔离级别能否防止幻读呢？不妨来实验一下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql(事务1) &gt; begin;</span><br><span class="line">mysql(事务1) &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  5 |      22 |</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; begin;</span><br><span class="line">mysql(事务2) &gt; insert into `test_zq` (`id`, `test_id`) values(&apos;6&apos;,&apos;78&apos;);</span><br><span class="line">mysql(事务2) &gt; commit;</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  5 |      22 |</span><br><span class="line">mysql(事务1) &gt; commit;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，在事务2提交后，事务1的查询还是不会读到这条新增的数据，InnoDB的RR级别似乎解决了幻读的问题，这是怎么肥事呢？其实，InnoDB引擎的Repeatable read实现和标准规范有所不同，<strong>为了解决当前读中的幻读问题，它使用了——Next-Key锁</strong>。</p>
+<h2 id="MySQL的RR隔离级别与幻读现象"><a href="#MySQL的RR隔离级别与幻读现象" class="headerlink" title="MySQL的RR隔离级别与幻读现象"></a>MySQL的RR隔离级别与幻读现象</h2><p>我们知道，理论上Repeatable read（可重复读）事务隔离级别是无法解决幻读的，只有在Serializable级别才能解决这个问题。那么，MySQL的InnoDB中默认RR隔离级别能否防止幻读呢？不妨来实验一下。<br><img src="http://www.sdwangblog.cn/blogimg/sample_innoddb_mvcc_phantom.png" alt><br>可以看到，MySQL的InnoDB中默认RR隔离级别下通过MVCC机制可以 <strong>部分防止幻读：事务2在事务1执行中insert了一条数据并提交，事务1再次查询时读取——快照读——的是undo中的旧版本数据（防止了部分幻读），但是事务1中执行update/delete——当前读——都是可以成功的</strong>。换句话说，<strong>InnoDB的默认RR隔离级别在快照读的情况下避免了不可重复读和幻读，但是在当前读的情况下并没有完全避免幻读</strong>。</p>
+<p><strong>说到当前读中的幻读问题，必须隆重介绍下InnoDB的一种锁类型——Next-Key锁</strong>。</p>
 <h3 id="Next-Key锁"><a href="#Next-Key锁" class="headerlink" title="Next-Key锁"></a>Next-Key锁</h3><p><strong>A next-key lock is a combination of a record lock on the index record and a gap lock on the gap before the index record——记录锁和GAP锁的合并</strong>。</p>
 <p>记录锁（Record Lock）是锁住记录的，但 <strong>它锁住的是索引记录，而不是我们真正的数据记录：如果加锁列是（非）主键索引，会（在自己的索引上面加锁之后再）去主键上面加锁锁住；否则会进行全表记录加锁</strong>。</p>
 <p>间隙锁（GAP锁），顾名思义锁间隙——锁定某个范围，不锁记录。它不会阻塞其他的GAP锁，但是会阻塞插入间隙锁，这也是用来防止幻读的关键。<br><strong>InnoDB自动使用间隙锁/Next-Key锁的条件如下</strong>：</p>
@@ -246,6 +248,16 @@
 <p>这里请思考一个问题，既然“插入意向锁”是一种特殊的间隙锁，那INSERT操作为何不直接使用间隙锁，或者记录锁或next-key锁呢？<br><strong>如果INSERT操作直接使用间隙锁，因为间隙锁之间互不排斥，Next-Key锁和间隙锁相互兼容，那么插入数据就不会堵塞即唤起等待，会造成幻读；如果INSERT操作使用了记录锁或next-key锁，next-key锁之间可能相互排斥，会影响insert的并发性</strong>。</p>
 <h2 id="花絮彩蛋"><a href="#花絮彩蛋" class="headerlink" title="花絮彩蛋"></a>花絮彩蛋</h2><p>至此大家应该对“InnoDB的事务隔离级别和加锁机制”都有了一定程度的了解，那。。。不妨来尝试分析下面这个“死锁案例”的发生原因（后附有执行过程解析图）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  1 |      10 |</span><br><span class="line">|  5 |      50 |</span><br><span class="line">|  7 |      70 |</span><br><span class="line">| 11 |     110 |</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; begin; delete from test_zq where test_id=80;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; begin; delete from test_zq where test_id=90;</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; insert test_zq select 8,80;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; insert test_zq select 9,90;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">#事务管理器选择回滚事务 2，事务 1 插入操作执行成功</span><br><span class="line">mysql(事务1) &gt;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://www.sdwangblog.cn/blogimg/innodb_cross_insert_deadlock_sample.png" alt></p>
+<h2 id="一些优化锁性能的建议"><a href="#一些优化锁性能的建议" class="headerlink" title="一些优化锁性能的建议"></a>一些优化锁性能的建议</h2><ul>
+<li>尽量使用较低的隔离级别；</li>
+<li>精心设计索引， 并尽量使用索引访问数据， 使加锁更精确， 从而减少锁冲突的机会；</li>
+<li>选择合理的事务大小，小事务发生锁冲突的几率也更小；</li>
+<li>给记录集显示加锁时，最好一次性请求足够级别的锁。比如要修改数据的话，最好直接申请排他锁，而不是先申请共享锁，修改时再请求排他锁，这样容易产生死锁；</li>
+<li>不同的程序访问一组表时，应尽量约定以相同的顺序访问各表，对一个表而言，尽可能以固定的顺序存取表中的行。这样可以大大减少死锁的机会；</li>
+<li>尽量用相等条件访问数据，这样可以避免间隙锁对并发插入的影响；</li>
+<li>不要申请超过实际需要的锁级别；</li>
+<li>对于一些特定的事务，可以使用表锁来提高处理速度或减少死锁的可能；</li>
+</ul>
 
       
 
@@ -398,7 +410,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB锁类型"><span class="toc-number">2.</span> <span class="toc-text">InnoDB锁类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的四种隔离级别"><span class="toc-number">3.</span> <span class="toc-text">事务的四种隔离级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-uncommitted-读未提交"><span class="toc-number">3.1.</span> <span class="toc-text">Read uncommitted 读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-committed-读提交"><span class="toc-number">3.2.</span> <span class="toc-text">Read committed 读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repeatable-read-可重复读"><span class="toc-number">3.3.</span> <span class="toc-text">Repeatable read 可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializable-串行化"><span class="toc-number">3.4.</span> <span class="toc-text">Serializable 串行化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置当前隔离级别"><span class="toc-number">4.</span> <span class="toc-text">设置当前隔离级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务隔离的实现——MVCC"><span class="toc-number">5.</span> <span class="toc-text">事务隔离的实现——MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MVCC在InnoDB中的实现"><span class="toc-number">5.1.</span> <span class="toc-text">MVCC在InnoDB中的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的RR隔离级别与幻读现象"><span class="toc-number">6.</span> <span class="toc-text">MySQL的RR隔离级别与幻读现象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Next-Key锁"><span class="toc-number">6.1.</span> <span class="toc-text">Next-Key锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入意向锁"><span class="toc-number">6.2.</span> <span class="toc-text">插入意向锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#花絮彩蛋"><span class="toc-number">7.</span> <span class="toc-text">花絮彩蛋</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB锁类型"><span class="toc-number">2.</span> <span class="toc-text">InnoDB锁类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的四种隔离级别"><span class="toc-number">3.</span> <span class="toc-text">事务的四种隔离级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-uncommitted-读未提交"><span class="toc-number">3.1.</span> <span class="toc-text">Read uncommitted 读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-committed-读提交"><span class="toc-number">3.2.</span> <span class="toc-text">Read committed 读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repeatable-read-可重复读"><span class="toc-number">3.3.</span> <span class="toc-text">Repeatable read 可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializable-串行化"><span class="toc-number">3.4.</span> <span class="toc-text">Serializable 串行化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置当前隔离级别"><span class="toc-number">4.</span> <span class="toc-text">设置当前隔离级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务隔离的实现——MVCC"><span class="toc-number">5.</span> <span class="toc-text">事务隔离的实现——MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MVCC在InnoDB中的实现"><span class="toc-number">5.1.</span> <span class="toc-text">MVCC在InnoDB中的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的RR隔离级别与幻读现象"><span class="toc-number">6.</span> <span class="toc-text">MySQL的RR隔离级别与幻读现象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Next-Key锁"><span class="toc-number">6.1.</span> <span class="toc-text">Next-Key锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入意向锁"><span class="toc-number">6.2.</span> <span class="toc-text">插入意向锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#花絮彩蛋"><span class="toc-number">7.</span> <span class="toc-text">花絮彩蛋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些优化锁性能的建议"><span class="toc-number">8.</span> <span class="toc-text">一些优化锁性能的建议</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -510,27 +522,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -542,23 +534,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,7 +550,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>

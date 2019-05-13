@@ -249,58 +249,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。<br>索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升<br>查询性能最有效的手段了。</p>
-<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。</p>
-<h3 id="普通型索引"><a href="#普通型索引" class="headerlink" title="普通型索引"></a>普通型索引</h3><p>最基本的索引类型，没有唯一性之类的限制，普通索引可以通过以下几种方式创建：</p>
-<ul>
-<li>CREATE INDEX 索引的名字 ON tablename (列名1，列名2,…);</li>
-<li>ALTER TABLE tablename ADD INDEX 索引的名字 (列名1，列名2,…);</li>
-<li>CREATE TABLE tablename ( […], INDEX 索引的名字 (列名1，列名2,…) );<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3></li>
-</ul>
-<p>这种索引和前面的“普通索引”基本相同，但区别在于索引列的所有值必须唯一。唯一性索引也可以用以下几种方式创建：</p>
-<ul>
-<li>CREATE UNIQUE INDEX 索引的名字 ON tablename (列的列表);</li>
-<li>ALTER TABLE tablename ADD UNIQUE 索引的名字 (列的列表);</li>
-<li>CREATE TABLE tablename ( […], UNIQUE 索引的名字 (列的列表) );<h3 id="主键"><a href="#主键" class="headerlink" title="主键"></a>主键</h3></li>
-</ul>
-<p>主键是一种唯一性索引，但它必须指定为“PRIMARY KEY”。主键一般在创建表的时候指定，例如“CREATE TABLE tablename ( […], PRIMARY KEY (列的列表) ); ”。但是，我们也可以通过修改表的方式加入主键，例如“ALTER TABLE tablename ADD PRIMARY KEY (列的列表); ” <strong>每个表只能有一个主键。</strong></p>
-<h3 id="单列索引和多列索引（联合索引）"><a href="#单列索引和多列索引（联合索引）" class="headerlink" title="单列索引和多列索引（联合索引）"></a>单列索引和多列索引（联合索引）</h3><p>索引可以是单列索引，也可以是多列索引【多个键值的B+树】，多列索引在以下几中情况下才能有效：</p>
-<ul>
-<li>select * from table where a=xxx and b=xxx 显然可以使用（a,b）这个联合索引；</li>
-<li>select * from table where a=xxx 也可以使用（a,b）索引；</li>
-<li>但对于b列的查询select * from table where b=xxx则不可以使用B+树索引；<br>联合索引的好处是对第二个键值进行了排序处理。<h2 id="索引的方式"><a href="#索引的方式" class="headerlink" title="索引的方式"></a>索引的方式</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a>B-Tree索引</h3>B-Tree是InnoDB和MyISAM引擎的默认索引类型，也可以在创建索引时通过USING BTREE来显示指定。B-Tree是一种多叉平衡树，一般用于数据库的索引，综合效率较高。<h4 id="B-Tree的应用场景"><a href="#B-Tree的应用场景" class="headerlink" title="B-Tree的应用场景"></a>B-Tree的应用场景</h4></li>
-<li>等值匹配：可用于= ，!=，&lt;&gt;，IN， NOT IN，&lt;=&gt;查询语句的优化；</li>
-<li>范围匹配：可用于&gt;，&gt;=,&lt;，&lt;=，BETWEEN AND等范围查询语句优化；</li>
-<li>匹配最左前缀：对于name like bai%这种模糊查询可食用name字段索引来优化查询，但是对name like %bai这种前模糊匹配的查询就无法使用索引了；</li>
-<li>覆盖索引：B-Tree索引的key存放的是字段的值，如果key中包含了所有要查询字段的值，我们称为覆盖索引，覆盖索引能极大的提高性能；</li>
-<li>排序：B-Tree索引是排好序的，可以用来优化order by和group by等操作；<h3 id="HASH索引"><a href="#HASH索引" class="headerlink" title="HASH索引"></a>HASH索引</h3></li>
-</ul>
-<p>哈希索引基于哈希表实现，使用哈希索引可以一次定位，查询效率远高于B-Tree索引，但HASH索引有很多限制：</p>
-<ul>
-<li>只有精确匹配索引所有列查询才有效（因其利用索引的所有列字段值计算哈希值）；</li>
-<li>只支持等值比较查询，不能用于范围查询；</li>
-<li>哈希索引的只包含索引字段的哈希值和指向数据的指针，故不能使用索引中的值来避免读取行；</li>
-<li>哈希索引的数据并不是顺序存储的，无法用于排序；<h3 id="全文索引（FULLTEXT）"><a href="#全文索引（FULLTEXT）" class="headerlink" title="全文索引（FULLTEXT）"></a>全文索引（FULLTEXT）</h3></li>
-</ul>
-<p>全文索引，通过建立倒排索引，快速匹配文档的方式；</p>
-<h3 id="空间索引（SPATIAL）"><a href="#空间索引（SPATIAL）" class="headerlink" title="空间索引（SPATIAL）"></a>空间索引（SPATIAL）</h3><p>MyISAM支持空间索引，可以用作地理数据的存储</p>
-<h2 id="聚集索引、非聚集索引"><a href="#聚集索引、非聚集索引" class="headerlink" title="聚集索引、非聚集索引"></a>聚集索引、非聚集索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>聚集索引并不是一种单独的索引类型，而是一种数据存储方式，InnoDB的聚集索引实际上是将主键（primary key）与数据行存放在同一个文件，一张表只能有一个聚集索引。<br>InnoDB要求表必须有主键（MyISAM可以没有）,如果没有显式指定,则MySQL系统会用一个唯一且不为空的索引列做为主键,如果不存在这种列,则MySQL自动为InnoDB表生成一个隐含字段作为主键。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png" alt><br>InnoDB的普通索引（二级索引）的叶子节点存的的是PRIMARY KEY的值，所以要先查询普通索引（二级索引）的叶子节点找到对应的主键值，然后再根据主键值去聚集索引中查询到对应数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_secondary_index.png" alt></p>
-<ul>
-<li>InnoDB将主键与数据聚集在一起的方式,使得按主键顺序的插入和查询效率会很高,但是更新主键的字段或者不按主键的顺序插入数据的代价会比较高,所以主键的选取很重要(使用AUTO INCREMENT字段或者应用程序生成的顺序递增字段要比无序的UUID好的多);</li>
-<li>二级索引会保存主键的值,所以主键的值不要太大。<h3 id="非聚集"><a href="#非聚集" class="headerlink" title="非聚集"></a>非聚集</h3></li>
-</ul>
-<p>非聚集索引的索引与数据存在不同的文件，比如MyISAM引擎的一张表，会有三种文件：FRM表结构，MYD数据，MYI索引；<br>MYSQL使用索引查询数据时，先到MYI文件中找到数据存储的位置指针，然后再到MYD文件读取数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_unconverage_primary_index.png" alt></p>
-<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2><p>既然索引可以加快查询速度,那么是不是只要是查询语句需要,就建上索引？答案是否定的。因为索引虽然加快了查询速度,但索引也是有代价的:索引文件本身要消耗存储空间,同时索引会加重插入、删除和修改记录时的负担。</p>
-<ul>
-<li><p>索引列不能是表达式的一部分，也不能是函数的参数；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select ...  where id+1=5 //不能使用索引</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>索引的选择性是指不重复的索引值(Cardinality)和数据表的记录总数的比值(0, 1],索引的选择性高(越接近1),查询时能够过滤掉更多的行,效率也更高。</p>
-</li>
-<li>对于字符列,可以使用列的前缀代替整个列作为索引key,当前缀长度合适时,可以做到既使得前缀索引的选择性接近全列索引,同时大大节约索引空间。<br>对于BLOB、TEXT、或者很长的VARCHAR类型的列,必须使用前缀索引。</li>
-<li>MYSQL允许对表上的多个列进行索引。</li>
-</ul>
-
+        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p><strong>索引是存储引擎用于快速找到记录的一种数据结构</strong>，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。</p>
+<p>MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即<a href="http://www.sdwangblog.cn/2019/03/09/%E8%AE%A4%E8%AF%86MySQL%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%97%A5%E5%BF%97/">不同的存储引擎的索引</a>工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于InnoDB存储引擎在MySQL数据库中的使用最为广泛，我们就先来认识下InnoDB的索引模型。</p>
+<h2 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h2><p>索引的出现是为了提高查询效率，但实现索引的方式（数据结构）却有很多种，几种常见且较简单的数据结构有：<strong>哈希表、有序数组和搜索树</strong>。<strong>InnoDB就使用了<a href="https://zh.wikipedia.org/wiki/B%2B%E6%A0%91" target="_blank" rel="noopener">B+树</a>作为索引模型，每个索引在InnoDB里面对应一颗B+树</strong>。</p>
+        
+          <a class="article-more-a" href="/2018/03/22/MYSQL索引详解/#more">more >></a>
+        
       
 
       
@@ -1083,27 +1037,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1115,23 +1049,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1143,7 +1065,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>

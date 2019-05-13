@@ -8,22 +8,23 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>MYSQL索引详解 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
+  <meta name="description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MYSQL索引详解">
 <meta property="og:url" content="http://www.sdwangblog.cn/2018/03/22/MYSQL索引详解/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
+<meta property="og:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_secondary_index.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_unconverage_primary_index.png">
-<meta property="og:updated_time" content="2019-04-12T06:35:55.710Z">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_IoT_sample.png">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_cluster_index.png">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_tuser_joint_index.png">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_index_pushdown_sample.png">
+<meta property="og:updated_time" content="2019-05-13T05:53:30.415Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MYSQL索引详解">
-<meta name="twitter:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 索引的类型索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png">
+<meta name="twitter:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于">
+<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/innodb_IoT_sample.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -179,57 +180,57 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引是存储引擎用于快速找到记录的一种数据结构,索引类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。<br>索引就是存储引擎的目录,如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升<br>查询性能最有效的手段了。</p>
-<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>索引在MYSQL的存储引擎中实现，而不是服务层实现，即每种存储引擎支持的索引类型各不相同，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。</p>
-<h3 id="普通型索引"><a href="#普通型索引" class="headerlink" title="普通型索引"></a>普通型索引</h3><p>最基本的索引类型，没有唯一性之类的限制，普通索引可以通过以下几种方式创建：</p>
+        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p><strong>索引是存储引擎用于快速找到记录的一种数据结构</strong>，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。</p>
+<p>MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即<a href="http://www.sdwangblog.cn/2019/03/09/%E8%AE%A4%E8%AF%86MySQL%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%97%A5%E5%BF%97/">不同的存储引擎的索引</a>工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于InnoDB存储引擎在MySQL数据库中的使用最为广泛，我们就先来认识下InnoDB的索引模型。</p>
+<h2 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h2><p>索引的出现是为了提高查询效率，但实现索引的方式（数据结构）却有很多种，几种常见且较简单的数据结构有：<strong>哈希表、有序数组和搜索树</strong>。<strong>InnoDB就使用了<a href="https://zh.wikipedia.org/wiki/B%2B%E6%A0%91" target="_blank" rel="noopener">B+树</a>作为索引模型，每个索引在InnoDB里面对应一颗B+树</strong>。</p>
+<a id="more"></a>
+<p>在InnoDB存储引擎中，<strong>表都是根据主键（每张表都有Primary Key，如果创建表时没有指定主键，InnoDB会选择表中符合条件的列作为主键）顺序以索引的形式存放的</strong>，这种存储方式的表称为索引组织表。如下图示的某个(主键)索引组织表，浅蓝色的块我们称之为一个磁盘块，可以看到每个磁盘块包含 <strong>几个数据项（深蓝色所示）和指针（黄色所示）</strong>，比如磁盘块1包含着17、35数据项，和P1、P2、P3指针项，P1指向小于17的磁盘块，P2指向在17和35之间的磁盘块，P3指向大于35的磁盘块。<strong>真实的数据存在于叶子节点</strong>——3、5、9、10、13、15、28、29、36、60、75、79、90、99。<strong>非叶子节点不存储真实的数据，只存储指引搜索方向的数据项</strong>，比如17、35并不真实存在于数据表中。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_IoT_sample.png" alt><br>如上图示，假如要查找数据项29，那么，1. 首先会把磁盘块1由磁盘加载到内存，此时发生一次IO，在内存中用二分查找确定29在17和35之间，锁定磁盘块1的P2指针（相比磁盘的IO，内存查找耗时间很短，可以忽略不计）；2. 通过磁盘块1的P2指针的磁盘地址把磁盘块3由磁盘加载到内存，发生第二次IO，29在26和30之间，锁定磁盘块3的P2指针；3. 通过指针加载磁盘块8到内存，发生第三次IO，同时内存中做二分查找找到29数据项结束，总计三次IO（真实数据量远比这个复杂）。</p>
+<p>通过上面的分析可知，<strong>查询时间 -》磁盘IO次数 -》B+树的高度h。假设当前数据表的数据量为N，每个磁盘块的数据项数量是m，则有h=㏒(m+1)N。当数据量N一定的情况下，m越大h越小，而m = 磁盘块的大小 / 数据项的大小，磁盘块的大小就是一个数据页的大小，是固定的。如果数据项占的空间越小，数据项的数量m越多，树的高度h越低，这就是为什么每个数据项——索引字段要尽量小，比如int占4字节，要比bigint8字节少一半</strong>。</p>
+<p>假设我们有一个主键列为id的表T，并在其字段k上也建立了个普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; create table T(</span><br><span class="line">    -&gt; id int(11) not null auto_increment,</span><br><span class="line">    -&gt; k int(11) not null,</span><br><span class="line">    -&gt; name varchar(64),</span><br><span class="line">    -&gt; PRIMARY KEY (`id`),</span><br><span class="line">    -&gt; KEY `k` (`k`)</span><br><span class="line">    -&gt; ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.09 sec)   </span><br><span class="line"></span><br><span class="line">mysql &gt; insert into T(id,k,name)</span><br><span class="line">    -&gt; values(100,1,&apos;hello&apos;)</span><br><span class="line">    -&gt; values(200,2,&apos;word&apos;);</span><br><span class="line">    -&gt; values(300,3,&apos;!&apos;);</span><br><span class="line">    -&gt; values(500,5,&apos; &apos;);</span><br><span class="line">    -&gt; values(600,6,&apos;I&apos;);</span><br><span class="line">Query OK, 5 rows affected (0.09 sec)</span><br></pre></td></tr></table></figure></p>
+<p>根据表T中数据分布情况，主键索引(id)和普通索引(k)对应的两棵B+树的示例示意图如下：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_cluster_index.png" alt><br>如上图示，<strong>根据叶子结点内容，索引类型可被分为主键索引和非主键索引，主键索引的叶子节点存的是整行数据，非主键索引的叶子节点内容是主键的值。在InnoDB中，主键索引也被称为聚簇索引(clustered index)，非主键索引也被称为二级索引(secondary index)</strong>。</p>
+<p>根据上面的索引结构说明，我们来讨论一个问题：<strong>基于主键索引和普通索引的查询有什么区别</strong>？</p>
 <ul>
-<li>CREATE INDEX 索引的名字 ON tablename (列名1，列名2,…);</li>
-<li>ALTER TABLE tablename ADD INDEX 索引的名字 (列名1，列名2,…);</li>
-<li>CREATE TABLE tablename ( […], INDEX 索引的名字 (列名1，列名2,…) );<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3></li>
+<li>如果语句是 <code>select * from T where ID=500;</code>，即主键查询方式，则只需对数级时间内搜索 ID 这颗B+树；</li>
+<li>如果语句是 <code>select * from T where k=5;</code>，即普通索引查询方式，则需要先搜索 k 索引树得到其 ID 值为500，再到 ID 索引树上搜索对应记录行。这个过程称为 <strong>回表，也就是说，基于非主键索引的查询需要多扫描一颗索引树</strong>。</li>
 </ul>
-<p>这种索引和前面的“普通索引”基本相同，但区别在于索引列的所有值必须唯一。唯一性索引也可以用以下几种方式创建：</p>
+<h3 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h3><p>B+树为了维护索引有序性，在插入/删除记录的时候需要做必要的维护。以上图中表T为例，如果新插入的新行ID=700，则只需要在R5记录后面插入一个新纪录。如果新插入的ID=400，就需要逻辑上挪动后面的数据了，相对麻烦。而更糟糕的是，如果R5所在的数据页（磁盘块）已经满了，根据B+树算法，<strong>这时需要申请一个新的数据页，然后挪动部分数据过去（将旧页面一半数据拷贝到一个新的页面中，并成为左右兄弟结点），这个过程称为页分裂</strong>。在这种情况下，性能和数据页利用率自然会受影响。</p>
+<p>反过来，当相邻两个数据页由于删除数据，<strong>（空间）利用率降都小于50%时，InnoDB会将相邻页面就会合并为一个页面</strong>，减少空间浪费。这个合并过程可以认为是分裂过程的逆过程。</p>
+<p>你可能在一些建表规范里面见到过类似的描述，<strong>要求建表语句里一定要有自增主键</strong>，当然事无绝对，我们基于上面的索引维护过程来说明下哪些场景应该使用自增主键，而哪些场景下不应该？</p>
 <ul>
-<li>CREATE UNIQUE INDEX 索引的名字 ON tablename (列的列表);</li>
-<li>ALTER TABLE tablename ADD UNIQUE 索引的名字 (列的列表);</li>
-<li>CREATE TABLE tablename ( […], UNIQUE 索引的名字 (列的列表) );<h3 id="主键"><a href="#主键" class="headerlink" title="主键"></a>主键</h3></li>
+<li>自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。<strong>每次插入一条新纪录都是追加操作，不涉及挪动其他记录，也不会触发叶子节点的分裂。而由业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高</strong>；</li>
+<li>除了考虑性能外，我们还可以 <strong>从存储空间</strong> 的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是自增字段做主键呢？由于每个非主键索引的叶子结点上都是主键的值，如果用身份证号做主键，那么每个二级索引的叶子结点占用约20个字节，而如果用整型做主键则只需要4个字节。<strong>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小</strong>。所以从性能和存储空间方面考量，自增主键往往是更合理的选择。</li>
 </ul>
-<p>主键是一种唯一性索引，但它必须指定为“PRIMARY KEY”。主键一般在创建表的时候指定，例如“CREATE TABLE tablename ( […], PRIMARY KEY (列的列表) ); ”。但是，我们也可以通过修改表的方式加入主键，例如“ALTER TABLE tablename ADD PRIMARY KEY (列的列表); ” <strong>每个表只能有一个主键。</strong></p>
-<h3 id="单列索引和多列索引（联合索引）"><a href="#单列索引和多列索引（联合索引）" class="headerlink" title="单列索引和多列索引（联合索引）"></a>单列索引和多列索引（联合索引）</h3><p>索引可以是单列索引，也可以是多列索引【多个键值的B+树】，多列索引在以下几中情况下才能有效：</p>
+<p>那有没有什么场景适合用业务字段直接做主键呢？有的，比如 <strong>典型的KV场景 需求：1.只有一个索引；2.该索引必须是唯一索引；由于没有其他索引，就不用考虑其他索引的叶子节点大小问题，同时直接将这个索引设为主键也可以避免每次查询搜索两棵树</strong>。</p>
+<h2 id="MySQL索引分类"><a href="#MySQL索引分类" class="headerlink" title="MySQL索引分类"></a>MySQL索引分类</h2><p>MySQL常见的索引类型有：</p>
 <ul>
-<li>select * from table where a=xxx and b=xxx 显然可以使用（a,b）这个联合索引；</li>
-<li>select * from table where a=xxx 也可以使用（a,b）索引；</li>
-<li>但对于b列的查询select * from table where b=xxx则不可以使用B+树索引；<br>联合索引的好处是对第二个键值进行了排序处理。<h2 id="索引的方式"><a href="#索引的方式" class="headerlink" title="索引的方式"></a>索引的方式</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a>B-Tree索引</h3>B-Tree是InnoDB和MyISAM引擎的默认索引类型，也可以在创建索引时通过USING BTREE来显示指定。B-Tree是一种多叉平衡树，一般用于数据库的索引，综合效率较高。<h4 id="B-Tree的应用场景"><a href="#B-Tree的应用场景" class="headerlink" title="B-Tree的应用场景"></a>B-Tree的应用场景</h4></li>
-<li>等值匹配：可用于= ，!=，&lt;&gt;，IN， NOT IN，&lt;=&gt;查询语句的优化；</li>
-<li>范围匹配：可用于&gt;，&gt;=,&lt;，&lt;=，BETWEEN AND等范围查询语句优化；</li>
-<li>匹配最左前缀：对于name like bai%这种模糊查询可食用name字段索引来优化查询，但是对name like %bai这种前模糊匹配的查询就无法使用索引了；</li>
-<li>覆盖索引：B-Tree索引的key存放的是字段的值，如果key中包含了所有要查询字段的值，我们称为覆盖索引，覆盖索引能极大的提高性能；</li>
-<li>排序：B-Tree索引是排好序的，可以用来优化order by和group by等操作；<h3 id="HASH索引"><a href="#HASH索引" class="headerlink" title="HASH索引"></a>HASH索引</h3></li>
+<li>主键索引，使用PRIMARY KEY pk_index(‘col’)）建立索引，列值不允许重复，不允许null；</li>
+<li>唯一索引，使用ADD UNIQUE index_name(‘col’)建立索引，列值必须唯一，允许null；</li>
+<li>普通索引，使用ADD INDEX index_name(‘col’)建立索引，列值没有任何限制；</li>
+<li>全文索引，使用ADD FULLTEXT INDEX ft_index(‘col’)对文本内容进行分词，便于搜索；</li>
+<li>联合索引，使用ADD INDEX index_name(‘col1’,’col2’,’col3’)在多个字段组合【多个键值的B+树】上创建的索引，专门用于组合搜索，其效率大于索引合并；</li>
 </ul>
-<p>哈希索引基于哈希表实现，使用哈希索引可以一次定位，查询效率远高于B-Tree索引，但HASH索引有很多限制：</p>
+<h2 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h2><p>以上图中表T为例，假若我们执行<code>select * from T where k betwen 3 and 5;</code>，需要执行几次B+树搜索，又会扫描多少行呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 在 k 索引树上找到 k=3 的记录，取得 ID = 300;</span><br><span class="line">2. 再到 ID索引树查到ID=300 对应的R3；</span><br><span class="line">3. 在 k 索引树取下一个值 k=5，取得ID=500；</span><br><span class="line">4. 再到 ID索引树查到ID=500 对应的R4；</span><br><span class="line">6. 在 k 索引树取下一个值 k=6，不满足条件，循环结束</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，这个查询过程读了 k 索引树的3条记录（步骤1，3，5），回表了两次（步骤2，4）——由于查询结果所需要的数据只在主键索引上有，不得不回表。那么有没有可能经过索引优化，避免回表过程呢？</p>
+<p>假若我们执行的语句是<code>select ID from T where k betwen 3 and 5;</code>，这时只需要查得ID的值，而ID的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，<strong>索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引</strong>。<br><strong>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段</strong>。</p>
+<p>基于上面的覆盖索引的说明，我们讨论一个问题：<strong>在一个市民信息表上，是否有必要将身份证号和名字建立联合索引</strong>？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `tuser` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `id_card` varchar(32) DEFAULT NULL,</span><br><span class="line">  `name` varchar(32) DEFAULT NULL,</span><br><span class="line">  `age` int(11) DEFAULT NULL,</span><br><span class="line">  `email` varchar(64) DEFAULT NULL,</span><br><span class="line">  `ismale` tinyint(1) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `id_card` (`id_card`),</span><br><span class="line">  KEY `name_age` (`name`,`age`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<p>一般来讲，身份证号是市民的唯一标识，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引（<strong>见引申思考题</strong>）就够了，而再建立一个（身份证号、姓名）的联合索引是否在浪费空间？<br>如果现在有一个高频请求，要根据市民的身份证号查询姓名，这个联合索引就有意义了。<strong>它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。当然索引字段的维护总是有代价的，因此是否要建立冗余索引来支持覆盖索引就需要权衡考虑了</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">引申思考：那是为身份证号字段创建唯一索引，还是普通索引呢？如果业务代码已经保证了不会写入重复的id_card，那么这两个选择逻辑上都是正确的。那么从性能的角度考虑，你选择唯一索引还是普通索引呢？选择的依据是什么呢？</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">对于查询过程，这两种方式带来的性能差距微乎其微；</span><br><span class="line">对于更新过程，由于唯一索引的更新不能使用change buffer，实际上也只有普通索引可以使用，普通索引+change buffer对于数据量大的表更新优化还是很是明显的</span><br><span class="line">详情参见：https://time.geekbang.org/column/article/70848</span><br></pre></td></tr></table></figure></p>
+<h2 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h2><p><strong>B+树这种索引结构，可以利用索引的“最左前缀”来定位记录</strong>。以上例中的市民信息表为例，假设我们创建了Index(name,age)这个联合索引：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_tuser_joint_index.png" alt><br>如上图示，<strong>索引项是按照索引定义里面出现的字段顺序来排序的</strong>。当(张三,20)这样的数据来检索的时候，B+树会优先比较name来确定下一步的搜索方向，如果name相同(ID4)再继续比较age，最后得到检索的数据。如果你要查的是所有名字第一个字是“张”的人——<code>where name like &#39;张%&#39;</code>，Index(name,age)索引也能够被用上【<strong>能否指定搜索方向</strong>】，查找到第一个符合条件的记录ID3，然后向后遍历到所有需要的结果。<br><strong>也就是说，不只是索引的全部定义，只要满足最左前缀，就可以利用索引来加速检索。这个最左前缀可以是联合索引的最左N个字段，也可以是字符串索引的最左M个字符</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">引申思考：使用前缀索引，定义好长度，就可以做到既节省空间，又不用额外增加太多的查询成本。</span><br><span class="line">详情参见：https://time.geekbang.org/column/article/71492</span><br></pre></td></tr></table></figure></p>
+<p>基于上面对最左前缀索引的说明，我们来讨论一个问题：<strong>在建立联合索引的时候，如何安排索引内的字段顺序</strong>？<br><strong>考虑索引的复用能力</strong>，因为B+树支持“最左前缀”定位，所以当联合索引(a,b)已经存在时，一般就不需要单独在a上建立索引了。也就是说，<strong>如果通过调整顺序可以少维护一个索引，那么这个顺序往往是需要优先考虑采用的</strong>。</p>
+<p>那应用中如果既有联合查询，又有基于a、b各自的查询呢（查询条件只有b的语句无法使用(a,b)这个联合索引）？这时你就不得不要维护另外一个索引，即需要同时维护(a,b),(b)这两个索引。<br><strong>考虑索引的存储空间</strong>，比如上例中的市民表，name字段比age字段长度大，建议你创建一个(name,age)的联合索引和一个(age)的单字段索引。</p>
+<h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><p>我们知道，查询条件满足最左前缀原则的时候，其索引可被用来定位记录，那么，哪些不符合最左前缀的部分会怎么样呢？<br>以上例中市民表的联合索引(name,age)为例，假若你要检索表中“名字第一个字是张，且年龄是10岁的所有男孩”——<code>select * from tuser where name like &#39;张%&#39; and age=10 and ismale=1;</code>，根据前缀索引规则，这个语句在搜索索引树的时候只能用 “张”，找到第一个满足条件的记录ID3，然后。。。。。。</p>
 <ul>
-<li>只有精确匹配索引所有列查询才有效（因其利用索引的所有列字段值计算哈希值）；</li>
-<li>只支持等值比较查询，不能用于范围查询；</li>
-<li>哈希索引的只包含索引字段的哈希值和指向数据的指针，故不能使用索引中的值来避免读取行；</li>
-<li>哈希索引的数据并不是顺序存储的，无法用于排序；<h3 id="全文索引（FULLTEXT）"><a href="#全文索引（FULLTEXT）" class="headerlink" title="全文索引（FULLTEXT）"></a>全文索引（FULLTEXT）</h3></li>
+<li>在MySQL5.6之前，只能从ID3开始一个个回表，在主键索引树上找出数据行再比对字段值；</li>
+<li>MySQL5.6之后引入了 <strong>索引下推优化（index condition pushdown），可以在索引遍历过程中对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_index_pushdown_sample.png" alt><br>上图中每个虚线箭头表示回表一次。在左图中InnoDB并不会去看age的值，只是按顺序把“name第一个字是张”的记录一条条的取出来回表，需要回表4次。而在右图中InnoDB在(name,age)索引内部就判断了age是否等于10，对于不等于10的记录直接判断并跳过，故而只需对ID4、ID5这两条记录回表取数据判断。<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2>索引可以加快查询速度，一般会为 <strong>经常作为查询条件、与其他表关联（外键关系）或者出现在ORDER BY语句中的字段列建立索引，但索引并非越多越好，一个表中如有大量的索引，不仅占用磁盘空间，而且会影响INSERT、DELETE、UPDATE等语句的性能，因为当表中的数据(文件)更改的同时，索引(文件)也会进行调整和更新</strong>。索引设计不合理或者缺少索引都会对数据库和应用程序的性能造成障碍：</li>
+<li>避免对经常更新的表设计过多的索引，并且索引中的列尽可能要少【<strong>短索引，高树</strong>】——避免添加不必要的字段，对经常用于查询的字段创建索引；</li>
+<li>数据量小的表最好不要使用索引，由于数据较少，查询花费的时间可能比遍历索引时间还要短，达不到优化效果；</li>
+<li>尽量选择区分度(Cardinality)高的列作为索引，区分度的公式是 <code>COUNT(DISTINCT col) / COUNT(*)</code>，字段不重复的比率越大需要扫描的记录数就越少；</li>
+<li>索引列不能参与计算，尽量保持列“干净”。对索引字段做函数操作（包括”懒惰计算”<code>where id+1=5</code>）、隐式类型转换（如email=9999）、隐式字符编码转换都可能破坏索引值的有序性，导致无法使用索引快速定位功能而只能使用全索引扫描（<strong>注意并不一定是放弃使用这个索引</strong>）；</li>
+<li>不使用NOT IN 、&lt;&gt;、！=操作，但&lt;,&lt;=，=，&gt;,&gt;=,BETWEEN,IN是可以用到索引的；</li>
+<li>单个多列组合索引和多个单列索引的检索查询效果不同，因为在执行SQL时，MySQL只能使用一个索引，会从多个单列索引中选择一个限制最为严格的索引；</li>
+<li>尽可能的扩展索引，不要新建立索引。比如表中已经有了a的索引，现在要加（a,b）的索引，那么只需要修改原来的索引即可；</li>
+<li>ORDER BY子句尽量使用Index方式排序，避免使用FileSort方式排序。ORDER BY子句在满足以下情况时会使用Index方式排序：a).ORDER BY子句使用索引最左前列；b).使用WHERE子句与ORDER BY子句条件列组合满足索引最左前列；</li>
 </ul>
-<p>全文索引，通过建立倒排索引，快速匹配文档的方式；</p>
-<h3 id="空间索引（SPATIAL）"><a href="#空间索引（SPATIAL）" class="headerlink" title="空间索引（SPATIAL）"></a>空间索引（SPATIAL）</h3><p>MyISAM支持空间索引，可以用作地理数据的存储</p>
-<h2 id="聚集索引、非聚集索引"><a href="#聚集索引、非聚集索引" class="headerlink" title="聚集索引、非聚集索引"></a>聚集索引、非聚集索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>聚集索引并不是一种单独的索引类型，而是一种数据存储方式，InnoDB的聚集索引实际上是将主键（primary key）与数据行存放在同一个文件，一张表只能有一个聚集索引。<br>InnoDB要求表必须有主键（MyISAM可以没有）,如果没有显式指定,则MySQL系统会用一个唯一且不为空的索引列做为主键,如果不存在这种列,则MySQL自动为InnoDB表生成一个隐含字段作为主键。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_primary_index.png" alt><br>InnoDB的普通索引（二级索引）的叶子节点存的的是PRIMARY KEY的值，所以要先查询普通索引（二级索引）的叶子节点找到对应的主键值，然后再根据主键值去聚集索引中查询到对应数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_converage_secondary_index.png" alt></p>
-<ul>
-<li>InnoDB将主键与数据聚集在一起的方式,使得按主键顺序的插入和查询效率会很高,但是更新主键的字段或者不按主键的顺序插入数据的代价会比较高,所以主键的选取很重要(使用AUTO INCREMENT字段或者应用程序生成的顺序递增字段要比无序的UUID好的多);</li>
-<li>二级索引会保存主键的值,所以主键的值不要太大。<h3 id="非聚集"><a href="#非聚集" class="headerlink" title="非聚集"></a>非聚集</h3></li>
-</ul>
-<p>非聚集索引的索引与数据存在不同的文件，比如MyISAM引擎的一张表，会有三种文件：FRM表结构，MYD数据，MYI索引；<br>MYSQL使用索引查询数据时，先到MYI文件中找到数据存储的位置指针，然后再到MYD文件读取数据。<br><img src="http://www.sdwangblog.cn/blogimg/mysql_unconverage_primary_index.png" alt></p>
-<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2><p>既然索引可以加快查询速度,那么是不是只要是查询语句需要,就建上索引？答案是否定的。因为索引虽然加快了查询速度,但索引也是有代价的:索引文件本身要消耗存储空间,同时索引会加重插入、删除和修改记录时的负担。</p>
-<ul>
-<li><p>索引列不能是表达式的一部分，也不能是函数的参数；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select ...  where id+1=5 //不能使用索引</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>索引的选择性是指不重复的索引值(Cardinality)和数据表的记录总数的比值(0, 1],索引的选择性高(越接近1),查询时能够过滤掉更多的行,效率也更高。</p>
-</li>
-<li>对于字符列,可以使用列的前缀代替整个列作为索引key,当前缀长度合适时,可以做到既使得前缀索引的选择性接近全列索引,同时大大节约索引空间。<br>对于BLOB、TEXT、或者很长的VARCHAR类型的列,必须使用前缀索引。</li>
-<li>MYSQL允许对表上的多个列进行索引。</li>
-</ul>
+<p>如果排序的字段使用了索引，那么select的字段也要是索引字段，否则索引失效。特别的是如果排序的是主键索引则select * 也不会导致索引失效。</p>
 
       
 
@@ -382,7 +383,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是索引"><span class="toc-number">1.</span> <span class="toc-text">什么是索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的类型"><span class="toc-number">2.</span> <span class="toc-text">索引的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通型索引"><span class="toc-number">2.1.</span> <span class="toc-text">普通型索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#唯一索引"><span class="toc-number">2.2.</span> <span class="toc-text">唯一索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主键"><span class="toc-number">2.3.</span> <span class="toc-text">主键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单列索引和多列索引（联合索引）"><span class="toc-number">2.4.</span> <span class="toc-text">单列索引和多列索引（联合索引）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的方式"><span class="toc-number">3.</span> <span class="toc-text">索引的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Tree索引"><span class="toc-number">3.1.</span> <span class="toc-text">B-Tree索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#B-Tree的应用场景"><span class="toc-number">3.1.1.</span> <span class="toc-text">B-Tree的应用场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HASH索引"><span class="toc-number">3.2.</span> <span class="toc-text">HASH索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全文索引（FULLTEXT）"><span class="toc-number">3.3.</span> <span class="toc-text">全文索引（FULLTEXT）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空间索引（SPATIAL）"><span class="toc-number">3.4.</span> <span class="toc-text">空间索引（SPATIAL）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#聚集索引、非聚集索引"><span class="toc-number">4.</span> <span class="toc-text">聚集索引、非聚集索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#聚集索引"><span class="toc-number">4.1.</span> <span class="toc-text">聚集索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非聚集"><span class="toc-number">4.2.</span> <span class="toc-text">非聚集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">5.</span> <span class="toc-text">高效索引策略</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是索引"><span class="toc-number">1.</span> <span class="toc-text">什么是索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB的索引模型"><span class="toc-number">2.</span> <span class="toc-text">InnoDB的索引模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#索引维护"><span class="toc-number">2.1.</span> <span class="toc-text">索引维护</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL索引分类"><span class="toc-number">3.</span> <span class="toc-text">MySQL索引分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#覆盖索引"><span class="toc-number">4.</span> <span class="toc-text">覆盖索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最左前缀原则"><span class="toc-number">5.</span> <span class="toc-text">最左前缀原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引下推"><span class="toc-number">6.</span> <span class="toc-text">索引下推</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">7.</span> <span class="toc-text">高效索引策略</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -494,27 +495,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -526,23 +507,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -554,7 +523,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>
