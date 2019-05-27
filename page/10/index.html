@@ -152,6 +152,146 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP的缓存技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/04/PHP的缓存技术/">PHP的缓存技术</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/04/PHP的缓存技术/" class="archive-article-date">
+  	<time datetime="2017-06-04T08:31:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常PHP 应用程序中最耗费时间的任务是数据检索。实际上，用于从存储库（文件或数据库服务器）中获取信息的时间远高于编译并且甚至是执行 PHP 程序所需耗费的时间。连接至数据库服务器所需的时间是一次延迟，等待查询完成添加附加停顿，并且结果的传输甚至会导致更多延迟。此外，如果代码使用对象，则有指向对象的导致负担过重的映射平面行。<br>在网络传输延迟不定的情况下，为了更高的速度需求，我们可以从两个方面优化效率：数据层数据库缓存，或应用层内容缓存。</p>
+<h2 id="数据库缓存"><a href="#数据库缓存" class="headerlink" title="数据库缓存"></a>数据库缓存</h2><p>对于优化数据库的速度，可先采取如下这些步骤，它应当对常见问题有所帮助。</p>
+<h3 id="将数据库放在自己的机器上"><a href="#将数据库放在自己的机器上" class="headerlink" title="将数据库放在自己的机器上"></a>将数据库放在自己的机器上</h3><p>数据库查询自身可以变得相当激烈，通常在对大小合理的数据集执行简单的 SELECT 语句时限定在 100% 的 CPU。如果您的 web 服务器和数据库服务器都在竞用单一机器上的 CPU 时间，这无疑将减慢您的请求速度。因此我想第一步最好是将 web 服务器和数据库服务器放在单独的机器上，确保您的数据库服务器是两者中更强健的（数据库服务器喜欢大量内存和多个 CPU）。</p>
+<h3 id="合理设计和编制表索引"><a href="#合理设计和编制表索引" class="headerlink" title="合理设计和编制表索引"></a>合理设计和编制表索引</h3><p>数据库性能的最大问题可能源自于不良数据库设计和缺失索引。SELECT 语句通常是运行在典型 web 应用程序中的最常见的查询类型。它们也是在数据库服务器上运行的最耗时的查询。此外，这些类型的 SQL 语句对适当的索引和数据库设计最敏感，因此查看以下指示，获取实现最优性能的技巧。</p>
+<ul>
+<li>确保每个表都有一个主键。这为表提供一个默认顺序和快速方式来连接其他表；</li>
+<li>确保一个表中的任何外键（即链接记录到另一个表中的记录的键）的索引得到合理编制。许多数据库会自动对这些键施加约束，以便值真正匹配另一个表中的一条记录，这有助于摆脱这一困难；</li>
+<li>试图限制一个表中的列数。一个表中有太多列比仅有一些列时进行查询所需的扫描时间要长。此外如果您有不常用的含多个列的一个表，您也在通过NULL值字段浪费磁盘空间（文本或blob等可变大小字段也是如此），在这种情况下应当考虑将其他栏分成不同的表，在记录的主键上将其联合起来。</li>
+</ul>
+<h3 id="分析在服务器上运行的查询"><a href="#分析在服务器上运行的查询" class="headerlink" title="分析在服务器上运行的查询"></a>分析在服务器上运行的查询</h3><p>改进数据库性能的最佳方法是分析在您的数据库服务器上运行什么查询，且运行他们需要多长时间。几乎每个数据库都有具有这种功能的工具。对于MYSQL，您可以利用慢查询日志来查找有问题的查询：将MYSQL配置文件中<code>slow_query_log=1, log_output=FILE,long_query_time=30</code>，慢查询日志会记录到件hostname-slow.log中，如下示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/mysql/bin/mysqld, Version: 5.1.49-log, started with:</span><br><span class="line">Tcp port: 3306  Unix socket: /tmp/mysql.sock</span><br><span class="line">Time                 Id Command    Argument</span><br><span class="line"># Time: 030207 15:03:33</span><br><span class="line"># User@Host: user[user] @ localhost.localdomain [127.0.0.1]</span><br><span class="line"># Query_time: 13  Lock_time: 0  Rows_sent: 117  Rows_examined: 234</span><br><span class="line">use sugarcrm;</span><br><span class="line">select * from accounts inner join leads on accounts.id = leads.account_id;</span><br></pre></td></tr></table></figure></p>
+<p>如果要更深入的专研如何写查询，可以在查询开始处加上<a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html" target="_blank" rel="noopener">explain</a>，他会返回查询计划，而非结果集。</p>
+<p>除此之外，MySQL 可以使用其查询缓存为查询阶段提速，典型的就是SQL第一次查询时解析，后续命中查询会直接从database server cache中获取结果。<br>您还可以复制数据库（一个主数据库，多个副本），从而在多个 CPU 之间分担查询处理的负担。但是，一旦底层表改变，MySQL 查询缓存的内容就会过时。而且，仅当一个查询与先前查询相同时，查询缓存才会被命中。副本也有限制。例如，无法分布数据库写操作。<br>从根本上说，虽然查询缓存和数据库副本都是有目的的并且在整体工作负载管理策略中占有地位（查询缓存将消耗一些内存，但是在其他方面却很节省；副本将把灾难停机的风险降至最低），但是连接和传输时间不变。</p>
+<h2 id="内容缓存"><a href="#内容缓存" class="headerlink" title="内容缓存"></a>内容缓存</h2><p>就应用层内容缓存而言，PHP缓存技术可以分为静态缓存和内存缓存两大类。</p>
+<h3 id="静态缓存"><a href="#静态缓存" class="headerlink" title="静态缓存"></a>静态缓存</h3><p>这里所说的静态缓存是指静态化，将某个脚本的最终输出直接生成HTML或XML等文本文件存放在文件系统中，当数据库内容被修改或文件过期时，重新执行原始脚本以更新缓存内容。这种适合于不太变化的页面，比如模版引擎，个人信息，商品显示页等，简单示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$file = &apos;cache/&apos;.basename($_SERVER[&apos;SCRIPT_NAME&apos;]);</span><br><span class="line">$cache_last_modified = filemtime($file);</span><br><span class="line"></span><br><span class="line">if(file_exists($file) &amp;&amp; time()&lt;strtotime(&quot;+1 day&quot;,$cache_last_modified))&#123;</span><br><span class="line">  include($file);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  ob_start();</span><br><span class="line"></span><br><span class="line">  $fp=fopen($file,&apos;w&apos;);</span><br><span class="line">  fwrite($fp,ob_get_contents());</span><br><span class="line">  fclose($fp);</span><br><span class="line">  ob_end_flush();               //flush output buffered</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="内存缓存"><a href="#内存缓存" class="headerlink" title="内存缓存"></a>内存缓存</h3><p>顾名思义，将结果缓存到本地内存中。在细究某些具体方法前，先看一些php.ini文件中可供设置的大量优化选项。这些设置更适合于生产实例，在开发或测试实例上，您可能不希望做这些变更，因为他会使得应用程序的调试问题变得更难。</p>
+<ul>
+<li>有若干php.ini设置应当予以禁用，因为他们常用作向后兼容性：register_globals，magic_quotes_*，always_populate_raw_post_data。注意，在遗留代码上禁用这些选项会有风险，因为它们可能取决于其设置来实现正确执行。</li>
+<li>启用php.ini文件的一些优秀性能选项，来提升您的脚本速度：output_buffering，variables_order，date.timezone;</li>
+</ul>
+<p>PS：就PHP而言，还有一件事需要考虑：应用程序中require()和include()（以及其同级require_once()和include_once）的使用。从性能来看，文件状态调用（即为检查一个文件是否存在而对底层文件系统进行的调用）相当昂贵，<strong>为所有 require() 和 include() 调用使用绝对路径</strong>；</p>
+<p>如果要查询的数据不经常改变，这种情况下一个好的选择就是在本地存储这些结果，而非针对每个请求调用查询。常见的方法有Opcode Cache 和Memcached。</p>
+<h4 id="操作码缓存"><a href="#操作码缓存" class="headerlink" title="操作码缓存"></a>操作码缓存</h4><p>与其他开发Web应用程序的脚本语言（包括Perl，python和Ruby）相似，每次HTTP请求调用时，PHP代码会被解析翻译为操作码（PHP引擎直接执行的原语指令——类似于汇编语言）再执行。在要求很低或可忽略的情况下，服务器看上去能立即执行这个复杂的解释过程。但是一旦处理的页面增加，解释——从本质上说重复工作——就会对服务器造成很大的负担。在某些情况下，“编译” PHP 代码的时间会远远超过执行该代码所需的时间。因此，当需求增加时，您常常会自食其果，因为处理这些不断解释和动态生成的页面需要消耗更多的系统资源。</p>
+<p>节约CPU周期的一种方法是减少运行PHP应用程序所需的重复工作，没必要每次都把同样的PHP代码翻译一遍。PHP 代码被翻译成操作码后，可以把它保存起来并重复使用 —— 直到原始代码被修改。其实，缓存（用于保存和重用） PHP 操作码有几种 PHP 加速器内部的机制，包括开源 Alternative PHP Cache (APC)、支持 PHP 的 Turck MMCache、XCache、eAccelerator 和商业 Zend Platform。以apc_complier_cache为例：<br><img src="http://www.sdwangblog.cn/blogimg/apc_complier_cache.png" alt><br>由于apc并未内置到PHP解释器内核中，你需要单独安装并在php.ini中添加APC配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://pecl.php.net/get/APC-3.1.6.tgz</span><br><span class="line">$ tar -zxvf APC-3.1.6.tgz</span><br><span class="line">$ cd APC-3.1.6</span><br><span class="line">$ /home/ad/php/bin/phpize ./configure --enable-apc --enable-apc-mmap --with-php-config=/home/ad/php/bin/php-config</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure></p>
+<p>apc的使用是比较简单的，主要比较常用的有三个方法：</p>
+<ul>
+<li>apc_add/apc_store: store a variable in the cache. The only difference between apc_add and apc_store is that apc_store overwrites the data if it already exists and apc_add does not；（数据被直接存储到一个共享内存段中）</li>
+<li>apc_fetch: fetch a variable from the cache；</li>
+<li>apc_delete: delete a variable from the cache；</li>
+</ul>
+<p>使用APC缓存数据库结果的示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">function getListOfUsers()</span><br><span class="line">&#123;</span><br><span class="line">    $list = apc_fetch(&apos;getListOfUsers&apos;);</span><br><span class="line"></span><br><span class="line">    if ( empty($list) ) &#123;</span><br><span class="line">        $conn = new PDO(&apos;mysql:dbname=testdb;host=127.0.0.1&apos;, &apos;dbuser&apos;, &apos;dbpass&apos;);</span><br><span class="line">        $sql = &apos;SELECT id, name FROM users ORDER BY name&apos;;</span><br><span class="line">        foreach ($conn-&gt;query($sql) as $row) &#123;</span><br><span class="line">            $list[] = $row;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        apc_store(&apos;getListOfUsers&apos;,$list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上例中，我们仅需一次执行查询。之后我们将结果推送到 getListOfUsers 键下的 APC 缓存中。从这里开始，直到缓存到期，您就能够直接从缓存中获取结果数组，跳过 SQL 查询。<strong>apc_store对于系统设置等PHP变量的缓存是比较好的选择，但apc不合适通过apc_store频繁变更用户数据，会出现一些奇异现象。</strong></p>
+<h4 id="Memcache"><a href="#Memcache" class="headerlink" title="Memcache"></a>Memcache</h4><p>虽然很多Web服务器都可被配置成使用缓存发回消息，但那与大多数应用程序的动态特性无法相适，而这正式Memcache的用武之地（Memcache是项目名称，而memcached是项目在服务器段的主程序文件名）。</p>
+<h5 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h5><p>Memcache是一个开源项目，旨在利用多个服务器内的多余RAM来充当一个可存放经常被访问信息的内存缓存，可保存任何东西，包括本地语言对象。<br>比如，考虑这样一个典型的基于web的应用程序：即便是一个动态网站可能也会有一些组建或信息常量是贯穿整个生命周期的，比如用户的组织信息，访问/操作权限等。每次都通过一个对数据库的查询加载此类信息相对比较昂贵，特别在数据没有更改的情况下，就更是如此。通过使用memcached，可将加载数据库的格式化信息存储为某种数据结构，并且由于信息是从RAM而不是通过数据库或其他处理从磁盘上加载的，所以对信息的访问几乎是瞬时的。</p>
+<p>Memcache区分为memcache服务器端的和memcache客户端，其间接口是通过网络连接提供的，默认端口号11211（它可以应对任意多个连接，使用非阻塞的网络IO）。这意味着您可以在多个客户机(处理请求的web服务器)间共享单个memcahe服务器（或多个服务器），这也是 <strong>分布式对象缓存系统</strong> 的由来。这个网络接口非常迅速，并且为了改善性能，服务器故意不支持身份验证或安全通行，但不应限制部署选项，<strong>memcache服务器应该存在于您网络的内部并通过防火墙限制外网访问memcache端口，以root权限运行</strong>。<br>Memcache 的存储方法是一个简单的键/值对，类似于很多语言内的散列或关联数组。通过提供键和值来将信息存储到 memcached 内，通过按特定的键请求信息来恢复信息。比如<code>get(key)</code>——从存储了特定键的memcached获得信息；<code>set(key, value [, expiry])</code>使缓存内的标识符键存储这个特定的值，这里需要特别说明两点：</p>
+<ul>
+<li><strong>memcached并不会耗费CPU时间来监视过期值，当某个值过期后，其内存并不会被直接删除，而是当再次在get时根据记录的时间戳检查记录是否过期，如果已过期，则返回空并且清空，这种技术被称为lazy(惰性)expiration。</strong></li>
+<li><strong>为缓存分配的内存耗尽：在这种情况下，memcached会优先使用已超时记录的空间，但即使如此，也会发生追加新纪录时空间不足的情况，此时就要使用Least Recently Used（LRU）机制来分配空间【即使某个key设置的是永久有效期】。</strong></li>
+</ul>
+<h5 id="使用Memcache"><a href="#使用Memcache" class="headerlink" title="使用Memcache"></a>使用Memcache</h5><p>先构建和安装PHP Memcache扩展【Memcache客户端安装】，该扩展将提供访问Memcache守护程序的服务所需的API。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#与构建其他PHP扩展的过程完全相同</span><br><span class="line">$ wget http://pecl.php.net/get/memcached-3.0.4.tgz</span><br><span class="line">$ tar -zxvf memcached-3.0.4.tgz</span><br><span class="line">$ cd memcached-3.0.4</span><br><span class="line">$ phpize</span><br><span class="line">$ ./configure</span><br><span class="line">$ make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>将构建出的名为memcache.so的新文件放入扩展目录，然后编辑php.ini添加如下代码行，让PHP加载并应用扩展【别忘了重启服务器】：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extension=memcache.so</span><br><span class="line">memcache.allow_failover = 1                       #当连接出错时，Memcache扩展是否故障转移到其他服务器</span><br><span class="line">memcache.max_failover_attempts=20                 #用于限制连接到持久性数据或检索数据的服务器数目</span><br><span class="line">memcache.chunk_size =8192                         #用于控制数据传输的大小</span><br><span class="line">memcache.default_port = 11211                     #设置连接到Memcache所使用的TCP端口</span><br></pre></td></tr></table></figure></p>
+<p>然后，构建Memcache守护程序，此守护程序依赖于libevent:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://www.monkey.org/~provos/libevent-1.3b.tar.gz</span><br><span class="line">$ wget http://www.danga.com/memcached/dist/memcached-1.2.1.tar.gz</span><br><span class="line">$ tar -zxvf libevent-1.3b.tar.gz</span><br><span class="line">$ cd ../libevent-1.3b</span><br><span class="line">$ ./configure --prefix=/opt/lampp</span><br><span class="line">...</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br><span class="line">...</span><br><span class="line">/usr/bin/install -c .libs/libevent.lai /opt/lampp/lib/libevent.la</span><br><span class="line">/usr/bin/install -c .libs/libevent.a /opt/lampp/lib/libevent.a</span><br><span class="line">chmod 644 /opt/lampp/lib/libevent.a</span><br><span class="line">ranlib /opt/lampp/lib/libevent.a</span><br><span class="line">PATH=&quot;$PATH:/sbin&quot; ldconfig -n /opt/lampp/lib</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Libraries have been installed in:</span><br><span class="line">   /opt/lampp/lib</span><br><span class="line"></span><br><span class="line">$ tar -zxvf memcached-1.2.1.tar.gz</span><br><span class="line">$ cd ../memcached-1.2.1</span><br><span class="line">$ ./configure --prefix=/opt/lampp</span><br><span class="line">...</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br><span class="line">...</span><br><span class="line">/usr/bin/install -c memcached /opt/lampp/bin/memcached</span><br><span class="line">/usr/bin/install -c memcached-debug /opt/lampp/bin/memcached-debug</span><br></pre></td></tr></table></figure></p>
+<p>构建和安装memcached二进制文件后，启动memcached十分简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./memcached -d -m 2048 -l ip-address -p 11211</span><br><span class="line">#-d 选项将把 memcached 作为一个守护程序而不是在最显著的位置中运行；-m number将把number 兆字节分配给此过程实例。（在某些系统中，可能会要求您运行多个 memcached 实例以访问可用于进行缓存的所有内存。有关更多信息，请参阅 Memcache 文档）；-l ip-address -p 11211 将使守护进程分别监听IP 地址 ip-address 和端口 11211。替换您的 IP 地址。如果为 memcached 选择其他端口，请确保 php.ini 将反映该端口。</span><br></pre></td></tr></table></figure></p>
+<p>在Memcache客户端和Memcache守护进程都成功配置启动后，大家是不是已经开始“摩拳擦掌”了呢？不要慌，还有一个重点考虑因素是如何组织和命名存储在缓存内的这些数据。就键值而言，没有格式限制，你可以使用任何字符串作为键的名称，但通常可以使用一种与现有应用程序类似的结构，并且这种结构很可能基于某种唯一标识符。在存储值方面，依然没有格式限制，但应该确保缓存内的信息适合您的应用程序，具备实用性。与memcached服务器通信的接口有很多，并常常具有针对所有语言的多个实现，主要函数有：</p>
+<ul>
+<li>get(key)— 从存储了特定键的 memcached 获得信息。 如果键不存在，就返回错误；</li>
+<li>set(key, value [, expiry])— 使用缓存内的标识符键存储这个特定的值。如果键已经存在，那么它就会被更新，期满时间的单位为秒；</li>
+<li>add(key, value [, expiry])— 如果键不存在就将这个键添加到缓存内，如果键已经存在就返回错误。如果您想要显式地添加一个新键而又不会因它已经存在而更新它，那么这个函数将十分有用；</li>
+<li>replace(key, value [, expiry])— 更新此特定键的值，如果键不存在就返回一个错误；</li>
+<li>delete(key [, time])— 从缓存中删除此键/值对。如果您提供一个时间，那么添加具有此键的一个新值就会被阻塞这个特定的时期；</li>
+<li>incr(key [, value]) — 为特定的键增 1 或特定的值。只适用于数值；</li>
+<li>decr(key [, value])— 为特定的键减 1 或特定的值，只适用于数值；</li>
+<li>flush_all— 让缓存内的所有当前条目无效（或到期失效）；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$memcache_host = &apos;127.0.0.1&apos;;</span><br><span class="line">$memcache_port = &apos;11211&apos;;</span><br><span class="line"></span><br><span class="line">$memcache = new Memcache();</span><br><span class="line">$is_connect = $memcache-&gt;connect($memcache_host,$memcache_port);</span><br><span class="line">if($is_connect)&#123;</span><br><span class="line">  $things = $memcache-&gt;get(&apos;things&apos;);</span><br><span class="line">  if($things==null)&#123;</span><br><span class="line">    //data doesn&apos;t cached or expired</span><br><span class="line">    $db = new CI_DB_mysqli_driver($db_host,$db_user,$db_password,$db_name);</span><br><span class="line">    $results = $db-&gt;query(&quot;SELECT * FROM tbl_things WHERE needed=&apos;yes&apos;;&quot;)-&gt;fetch_array(MYSQLI_ASSOC);</span><br><span class="line">    $memcache-&gt;set(&apos;things&apos;,$things,false,86400);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面只是使用示例，实际上在生产环境进行部署时，Memcache一般以服务器集群的方式体现。memcached 服务器只是网络上针对一些键存储值的一个缓存。如果有多台机器，那么很自然地会想要在所有多余机器上设置一个 memcached 的实例来提供一个超大的联网 RAM 缓存存储，举个例子访问模型可如下：<br><img src="http://www.sdwangblog.cn/blogimg/distribute_memcache.png" alt><br>特别说明：<strong>MemCache虽然被称为”分布式缓存”，但是MemCache本身完全不具备分布式的功能，MemCache集群之间不会相互通信（与之形成对比的，比如JBoss Cache，某台服务器有缓存数据更新时，会通知集群中其他机器更新缓存或清除缓存数据），所谓的”分布式”，完全依赖于客户端程序的散列算法实现。</strong><br>根据上图的流程，比如应用程序需要写入/读取键值为“shanghai”的缓存数据，Memcache API会根据“键”值基于输入路由算法模块（比如Consistent hashing）得到某个服务器编号，并由服务器编号得到该Memcache的IP地址和端口号；Memcache API调用通信模块和指定服务器通信，将数据写入/读出该服务器返回。也就是说，<strong>如果在每个应用程序服务器上使用的是相同的路由算法和服务器列表（并且顺序相同），那么当需要保存或检索同一个键时，每个/次应用程序服务器都将选择同一个服务器，如此就实现了memcached的分布式。</strong><br>从上面的图中，可以看出一个很重要的问题，就是对服务器集群的管理，路由算法至关重要，就和负载均衡算法一样，<strong>路由算法决定着究竟该访问集群中的哪台服务器，是否会因分布不均而造成数据倾斜，memcache服务器增多是否会影响键值的重新分布以及增减服务器是否会导致缓存的大范围丢失</strong>。</p>
+<ul>
+<li>简单的余数Hash路由算法：用服务器数目和缓存数据KEY的hash值相除，余数为服务器列表下标编号。由于HashCode随机性比较强，在不考虑服务器集群的伸缩性的情况下，余数Hash算法几乎可以满足绝大多数的缓存路由需求（缓存分布均衡）。</li>
+</ul>
+<p>不妨举个例子，假如有HashCode为0-19的20个数据，更改memcached服务器集群由3台变为4台，仍然使用余数Hash路由算法，那么:<br><img src="http://www.sdwangblog.cn/blogimg/memcache_route_mod.png" alt><br>如果扩容到20+的台数，只有前三个HashCode对应的Key是命中的，也就是15%。当然现实情况肯定比这个复杂得多，不过足以说明，使用余数Hash的路由算法，在扩容的时候，造成大量的数据无法正确命中（其实不仅仅是无法命中，那些大量的无法命中的数据还在原缓存中在被移除前占据着内存）。当大部分被缓存的数据因为服务器扩容而不能正确读取时，这些数据访问压力就落回到数据库（数据库的负载能力是以有缓存为前提设计的），严重的可能会导致数据库宕机；</p>
+<ul>
+<li>一致性Hash算法：通过一个叫一致性Hash环的数据结构实现Key到缓存服务器的Hash映射，简单来说，一致性哈希将整个哈希值空间组织成一个虚拟的圆环，比如某哈希函数H的值空间是0~2^32-1，整个哈希空间如下：<br><img src="http://www.sdwangblog.cn/blogimg/memcache_hash_2^32_circle.png" alt><br>将各个服务器使用H进行哈希值计算（比如可使用服务器的IP地址或主机名作为关键字），确定它们各自在上面哈希环上的地址，并且按照顺时针排列，我们假设三台节点memcache经计算后位置如下，此时来了A，B，C，D四个数据对象，使用相同H进行哈希值计算它们的相对位置：<br><img src="http://www.sdwangblog.cn/blogimg/memcache_hash_2^32_server.png" alt><br>根据一致性哈希算法，按照顺时针找最近服务节点方法，数据A就被绑定到了server01上，D被绑定到了server02上，B、C在server03上。<br>此时假如server03宕机，B，C将会受到影响而被重定位到Server01。<strong>一般的，在一致性哈希算法中，如果一台服务器不可用，则受影响的数据仅仅是此服务器到其环空间中前一台服务器（即顺着逆时针方向行走遇到的第一台服务器）之间数据，其它不会受到影响。</strong><br><img src="http://www.sdwangblog.cn/blogimg/memcache_hash_2^32_server_decr.png" alt><br>考虑另外一种情况，如果我们在系统中增加一台服务器Memcached Server 04如下，此时A、D、C不受影响，只有B需要重定位到新的Server04。<strong>一般的，在一致性哈希算法中，如果增加一台服务器，则受影响的数据仅仅是新服务器到其环空间中前一台服务器（即顺着逆时针方向行走遇到的第一台服务器）之间数据，其它不会受到影响。</strong><br><img src="http://www.sdwangblog.cn/blogimg/memcache_hash_2^32_server_incr.png" alt><br>综上所述，<strong>一致性哈希算法对于节点的增减都只需重定位环空间中的一小部分数据（集群中缓存服务器节点越多，增加/减少节点带来的影响越小），具有较好的容错性和可扩展性。但缺点是，在服务节点太少时，容易因为节点分部不均匀而造成数据倾斜问题（可以采用增加虚拟节点的方式解决）</strong>。<h5 id="弹性和可用性"><a href="#弹性和可用性" class="headerlink" title="弹性和可用性"></a>弹性和可用性</h5>有关 memcached 最常见的一个问题是：“若缓存不可用了，会发生什么情况呢？”请注意：<strong>memcached 是信息的缓存但并非惟一的数据源，虽然无法从缓存访问信息将会减缓应用程序的性能，但它不应该阻止应用程序的运转。可能会发生这样几个场景：</strong></li>
+<li>如果memcached服务宕掉，应用程序应该回退到从原始数据源加载信息并对信息进行显示所需的格式化。此应用程序还应继续尝试在 memcached 内加载和存储信息；</li>
+<li>一旦 memcached 服务器恢复可用，应用程序就应该自动尝试存储数据。没有必要强制重载已缓存了的数据，可以使用标准的访问来用信息加载和填充缓存。最终，缓存将会被最常用的数据重新填充。</li>
+</ul>
+<p>实际上，memcached 服务器相对简单，并且虽然不是绝对无故障的，但它的简单性的结果就是它很少会出错。</p>
+<p> APC 和 Wincache 并非一个用户缓存的惟一选择；memcache 和 Redis 是不需要您在与 Web 服务器相同的服务器上运行用户缓存的其他流行选择。这就提高了性能和灵活性，特别是当您的 web 应用程序跨多个 Web 服务器向外扩展时。</p>
+<p>内存缓存:<br>　　Memcached是高性能的，分布式的内存对象PHP缓存机制系统，用于在动态应用中减少数据库负载，提升访问速度。<br>７、php的缓冲器：<br>　　有eaccelerator， apc， phpa，xcache，这个这个就不说了吧，搜索一堆一堆的，自己看啦，知道有这玩意就OK</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/04/PHP的缓存技术/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP命名空间与自动加载" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

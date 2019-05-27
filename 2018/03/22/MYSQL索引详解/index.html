@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_cluster_index.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_tuser_joint_index.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_index_pushdown_sample.png">
-<meta property="og:updated_time" content="2019-05-13T05:53:30.415Z">
+<meta property="og:updated_time" content="2019-05-15T09:56:49.618Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MYSQL索引详解">
 <meta name="twitter:description" content="什么是索引索引是存储引擎用于快速找到记录的一种数据结构，它类似一本书的目录,我们根据目录可以快速的查找到我们感兴趣的内容。如果没有索引存储引擎必须遍历整个数据库表来查询符合条件的记录,索引的建立和优化应该是提升查询性能最有效的手段了。 MySQL索引是在存储引擎层实现的，所以没有统一的索引标准，即不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同。由于">
@@ -230,7 +230,6 @@
 <li>尽可能的扩展索引，不要新建立索引。比如表中已经有了a的索引，现在要加（a,b）的索引，那么只需要修改原来的索引即可；</li>
 <li>ORDER BY子句尽量使用Index方式排序，避免使用FileSort方式排序。ORDER BY子句在满足以下情况时会使用Index方式排序：a).ORDER BY子句使用索引最左前列；b).使用WHERE子句与ORDER BY子句条件列组合满足索引最左前列；</li>
 </ul>
-<p>如果排序的字段使用了索引，那么select的字段也要是索引字段，否则索引失效。特别的是如果排序的是主键索引则select * 也不会导致索引失效。</p>
 
       
 
