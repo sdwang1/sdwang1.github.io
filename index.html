@@ -152,6 +152,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL为什么有时候会选错索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/30/MySQL为什么有时候会选错索引/">MySQL为什么有时候会选错索引？</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/30/MySQL为什么有时候会选错索引/" class="archive-article-date">
+  	<time datetime="2019-03-30T07:47:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
+<p>是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。</p>
+<h2 id="问题1描述"><a href="#问题1描述" class="headerlink" title="问题1描述"></a>问题1描述</h2><p>假设现有如下所示的表结构<code>t</code>，表中有a、b两个字段，其上被分别创建了普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们向表t中插入10万行记录，取值按整数递增，即数据从(1,1,1),(2,2,2),(3,3,3)直到(100000,100000,100000)。接下来，我们分析一条SQL语句<code>select * from t where a between 10000 and 20000;</code></p>
+        
+          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-InnoDB使用全文索引-FullText-Index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -345,7 +424,7 @@
 <p>我们今天就主要讨论在多个事务并发的情况下，Very Important的事务的隔离性。<strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了构建这些隔离级别，我们的数据库锁算是发挥了“中流砥柱”的作用。</p>
 <h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>InnoDB引擎中常见的锁类型有如下几种，其间兼容性如图示：</p>
 <ul>
-<li><strong>S共享锁</strong>：也叫读锁，行级锁，其它事务可以继续加共享锁，但不能加排它锁；</li>
+<li><strong>S共享锁</strong>：也叫读锁，行级锁，其它事务可以继续加共享锁，但不能加排它锁(SELECT … LOCK IN SHARE MODE)；</li>
 <li><strong>X排他锁</strong>：也叫写锁，行级锁，一旦加了写锁后，其它事务不能再获得任何锁；</li>
 <li><strong>I意向锁</strong>：表级锁，表达一个事务想要获取什么，可分为意向共享锁（表中某几行的共享锁）、意向排他锁（表中某几行的排他锁）。有了意向锁的话，当需要給表加表锁时就不需要逐行遍历是否有行锁，只要判断是否有意向锁即可；</li>
 <li><strong>自增长锁</strong>：用于提升并发插入性能的特殊表锁机制，有几个特点：1.SQL执行完就释放锁，而不是事务执行完；2.对于 insert…select 大数据量插入会影响插入性能，因为会阻塞另外一个事务执行；3.使用不同模式来调整自增加锁的方式（mysql&gt;=5.7 innodb_autoinc_lock_mode参数）；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_lock_type_capacity.png" alt></li>
@@ -851,83 +930,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-如何建立安全的会话管理机制二之Token机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/">如何建立安全的会话管理机制二之Token机制</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/" class="archive-article-date">
-  	<time datetime="2018-10-07T09:15:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们之所以 <strong>“建立安全的会话管理机制”</strong>，是因为Http是一种无状态协议，而为了用户使用便利性，我们需要维护web应用程序的状态。大家知道，实际应用中的会话管理，不仅要维持各个请求之间的状态，还需要维持会话期间针对每个特定用户使用到的数据，即 <strong>session数据</strong>。传统的<a href="http://www.sdwangblog.cn/2018/09/26/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E7%9A%84%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B8%80%E4%B9%8BSession%E6%9C%AC%E8%B4%A8/">Session机制</a>在面对高并发网络请求时，被这小小的session数据逼得不得不使出“百般解数”，苦不堪言。现在请思考个问题，假若暂时不考虑session数据的存储，建立会话管理的本质是什么？。。。。。。没错，是 <strong>“认证”，即知晓当前请求者是否为web应用已合法登录的某用户</strong>。</p>
-<p>比如说，小F首次登录系统成功（注册也是一种可以适用的场景）之后, 服务器端给他颁发一个 <strong>令牌</strong>（token，最简单的token组成:uid(用户唯一的身份标识)、time(当前时间的时间戳)、sign(签名，由token的前几位+盐以哈希算法压缩成定长的十六进制字符串)拼接而成）如下图示例， <strong>服务器端可以不保存这个token</strong>；当小F再次发送http请求时，会通过Http header/body将这个token值附带而来，服务器会再用同样的算法对数据 <strong>计算签名并和token中的签名做比较</strong>，如果认证通过就说明小F已经登录过了，并且可直接取到小F的userId，否则就是没通过有效性认证。<br><img src="http://www.sdwangblog.cn/blogimg/simple_token_sign.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/">展开全文 >></a>
         </p>
       
 

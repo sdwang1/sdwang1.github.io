@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Archives: 2019/3 | Sdwang1的博客</title>
+  <title>MySQL为什么有时候会选错索引？ | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/archives/2019/03/index.html">
+  <meta name="description" content="前言前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在执行一条SQL语句时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？ 是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。 问题1描述假设现有如下所示的表结构t，表中有a、b两个字段，">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL为什么有时候会选错索引？">
+<meta property="og:url" content="http://www.sdwangblog.cn/2019/03/30/MySQL为什么有时候会选错索引/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="前言前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在执行一条SQL语句时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？ 是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。 问题1描述假设现有如下所示的表结构t，表中有a、b两个字段，">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png">
+<meta property="og:updated_time" content="2019-06-04T06:33:32.419Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="MySQL为什么有时候会选错索引？">
+<meta name="twitter:description" content="前言前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在执行一条SQL语句时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？ 是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。 问题1描述假设现有如下所示的表结构t，表中有a、b两个字段，">
+<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,36 +157,111 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-MySQL为什么有时候会选错索引" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      MySQL为什么有时候会选错索引？
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/30/MySQL为什么有时候会选错索引/" class="archive-article-date">
+
+        
+        <a href="/2019/03/30/MySQL为什么有时候会选错索引/" class="archive-article-date">
   	<time datetime="2019-03-30T07:47:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/30/MySQL为什么有时候会选错索引/">MySQL为什么有时候会选错索引？</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
+<p>是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。</p>
+<h2 id="问题1描述"><a href="#问题1描述" class="headerlink" title="问题1描述"></a>问题1描述</h2><p>假设现有如下所示的表结构<code>t</code>，表中有a、b两个字段，其上被分别创建了普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们向表t中插入10万行记录，取值按整数递增，即数据从(1,1,1),(2,2,2),(3,3,3)直到(100000,100000,100000)。接下来，我们分析一条SQL语句<code>select * from t where a between 10000 and 20000;</code></p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 10001 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>如上所示，这条查询语句的执行“不出意料”的key字段值是‘a’，表示优化器选择了索引a。继续实验。。。：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql(事务1) &gt; start transaction with consistent snapshot;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; delete from t;</span><br><span class="line">mysql(事务2) &gt; source data.sql;      //插入10万条数据(1,1),(2,2)...(100000,100000)</span><br><span class="line">mysql(事务2) &gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows  | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | ALL  | a             | NULL | NULL    | NULL | 94599 |    39.24 | Using where |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.12 sec)</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; commit；</span><br></pre></td></tr></table></figure></p>
+<p>上例中事务1就是简单开启了一个事务，事务2则是把数据都删除后又插入了10万行数据，然后再次执行查询语句<code>select * from t where a between 10000 and 20000;</code>。“猫腻乍现”，该次查询key字段值竟然是null，扫描结果为94599行，显然是走了全表扫描。为了进一步说明问题，我们将原查询语句加上force index(a)再和事务2中的查询语句执行情况做对比：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; explain select * from t force index(a) where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 37116 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.01 sec)</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，当我们使用了force index的时候，MySQL才“正确地”选择了索引‘a’。 说起来，上面的例子对应的就是我们日常不断的删除历史数据和新增数据的场景，而如此稀松平常之事，MySQL竟然也会选错索引，是不是有点奇怪呢？</p>
+<h2 id="优化器的逻辑"><a href="#优化器的逻辑" class="headerlink" title="优化器的逻辑"></a>优化器的逻辑</h2><p>在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">一条SQL语句是如何执行的</a>一文中，我们知道选择索引是优化器的工作。优化器选择索引的目的是为了找到一个最优的执行方案，并以最小的代价去执行语句。不难猜到，<strong>扫描行数就是影响执行代价的因素之一</strong>，扫描的行数越少，意味着访问磁盘数据的次数越少，消耗的CPU资源就越少。<br><strong>当然，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表，是否排序等因素进行综合判断</strong>。上例中简单的查询语句<code>select * from t where a between 10000 and 20000;</code>并没有涉及到临时表和排序，它选错索引就是在判断扫描行的时候出了问题。 那么，<strong>扫描行数是怎么判断的呢</strong>？</p>
+<p>MySQL在真正开始执行语句之前并不能精确地知道满足这个条件的记录有多少条，而只能根据统计信息来估算记录数，<strong>这个统计信息就是索引的“区分度”——一个索引上不同的值越多，这个索引的区分度就越好。一个索引上不同值的个数，我们称之为“基数”（cardinality），即基数越大，索引区分度越好</strong>。我们可以使用<code>show index</code>命令查看一个索引的基数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show index from t;</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| Table | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| t     |          0 | PRIMARY  |            1 | id          | A         |       94599 |     NULL | NULL   |      | BTREE      |         |               |</span><br><span class="line">| t     |          1 | a        |            1 | a           | A         |       94599 |     NULL | NULL   | YES  | BTREE      |         |               |</span><br><span class="line">| t     |          1 | b        |            1 | b           | A         |       94599 |     NULL | NULL   | YES  | BTREE      |         |               |</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">3 rows in set (0.08 sec)</span><br></pre></td></tr></table></figure></p>
+<p>那么，<strong>MySQL是怎样得到索引的基数的呢</strong>？诚然，如果我们把整张表取出来一行行统计，的确可以得到精确的计算结果，但执行代价将会很高，<strong>MySQL选取了采样统计的计算方法。在采样统计的时候，InnoDB默认会选择N个数据页，统计这些页面上的不同值并得到一个平均值，然后乘以这个索引的页面数，就得到了这个索引的基数。数据表内容是会持续更新的，索引的统计信息当然也不会固定不变。所以，当变更的数据行数超过1/M的时候，InnoDB会自动触发重新做一次索引统计</strong>。<br>MySQL中有两种存储索引统计的方式，可以通过设置参数innodb_stats_presistent的值来选择：</p>
+<ul>
+<li>innodb_stats_presistent=on，表示统计信息为持久化存储，此时默认N=20，M=10；</li>
+<li>innodb_stats_presistent=off，表示统计信息只存储在内存中，此时默认N=8，M=16；</li>
+</ul>
+<p><strong>由于采样统计的局限性，不管N值是20还是8，这个基数都是很容易不准的</strong>。但这还不是问题1选错索引的原因，通过上面的<code>show index</code>命令的输出可知，表t上三个索引的统计值(cardinality列)是相等的，选错索引肯定还另有缘由。<strong>其实，对于一个具体的语句来说，索引统计只是一个输入，优化器还要判断执行这个语句本身要扫描多少行</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql(Q1)&gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows  | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | ALL  | a             | NULL | NULL    | NULL | 94599 |    39.24 | Using where |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.09 sec)</span><br><span class="line"></span><br><span class="line">mysql(Q2)&gt; explain select * from t force index(a) where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 37116 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.01 sec)</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，Q1的预计扫描行数rows=94599，这个结果还是符合预期的；Q2的预计扫描行数rows=37116，这个偏差就大了。再回忆下数据表最原始的状态（删除并新插入数据前）时explain命令看到的rows只是10001行， 不难猜想，<strong>可能就是这个偏差误导了优化器的判断</strong>。<br>那么，为什么优化器放着扫描37116的执行计划不用，却选择了扫描行数是94599的执行计划呢？为便于分析问题，我们 <strong>开启优化器跟踪查看MySQL优化过程</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%optimizer_trace%&apos;;</span><br><span class="line">+------------------------------+----------------------------------------------------------------------------+</span><br><span class="line">| Variable_name                | Value                                                                      |</span><br><span class="line">+------------------------------+----------------------------------------------------------------------------+</span><br><span class="line">| optimizer_trace              | enabled=off,one_line=off                                                   |</span><br><span class="line">| optimizer_trace_features     | greedy_search=on,range_optimizer=on,dynamic_range=on,repeated_subselect=on |</span><br><span class="line">| optimizer_trace_limit        | 1                                                                          |</span><br><span class="line">| optimizer_trace_max_mem_size | 16384                                                                      |</span><br><span class="line">| optimizer_trace_offset       | -1                                                                         |</span><br><span class="line">+------------------------------+----------------------------------------------------------------------------+</span><br><span class="line">5 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">-- mysql &gt; SET session OPTIMIZER_TRACE_MAX_MEM_SIZE=268435456(i.e. 256M);</span><br><span class="line">mysql &gt; SET session OPTIMIZER_TRACE=&quot;enabled=on&quot;;</span><br><span class="line"></span><br><span class="line">-- 执行完查询语句后查看其具体的优化器执行过程</span><br><span class="line">mysql &gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">mysql &gt; select * from information_schema.optimizer_trace;</span><br><span class="line">-- 以下为optimizer_trace的TRACE部分</span><br><span class="line">&#123;</span><br><span class="line">  &quot;steps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_preparation&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;expanded_query&quot;: &quot;/* select#1 */ select `t`.`id` AS `id`,`t`.`a` AS `a`,`t`.`b` AS `b` from `t` where (`t`.`a` between 10000 and 20000)&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_optimization&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;condition_processing&quot;: &#123;</span><br><span class="line">              &quot;condition&quot;: &quot;WHERE&quot;,</span><br><span class="line">              &quot;original_condition&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;,</span><br><span class="line">              &quot;steps&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;equality_propagation&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;constant_propagation&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;trivial_condition_removal&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;substitute_generated_columns&quot;: &#123;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;table_dependencies&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`t`&quot;,</span><br><span class="line">                &quot;row_may_be_null&quot;: false,</span><br><span class="line">                &quot;map_bit&quot;: 0,</span><br><span class="line">                &quot;depends_on_map_bits&quot;: [</span><br><span class="line">                ]</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;ref_optimizer_key_uses&quot;: [</span><br><span class="line">            ]</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">&lt;!----------扫描行数预估-----------------------&gt;</span><br><span class="line">            &quot;rows_estimation&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`t`&quot;,</span><br><span class="line">                &quot;range_analysis&quot;: &#123;</span><br><span class="line">                  &quot;table_scan&quot;: &#123;</span><br><span class="line">                    &quot;rows&quot;: 94599,</span><br><span class="line">                    &quot;cost&quot;: 19339</span><br><span class="line">                  &#125;,</span><br><span class="line">                  &quot;potential_range_indexes&quot;: [</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;index&quot;: &quot;PRIMARY&quot;,</span><br><span class="line">                      &quot;usable&quot;: false,</span><br><span class="line">                      &quot;cause&quot;: &quot;not_applicable&quot;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;index&quot;: &quot;a&quot;,</span><br><span class="line">                      &quot;usable&quot;: true,</span><br><span class="line">                      &quot;key_parts&quot;: [</span><br><span class="line">                        &quot;a&quot;,</span><br><span class="line">                        &quot;id&quot;</span><br><span class="line">                      ]</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;index&quot;: &quot;b&quot;,</span><br><span class="line">                      &quot;usable&quot;: false,</span><br><span class="line">                      &quot;cause&quot;: &quot;not_applicable&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                  ],</span><br><span class="line">                  &quot;setup_range_conditions&quot;: [</span><br><span class="line">                  ],</span><br><span class="line">                  &quot;group_index_range&quot;: &#123;</span><br><span class="line">                    &quot;chosen&quot;: false,</span><br><span class="line">                    &quot;cause&quot;: &quot;not_group_by_or_distinct&quot;</span><br><span class="line">                  &#125;,</span><br><span class="line">                  &quot;analyzing_range_alternatives&quot;: &#123;</span><br><span class="line">&lt;!------------------范围扫描选项考虑了索引index(a)，rows=37116，但由于耗时cost=44540放弃使用--&gt;</span><br><span class="line">                    &quot;range_scan_alternatives&quot;: [</span><br><span class="line">                      &#123;</span><br><span class="line">                        &quot;index&quot;: &quot;a&quot;,</span><br><span class="line">                        &quot;ranges&quot;: [</span><br><span class="line">                          &quot;10000 &lt;= a &lt;= 20000&quot;</span><br><span class="line">                        ],</span><br><span class="line">                        &quot;index_dives_for_eq_ranges&quot;: true,</span><br><span class="line">                        &quot;rowid_ordered&quot;: false,</span><br><span class="line">                        &quot;using_mrr&quot;: false,</span><br><span class="line">                        &quot;index_only&quot;: false,</span><br><span class="line">                        &quot;rows&quot;: 37116,</span><br><span class="line">                        &quot;cost&quot;: 44540,</span><br><span class="line">                        &quot;chosen&quot;: false,</span><br><span class="line">                        &quot;cause&quot;: &quot;cost&quot;</span><br><span class="line">                      &#125;</span><br><span class="line">                    ],</span><br><span class="line">                    &quot;analyzing_roworder_intersect&quot;: &#123;</span><br><span class="line">                      &quot;usable&quot;: false,</span><br><span class="line">                      &quot;cause&quot;: &quot;too_few_roworder_scans&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;considered_execution_plans&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;plan_prefix&quot;: [</span><br><span class="line">                ],</span><br><span class="line">                &quot;table&quot;: &quot;`t`&quot;,</span><br><span class="line">                &quot;best_access_path&quot;: &#123;</span><br><span class="line">&lt;!----------------最终选择了主键索引，扫描行rows_to_scan=94599，结果行resulting_rows=37116，耗时cost=19337--&gt;                  </span><br><span class="line">                  &quot;considered_access_paths&quot;: [</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;rows_to_scan&quot;: 94599,</span><br><span class="line">                      &quot;access_type&quot;: &quot;scan&quot;,</span><br><span class="line">                      &quot;resulting_rows&quot;: 37116,</span><br><span class="line">                      &quot;cost&quot;: 19337,</span><br><span class="line">                      &quot;chosen&quot;: true</span><br><span class="line">                    &#125;</span><br><span class="line">                  ]</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;condition_filtering_pct&quot;: 100,</span><br><span class="line">                &quot;rows_for_plan&quot;: 37116,</span><br><span class="line">                &quot;cost_for_plan&quot;: 19337,</span><br><span class="line">                &quot;chosen&quot;: true</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;attaching_conditions_to_tables&quot;: &#123;</span><br><span class="line">              &quot;original_condition&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;,</span><br><span class="line">              &quot;attached_conditions_computation&quot;: [</span><br><span class="line">              ],</span><br><span class="line">              &quot;attached_conditions_summary&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;table&quot;: &quot;`t`&quot;,</span><br><span class="line">                  &quot;attached&quot;: &quot;(`t`.`a` between 10000 and 20000)&quot;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;refine_plan&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`t`&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_explain&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由上可知，<strong>如果使用索引a，每次从索引a上拿到一个值，都要回到主键索引上查出整行数据，这个代价优化器也会算进去；相反如果选择扫描94599行，是直接在主键索引上扫描的，没有额外的代价</strong>。优化器会估算这两个选择的代价，从结果上看，优化器认为直接扫描主键索引更快(cost 19337&lt; cost 44540)。归咎到底，原因还是MySQL没能准确的判断出扫描行数。为此，我们可以使用<code>analyze table t</code>命令来重新统计索引信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; analyze table t;</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">| Table   | Op      | Msg_type | Msg_text |</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">| octet.t | analyze | status   | OK       |</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">1 row in set (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 10001 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.01 sec)</span><br></pre></td></tr></table></figure></p>
+<p>Bingo!！使用<code>analyze table</code>命令恢复索引信息后，explain结果再次回到了数据表最原始状态的完美执行情况(rows=10001)。<strong>在实践中，如果你发现explain结果预估的rows与实际情况差距较大，就可以采用这个方法来处理</strong>。</p>
+<h2 id="问题描述2"><a href="#问题描述2" class="headerlink" title="问题描述2"></a>问题描述2</h2><p>前面我们说了，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表，是否排序等因素进行综合判断。依然基于这个表，我们看看另外一个查询语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;</span><br></pre></td></tr></table></figure></p>
+<p>从条件上看，当前数据表中并没有符合条件的记录，因此会返回空集合。在开始执行这条语句前，设想一下，如果让你来选索引，会选择哪一个呢？<br>为了便于分析，先来看一下a、b这两个索引的结构图：<br><img src="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png" alt></p>
+<ul>
+<li>如果使用索引a进行查询，首先会扫描索引a的前1000个值，取得对应的主键ID；然后在主键索引上查出每一行，并根据字段b进行过滤，这样查询需要扫描1000行；</li>
+<li>如果使用索引b进行查询，首先会扫描索引b的最后50001个值，与上面的执行过程雷同，同样会回到主键索引上取记录行再过滤，这样查询需要扫描50001行；</li>
+</ul>
+<p>如此分析，如果选择使用索引a，执行速度似乎会快很多。接下来我们就来实际检验下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; explain select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+------------------------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows | filtered | Extra                              |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a,b           | b    | 5       | NULL | 50007 |    2.00 | Using index condition; Using where |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+------------------------------------+</span><br><span class="line">1 row in set, 1 warning (0.03 sec)</span><br></pre></td></tr></table></figure></p>
+<p>如上所示，这次优化器选择了索引b，而rows字段显示需要扫描的行数是50007。显然，这次MySQL又选错了索引，扫描行估计值依然不准确。这又该如何修正处理呢？</p>
+<h2 id="索引选择异常和处理"><a href="#索引选择异常和处理" class="headerlink" title="索引选择异常和处理"></a>索引选择异常和处理</h2><p>大多数时候优化器都能找到正确的索引，但偶尔也会碰到我们上面举例的这两种情况，导致原本可以执行得很快的SQL语句，执行速度比预期慢很多，你该如何处理呢？</p>
+<ul>
+<li><strong>类似第一个例子，采用force index强行选择一个索引</strong>。MySQL会根据词法分析的结果分析出可能可以使用的索引作为候选项，然后在候选列表中依次判断每个索引需要扫描多少行。如果force index指定的索引在索引候选列表中，就直接选择这个索引，不再评估其他索引的执行代价；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;</span><br><span class="line">Empty set (2.23 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t force index(a) where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;</span><br><span class="line">Empty set (0.05 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>可以看到，相较于优化器没有选择正确的索引，在fore index“矫正”索引后，执行效率就快了40多倍。不过很多程序员不喜欢使用force index，一来这么写不优美，二来如果索引修改了名字，这条语句也得改，且如果以后迁移到别的数据库的话，这个语法还可能会不兼容。</p>
+<p><strong>其实使用force index最主要的问题会是变更的及时性，因为选错索引的情况是比较少出现的，所以开发的时候通常不会先写上force index。等到线上出现问题的时候，你才会再去修改SQL语句、添加force index。但修改之后还要测试和发布，对于生产系统来说，这个过程不够敏捷</strong>。</p>
+<ul>
+<li><strong>考虑修改语句，引导MySQL使用我们期望的索引</strong>。比如上例中，修改SQL语句‘order by b limit’为’order by b a limit 1’，语义逻辑是相同，但执行效果却大相径庭：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from t force index(a) where (a between 1 and 1000) and (b between 50000 and 100000) order by b,a limit 1;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 2000 |    11.11 | Using index condition; Using where; Using filesort |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>之前优化器选择使用索引b，是因为它认为使用索引b可以避免排序(b本身是索引【有序的】，如果选择索引b的话，就不需要再做排序仅需遍历)，所以即使扫描行数多，也判定为代价更小。改写为‘order by b,a’后，就意味着使用这两个索引都需要排序，扫描行数就成了影响决策的主要条件，于是此时优化器选了只需要扫描1000行的索引a。<strong>当然，这种修改并不是通用的优化手段</strong>，只是刚好这个语句里有limit 1，即如果有满足条件的记录，‘order by limit 1’和‘order by b,a limit 1’都会返回b是最小的那一行，语义逻辑一致才可以这么做。</p>
+<p>如果你觉得修改语义这件事不太好，这里还有一种改法，执行效果如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from (select * from t force index(a) where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 100)alias limit 1;</span><br><span class="line">+----+-------------+------------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">| id | select_type | table      | partitions | type  | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |</span><br><span class="line">+----+-------------+------------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">|  1 | PRIMARY     | &lt;derived2&gt; | NULL       | ALL   | NULL          | NULL | NULL    | NULL |  100 |   100.00 | NULL                                               |</span><br><span class="line">|  2 | DERIVED     | t          | NULL       | range | a             | a    | 5       | NULL | 2000 |    11.11 | Using index condition; Using where; Using filesort |</span><br><span class="line">+----+-------------+------------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+</span><br><span class="line">2 rows in set, 1 warning (0.04 sec)</span><br></pre></td></tr></table></figure></p>
+<p>上图中我们用limit 100让优化器意思到使用b的索引代价是很高的。其实我们只是根据数据特征诱导了一下优化器，同样不具备通用性。</p>
+<ul>
+<li><strong>在有些场景下，我们可以新建一个更合适的索引，来提供给优化器做选择，或删掉误用的索引</strong>。在这个例子中，我们没有找到通过新增索引来改变优化器行为的方法。这种情况其实比较少见，尤其是经过DBA索引优化过的库碰到这个bug，找到一个更合适的索引一般比较难。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此，我们了解了索引统计的更新机制，并提到了优化器存在选错索引的可能性：<strong>对于由于索引统计信息不准确导致的问题，你可以使用analyze table来解决；而对于其他优化器误判的情况，你可以在应用端用force index来强行指定索引，也可以通过修改语句来引导优化器，还可以通过增加或删除索引来绕过这个问题</strong>。</p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -191,247 +273,119 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2019/03/30/MySQL为什么有时候会选错索引/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" class="archive-article-date">
-  	<time datetime="2019-03-27T10:19:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-27</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">InnoDB使用全文索引(FullText Index)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">InnoDB使用全文索引(FullText Index)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题1描述"><span class="toc-number">2.</span> <span class="toc-text">问题1描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化器的逻辑"><span class="toc-number">3.</span> <span class="toc-text">优化器的逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述2"><span class="toc-number">4.</span> <span class="toc-text">问题描述2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引选择异常和处理"><span class="toc-number">5.</span> <span class="toc-text">索引选择异常和处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/22/MongoDB-Tutorial/" class="archive-article-date">
-  	<time datetime="2019-03-22T02:03:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/22/MongoDB-Tutorial/">MongoDB-Tutorial</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
-  	<time datetime="2019-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/" class="archive-article-date">
-  	<time datetime="2019-03-10T01:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">一种高级的DoS攻击-Hash碰撞攻击</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/09/认识MySQL的事务日志/" class="archive-article-date">
-  	<time datetime="2019-03-09T07:00:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/09/认识MySQL的事务日志/">认识MySQL的事务日志</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
-  	<time datetime="2019-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -454,8 +408,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
