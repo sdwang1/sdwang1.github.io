@@ -20,9 +20,7 @@
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_kerberos.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_phase1.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_phase2.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_more_phase1.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_more_phase2.png">
-<meta property="og:updated_time" content="2019-03-06T03:04:05.712Z">
+<meta property="og:updated_time" content="2019-06-05T06:39:56.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单点登录怎么实现？">
 <meta name="twitter:description" content="前言假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：用户（张三）只在需要登录时输入一次用户名和密码，成功登">
@@ -217,7 +215,7 @@
 <li><p>Application 1 Server 首先使用 <strong>自己的密钥（K_Service）解密 ST</strong>，获得服务器会话密钥 SK_Service，然后使用SK_Service解密 Authenticator，验证请求用户是否为票中所声明用户和有效期。Application 1 Server 判断无误后向客户端发送一个包以证明自己的身份，这个包使用SK_Service加密。此后user与Application 1 Server的通信都采用SK_Service加密，好比建立了一条加密通道。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值得注意的是，客户端会等待Service Server发送确认信息，如果不是正确的Service Server就不能解密ST，也就无法解密服务会话密钥，从而避免用户使用错误的服务器。</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>客户端用户转而访问应用服务Application 2 server时，和访问<a href="http://www.a.com/pageA非常类似，唯一不同的是" target="_blank" rel="noopener">www.a.com/pageA非常类似，唯一不同的是</a> <strong>客户端已经有了AS发放的TGT（注意效期），直接跳转到步骤3-4，继续执行流程获得ST and SK_Service of Application 2 Server</strong>。</p>
+<li><p>客户端用户转而访问应用服务Application 2 server时，和访问<code>www.a.com/pageA</code>非常类似，唯一不同的是 <strong>客户端已经有了AS发放的TGT（注意效期），直接跳转到步骤3-4，继续执行流程获得ST and SK_Service of Application 2 Server</strong>。</p>
 </li>
 </ul>
 <p><strong>SSO的单点退出，要求用户在一个系统退出时，认证中心需要把自己的会话和cookie干掉，然后还要去通知各个系统， 让他们把自己的会话统统干掉，这样才能在所有的系统都实现真正地退出。</strong></p>
@@ -225,11 +223,11 @@
 <ul>
 <li><strong>失败于单点</strong>：Kerberos协议运转需要KDC的持续响应，一旦KDC服务意外结束，没有人可以连接到应用服务器。这个缺陷可以通过使用复合Kerberos服务器和缺陷认证机制弥补；</li>
 <li>Kerberos要求 <strong>参与通信的主机的时钟同步</strong>。票据具有一定有效期，因此如果主机时钟与Kerberos服务器的时钟不同步，认证会失败。在实践中，通常用网络时间协议后台程序来保持主机时钟同步。默认设置要求时钟的时间差不超过10分钟；</li>
-<li><strong>管理协议没有标准化</strong>，在服务器实现工具中有一些差别，比如接下来介绍的 <strong>“非一般”CAS实现</strong>；</li>
+<li><strong>管理协议没有标准化</strong>，在服务器实现工具中有一些差别；</li>
 <li>所有用户使用的密钥都存储于中心服务器，危及服务器的安全行为将危及所有用户的密钥；</li>
 <li>一个危险客户机也将危及用户密码；</li>
 </ul>
-<h4 id="“非一般”CAS实现"><a href="#“非一般”CAS实现" class="headerlink" title="“非一般”CAS实现"></a>“非一般”CAS实现</h4><p>CAS（Central Authentication Server）原理与Kerberos流程基本雷同，但由于管理协议没有标准化，总有些“非同凡响”的实现方式，比如下例：<br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase1.png" alt><br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase2.png" alt><br>此时，如果用户访问受信任的系统<a href="http://www.b.com/pageB时，由于浏览器已经有了认证中心的cookie（TGT），就不再需要用户登录了，直接发送给www.sso.com即可。" target="_blank" rel="noopener">www.b.com/pageB时，由于浏览器已经有了认证中心的cookie（TGT），就不再需要用户登录了，直接发送给www.sso.com即可。</a><br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_more_phase1.png" alt><br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_more_phase2.png" alt></p>
+<h4 id="CAS协议"><a href="#CAS协议" class="headerlink" title="CAS协议"></a>CAS协议</h4><p><a href="https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol.html" target="_blank" rel="noopener">CAS（Central Authentication Server）</a>原理与Kerberos流程基本雷同，当前版本3.x，但由于管理协议没有标准化，也会有些“非同凡响”的实现方式。下图为 CAS Browser-Server Web flow diagram：<br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase1.png" alt><br>此时，如果用户来访问受信任的系统<code>www.b.com/pageB</code>，由于浏览器已经有了认证中心的cookie（TGT），就不再需要用户登录了，直接发送给<a href="http://www.sso.com即可。" target="_blank" rel="noopener">www.sso.com即可。</a><br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase2.png" alt></p>
 
       
 
@@ -382,7 +380,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSO技术实现"><span class="toc-number">2.</span> <span class="toc-text">SSO技术实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于cookies实现"><span class="toc-number">2.1.</span> <span class="toc-text">基于cookies实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于经纪人实现"><span class="toc-number">2.2.</span> <span class="toc-text">基于经纪人实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos原理"><span class="toc-number">2.2.1.</span> <span class="toc-text">Kerberos原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos的缺点"><span class="toc-number">2.2.2.</span> <span class="toc-text">Kerberos的缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#“非一般”CAS实现"><span class="toc-number">2.2.3.</span> <span class="toc-text">“非一般”CAS实现</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSO技术实现"><span class="toc-number">2.</span> <span class="toc-text">SSO技术实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于cookies实现"><span class="toc-number">2.1.</span> <span class="toc-text">基于cookies实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于经纪人实现"><span class="toc-number">2.2.</span> <span class="toc-text">基于经纪人实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos原理"><span class="toc-number">2.2.1.</span> <span class="toc-text">Kerberos原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos的缺点"><span class="toc-number">2.2.2.</span> <span class="toc-text">Kerberos的缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS协议"><span class="toc-number">2.2.3.</span> <span class="toc-text">CAS协议</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -494,6 +492,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
@@ -527,10 +529,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
