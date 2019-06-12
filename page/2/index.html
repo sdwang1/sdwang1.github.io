@@ -152,6 +152,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-理解OAuth-2-0，一个授权的故事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/">理解OAuth 2.0，一个授权的故事</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/理解OAuth-2-0，一个授权的故事/" class="archive-article-date">
+  	<time datetime="2018-10-11T03:45:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth</a>是一个关于授权（authorization）的开放网络标准，在世界范围内得到广泛应用，目前版本2.0版。为了理解OAuth的适用场合，让我们来听一个关于授权的故事：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">小梁开发了一个“信用卡管家”的程序 ， 可以自动从邮箱中读取信用卡相关邮件，分析、汇总，形成一个报表。</span><br><span class="line"></span><br><span class="line">小梁找到信用卡达人张大胖试用 ： “你的信用卡那么多，看看我这个程序吧， 保准你会爱死它。”</span><br><span class="line"></span><br><span class="line">张大胖尝试了几下说： “咦，你这个程序要读取我的网易邮箱啊，那需要用户名/密码吧”</span><br><span class="line"></span><br><span class="line">“是啊 ， 你把密码告诉输入程序不就行了， 我的程序替你加密保存，保证不会泄露。”</span><br><span class="line"></span><br><span class="line">“得了吧你， 我可不会告诉你我的密码， 为了方便记忆， 我的密码都是通用的， 万一泄露了就完蛋了”</span><br><span class="line"></span><br><span class="line">小梁说：“这样吧，我不保存，我就访问邮箱的时候使用一次， 用完就扔！”</span><br><span class="line"></span><br><span class="line">“你以为你是阿里巴巴啊， 有信用背书， 你只是个小网站， 我把密码献给你，总是觉得不安全。就是我信任你，别人能信任你吗？”</span><br><span class="line"></span><br><span class="line">小梁想想也是， 这是一个巨大的心理障碍， 每个人都要誓死捍卫自己的密码啊。</span><br></pre></td></tr></table></figure></p>
+<p>在继续我们的故事前，先来了解几个关于OAuth 2.0的专用名词：</p>
+<ul>
+<li><strong>Third-party application：第三方应用程序，本文又称“客户端”（client），即上例中的“信用卡管家”</strong>；</li>
+<li><strong>HTTP service：HTTP服务提供商，本文简称“服务提供商”，即上例中的“网易邮箱”</strong>；</li>
+<li><strong>Resource Owner：资源所有者，本文简称“用户”，即上例中的“张大胖”</strong>；</li>
+<li><strong>Authorization server：认证服务器，服务提供商专门用来处理认证的服务器，即上例中的“网易认证中心”</strong>；</li>
+<li><strong>Resource server：资源服务器，服务提供商存放用户生成资源的服务器，它与认证服务器可以是同一台服务器，也可是不同的服务器，即上例中的”网易邮箱“</strong>；</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-如何建立安全的会话管理机制二之Token机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -892,82 +976,6 @@
 
 
   
-    <article id="post-Apache与PHP的工作机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/24/Apache与PHP的工作机制/">Apache与PHP的工作机制</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/24/Apache与PHP的工作机制/" class="archive-article-date">
-  	<time datetime="2018-05-24T06:33:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通过<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial篇一/">Apache Tutorial</a>我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcgi,fpm-fcgi等等。Apache处理PHP文件方式一般有以下三种模式：加载mod_php 模块，CGI模式和FastCGI模式。<br><img src="http://www.sdwangblog.cn/blogimg/Php_struction.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/05/24/Apache与PHP的工作机制/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Apache</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/24/Apache与PHP的工作机制/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1065,10 +1073,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
@@ -1114,6 +1118,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">

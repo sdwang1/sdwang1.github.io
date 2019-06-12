@@ -152,6 +152,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析八之地址解析类文件URI-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/">CodeIgniter框架源码解析八之地址解析类文件URI.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/" class="archive-article-date">
+  	<time datetime="2018-03-10T08:17:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>URI类主要处理地址字符串，将uri分解成对应的片段，存到segments数组中。querystring分解后存到<code>$_GET</code>数组，ROUTER路由类在之后的解析路由动作中，也主要依靠URI类的segments属性数组来获取当前上下文的请求URI信息。为了合理的分解URI，我们有必要先简要了解下CodeIgniter URL：</p>
+<ul>
+<li>默认情况下，CodeIgniter 中的URL是基于段的方法设计的，不同于使用标准的“查询字符串”方法，形如<code>example.com/class/function/ID</code>。事实上，你的URL中默认还会包含index.php文件，比如<code>example.com/index.php/news/article/my_article</code>。</li>
+<li>如果你的config/config.php 文件中已经指定了url_suffix，比如html，那么某个页面URL可能是这个样子：<code>example.com/index.php/products/view/shoes.html</code>；</li>
+<li>如果你在application/config.php 配置文件中启用了enable_query_string,它就会通过你设置的 trigger 关键字来访问你的控制器和方法，url形如<code>index.php?c=products&amp;m=view&amp;id=345</code>;</li>
+</ul>
+<p>CI框架体系中的方法参数都是从URI片段中取的,并按顺序传递给方法参数。$config[‘uri_protocol’]配置不但决定以哪个函数处理URI，同时决定了从哪个全局变量里获取当前上下文的uri地址。其对应关系是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&apos;REQUEST_URI&apos;    使用 $_SERVER[&apos;REQUEST_URI&apos;]，取用url地址中主机头后面所有的字符</span><br><span class="line">&apos;QUERY_STRING&apos;   使用 $_SERVER[&apos;QUERY_STRING&apos;]，取用url地址中&quot;?&quot;后面的部分</span><br><span class="line">&apos;PATH_INFO&apos;      使用 $_SERVER[&apos;PATH_INFO&apos;]，取用url地址中脚本文件($_SERVER[&apos;SCRIPT_NAME&apos;])之后&quot;?&quot;之前的字符内容</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/10/CodeIgniter框架源码解析八之地址解析类文件URI-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析七之编码类文件Utf8-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -860,82 +942,6 @@
 
 
   
-    <article id="post-字符编码：ASCII，Unicode和UTF-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/05/字符编码：ASCII，Unicode和UTF-8/">字符编码：ASCII，Unicode和UTF-8</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/05/字符编码：ASCII，Unicode和UTF-8/" class="archive-article-date">
-  	<time datetime="2018-01-05T07:23:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>事情的初衷：让本地的一个简单的SQL自助查询工具绕过对方的应用防火墙（由于是应用层而非网络层的入侵，或许称为Web IPS更合适）检测。<br>Web防火墙对于”SQL注入”攻击的检测能力要看具体的厂家技术特点了，比如基础的关键字权重累计，算法识别，以及随着机器学习推进的应用网页的自动学习检测等等。此处我们只是打算绕过最简单的”关键字识别”防御检测，可以考虑的方法有很多种，比如base64_encode，提供一套关键字映射规则，或者对SQL语句进行可逆加密等等。为了躲避特征码扫描，我们采用了如下例简单的加密解密算法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compile</span>(<span class="params">code</span>)  </span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">   <span class="keyword">var</span> c=<span class="built_in">String</span>.fromCharCode(code.charCodeAt(<span class="number">0</span>)+code.length);  </span><br><span class="line">   <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>;i&lt;code.length;i++)&#123;  </span><br><span class="line">   c+=<span class="built_in">String</span>.fromCharCode(code.charCodeAt(i)+code.charCodeAt(i<span class="number">-1</span>));  </span><br><span class="line">   &#125;  </span><br><span class="line">   alert(<span class="built_in">escape</span>(c));  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">&lt;!-- 比如<span class="string">'黑客防线'</span>运行得到加密结果为：o%CD%D1%D7%E6%<span class="number">9</span>CJ%u9EF3%uFA73%uF1D4%u14F1%u7EE1Kd --&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uncompile</span>(<span class="params">code</span>)  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">   code=<span class="built_in">unescape</span>(code);  </span><br><span class="line">   <span class="keyword">var</span> c=<span class="built_in">String</span>.fromCharCode(code.charCodeAt(<span class="number">0</span>)-code.length);  </span><br><span class="line">   <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>;i&lt;code.length;i++)&#123;  </span><br><span class="line">   c+=<span class="built_in">String</span>.fromCharCode(code.charCodeAt(i)-c.charCodeAt(i<span class="number">-1</span>));  </span><br><span class="line">   &#125;  </span><br><span class="line">   <span class="keyword">return</span> c;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/01/05/字符编码：ASCII，Unicode和UTF-8/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/05/字符编码：ASCII，Unicode和UTF-8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1033,10 +1039,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">CI框架源码解析</a>
               </li>
              
@@ -1082,6 +1084,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
