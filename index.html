@@ -152,6 +152,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-跳跃表原理及实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/08/跳跃表原理及实现/">跳跃表原理及实现</a>
+    </h1>
+  
+
+        
+        <a href="/2019/07/08/跳跃表原理及实现/" class="archive-article-date">
+  	<time datetime="2019-07-08T08:35:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间曾欲<a href="http://www.sdwangblog.cn/2019/03/27/InnoDB%E4%BD%BF%E7%94%A8%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95-FullText-Index/">使用InnoDB全文索引</a>优化表上某字段的模糊查询，但考虑到线上MySQL版本(&gt;=5.6)及参数兼容性(innodb_ft_min_token_size)等因素，最后还是单写了个<a href="#">简略版全文索引引擎</a>。在了解全文检索相关技术时，Lucenne、Sphinx及ElasticSearch自然就“不期而遇”了。对于这几种技术，除了Elasticsearch略微有所接触（得益于某大佬曾基于它写过一个日志检索系统）外，其他真的是一无所知，虽有心探究但由于工期因素就暂时加在了“TODO List豪华菜单“。But Now。。。。。。接下来一段时间我们会多聊一聊Elasticearch和Lucene的相关知识（没错，我又是个闲人了😂。。。）。<br>全文检索技术由来已久，绝大多数都基于 <strong>倒排索引【顾名思义，相反于一篇文章包含了哪些词，它从词出发，记载了这个词在哪些文档中出现过】</strong> 来做（曾有过一些其他方案如文件指纹），<strong>通常由词典和倒排表两部分组成</strong>。其中词典结构尤为重要，在一个索引系统中，需要权衡各个因素（索引效率，磁盘空间、内存空间）来找到适合你当前业务的词典（数据）结构进行存储，才能让索引发挥最大能效。对于倒排索引的词典结构，常见的有 <strong>哈希表、B+树、跳跃表、字典树、FST(Finite State Transducers)等几种数据结构（其实只要是快速查找型的数据结构就可以用来做词典结构）</strong>。对于“哈希表、B+树”，大家应该都不陌生，那“跳跃表”又是个什么东东呢？（鄙人是第一次遇到，请见谅我的无知😊）</p>
+        
+          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-使用FFMPEG生成HLS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -922,86 +998,9 @@
 
 
   
-    <article id="post-PHP写入Word文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/07/PHP写入Word文件/">PHP写入Word文件</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/07/PHP写入Word文件/" class="archive-article-date">
-  	<time datetime="2018-11-07T08:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于PHP写入/读取Xls(s)文件，相信众phper应该都不陌生，依赖于强大的第三方开源库（比如phpoffice/phpspreadsheet）的支持，我们甚至可寥寥数行就能直接实现，那么对于doc(x)文件的写入/读取你又了解多少呢？很多人第一反应是不是也与我类似，认为可以直接选择依赖库”站在巨人的肩膀上“就OK？（现实并非如此简单，不然这篇文章有何必要出现？😂）</p>
-<p>最近刚完结了公司“招聘管理系统”的人才库开发，里面就涉及到doc(x)文件的写入/读取，虽费了些周折，但也算不虚此行的颇有收获，现简要汇总于此，希望对后来人有所帮助。正所谓“知己知彼”，首先简单说下doc与docx文件的区别：<br>The old (.doc) format was a proprietary and mostly undocumented format, while the .docx file is a ZIP archive of XML files( If you create a new, empty Microsoft Word document, write a single word ‘Test’ inside and unzip it contents, you will see the following file structure). The latter is an open standard that allows more content control with PHP without having Microsoft Office installed on the server.</p>
-        
-          <a class="article-more-a" href="/2018/11/07/PHP写入Word文件/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/07/PHP写入Word文件/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1112,15 +1111,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1136,15 +1135,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

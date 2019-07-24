@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/video_play_theory.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/hls_protocol_explanation.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mp4_box_structure.png">
-<meta property="og:updated_time" content="2019-06-13T10:43:10.955Z">
+<meta property="og:updated_time" content="2019-06-13T10:49:37.047Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用FFMPEG生成HLS">
 <meta name="twitter:description" content="前言近期处理公司的“知识库模块”开发需求中，接触到了网页视频播放。虽说研究生期间做过“实时视频中交通标志的检测与识别”，但多是用“OpenCV+模式识别”在处理底层视频帧（通常是在看某二进制矩阵或特征向量的说😂），网页流媒体文件播放方面真是新手一枚。经过查资料、写demo的一番折腾，大体上算是有所知晓，今整理汇总于此，望有助于后来者。 视频档播放原理视频档是一种包含不同视频轨和音频轨，甚至有时还">
@@ -288,10 +288,10 @@
 <ol>
 <li>在现有系统的应用架构中，<strong>为了节省本地应用系统资源，OSS服务采用了服务端签名后直传的上传方式</strong>，而视频素材(大小通常几百M，甚至几G)一般都是大文件，<strong>而服务端签名后直传的上传方式并不支持分片上传</strong>。当然这不是主要问题，最坏情况也就乖巧状👀“爱的魔力转圈圈”，改良方案可 <strong>增加Web端PostObject直传方式来分片上传</strong>。</li>
 <li><strong>由于点播服务的TS切片通常较小，海量碎片在文件分发、一致性缓存、存储方面都有较大的挑战（直播服务还需考虑延迟）</strong>。改良方案可 <strong>利用CDN进行分发加速以解决大规模应用的瓶颈</strong>，但遗憾的是，大佬认为：“知识库中添加视频素材功能只是模块功能的一小部分，实际使用场景有限，不足以构成痛处，暂不考虑引入CDN，就先给OSS加流量去吧”，故而就暂时苟在OSS上吧（可惜了实践CDN的机会😂）。</li>
-<li>为了减轻视频预览/播放时本地应用系统负载，我们打算采用<a href="https://help.aliyun.com/document_detail/119371.html?spm=5176.8466010.0.0.45d814504AChjU" target="_blank" rel="noopener"><strong>JavaScript GetObject</strong></a>方式获取某个tsFile。用户发送GetObject请求时须携带签名，而<a href="https://help.aliyun.com/document_detail/31951.html?spm=5176.doc31950.6.842.KmlCNR" target="_blank" rel="noopener">签名的计算方法</a>决定了每次GetObject请求都需要重新计算签名（<strong>CanonicalizedResource——用户想要访问的OSS资源——参与了生成签名计算），相较于调用本地应用系统获取tsFile，客户端签名获取后直取文件方式的确会节省本地应用系统资源，但大量TS切片分发带来的负载压力才是痛处所在</strong>。这就是没钱没粮的下场呀。。。😂</li>
+<li>为了减轻视频预览/播放时本地应用系统负载，我们打算采用<a href="https://help.aliyun.com/document_detail/119371.html?spm=5176.8466010.0.0.45d814504AChjU" target="_blank" rel="noopener"><strong>JavaScript GetObject</strong></a>方式获取某个tsFile。用户发送GetObject请求时须携带签名，而<a href="https://help.aliyun.com/document_detail/31951.html?spm=5176.doc31950.6.842.KmlCNR" target="_blank" rel="noopener">签名的计算方法</a>决定了每次GetObject请求都需要重新计算签名（<strong>CanonicalizedResource——用户想要访问的OSS资源——参与了生成签名计算），相较于调用本地应用接口获取tsFile，客户端签名获取后直取文件方式的确会节省些本地应用系统资源，但大量TS切片分发带来的负载压力才是痛处所在</strong>。这就是没钱没粮的下场呀。。。😂</li>
 </ol>
 <h3 id="Optimize-MP4-for-Faster-Streaming"><a href="#Optimize-MP4-for-Faster-Streaming" class="headerlink" title="Optimize MP4 for Faster Streaming"></a>Optimize MP4 for Faster Streaming</h3><p>虽说本地应用系统“没钱没粮”，但问题还是要处理解决的呀，那就只能再往底层深入以期能从根源上稍微做些优化，让“瞎猫也能捉点耗子”吧。。。😂<br>MP4文件中的所有数据都装在Box（QuickTime中为atom）中，即它由若干个Box组成，每个Box都包含了一个BoxHeader(包含Box的类型和整个Box的长度)和BoxData(包含了子Box和各种数据)，可将Box理解为一个数据对象块。Box之间可以层级嵌套，大体结构如下所示：<br><img src="http://www.sdwangblog.cn/blogimg/mp4_box_structure.png" alt><br>这里不详细介绍MP4的格式信息，但应该能看出moov box对播放很关键，它提供了文件的宽高、时长、码率、编码格式、帧列表、关键帧列表等信息。从某种意义上，你可以 <strong>认为moov box就是MP4文件目录。当你播放MP4文件时，程序会先查找定位 moov box 的位置，然后借此去查找视频和音频的起始位置才能开始播放。而Box 可能以任意顺序排列</strong>，程序一开始并不知道 moov box 哪里，有些视频播放时就需多做几次请求而导致加载缓慢。</p>
-<p>这次解决方案很简单：<strong>对moov box位置不合适的视频文件进行订正，用工具将其提到视频的前面即可</strong>。查看moov在文件中的位置可以用hex文本编辑器打开，按字符搜索moov所在的位置即可，MAC上面还可以使用<a href="https://github.com/ksvc/MediaParser" target="_blank" rel="noopener">MediaParser</a>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#将moov box移动到首部</span><br><span class="line">$ ffmpeg -i input.mp4 -movflags faststart -acodec copy -vcodec copy output.mp4</span><br></pre></td></tr></table></figure></p>
+<p>这次解决方案(稍微优化)很简单：<strong>对moov box位置不合适的视频文件进行订正，用工具将其提到视频的前面即可</strong>。查看moov在文件中的位置可以用hex文本编辑器打开，按字符搜索moov所在的位置即可，MAC上面还可以使用<a href="https://github.com/ksvc/MediaParser" target="_blank" rel="noopener">MediaParser</a>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#将moov box移动到首部</span><br><span class="line">$ ffmpeg -i input.mp4 -movflags faststart -acodec copy -vcodec copy output.mp4</span><br></pre></td></tr></table></figure></p>
 <p>参考文章：</p>
 <ul>
 <li><a href="https://segmentfault.com/a/1190000017473007" target="_blank" rel="noopener">短视频宝贝=慢？阿里巴巴工程师这样秒开短视频</a>;</li>
@@ -412,6 +412,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/07/08/跳跃表原理及实现/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          跳跃表原理及实现
+        
+      </div>
+    </a>
   
   
     <a href="/2019/03/30/MySQL为什么有时候会选错索引/" id="article-nav-older" class="article-nav-link-wrap">
@@ -570,15 +579,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -594,15 +603,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
