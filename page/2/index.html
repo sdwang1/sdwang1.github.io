@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP读出Docx文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/08/PHP读出Docx文件/">PHP读出Docx文件</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/08/PHP读出Docx文件/" class="archive-article-date">
+  	<time datetime="2018-11-08T02:58:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>书接上文，本节我们继续探讨doc(x)文件的解析读取。了解了<a href="http://www.sdwangblog.cn/2018/11/07/PHP%E5%86%99%E5%85%A5Word%E6%96%87%E4%BB%B6/">PHP如何写入Doc(x)文件</a>后，我们知道生成doc文件的内容形式可以有两种：原生的二进制格式和兼容的网页格式。“因地制宜”，对于原生的二进制格式同样可以使用Microsoft Office自带的ActiveX/<a href="http://www.php.net/manual/en/class.com.php" target="_blank" rel="noopener">COM组件</a>解析，而对于兼容的网页格式，不同的生成过程对应的逆向过程就是解析方法了（不考虑部分信息丢失），此不再赘述。对比而言，生成docx文件的内容形式就相对统一多了，它是我们本节讨论的主角。</p>
+<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx 是一个微软开发的基于XML的文字处理文件, 解压缩后文件（夹）内容如下图示。其中，最重要的就是/word/document.xml文件，它存储着文档的真实文本内容。<br><img src="http://www.sdwangblog.cn/blogimg/content_structure_docx_file.png" alt></p>
+        
+          <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP写入Word文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -898,84 +975,6 @@
 
 
   
-    <article id="post-HTM-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/08/HTM-Tutorial/">HTM Tutorial</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/08/HTM-Tutorial/" class="archive-article-date">
-  	<time datetime="2018-07-08T09:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>HTML(HyperText Markup Language)超文本标记语言</strong>，由一系列的元素（Opening tag,Closing tag,Content）组成，您可以使用它来封装、包装或标记内容的不同部分，使其以某种方式显示，或以某种方式执行。总而言之，<strong>HTML用于告诉浏览器如何构造您访问的页面</strong>。对于后端开发者，因实际使用场景的限制（比如前后端分离而不常实践前端）或许成不了“熟能生巧”的前端“老师傅”，然HTML+CSS+JavaScript亦须作为基本技能掌握。本文的定位就是一篇“入门篇”的HTML概述。</p>
-<h2 id="分析HTML文档"><a href="#分析HTML文档" class="headerlink" title="分析HTML文档"></a>分析HTML文档</h2><p>HTML文件的基本结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;                                   #声明文档类型</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;                                  #根元素标签，lang为文档设定主语言</span><br><span class="line">  &lt;head&gt;                                            </span><br><span class="line">      &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">      &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<p>分析如下：</p>
-        
-          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HTML</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1089,7 +1088,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1098,6 +1097,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1125,11 +1128,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
