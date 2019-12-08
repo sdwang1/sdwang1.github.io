@@ -18,7 +18,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/apc_complier_cache.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/distribute_memcache.png">
-<meta property="og:updated_time" content="2019-12-05T06:30:34.574Z">
+<meta property="og:updated_time" content="2019-12-05T07:01:39.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP的缓存技术">
 <meta name="twitter:description" content="通常PHP 应用程序中最耗费时间的任务是数据检索。实际上，用于从存储库（文件或数据库服务器）中获取信息的时间远高于编译并且甚至是执行 PHP 程序所需耗费的时间。连接至数据库服务器所需的时间是一次延迟，等待查询完成添加附加停顿，并且结果的传输甚至会导致更多延迟。此外，如果代码使用对象，则有指向对象的导致负担过重的映射平面行。在网络传输延迟不定的情况下，为了更高的速度需求，我们可以从两个方面优化效率">
@@ -211,7 +211,7 @@
 <p>使用APC缓存数据库结果的示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">function getListOfUsers()</span><br><span class="line">&#123;</span><br><span class="line">    $list = apc_fetch(&apos;getListOfUsers&apos;);</span><br><span class="line"></span><br><span class="line">    if ( empty($list) ) &#123;</span><br><span class="line">        $conn = new PDO(&apos;mysql:dbname=testdb;host=127.0.0.1&apos;, &apos;dbuser&apos;, &apos;dbpass&apos;);</span><br><span class="line">        $sql = &apos;SELECT id, name FROM users ORDER BY name&apos;;</span><br><span class="line">        foreach ($conn-&gt;query($sql) as $row) &#123;</span><br><span class="line">            $list[] = $row;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        apc_store(&apos;getListOfUsers&apos;,$list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上例中，我们仅需一次执行查询。之后我们将结果推送到 getListOfUsers 键下的 APC 缓存中。从这里开始，直到缓存到期，您就能够直接从缓存中获取结果数组，跳过 SQL 查询。<strong>apc_store对于系统设置等PHP变量的缓存是比较好的选择，但apc不合适通过apc_store频繁变更用户数据，会出现一些奇异现象。</strong></p>
 <h4 id="Memcache"><a href="#Memcache" class="headerlink" title="Memcache"></a>Memcache</h4><p>虽然很多Web服务器都可被配置成使用缓存发回消息，但那与大多数应用程序的动态特性无法相适，而这正是Memcache、Redis等内存缓存的用武之地（Memcache是项目名称，包含memcache服务器端(memcached)的和memcache客户端）。</p>
-<h5 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h5><p>Memcache是一个开源项目，旨在利用多个服务器内的多余RAM来充当一个可存放经常被访问信息的 <strong>内存缓存</strong>，可保存各种类型（序列化存储）。<br>通常一个典型的基于web的应用程序可能会有一些组建或信息常量是贯穿整个生命周期的，比如用户的组织信息，访问/操作权限等。通过使用Memcache缓存数据库查询结果到内存，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。<br>memcached 是一款高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存，其中键长最大为250字节（大于该长度无法存储），单个item最大数据是1MB（超过该大小不予存储），且不支持复杂的数据结构（哈希、列表、集合、有序集合等），默认端口号11211。memcache具有以下特点：</p>
+<h5 id="Memcache概览"><a href="#Memcache概览" class="headerlink" title="Memcache概览"></a>Memcache概览</h5><p>Memcache是一个开源项目，旨在利用多个服务器内的多余RAM来充当一个可存放经常被访问信息的 <strong>内存缓存</strong>，可保存各种类型（序列化存储）。<br>通常一个典型的基于web的应用程序可能会有一些组建或信息常量是贯穿整个生命周期的，比如用户的组织信息，访问/操作权限等。通过使用Memcache缓存数据库查询结果到内存，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。<br>memcached 是一款高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存，其中键长最大为250字节（大于该长度无法存储），单个item最大数据是1MB（超过该大小不予存储），且不支持复杂的数据结构（哈希、列表、集合、有序集合等），默认端口号11211。memcache具有以下特点：</p>
 <ul>
 <li><p><strong>协议简单</strong>，memcache服务器客户端通信并不使用复杂的XML等格式，而使用简单的<a href="http://code.sixapart.com/svn/memcached/trunk/server/doc/protocol.txt" target="_blank" rel="noopener">基于文本行的协议</a>，因此通过telnet也能在memcached上保存、取得数据。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ telnet localhost 11211</span><br><span class="line">Trying ::1...</span><br><span class="line">Connected to localhost.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">set foo 0 0 3   （保存命令）    //set key flags exptime bytes [noreply]  value</span><br><span class="line">bar              (数据)</span><br><span class="line">STORED          （结果）</span><br></pre></td></tr></table></figure>
@@ -224,7 +224,13 @@
 <blockquote>
 <p>⚠️为了改善性能，服务器故意不支持身份验证或安全通行，但不应限制部署选项，<strong>memcache服务器应该存在于您网络的内部并通过防火墙限制外网访问memcache端口，以root权限运行</strong>。</p>
 </blockquote>
-<p>在线上生产环境进行部署时，Memcache一般以服务器集群的方式体现，每台memcached 服务器都存储一些键值，访问模型如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/distribute_memcache.png" alt></p>
+<p>在线上生产环境进行部署时，Memcache一般以服务器集群的方式体现，每台memcached 服务器都存储一些键值，访问模型如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/distribute_memcache.png" alt><br>当应用程序需要向memcached写入缓存数据时：</p>
+<ol>
+<li>Memcached API将Key输入路由算法模块，路由算法根据Key和MemCache集群服务器列表得到一台服务器编号；</li>
+<li>由服务器编号得到MemCache及其的ip地址和端口号；</li>
+<li>API调用通信模块和指定编号的服务器通信，将数据写入该服务器，完成一次分布式缓存的写操作；</li>
+</ol>
+<p>应用程序从memcached读取缓存数据和写缓存类似，同样使用相同的路由算法和服务器列表，应用程序就会查询到相同的Key，MemCache客户端总是访问相同的客户端去读取数据，只要服务器中还缓存着该数据，就能保证缓存命中。</p>
 
       
 
@@ -377,7 +383,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库缓存"><span class="toc-number">1.</span> <span class="toc-text">数据库缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#将数据库放在自己的机器上"><span class="toc-number">1.1.</span> <span class="toc-text">将数据库放在自己的机器上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合理设计和编制表索引"><span class="toc-number">1.2.</span> <span class="toc-text">合理设计和编制表索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析在服务器上运行的查询"><span class="toc-number">1.3.</span> <span class="toc-text">分析在服务器上运行的查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内容缓存"><span class="toc-number">2.</span> <span class="toc-text">内容缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态缓存"><span class="toc-number">2.1.</span> <span class="toc-text">静态缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存缓存"><span class="toc-number">2.2.</span> <span class="toc-text">内存缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作码缓存"><span class="toc-number">2.2.1.</span> <span class="toc-text">操作码缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Memcache"><span class="toc-number">2.2.2.</span> <span class="toc-text">Memcache</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#基础知识"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">基础知识</span></a></li></ol></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库缓存"><span class="toc-number">1.</span> <span class="toc-text">数据库缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#将数据库放在自己的机器上"><span class="toc-number">1.1.</span> <span class="toc-text">将数据库放在自己的机器上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合理设计和编制表索引"><span class="toc-number">1.2.</span> <span class="toc-text">合理设计和编制表索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析在服务器上运行的查询"><span class="toc-number">1.3.</span> <span class="toc-text">分析在服务器上运行的查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内容缓存"><span class="toc-number">2.</span> <span class="toc-text">内容缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态缓存"><span class="toc-number">2.1.</span> <span class="toc-text">静态缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存缓存"><span class="toc-number">2.2.</span> <span class="toc-text">内存缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作码缓存"><span class="toc-number">2.2.1.</span> <span class="toc-text">操作码缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Memcache"><span class="toc-number">2.2.2.</span> <span class="toc-text">Memcache</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Memcache概览"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">Memcache概览</span></a></li></ol></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -497,15 +503,35 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -517,31 +543,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -553,7 +555,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
