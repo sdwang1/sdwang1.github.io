@@ -152,6 +152,256 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
+  	<time datetime="2019-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>提到事务，你肯定会想到事务的四大特性——ACID：</p>
+<ul>
+<li>原子性（ Atomicity ）：事务是数据库的逻辑工作单位，事务中包括的诸操作要么全做，要么全不做；</li>
+<li>一致性（ Consistency ）：事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的；</li>
+<li>隔离性（ Isolation ）：一个事务的执行不能被其他事务干扰；</li>
+<li>持续性（ Durability ）：一个事务一旦提交，它对数据库中数据的改变就应该是永久性的；</li>
+</ul>
+<p>我们今天就主要讨论在多个事务并发的情况下，Very Important的事务的隔离性。<strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了构建这些隔离级别，我们的数据库锁算是发挥了“中流砥柱”的作用。</p>
+<h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>InnoDB引擎中常见的锁类型有如下几种，其间兼容性如图示：</p>
+<ul>
+<li><strong>S共享锁</strong>：也叫读锁，行级锁，其它事务可以继续加共享锁，但不能加排它锁(SELECT … LOCK IN SHARE MODE)；</li>
+<li><strong>X排他锁</strong>：也叫写锁，行级锁，一旦加了写锁后，其它事务不能再获得任何锁；</li>
+<li><strong>I意向锁</strong>：表级锁，表达一个事务想要获取什么，可分为意向共享锁（表中某几行的共享锁）、意向排他锁（表中某几行的排他锁）。有了意向锁的话，当需要給表加表锁时就不需要逐行遍历是否有行锁，只要判断是否有意向锁即可；</li>
+<li><strong>自增长锁</strong>：用于提升并发插入性能的特殊表锁机制，有几个特点：1.SQL执行完就释放锁，而不是事务执行完；2.对于 insert…select 大数据量插入会影响插入性能，因为会阻塞另外一个事务执行；3.使用不同模式来调整自增加锁的方式（mysql&gt;=5.7 innodb_autoinc_lock_mode参数）；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_lock_type_capacity.png" alt></li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-一种高级的DoS攻击-Hash碰撞攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">一种高级的DoS攻击-Hash碰撞攻击</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/" class="archive-article-date">
+  	<time datetime="2019-03-10T01:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着RESTful风格的接口普及，程序员默认都会使用json作为数据传递的方式。json格式的数据冗余少，兼容性高，从提出到现在已被广泛的使用，可以说成为了Web的一种标准。无论我们服务端使用什么语言，我们拿到json格式的数据之后都需要做 <strong>jsonDecode(),将json串转换为json对象，而对象默认会存储于Hash Table，而Hash Table很容易被碰撞攻击。也就是说，我们只要将攻击数据（大量的经过“特殊构造”的碰撞数据）放在json中，服务端程序在做jsonDecode()时必定中招，中招后CPU会立刻飙升至100%，从而能达到DoS的目的</strong>。</p>
+<h2 id="背景知识：哈希表"><a href="#背景知识：哈希表" class="headerlink" title="背景知识：哈希表"></a>背景知识：哈希表</h2><p>哈希表是一种查找效率极高的数据结构，PHP中的哈希表用于表示Array数据类型，在Zend虚拟机内部也用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。<br>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为 <strong>碰撞（collision）</strong>。哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，<strong>第一种是根据某种原则将被碰撞数据定为到其它桶</strong>，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；<strong>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树）</strong>，所有碰撞的数据以某种数据结构的形式组织起来。<br>PHP是使用 <strong>单链表存储碰撞的数据</strong>，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。<br><img src="http://www.sdwangblog.cn/blogimg/php_hash_collision.png" alt></p>
+        
+          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-认识MySQL的事务日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/09/认识MySQL的事务日志/">认识MySQL的事务日志</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/09/认识MySQL的事务日志/" class="archive-article-date">
+  	<time datetime="2019-03-09T07:00:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。<br>MySQL主要有以下几种日志，可通过<code>show variables like &#39;%log%&#39;;</code>命令查看：</p>
+<ul>
+<li><p>log_error：错误日志功能默认开启且无法被禁止，默认情况下，错误日志位于在mysql文件夹的data目录下，通常名称为hostname.err(hostname为服务器主机名)。mysqld服务器动时使用<code>--log-error=[file-name]</code>参数可指定错误日志存放的位置，也可通过在my.cnf配置文件中添加行<code>log_error = /var/mysqld.err</code>来指定其存放位置。<br>通常情况下错误日志主要记录记录了mysqld服务启动和关闭过程中信息（比如如何启动InnoDB的表空间文件的、如何初始化自己的存储引擎等），服务运行过程中错误信息；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;log_error%&apos;;</span><br><span class="line">| log_error                               | /usr/local/mysql/data/mysqld.local.err                    |  </span><br><span class="line">| log_error_verbosity                     | 3                                                         |</span><br><span class="line"></span><br><span class="line">#为保证mysqld服务的硬盘空间，重命名历史的错误日志并手动冲洗日志创建新的</span><br><span class="line">$ mv stu18.magedu.com.err  stu18.magedu.com.err.old</span><br><span class="line">$ mysqladmin -u root -p flush-logs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>general_log：查询日志默认情况是关闭的，通常也建议关闭此日志。这是因为查询日志记录了客户端操作的所有SQL语句（增删改查），在高并发操作下会产生大量写入信息从而导致不必要的磁盘IO，影响mysqld性能。</p>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -743,238 +993,6 @@
 
 
   
-    <article id="post-用openssl签一个证书部署到nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/27/用openssl签一个证书部署到nginx/">用openssl签一个证书部署到nginx</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/27/用openssl签一个证书部署到nginx/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SSL(Secure Sockets Layer 安全套接层)协议主要用来提供对用户和服务器的认证；对传送的数据进行加密和隐藏；确保数据在传送中不被改变，即数据 的完整性，现已成为该领域中全球化的标准。由于SSL技术已建立到所有主要的浏览器和WEB服务器程序中，因此，仅需安装服务器证书就可以激活该功能了。<br><strong>一份 SSL 证书包括一个公共密钥和一个私用密钥</strong>。公共密钥用于加密信息，私用密钥用于解译加密的信息。<strong>浏览器指向一个安全域时，SSL 同步确认服务器和客户端，并创建一种加密方式和一个唯一的会话密钥</strong>，它们可以启动一个保证消息的隐私性和完整性的安全会话。</p>
-<p>首先要有一个主证书，然后用主证书来签发服务器证书和客户证书，服务器证书和客户证书是 <strong>平级关系</strong>。SSL所使用的证书可以自己生成，也可以通过一个商业性CA（如Verisign 或 Thawte）签署证书：如果使用的是商业证书，具体的签署方法请查看相关销售商说明；如果是自己签发的证书，<strong>可以使用openssl自带的CA.sh脚本工具【在Debian或者Ubuntu系统中有更加简便的方法制作self-signed证书使用make-ssl-cert命令】</strong>。如果不为单独的客户端签发证书，客户端证书可以不用生成，客户端与服务器端使用相同的证书。</p>
-<p><strong>特别说明下，自签（self-signed）证书没有任何保证，大部分软件遇到这种证书会发出警告，甚至不接受这类证书。使用自签名(self-signed)的证书，它的主要目的不是防伪，而是使用户和系统之间能够进行SSL通信，保证密码等个人信息传输时的安全</strong>。</p>
-        
-          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-PHP安全的存储用户密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/23/PHP安全的存储用户密码/">PHP安全的存储用户密码</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/23/PHP安全的存储用户密码/" class="archive-article-date">
-  	<time datetime="2018-08-23T07:01:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们已经知道，恶意攻击者使用查询表和彩虹表，暴力破解普通哈希(md5,sha1)是多么得快。为了让查表和彩虹表的方式无法破解hash，大家对“加盐（Adding salt）”技术应该都不陌生：<strong>给密码加一个随机（CSPRNG）的前缀或者后缀，然后再进行hash，这个随机的后缀或者前缀成为“盐”。</strong> 通过加盐，相同的密码每次hash都是完全不一样的字符串。由于后续检查用户输入的密码是否正确的时还需要这个盐，所以它一般都是跟hash一起保存在数据库里，或者作为hash字符串的一部分。</p>
-<h2 id="“加盐”的正确使用"><a href="#“加盐”的正确使用" class="headerlink" title="“加盐”的正确使用"></a>“加盐”的正确使用</h2><p>盐值不需要保密，只要盐值是随机的话，查询表、彩虹表都会失效。因为攻击者无法事先知道盐是什么，也就没有办法预先计算出查询表和彩虹表。如果每个用户都是使用了不同的盐，那么反向查表攻击也没法成功。下面介绍一些盐的常见的错误实现：</p>
-        
-          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-HTTPS加密那点事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/22/HTTPS加密那点事/">HTTPS加密那点事</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/22/HTTPS加密那点事/" class="archive-article-date">
-  	<time datetime="2018-08-22T08:06:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下文章内容主要转载自<a href="https://www.tuicool.com/articles/QzQnAnM" target="_blank" rel="noopener">如果这样来理解HTTPS，一篇就够了！</a>。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴于其普及性，尽快拥抱它才是符合技术潮流的。<br>本文将尝试用通俗易懂的语言，一步步还原HTTPS的设计过程，以便您能轻松理解为什么HTTPS最终会是这副模样。但鉴于HTTPS的复杂性，本文的文字主要是为了方便您的理解，而并不代表完全遵从HTTPS的真实设计过程。</p>
-        
-          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -989,7 +1007,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Shudan Wang
+    		&copy; 2020 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1076,7 +1094,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1085,10 +1111,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1112,10 +1134,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
@@ -1124,7 +1142,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
               </li>
              
               <li class="article-tag-list-item">

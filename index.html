@@ -152,6 +152,248 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-科学上网工具V2Ray简介及具体搭建过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">科学上网工具V2Ray简介及具体搭建过程</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/" class="archive-article-date">
+  	<time datetime="2020-02-10T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>原本在 <a href="https://bwh88.net/cart.php" target="_blank" rel="noopener">搬瓦工</a> 上面购买的 VPS 上面搭建的 VPN 不能用了，具体原因就是 GTW 经过一波加强，可以通过 TCP 阻断来封锁一些用于搭建 VPN 的 VPS。TCP 阻断的结果就是在国内无法通过 tcp 来连接访问国外的 VPS，从而在国内无法 SSH 登录 VPS，但是使用 ping 工具【基于 ICMP】却能 ping 通被 tcp 阻断的服务器。<br>当 VPS 被 TCP 阻断时，原本<a href="https://www.textarea.com/ExpectoPatronum/shiyong-shadowsocks-kexue-shangwang-265/" target="_blank" rel="noopener">基于 shadowsocks 的科学上网</a>方式就不能使用了，本文就是针对被 TCP 阻断的 VPS，通过 <a href="https://guide.v2fly.org/#%E5%A3%B0%E6%98%8E" target="_blank" rel="noopener">V2Ray 来实现科学上网</a>。当然对于没有被 TCP 阻断的 VPS 使用该方法来搭梯子也不容易被封。</p>
+<h2 id="基础条件"><a href="#基础条件" class="headerlink" title="基础条件"></a>基础条件</h2><p>搭建V2Ray的基础条件与SSR基本一致，无(一)甚(贯)特(尿)殊(性)：</p>
+<ol>
+<li>购买一台国外VPS服务器：选择自己喜欢的服务商即可【这里有<a href="https://www.vpser.net/ten-dollars-vps" target="_blank" rel="noopener">评比</a>】，不建议选择主流服务商像vultr,搬瓦工等，即使正常使用也很有可能被墙。我这次选择的是<a href="https://www.hostwinds.com/vps/unmanaged-linux" target="_blank" rel="noopener">hostwinds</a>最低配置Linux vps（<strong>建议位置选择Seattle，系统选择以稳定著称的CentOS 7</strong>），4.49美元/月，有1T流量，最重要的是支持免费更换ip，不限次数（<strong>注意购买hostwinds时，不要使用代理ip，直接用本机ip访问hostwinds官网购买，否则会导致购买完成后，vps显示“Pending”状态，不能即时创建服务，需要联系客服进行人工审核</strong>）。</li>
+<li>购买一个域名：V2Ray的节点可以伪装成正常的网站，将其流量与正常的网页流量混淆以避开第三方干扰，自然就需要有域名。我这里选择的是<a href="https://www.namesilo.com/account_domains.php" target="_blank" rel="noopener">namesilo</a>，在域名搜索框搜索自己喜欢的域名，找域名后缀最便宜的购买即可，我的域名后缀是club，1.59美元/年。</li>
+</ol>
+        
+          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">V2Ray</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Laravel进阶之事件篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/30/Laravel进阶之事件篇/">Laravel进阶之事件篇</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/30/Laravel进阶之事件篇/" class="archive-article-date">
+  	<time datetime="2019-11-30T07:39:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Laravel 事件提供了简单的观察者模式实现，允许你订阅和监听应用中的事件。事件类通常存放在<code>app/Events</code>目录，监听器存放在<code>app/Listeners</code>。如果你在应用中没有看到这些目录，不要担心，它们会在你使用 Artisan 命令生成事件和监听器的时候自动创建。<br>事件为应用功能模块解耦提供了行之有效的解决办法，因为单个事件可以有多个监听器而这些监听器之间并不相互依赖。例如，你可能想要在每次订单发送时给用户发送一个 Slack 通知，有了事件之后，你大可不必将订单处理代码和 Slack 通知代码耦合在一起，而只需要简单触发一个可以被监听器接收并处理为 Slack 通知的 <code>OrderShipped</code> 事件即可。</p>
+<h2 id="注册事件-监听器"><a href="#注册事件-监听器" class="headerlink" title="注册事件/监听器"></a>注册事件/监听器</h2><p>Laravel 自带的<code>EventServiceProvider</code>为事件监听器注册提供了方便之所。其中 <code>listen</code> 属性包含了事件（键）和对应监听器（值）数组。如果应用需要，你可以添加多个事件到该数组。下面让我们添加一个 <code>OrderShipped</code> 事件：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用的事件监听器映射.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@translator</span> laravelacademy.org</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> $listen = [</span><br><span class="line">    <span class="string">'App\Events\OrderShipped'</span> =&gt; [</span><br><span class="line">        <span class="string">'App\Listeners\SendShipmentNotification'</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Laravel,事件</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Laravel进阶之缓存篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/28/Laravel进阶之缓存篇/">Laravel进阶之缓存篇</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/28/Laravel进阶之缓存篇/" class="archive-article-date">
+  	<time datetime="2019-11-28T07:49:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Laravel 为不同的缓存系统提供了统一的 API，缓存配置位于 <code>config/cache.php</code>，在该文件中你可以指定在应用中默认使用哪个缓存驱动。Laravel 开箱支持主流的缓存后端如 <a href="https://memcached.org/" target="_blank" rel="noopener">Memcached</a> 和 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 等。<br>缓存配置文件还包含其他文档化的选项，确保仔细阅读这些选项。默认情况下，Laravel 被配置成使用文件缓存（<code>file</code> 驱动），这会将序列化数据和缓存对象存储到文件系统。对于大型应用，建议使用内存缓存如 Memcached 或 APC，你甚至可以为同一驱动配置多个缓存配置。</p>
+<ul>
+<li><p>使用<code>database</code>缓存驱动，你需要（提前）设置一张表存储缓存项。下面是该表的<code>Schema</code>声明：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//亦可使用 php artisan cache:table命令通过相应的schema生成迁移。</span></span><br><span class="line">Schema::create(<span class="string">'cache'</span>, <span class="function"><span class="keyword">function</span><span class="params">($table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;string(<span class="string">'key'</span>)-&gt;unique();</span><br><span class="line">    $table-&gt;text(<span class="string">'value'</span>);</span><br><span class="line">    $table-&gt;integer(<span class="string">'expiration'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>Memcached</code>缓存，需要安装PHP Memcached扩展。你可以在配置文件<code>config/cache.php</code>中列出所有Memcached服务器：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'memcached'</span> =&gt; [</span><br><span class="line">            <span class="string">'driver'</span> =&gt; <span class="string">'memcached'</span>,</span><br><span class="line">            <span class="string">'persistent_id'</span> =&gt; env(<span class="string">'MEMCACHED_PERSISTENT_ID'</span>),</span><br><span class="line">            <span class="string">'sasl'</span> =&gt; [</span><br><span class="line">                env(<span class="string">'MEMCACHED_USERNAME'</span>),</span><br><span class="line">                env(<span class="string">'MEMCACHED_PASSWORD'</span>),</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'options'</span> =&gt; [</span><br><span class="line">                <span class="comment">// Memcached::OPT_CONNECT_TIMEOUT  =&gt; 2000,</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'servers'</span> =&gt; [</span><br><span class="line">                [</span><br><span class="line">                    <span class="string">'host'</span> =&gt; env(<span class="string">'MEMCACHED_HOST'</span>, <span class="string">'127.0.0.1'</span>),  <span class="comment">//host可设置为UNIX socket路径，此时port应置为0</span></span><br><span class="line">                    <span class="string">'port'</span> =&gt; env(<span class="string">'MEMCACHED_PORT'</span>, <span class="number">11211</span>),</span><br><span class="line">                    <span class="string">'weight'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">                ],</span><br><span class="line">            ],</span><br><span class="line">        ],</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Laravel,缓存</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《memcached全面剖析》读书笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -754,256 +996,6 @@
 
 
   
-    <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
-  	<time datetime="2019-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>提到事务，你肯定会想到事务的四大特性——ACID：</p>
-<ul>
-<li>原子性（ Atomicity ）：事务是数据库的逻辑工作单位，事务中包括的诸操作要么全做，要么全不做；</li>
-<li>一致性（ Consistency ）：事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的；</li>
-<li>隔离性（ Isolation ）：一个事务的执行不能被其他事务干扰；</li>
-<li>持续性（ Durability ）：一个事务一旦提交，它对数据库中数据的改变就应该是永久性的；</li>
-</ul>
-<p>我们今天就主要讨论在多个事务并发的情况下，Very Important的事务的隔离性。<strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了构建这些隔离级别，我们的数据库锁算是发挥了“中流砥柱”的作用。</p>
-<h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>InnoDB引擎中常见的锁类型有如下几种，其间兼容性如图示：</p>
-<ul>
-<li><strong>S共享锁</strong>：也叫读锁，行级锁，其它事务可以继续加共享锁，但不能加排它锁(SELECT … LOCK IN SHARE MODE)；</li>
-<li><strong>X排他锁</strong>：也叫写锁，行级锁，一旦加了写锁后，其它事务不能再获得任何锁；</li>
-<li><strong>I意向锁</strong>：表级锁，表达一个事务想要获取什么，可分为意向共享锁（表中某几行的共享锁）、意向排他锁（表中某几行的排他锁）。有了意向锁的话，当需要給表加表锁时就不需要逐行遍历是否有行锁，只要判断是否有意向锁即可；</li>
-<li><strong>自增长锁</strong>：用于提升并发插入性能的特殊表锁机制，有几个特点：1.SQL执行完就释放锁，而不是事务执行完；2.对于 insert…select 大数据量插入会影响插入性能，因为会阻塞另外一个事务执行；3.使用不同模式来调整自增加锁的方式（mysql&gt;=5.7 innodb_autoinc_lock_mode参数）；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_lock_type_capacity.png" alt></li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-一种高级的DoS攻击-Hash碰撞攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">一种高级的DoS攻击-Hash碰撞攻击</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/" class="archive-article-date">
-  	<time datetime="2019-03-10T01:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着RESTful风格的接口普及，程序员默认都会使用json作为数据传递的方式。json格式的数据冗余少，兼容性高，从提出到现在已被广泛的使用，可以说成为了Web的一种标准。无论我们服务端使用什么语言，我们拿到json格式的数据之后都需要做 <strong>jsonDecode(),将json串转换为json对象，而对象默认会存储于Hash Table，而Hash Table很容易被碰撞攻击。也就是说，我们只要将攻击数据（大量的经过“特殊构造”的碰撞数据）放在json中，服务端程序在做jsonDecode()时必定中招，中招后CPU会立刻飙升至100%，从而能达到DoS的目的</strong>。</p>
-<h2 id="背景知识：哈希表"><a href="#背景知识：哈希表" class="headerlink" title="背景知识：哈希表"></a>背景知识：哈希表</h2><p>哈希表是一种查找效率极高的数据结构，PHP中的哈希表用于表示Array数据类型，在Zend虚拟机内部也用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。<br>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为 <strong>碰撞（collision）</strong>。哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，<strong>第一种是根据某种原则将被碰撞数据定为到其它桶</strong>，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；<strong>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树）</strong>，所有碰撞的数据以某种数据结构的形式组织起来。<br>PHP是使用 <strong>单链表存储碰撞的数据</strong>，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。<br><img src="http://www.sdwangblog.cn/blogimg/php_hash_collision.png" alt></p>
-        
-          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-认识MySQL的事务日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/09/认识MySQL的事务日志/">认识MySQL的事务日志</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/09/认识MySQL的事务日志/" class="archive-article-date">
-  	<time datetime="2019-03-09T07:00:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。<br>MySQL主要有以下几种日志，可通过<code>show variables like &#39;%log%&#39;;</code>命令查看：</p>
-<ul>
-<li><p>log_error：错误日志功能默认开启且无法被禁止，默认情况下，错误日志位于在mysql文件夹的data目录下，通常名称为hostname.err(hostname为服务器主机名)。mysqld服务器动时使用<code>--log-error=[file-name]</code>参数可指定错误日志存放的位置，也可通过在my.cnf配置文件中添加行<code>log_error = /var/mysqld.err</code>来指定其存放位置。<br>通常情况下错误日志主要记录记录了mysqld服务启动和关闭过程中信息（比如如何启动InnoDB的表空间文件的、如何初始化自己的存储引擎等），服务运行过程中错误信息；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;log_error%&apos;;</span><br><span class="line">| log_error                               | /usr/local/mysql/data/mysqld.local.err                    |  </span><br><span class="line">| log_error_verbosity                     | 3                                                         |</span><br><span class="line"></span><br><span class="line">#为保证mysqld服务的硬盘空间，重命名历史的错误日志并手动冲洗日志创建新的</span><br><span class="line">$ mv stu18.magedu.com.err  stu18.magedu.com.err.old</span><br><span class="line">$ mysqladmin -u root -p flush-logs</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>general_log：查询日志默认情况是关闭的，通常也建议关闭此日志。这是因为查询日志记录了客户端操作的所有SQL语句（增删改查），在高并发操作下会产生大量写入信息从而导致不必要的磁盘IO，影响mysqld性能。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1018,7 +1010,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Shudan Wang
+    		&copy; 2020 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1105,7 +1097,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1114,10 +1114,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1141,10 +1137,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
@@ -1153,7 +1145,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
               </li>
              
               <li class="article-tag-list-item">

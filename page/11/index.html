@@ -152,6 +152,242 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-用于PHP依赖关系处理的Composer" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/02/用于PHP依赖关系处理的Composer/">用于PHP依赖关系处理的Composer</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/02/用于PHP依赖关系处理的Composer/" class="archive-article-date">
+  	<time datetime="2017-05-02T08:49:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于现代语言而言，包管理器基本上是标配。Java 有 Maven，Python 有 pip，Ruby 有 gem，Node.js 有 npm。PHP的则是 PEAR，不过 PEAR 坑不少：依赖处理容易出问题；配置非常复杂；难用的命令行接口。这些都无疑推进了更加包容灵活、开源的PHP依赖管理的利器——Composer出现。<br>Composer 是一个依赖管理工具，不是一个包管理器，它涉及到 “packages” 和 “libraries”——库是一个可重用的包，需要作为一个依赖项进行添加；而典型的项目是一个应用程序，要依赖于多个库且通常不可重用（其他项目不需要它成为一个依赖项）。默认情况下它不会在全局安装任何东西，它只在每个项目的基础上进行管理，在你项目的某个目录中（例如 vendor）进行安装。</p>
+<h2 id="安装Composer"><a href="#安装Composer" class="headerlink" title="安装Composer"></a>安装Composer</h2><p>Composer需要 PHP 5.3.2+ 才能运行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -sS https://getcomposer.org/installer | php</span><br><span class="line"></span><br><span class="line">#如果上述方法由于某些原因失败了，还可以通过PHP下载安装器</span><br><span class="line">php -r &quot;copy(&apos;https://install.phpcomposer.com/installer&apos;,&apos;composer-setup.php&apos;);&quot;</span><br><span class="line">#执行安装过程</span><br><span class="line">php composer-setup.php</span><br><span class="line">php -r &quot;unlink(&apos;composer-setup.php&apos;);&quot;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2017/05/02/用于PHP依赖关系处理的Composer/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/02/用于PHP依赖关系处理的Composer/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-了解SSH原理与运用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/了解SSH原理与运用/">了解SSH原理与运用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/20/了解SSH原理与运用/" class="archive-article-date">
+  	<time datetime="2017-04-20T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：<code>ssh user@host</code>。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢<code>问题</code>！！！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  ssh open@lab.lpicn.org</span><br><span class="line">ssh: connect to host lab.lpicn.org port 22: Connection refused</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2017/04/20/了解SSH原理与运用/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSH</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/20/了解SSH原理与运用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-如何设计“Web用户登陆和找回用户账号”的功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/20/如何设计“Web用户登陆和找回用户账号”的功能/">如何设计“Web用户登陆和找回用户账号”的功能</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/20/如何设计“Web用户登陆和找回用户账号”的功能/" class="archive-article-date">
+  	<time datetime="2016-12-20T09:09:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近为“兄弟”公司独立开发了“付款管理系统”（附送组织架构系统——用户、角色和权限控制），一个月内“单枪匹马 马不停蹄”的完成工作之余也让我对自己提出了更多层面的要求，比如接口的抽象封装（“脑抽”的采用了同套代码部署方案😂），Web应用安全性（比如用户登陆口令、登陆状态等），欲解析一次HTTP请求的网络全过程等等。本文主要简单介绍下关系到用户安全的“Web用户登陆”和“找回用户账号”功能的设计思路。</p>
+<h2 id="用户和口令"><a href="#用户和口令" class="headerlink" title="用户和口令"></a>用户和口令</h2><p>Web上的用户登录功能应该是最基本的功能了，在这里分享几个从开发者的角度上来做<a href="https://coolshell.cn/articles/5353.html" target="_blank" rel="noopener">设计用户名和口令应遵循的规则</a>：</p>
+<ul>
+<li><strong>限制用户输入一些非常容易被破解的口令</strong>：比如像<a href="https://coolshell.cn/articles/2451.html" target="_blank" rel="noopener">twitter限制用户的口令</a>一样做一个口令的黑名单，限制用户口令的长度及复杂性（字母、数字、特殊字符）。现在很多网站都提供了<a href="https://blog.csdn.net/fyqcdbdx/article/details/7188169" target="_blank" rel="noopener">UX</a>让用户知道他的口令强度怎么样，目的就是告诉用户——若想安全，先把口令舍得好一点。</li>
+<li><strong>千万不要明文保存用户口令</strong>：很多时候用户都会用相同的ID相同的口令来登录很多网站，所以当你的网站明文保存时，如果你的数据被你的不良员工流传出去那对用户是灾难性的。请 <strong>选择不可逆的加密算法保存用户口令，比如mcrypt</strong>。</li>
+<li><strong>是否让浏览器保存口令</strong>：我们有N多的方法可以不让浏览器保存用户名和口令，但是这可能对用户来说很不爽。如果你系统的安全级别要求比较高，不要让浏览器保存密码，并在网站明显的位置告诉用户——保存口令最安全的地方只有你的大脑。</li>
+<li><strong>口令在网上的传输：请使用HTTPS协议</strong>，目前还有一些网站的Web登录方式在使用ActiveX控件（这可能成为IE6还大量存在的原因），我通常理解为这些ActiveX控件是为了反键盘记录程序的，但依然觉ActiveX控件不应该存在。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2016/12/20/如何设计“Web用户登陆和找回用户账号”的功能/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/20/如何设计“Web用户登陆和找回用户账号”的功能/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Git权限校验" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -405,7 +641,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Shudan Wang
+    		&copy; 2020 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -492,7 +728,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -501,10 +745,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -528,10 +768,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
@@ -540,7 +776,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
               </li>
              
               <li class="article-tag-list-item">

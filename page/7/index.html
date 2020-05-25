@@ -152,6 +152,236 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-HTTP原理之HTTP概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/14/HTTP原理之HTTP概述/">HTTP原理之HTTP概述</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/14/HTTP原理之HTTP概述/" class="archive-article-date">
+  	<time datetime="2017-12-14T03:45:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="HTTP事务"><a href="#HTTP事务" class="headerlink" title="HTTP事务"></a>HTTP事务</h2><p>一个HTTP事务是由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端）的响应结果组成的。这种通信<br>是通过名为HTTP报文（HTTP message）的格式化数据块进行的，如下图示。<br><img src="http://www.sdwangblog.cn/blogimg/http_affair.png" alt></p>
+        
+          <a class="article-more-a" href="/2017/12/14/HTTP原理之HTTP概述/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">HTTP原理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/14/HTTP原理之HTTP概述/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-PHP读取文件、获取远程文件及下载文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/10/PHP读取文件、获取远程文件及下载文件/">PHP读取文件、获取远程文件及下载文件</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/10/PHP读取文件、获取远程文件及下载文件/" class="archive-article-date">
+  	<time datetime="2017-12-10T08:22:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在软件开发过程中，写入和读取文件应该算是“司空见惯”的事情了，PHP自然也不例外。就写入文件而言，常用方案有两种：1. fopen($filename, $mode) =&gt; fwrite($handle, $string[, int $length]) =&gt; fclose($handle)；2. file_put_contents($filename, $data [,int $flags=0, resource $context])【无法远程写入】。对于读出文件就不如此简单了，它不仅有多种可使用的内置函数——fgets,file_get_contents,fread,readfile等等，而且作用形式也各有不同，比如读取本地/远程文件，输出内容到php缓存的下载。本节我们就PHP读出文件方法，来做个简单对比汇总。</p>
+<h2 id="string-fgets-resource-handle-int-length"><a href="#string-fgets-resource-handle-int-length" class="headerlink" title="string fgets(resource $handle [, int $length])"></a>string fgets(resource $handle [, int $length])</h2><p>fgets (resource $handle [,$length])从 handle 指向的文件中读取一行并返回长度最多为 length - 1 字节的字符串。碰到换行符（包括在返回值中）、EOF 或者已经读取了 length - 1 字节后停止（看先碰到那一种情况）。如果没有指定 length，则默认为 1K，或者说 1024 字节。<strong>handle是文件指针，指向由 fopen() 或 fsockopen() 成功打开的文件(并还未由 fclose() 关闭)。</strong></p>
+        
+          <a class="article-more-a" href="/2017/12/10/PHP读取文件、获取远程文件及下载文件/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/10/PHP读取文件、获取远程文件及下载文件/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-DNS协议详解及其解析过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/04/DNS协议详解及其解析过程/">DNS协议详解及其解析过程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/04/DNS协议详解及其解析过程/" class="archive-article-date">
+  	<time datetime="2017-12-04T08:15:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>计算机在网络上进行的通讯大部分是基于TCP/IP的，而TCP/IP是基于IP地址的，也就是说它只能识别如“202.96.134.133”之类的IP地址。我们很难记住10个以上IP地址（32位点分十进制表示）的网站，更多是直接在浏览器地址栏中输入域名，就能看到所访问网站的页面。这就是因为DNS(Domain Name System)，即域名系统自动地把我们的域名“翻译”成了相应的IP地址（<strong>类比通信录的“人名与电话号码”</strong>），然后调出IP地址所对应的网页。</p>
+<h2 id="域名结构"><a href="#域名结构" class="headerlink" title="域名结构"></a>域名结构</h2><p>域名系统并不像电话号码通讯录那么简单，在因特网上域名与IP地址之间是 <strong>一一对应</strong> 的，为了达到唯一性的目的，因特网在域名命名的时候 <strong>采用了层次结构的命名方法</strong>。每一个域名都是一个标号序列（labels），用字母、数字（0-9）和连接符（-）组成，标号序列总长度不能超过255个字符。它由点号<code>.</code>分割成一个个的标号（label），每个标号应该在63个字符之内，每个标号都可以看成一个层次的域名（<strong>一个完整的域名由2个或者2个以上的部分组成</strong>）。<br>其中从右至左，第一个<code>.</code>右边部分称为“顶级域名”，也称为一级域名；顶级域名的左边字串到下一个<code>.</code>为止称为“二级域名”。。。。。。依次类推，父级域名会控制它直属下级的域名分配。<br><img src="http://www.sdwangblog.cn/blogimg/domain_space_structure.png" alt></p>
+        
+          <a class="article-more-a" href="/2017/12/04/DNS协议详解及其解析过程/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/04/DNS协议详解及其解析过程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP-socket编程初窥" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -704,242 +934,6 @@
 
 
   
-    <article id="post-Linux常用命令-sed命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/20/Linux常用命令-sed命令/">Linux常用命令-sed命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/20/Linux常用命令-sed命令/" class="archive-article-date">
-  	<time datetime="2017-10-20T03:45:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="sed命令概览"><a href="#sed命令概览" class="headerlink" title="sed命令概览"></a>sed命令概览</h2><p><strong>sed是一种流编辑器，处理时会将当前处理的行存储在临时缓冲区【模式空间，pattern space】中，接着用sed命令处理缓冲区中的内容并将处理完成后的缓冲区内容送往屏幕，逐行往复。sed是一个管道命令，可以分析standar input，还可以将资料进行取代、删除、新增、提取特定行等。</strong></p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   sed可以将资料进行取代、删除、新增，提取特定行等，同时支持分析standar input。</p>
-<h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [-nefr] 动作</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/10/20/Linux常用命令-sed命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/20/Linux常用命令-sed命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux字元转换命令——tr-col-join-paste-expand命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/19/Linux字元转换命令——tr-col-join-paste-expand命令/">Linux字元转换命令——tr-col-join-paste-expand命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/19/Linux字元转换命令——tr-col-join-paste-expand命令/" class="archive-article-date">
-  	<time datetime="2017-10-19T08:40:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="字元转换命令概览"><a href="#字元转换命令概览" class="headerlink" title="字元转换命令概览"></a>字元转换命令概览</h2><p><strong>Linux下常用的字元转换命令有：tr,col,join,paste及expand命令。</strong></p>
-<ul>
-<li>tr可以用来删除一段讯息中的文字，或者进行文字讯息的替换【tr只能通过stdin读入，无法通过命令行参数来接受输入】；<br><code>tr [-ds] set1...</code><br>-d：删除讯息中set1这个字串；<br>-s：取代掉重复的字元；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#将last输出的讯息中所有的小写换成大写字元</span><br><span class="line">$ last | tr [a-z][A-Z]</span><br><span class="line">#将/etc/passwd输出讯息中的冒号删除</span><br><span class="line">$ cat /etc/passwd | tr -d&apos;:&apos;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/10/19/Linux字元转换命令——tr-col-join-paste-expand命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/19/Linux字元转换命令——tr-col-join-paste-expand命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用排序命令-sort-uniq命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/19/Linux常用排序命令-sort-uniq命令/">Linux常用排序命令-sort-uniq命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/19/Linux常用排序命令-sort-uniq命令/" class="archive-article-date">
-  	<time datetime="2017-10-19T08:20:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="sort命令概览"><a href="#sort命令概览" class="headerlink" title="sort命令概览"></a>sort命令概览</h2><p><strong>sort命令可依据不同的资料型态（文字或者数字等）来排序。【PS：排序的资源与语系的编码有关，建议LANG=C来让语系统一】</strong>。</p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   sort命令可依据不同的资料型态（文字或者数字等）来排序。</p>
-<h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort [-fbMnrtuk] [file or stdin]</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/10/19/Linux常用排序命令-sort-uniq命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/19/Linux常用排序命令-sort-uniq命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -954,7 +948,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Shudan Wang
+    		&copy; 2020 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1041,7 +1035,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1050,10 +1052,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1077,10 +1075,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
@@ -1089,7 +1083,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
               </li>
              
               <li class="article-tag-list-item">

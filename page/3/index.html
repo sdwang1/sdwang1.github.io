@@ -152,6 +152,238 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-用openssl签一个证书部署到nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/27/用openssl签一个证书部署到nginx/">用openssl签一个证书部署到nginx</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/27/用openssl签一个证书部署到nginx/" class="archive-article-date">
+  	<time datetime="2018-08-27T07:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SSL(Secure Sockets Layer 安全套接层)协议主要用来提供对用户和服务器的认证；对传送的数据进行加密和隐藏；确保数据在传送中不被改变，即数据 的完整性，现已成为该领域中全球化的标准。由于SSL技术已建立到所有主要的浏览器和WEB服务器程序中，因此，仅需安装服务器证书就可以激活该功能了。<br><strong>一份 SSL 证书包括一个公共密钥和一个私用密钥</strong>。公共密钥用于加密信息，私用密钥用于解译加密的信息。<strong>浏览器指向一个安全域时，SSL 同步确认服务器和客户端，并创建一种加密方式和一个唯一的会话密钥</strong>，它们可以启动一个保证消息的隐私性和完整性的安全会话。</p>
+<p>首先要有一个主证书，然后用主证书来签发服务器证书和客户证书，服务器证书和客户证书是 <strong>平级关系</strong>。SSL所使用的证书可以自己生成，也可以通过一个商业性CA（如Verisign 或 Thawte）签署证书：如果使用的是商业证书，具体的签署方法请查看相关销售商说明；如果是自己签发的证书，<strong>可以使用openssl自带的CA.sh脚本工具【在Debian或者Ubuntu系统中有更加简便的方法制作self-signed证书使用make-ssl-cert命令】</strong>。如果不为单独的客户端签发证书，客户端证书可以不用生成，客户端与服务器端使用相同的证书。</p>
+<p><strong>特别说明下，自签（self-signed）证书没有任何保证，大部分软件遇到这种证书会发出警告，甚至不接受这类证书。使用自签名(self-signed)的证书，它的主要目的不是防伪，而是使用户和系统之间能够进行SSL通信，保证密码等个人信息传输时的安全</strong>。</p>
+        
+          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/用openssl签一个证书部署到nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-PHP安全的存储用户密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/23/PHP安全的存储用户密码/">PHP安全的存储用户密码</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/23/PHP安全的存储用户密码/" class="archive-article-date">
+  	<time datetime="2018-08-23T07:01:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们已经知道，恶意攻击者使用查询表和彩虹表，暴力破解普通哈希(md5,sha1)是多么得快。为了让查表和彩虹表的方式无法破解hash，大家对“加盐（Adding salt）”技术应该都不陌生：<strong>给密码加一个随机（CSPRNG）的前缀或者后缀，然后再进行hash，这个随机的后缀或者前缀成为“盐”。</strong> 通过加盐，相同的密码每次hash都是完全不一样的字符串。由于后续检查用户输入的密码是否正确的时还需要这个盐，所以它一般都是跟hash一起保存在数据库里，或者作为hash字符串的一部分。</p>
+<h2 id="“加盐”的正确使用"><a href="#“加盐”的正确使用" class="headerlink" title="“加盐”的正确使用"></a>“加盐”的正确使用</h2><p>盐值不需要保密，只要盐值是随机的话，查询表、彩虹表都会失效。因为攻击者无法事先知道盐是什么，也就没有办法预先计算出查询表和彩虹表。如果每个用户都是使用了不同的盐，那么反向查表攻击也没法成功。下面介绍一些盐的常见的错误实现：</p>
+        
+          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/23/PHP安全的存储用户密码/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-HTTPS加密那点事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/22/HTTPS加密那点事/">HTTPS加密那点事</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/22/HTTPS加密那点事/" class="archive-article-date">
+  	<time datetime="2018-08-22T08:06:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下文章内容主要转载自<a href="https://www.tuicool.com/articles/QzQnAnM" target="_blank" rel="noopener">如果这样来理解HTTPS，一篇就够了！</a>。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴于其普及性，尽快拥抱它才是符合技术潮流的。<br>本文将尝试用通俗易懂的语言，一步步还原HTTPS的设计过程，以便您能轻松理解为什么HTTPS最终会是这副模样。但鉴于HTTPS的复杂性，本文的文字主要是为了方便您的理解，而并不代表完全遵从HTTPS的真实设计过程。</p>
+        
+          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/22/HTTPS加密那点事/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP的数据库扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -696,238 +928,6 @@
 
 
   
-    <article id="post-Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">Mac的Nginx+php-fpm+php5.6.3环境下升级为php7.2.4</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/" class="archive-article-date">
-  	<time datetime="2018-04-09T02:38:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了避免OS升级时覆盖php扩展或Apache等配置的隐患，初入坑时鄙人并未使用Mac自带的php软式，而是采用编译源码的方式安装搭建了Nginx+php-fpm+php5.6环境。时光如梭，岁月如歌，php官方版本早就发布到了7.2，项目线上系统php版本也都更新到7.0，与时俱进，欲将本地php5.6.3升级到php7.2.4，并同步更新相关配置。</p>
-<h2 id="源码编译安装php7-2"><a href="#源码编译安装php7-2" class="headerlink" title="源码编译安装php7.2"></a>源码编译安装php7.2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://cn2.php.net/distributions/php-7.2.4.tar.gz</span><br><span class="line">$ tar xzvf php-7.2.4.tar.gz</span><br><span class="line">$ cd php-7.2.4</span><br><span class="line"></span><br><span class="line">#调用 buildconf 生成 configure 文件：</span><br><span class="line">$ ./buildconf --force</span><br></pre></td></tr></table></figure>
-<p>生成了 configure 文件后，我们就需要着手开始进行编译安装的配置，如果你想知道有哪些编译配置选项，仅需 ./configure –help 即可查看。参考配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/php/7.2.4 --with-config-file-path=/usr/local/php/7.2.4/etc --with-config-file-scan-dir=/usr/local/php/7.2.4/etc/conf.d --enable-fpm --with-fpm-user=web --with-fpm-group=www --enable-soap --with-openssl --with-pcre-regex --with-zlib --with-iconv --enable-calendar --with-curl --enable-exif --with-pcre-dir --enable-ftp --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --with-mhash --enable-mbstring --enable-pdo --with-pdo-mysql --with-mysqli --with-libedit --enable-simplexml --enable-sockets --with-libxml-dir --with-xsl --enable-pcntl</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">php杂集</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/09/Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Dos攻击和DDos攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/08/Dos攻击和DDos攻击/">Dos攻击和DDos攻击</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/08/Dos攻击和DDos攻击/" class="archive-article-date">
-  	<time datetime="2018-04-08T09:17:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Dos攻击"><a href="#Dos攻击" class="headerlink" title="Dos攻击"></a>Dos攻击</h2><p><a href="https://baike.baidu.com/item/dos%E6%94%BB%E5%87%BB" target="_blank" rel="noopener">Dos攻击</a>是Denial of Service的简称，<strong>指故意的攻击网络协议实现的缺陷或直接通过野蛮手段残忍地耗尽被攻击对象的资源（网络带宽、文件系统容量、开放的进程或允许的连接数），目的是让目标计算机或网络无法提供正常的服务或资源访问</strong>，使目标系统服务系统停止响应甚至崩溃，而在此攻击中并不包括侵入目标服务器或目标网络设备。</p>
-<h3 id="Dos攻击原理"><a href="#Dos攻击原理" class="headerlink" title="Dos攻击原理"></a>Dos攻击原理</h3><p>Dos攻击是利用TCP协议通信前协商——三次握手的“缺陷”进行的。正常情况下：1. 客户端发送一个SYN(seq=x)数据包，并进入SYN_SENT状态；2. 服务器收到该SYN包后，回应一个ACK(x+1)确认包,同时自己也发送一个SYN(seq=y)包，此时服务器进入SYN_RECV状态；3. 客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手以正式进行通信。<br><img src="http://www.sdwangblog.cn/blogimg/dos_tcp_three_hands.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/04/08/Dos攻击和DDos攻击/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/08/Dos攻击和DDos攻击/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-SQL、XML和CRLF注入攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/07/SQL、XML和CRLF注入攻击/">SQL、XML和CRLF注入攻击</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/07/SQL、XML和CRLF注入攻击/" class="archive-article-date">
-  	<time datetime="2018-04-07T06:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>注入攻击代指一类攻击，它们 <strong>通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据</strong>。这种类别的攻击包括<a href="http://www.sdwangblog.cn/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/">跨站脚本攻击（XSS）</a>、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。<br>这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 <strong>将不可信数据（比如用户输入）作为命令或请求的一部分被发送到解释程序时发生</strong>。当然限于篇幅，这里只是简单介绍几种类型。</p>
-<h2 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h2><p>目前最常见的注入攻击形式是臭名昭著的 SQL 注入攻击（<strong>常见且致命</strong>）。它通常是把 <strong>SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令</strong>。具体来说，它是利用现有应用程序，将（恶意的）SQL命令注入到后台数据库引擎执行的能力，它可以通过在Web表单中输入（恶意）SQL语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行SQL语句。<br>看一下这条请求：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$db = <span class="keyword">new</span> mysqli(<span class="string">'localhost'</span>, <span class="string">'username'</span>, <span class="string">'password'</span>, <span class="string">'storedb'</span>);</span><br><span class="line">$result = $db-&gt;query( <span class="string">'SELECT * FROM transactions WHERE user_id = '</span> . $_POST[<span class="string">'user_id'</span>] );</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/04/07/SQL、XML和CRLF注入攻击/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/07/SQL、XML和CRLF注入攻击/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -942,7 +942,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Shudan Wang
+    		&copy; 2020 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1029,7 +1029,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1038,10 +1046,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1065,10 +1069,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
@@ -1077,7 +1077,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
               </li>
              
               <li class="article-tag-list-item">
