@@ -152,6 +152,165 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CodeIgniter框架源码解析十八之日志记录类文件Log-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/09/CodeIgniter框架源码解析十八之日志记录类文件Log-php/">CodeIgniter框架源码解析十八之日志记录类文件Log.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/09/CodeIgniter框架源码解析十八之日志记录类文件Log-php/" class="archive-article-date">
+  	<time datetime="2018-04-09T10:07:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>日志记录类，主要用于记录CI框架的一些操作日志（错误日志，调试日志，信息日志等等），即将日志信息以某种格式写入日志文件。<br>我们先来看下日志记录类的实现框架：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Path to save log files</span></span><br><span class="line"><span class="keyword">protected</span> $_log_path;</span><br><span class="line"><span class="comment">//File permissions</span></span><br><span class="line"><span class="keyword">protected</span> $_file_permissions = <span class="number">0644</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Level of logging</span></span><br><span class="line"><span class="comment"> * 0 = Disables logging, Error logging TURNED OFF</span></span><br><span class="line"><span class="comment"> * 1 = Error Messages (including PHP errors)</span></span><br><span class="line"><span class="comment"> * 2 = Debug Messages</span></span><br><span class="line"><span class="comment"> * 3 = Informational Messages</span></span><br><span class="line"><span class="comment"> * 4 = All Messages</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> $_threshold = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Array of threshold levels to log</span></span><br><span class="line"><span class="comment">* 与$_threshold有些不同，比如设置配置文件$config['log_threshold'] = 3，这个值会读到$_threshold属性中。那么写日志允许的level可以是1，2，3；可是如果设置$config['log_threshold'] = array(3),那么系统会把这个3读到$_threshold_array数组中，写日志level只允许3，其它的1和2不允许。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">protected</span> $_threshold_array = <span class="keyword">array</span>();</span><br><span class="line"><span class="comment">//Format of timestamp for log files</span></span><br><span class="line"><span class="keyword">protected</span> $_date_fmt = <span class="string">'Y-m-d H:i:s'</span>;</span><br><span class="line"><span class="comment">//Filename extension</span></span><br><span class="line"><span class="keyword">protected</span> $_file_ext;</span><br><span class="line"><span class="comment">// Whether or not the logger can write to the log files</span></span><br><span class="line"><span class="keyword">protected</span> $_enabled = <span class="keyword">TRUE</span>;</span><br><span class="line"><span class="comment">//Predefined logging levels</span></span><br><span class="line"><span class="keyword">protected</span> $_levels = <span class="keyword">array</span>(<span class="string">'ERROR'</span> =&gt; <span class="number">1</span>, <span class="string">'DEBUG'</span> =&gt; <span class="number">2</span>, <span class="string">'INFO'</span> =&gt; <span class="number">3</span>, <span class="string">'ALL'</span> =&gt; <span class="number">4</span>);</span><br><span class="line"><span class="comment">//mbstring.func_overload flag</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> $func_overload;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">write_log</span><span class="params">($level, $msg)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">_format_line</span><span class="params">($level, $date, $message)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">strlen</span><span class="params">($str)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">substr</span><span class="params">($str, $start, $length = NULL)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/04/09/CodeIgniter框架源码解析十八之日志记录类文件Log-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/09/CodeIgniter框架源码解析十八之日志记录类文件Log-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CodeIgniter框架源码解析十七之异常处理类文件Exceptions-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/09/CodeIgniter框架源码解析十七之异常处理类文件Exceptions-php/">CodeIgniter框架源码解析十七之异常处理类文件Exceptions.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/09/CodeIgniter框架源码解析十七之异常处理类文件Exceptions-php/" class="archive-article-date">
+  	<time datetime="2018-04-09T08:32:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架的异常处理类通常使用以下几个函数处理错误：</p>
+<ul>
+<li>function show_error($heading, $message, $template = ‘error_general’, $status_code = 500)；由于用户操作不当，比如找不到控制器，指定方法之类的，触发的错误。</li>
+<li>function show_404($page = ‘’, $log_error = TRUE)；show_error()中的一种特殊情况，表示请求不存在。</li>
+<li>function show_php_error($severity, $message, $filepath, $line);PHP原生错误，来着代码本身的一些错误，例如变量未定义之类的。</li>
+<li>log_exception($severity, $message, $filepath, $line)；</li>
+</ul>
+<p>我们先来看下Exception类的实现框架：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Nesting level of the output buffering mechanism</span></span><br><span class="line"><span class="keyword">public</span> $ob_level;</span><br><span class="line"><span class="comment">//List of available error levels</span></span><br><span class="line"><span class="keyword">public</span> $levels = <span class="keyword">array</span>(</span><br><span class="line">  E_ERROR			=&gt;	<span class="string">'Error'</span>,</span><br><span class="line">  E_WARNING		=&gt;	<span class="string">'Warning'</span>,</span><br><span class="line">  E_PARSE			=&gt;	<span class="string">'Parsing Error'</span>,</span><br><span class="line">  E_NOTICE		=&gt;	<span class="string">'Notice'</span>,</span><br><span class="line">  E_CORE_ERROR		=&gt;	<span class="string">'Core Error'</span>,</span><br><span class="line">  E_CORE_WARNING		=&gt;	<span class="string">'Core Warning'</span>,</span><br><span class="line">  E_COMPILE_ERROR		=&gt;	<span class="string">'Compile Error'</span>,</span><br><span class="line">  E_COMPILE_WARNING	=&gt;	<span class="string">'Compile Warning'</span>,</span><br><span class="line">  E_USER_ERROR		=&gt;	<span class="string">'User Error'</span>,</span><br><span class="line">  E_USER_WARNING		=&gt;	<span class="string">'User Warning'</span>,</span><br><span class="line">  E_USER_NOTICE		=&gt;	<span class="string">'User Notice'</span>,</span><br><span class="line">  E_STRICT		=&gt;	<span class="string">'Runtime Notice'</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">log_exception</span><span class="params">($severity, $message, $filepath, $line)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show_404</span><span class="params">($page = <span class="string">''</span>, $log_error = TRUE)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show_error</span><span class="params">($heading, $message, $template = <span class="string">'error_general'</span>, $status_code = <span class="number">500</span>)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show_exception</span><span class="params">($exception)</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show_php_error</span><span class="params">($severity, $message, $filepath, $line)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/04/09/CodeIgniter框架源码解析十七之异常处理类文件Exceptions-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/09/CodeIgniter框架源码解析十七之异常处理类文件Exceptions-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Mac的Nginx-php-fpm-php5-6-3环境下升级为php7-2-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -772,160 +931,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析十二之输入类文件Input-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/27/CodeIgniter框架源码解析十二之输入类文件Input-php/">CodeIgniter框架源码解析十二之输入类文件Input.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/27/CodeIgniter框架源码解析十二之输入类文件Input-php/" class="archive-article-date">
-  	<time datetime="2018-03-27T06:41:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架输入类主要有两个用途：1. 为了安全性，对输入数据进行预处理（安全性过滤、XSS过滤）；2. 提供了一些辅助方法来获取输入数据并处理（使用 POST、GET、COOKIE 和 SERVER 数据；使用php://input流）。该类由系统自动加载调用，你无需手工加载。</p>
-<p>我们先来看下CI框架中安全类的实现框架：</p>
-        
-          <a class="article-more-a" href="/2018/03/27/CodeIgniter框架源码解析十二之输入类文件Input-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/27/CodeIgniter框架源码解析十二之输入类文件Input-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-浅谈XSS攻击方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/25/浅谈XSS攻击方式/">浅谈XSS攻击方式</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/25/浅谈XSS攻击方式/" class="archive-article-date">
-  	<time datetime="2018-03-25T01:55:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="XSS是什么"><a href="#XSS是什么" class="headerlink" title="XSS是什么"></a>XSS是什么</h2><p>XSS(Cross Site Scripting，CSS)跨站脚本攻击，是Web程序中常见的漏洞，XSS属于被动式且用于客户端的攻击方式，所以容易被忽略其危害性。它的攻击原理与<code>SQL注入攻击</code>(以SQL语句作为用户输入，从而达到查询/修改/删除数据的目的)类似，<code>通过向有XSS漏洞的网站中输入(传入)恶意的HTML代码，当其它用户浏览该网站时，这段HTML代码会自动执行，从而达到攻击的目的</code>，比如盗取用户Cookie、破坏页面结构、重定向到其它网站等。</p>
-<h2 id="XSS攻击类型"><a href="#XSS攻击类型" class="headerlink" title="XSS攻击类型"></a>XSS攻击类型</h2><p>XSS攻击之前，我们先找到一个存在XSS漏洞的网站，XSS漏洞分为两种：一种是DOM Based XSS漏洞，另一种是Stored XSS漏洞。<strong>理论上，所有可输入的地方没有对输入数据进行处理的话，都会存在XSS漏洞，漏洞的危害取决于攻击代码的威力，攻击代码也不局限于script。</strong></p>
-        
-          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1035,11 +1040,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1047,7 +1052,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1055,7 +1060,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1075,11 +1080,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1108,6 +1113,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
             
             <div class="clearfix"></div>

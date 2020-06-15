@@ -152,6 +152,164 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-例行性工作排程（crontab）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/23/例行性工作排程（crontab）/">例行性工作排程（crontab）</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/23/例行性工作排程（crontab）/" class="archive-article-date">
+  	<time datetime="2017-10-23T07:37:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>每个人或多或少都有一些日程安排或工作，有些工作是例行性的，比如一日三餐，有些工作则是临时发生的，比如总公司高管来访啦，Linux下也有两种类型的工作排程方式——at和cron命令:</p>
+<ul>
+<li>at：处理执行一次就结束的指令。执行时需要atd服务的支援，在某些新版distributions中，atd可能并灭有被启动；</li>
+<li>crontab：设定工作将循环的一直进行下去，可循环的时间为分钟，小时，每周，每月或每年等，执行时需要crond服务的支援。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2017/10/23/例行性工作排程（crontab）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/23/例行性工作排程（crontab）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux格式化文件输出命令-printf-awk命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/20/Linux格式化文件输出命令-printf-awk命令/">Linux格式化文件命令-printf-awk命令</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/20/Linux格式化文件输出命令-printf-awk命令/" class="archive-article-date">
+  	<time datetime="2017-10-20T06:39:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p>很多时候，为了便于查阅或统计资料，我们可能需要将其格式化输出，不必要重新以vim编辑，这就要配合下面的printf及awk命令了。</p>
+<h3 id="格式化打印命令：printf"><a href="#格式化打印命令：printf" class="headerlink" title="格式化打印命令：printf"></a>格式化打印命令：printf</h3><p>举个例子，下表是考試卷分數的輸出，姓名與科目及分數之間是使用tab键分割的，但因为每个档位的原始资料长度并非如此固定(Chinese長度就是比Name 要多)，那是否可以稍微作個比較漂亮的版面配置吧？<br>Name     Chinese   English   Math    Average<br>DmTsai        80        60     92      77.33<br>VBird         75        55     80      70.00<br>Ken           60        90     70      73.33</p>
+<p><strong>printf 就是幫我們將資料輸出的結果格式化的指令：<code>printf &#39;列印格式&#39; 实际内容</code>。</strong></p>
+        
+          <a class="article-more-a" href="/2017/10/20/Linux格式化文件输出命令-printf-awk命令/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/20/Linux格式化文件输出命令-printf-awk命令/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux常用命令-sed命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -773,166 +931,6 @@
 
 
   
-    <article id="post-Linux用户权限管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/09/Linux用户权限管理/">Linux用户权限管理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/09/Linux用户权限管理/" class="archive-article-date">
-  	<time datetime="2017-10-09T07:11:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Linux是典型的多用户（Multi-users）和多任务（Multi-tasks）系统，即一台Linux主机可以给很多用户提供服务同时运行多种服务，那么系统是区分用户并控制访问操作的呢？这就牵涉到了Linux的用户类别和权限管理。</p>
-<h2 id="用户和组类型"><a href="#用户和组类型" class="headerlink" title="用户和组类型"></a>用户和组类型</h2><p>在Linux系统中有着用户和组两个概念：用户泛指计算机的使用者，可用UID标识；用户分组则是将具有某种共同特征的用户集合起来（Group），可用GID标识，分组与用户间为多对多的关系。另外UID和GID都是16位二进制数，即取值范围为0-65535。<br><strong>用户的类别</strong>：</p>
-<ul>
-<li>管理员用户：即通常所说的root，UID=0；</li>
-<li>系统用户：为让有些后台进程或服务类进程以非管理员的身份运行，通常需要为此创建多个普通用户，此类用户从不登录系统<br>【一般位于/sbin/nologin目录下，比如用户bin、daemon、adm等】，UID：1-499（centos6）,1-999（centos7）；</li>
-<li>登录用户：真正使用计算机的普通用户，UID：500-60000（centos6），1000-60000（centos7）；</li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/10/09/Linux用户权限管理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/09/Linux用户权限管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于Linux单用户维护模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/09/关于Linux单用户维护模式/">关于Linux单用户维护模式</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/09/关于Linux单用户维护模式/" class="archive-article-date">
-  	<time datetime="2017-10-09T03:13:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上节<a href="http://www.sdwangblog.cn/2017/09/28/%E4%BA%86%E8%A7%A3Linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84/"><strong>了解Linux目录结构</strong></a>时提到一词”单人维护模式”，略有耳闻【无知】，故而本章做所了解，另下章节我们可以了解下”Linux的用户权限管理”。</p>
-<p>下文主要内容转载自<a href="http://blog.sina.com.cn/s/blog_e97e12280102wfgw.html" target="_blank" rel="noopener"><strong>关于linux单用户维护模式</strong></a>。</p>
-<p>Linux下的启动方式常用到的有单用户方式、普通多用户方式、完全多用户方式和XWin方式。单用户方式下，系统并没有完全运行进来，只是部分程序运行，这时也不能进行远程登录到Linux系统。一般情况下，进入单用户方式进行系统维护是由ROOT用户进行完成的【ROOT直接进入，没有密码校验】，这时的ROOT用户对系统有完全的操作权限，可以修复系统的同时，也可以随时对系统进行破坏。</p>
-        
-          <a class="article-more-a" href="/2017/10/09/关于Linux单用户维护模式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/09/关于Linux单用户维护模式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
@@ -1042,11 +1040,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1054,7 +1052,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1062,7 +1060,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1082,11 +1080,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
+                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1115,6 +1113,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
             
             <div class="clearfix"></div>
