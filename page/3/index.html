@@ -152,6 +152,167 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-理解OAuth-2-0，一个授权的故事" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/">理解OAuth 2.0，一个授权的故事</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/理解OAuth-2-0，一个授权的故事/" class="archive-article-date">
+  	<time datetime="2018-10-11T03:45:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth</a>是一个关于授权（authorization）的开放网络标准，在世界范围内得到广泛应用，目前版本2.0版。为了理解OAuth的适用场合，让我们来听一个关于授权的故事：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">小梁开发了一个“信用卡管家”的程序 ， 可以自动从邮箱中读取信用卡相关邮件，分析、汇总，形成一个报表。</span><br><span class="line"></span><br><span class="line">小梁找到信用卡达人张大胖试用 ： “你的信用卡那么多，看看我这个程序吧， 保准你会爱死它。”</span><br><span class="line"></span><br><span class="line">张大胖尝试了几下说： “咦，你这个程序要读取我的网易邮箱啊，那需要用户名/密码吧”</span><br><span class="line"></span><br><span class="line">“是啊 ， 你把密码告诉输入程序不就行了， 我的程序替你加密保存，保证不会泄露。”</span><br><span class="line"></span><br><span class="line">“得了吧你， 我可不会告诉你我的密码， 为了方便记忆， 我的密码都是通用的， 万一泄露了就完蛋了”</span><br><span class="line"></span><br><span class="line">小梁说：“这样吧，我不保存，我就访问邮箱的时候使用一次， 用完就扔！”</span><br><span class="line"></span><br><span class="line">“你以为你是阿里巴巴啊， 有信用背书， 你只是个小网站， 我把密码献给你，总是觉得不安全。就是我信任你，别人能信任你吗？”</span><br><span class="line"></span><br><span class="line">小梁想想也是， 这是一个巨大的心理障碍， 每个人都要誓死捍卫自己的密码啊。</span><br></pre></td></tr></table></figure></p>
+<p>在继续我们的故事前，先来了解几个关于OAuth 2.0的专用名词：</p>
+<ul>
+<li><strong>Third-party application：第三方应用程序，本文又称“客户端”（client），即上例中的“信用卡管家”</strong>；</li>
+<li><strong>HTTP service：HTTP服务提供商，本文简称“服务提供商”，即上例中的“网易邮箱”</strong>；</li>
+<li><strong>Resource Owner：资源所有者，本文简称“用户”，即上例中的“张大胖”</strong>；</li>
+<li><strong>Authorization server：认证服务器，服务提供商专门用来处理认证的服务器，即上例中的“网易认证中心”</strong>；</li>
+<li><strong>Resource server：资源服务器，服务提供商存放用户生成资源的服务器，它与认证服务器可以是同一台服务器，也可是不同的服务器，即上例中的”网易邮箱“</strong>；</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/理解OAuth-2-0，一个授权的故事/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-如何建立安全的会话管理机制二之Token机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/">如何建立安全的会话管理机制二之Token机制</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/" class="archive-article-date">
+  	<time datetime="2018-10-07T09:15:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们之所以 <strong>“建立安全的会话管理机制”</strong>，是因为Http是一种无状态协议，而为了用户使用便利性，我们需要维护web应用程序的状态。大家知道，实际应用中的会话管理，不仅要维持各个请求之间的状态，还需要维持会话期间针对每个特定用户使用到的数据，即 <strong>session数据</strong>。传统的<a href="http://www.sdwangblog.cn/2018/09/26/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E7%9A%84%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B8%80%E4%B9%8BSession%E6%9C%AC%E8%B4%A8/">Session机制</a>在面对高并发网络请求时，被这小小的session数据逼得不得不使出“百般解数”，苦不堪言。现在请思考个问题，假若暂时不考虑session数据的存储，建立会话管理的本质是什么？。。。。。。没错，是 <strong>“认证”，即知晓当前请求者是否为web应用已合法登录的某用户</strong>。</p>
+<p>比如说，小F首次登录系统成功（注册也是一种可以适用的场景）之后, 服务器端给他颁发一个 <strong>令牌</strong>（token，最简单的token组成:uid(用户唯一的身份标识)、time(当前时间的时间戳)、sign(签名，由token的前几位+盐以哈希算法压缩成定长的十六进制字符串)拼接而成）如下图示例， <strong>服务器端可以不保存这个token</strong>；当小F再次发送http请求时，会通过Http header/body将这个token值附带而来，服务器会再用同样的算法对数据 <strong>计算签名并和token中的签名做比较</strong>，如果认证通过就说明小F已经登录过了，并且可直接取到小F的userId，否则就是没通过有效性认证。<br><img src="http://www.sdwangblog.cn/blogimg/simple_token_sign.png" alt></p>
+        
+          <a class="article-more-a" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-如何建立安全的会话管理机制一之Session本质" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -815,159 +976,6 @@
 
 
   
-    <article id="post-Apache与PHP的工作机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/24/Apache与PHP的工作机制/">Apache与PHP的工作机制</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/24/Apache与PHP的工作机制/" class="archive-article-date">
-  	<time datetime="2018-05-24T06:33:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通过<a href="http://www.sdwangblog.cn/2018/05/23/Apache-Tutorial篇一/">Apache Tutorial</a>我们对Apache的基本使用有了初步了解，接下来继续了解Apache与PHP的工作机制。在介绍其间的工作原理前，先看眼下图的php的架构：SAPI提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据。PHP所使用的接口类型(服务器和PHP之间的接口类型，the Server API)有很多种，常见的有cli,apache2handler,cgi-fcgi,fpm-fcgi等等。Apache处理PHP文件方式一般有以下三种模式：加载mod_php 模块，CGI模式和FastCGI模式。<br><img src="http://www.sdwangblog.cn/blogimg/Php_struction.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/05/24/Apache与PHP的工作机制/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Apache</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/24/Apache与PHP的工作机制/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Apache-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/23/Apache-Tutorial/">Apache Tutorial</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/23/Apache-Tutorial/" class="archive-article-date">
-  	<time datetime="2018-05-23T06:33:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下主要为<a href="http://apache.chinahtml.com/" target="_blank" rel="noopener">Apache HTTP服务器2.2文档</a>【原英文版<code>http://httpd.apache.org/docs/2.2/zh-cn/</code> 】的读书笔记。</p>
-<h2 id="Installing-Apache"><a href="#Installing-Apache" class="headerlink" title="Installing Apache"></a>Installing Apache</h2><p>Unix环境下，类似于其他开源项目，Apache使用libtool和autoconf建立编译环境。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://mirrors.hust.edu.cn/apache//httpd/httpd-2.4.33.tar.bz2</span><br><span class="line"></span><br><span class="line">$ bzip2 -d httpd-2.4.33.tar.bz2</span><br><span class="line">$ tar -xvf httpd-2.4.33.tar</span><br><span class="line">$ cd  httpd-2.4.33</span><br><span class="line"></span><br><span class="line">$ ./configure --prefix=PREFIX</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br><span class="line"></span><br><span class="line">#通过修改PREFIX/conf/目录下的配置文件，来配置Apache HTTP服务器</span><br><span class="line">$ vi PREFIX/conf/httpd.conf</span><br><span class="line">$ PREFIX/bin/apachectl -k start</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/05/23/Apache-Tutorial/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Apache</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/23/Apache-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1069,10 +1077,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1089,15 +1093,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1109,7 +1113,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1117,11 +1121,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1137,10 +1137,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
@@ -1149,11 +1145,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
             
             <div class="clearfix"></div>

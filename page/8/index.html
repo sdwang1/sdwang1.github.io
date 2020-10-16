@@ -152,6 +152,168 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux程序管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/03/Linux程序管理/">Linux程序管理</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/03/Linux程序管理/" class="archive-article-date">
+  	<time datetime="2017-11-03T08:36:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在Linux系统中，当程式【通常为binary file，以实体档案的型态存在，比如/bin/cp】被触发后，执行者的权限与属性，程式的程式码等所需资料都会被载入记忆体中，作业系统会给这个记忆体内的单元一个识别码PID且依上信息给予这个PID一组有效的权限设定，即程序就是一个正在运作中的程式。Linux的程序呼叫通常为fork-and-exec的流程，即父进程以fork的方式产生一个一摸一样的子程序，然后被复制出来的子程序【继承了父进程绝大部分环境变量】以exec的方式执行实际要进行的程序，最终成为一个子程序。<br>另外，还有一些常驻在记忆体中的程序，它通常会负责一些系统所提供的功能以服务使用者各项任务，这些常驻程式就会被我们称为服务，比如crond,atd,Apache等等。</p>
+<h2 id="bash环境下的工作管理"><a href="#bash环境下的工作管理" class="headerlink" title="bash环境下的工作管理"></a>bash环境下的工作管理</h2><p>当我们登入bash后，就会取得一个名为bash的PID，而这个环境下所执行的其他指令就几乎都是所谓的子程序了。我们可以在单一终端介面下同时进行多个工作的行为管理，即job control【注：我们无法以job control的方式由tty1的环境去管理tty2的bash!】。<br>假设我们进入了一个终端界面，则出现提示字元让你操作的环境就称为前景（foreground），至于其他工作就可以放入背景（background）去暂停或运作【注：放入背景的工作运作时，必须不能与使用者互动，也不能使用ctrl+c来终止】。同时，bash只能够管理自己的工作而不能管理其他bash的工作。那么实际进行job control的指令有哪些？</p>
+        
+          <a class="article-more-a" href="/2017/11/03/Linux程序管理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/03/Linux程序管理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-学习Shell-Scripts" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/30/学习Shell-Scripts/">学习Shell scripts</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/30/学习Shell-Scripts/" class="archive-article-date">
+  	<time datetime="2017-10-30T06:03:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>shell script是利用shell的功能所写的一个「程式（program）」，这个程式使用纯文字档，将一些shell的语法与指令（含外部指令）写在里面，搭配正则表示法，管道命令与资料流重导向等功能，以达到想要的处理目的。<br>它可简单点看成批次档.bat，不需编译即可执行，故执行速度较慢，且使用的CPU资源较多，所以通常利用shellscripts来处理伺服器的侦测，不会进行大量运算的需求。</p>
+<h2 id="Shell-Script简单示例"><a href="#Shell-Script简单示例" class="headerlink" title="Shell Script简单示例"></a>Shell Script简单示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir bin;cd bin;</span><br><span class="line">$ vim hello.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#Program:</span><br><span class="line">#   This program shows &quot;Hello World!&quot; in your screen.</span><br><span class="line">#History:</span><br><span class="line"># 2015/07/16 VBird First release</span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin</span><br><span class="line">export PATH</span><br><span class="line">echo -e &quot;Hello World! \a\n&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>以上这个简单示例可以分解为如下五部分组成：</p>
+<ol>
+<li>第一行#!/bin/bash在宣告这个script使用的shell名称，比如在这个程式被执行时，它能够载入bash的相关环境设定档（一般来说就是non-login shell的～/.bashrc）并且执行bash来使脚本中的指令能够执行。</li>
+<li>除了第一行的『 #! 』是用來宣告shell的之外，其他的#都是『注解』用途，一般来说建议习惯性说明该script的：内容与功能；版本资讯；建档日期；历史记录；作者与联络方式等等。</li>
+<li>主要环境参数的宣告：建议务必将一些必要的环境参数设定好，比如PATH，LANG等，如此就可以直接下达一些外部指令啦；</li>
+<li>主要程式部分；</li>
+<li>执行成果告知（定义回传值）；</li>
+</ol>
+        
+          <a class="article-more-a" href="/2017/10/30/学习Shell-Scripts/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/30/学习Shell-Scripts/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-例行性工作排程（crontab）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -777,160 +939,6 @@
 
 
   
-    <article id="post-vim编辑器的常用按键说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/13/vim编辑器的常用按键说明/">vim编辑器的常用按键说明</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/13/vim编辑器的常用按键说明/" class="archive-article-date">
-  	<time datetime="2017-10-13T06:25:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vim编辑器作为Linux上面预设的程式编辑命令，相信大家都有简单的使用经历。事实上除了简单的i,[Esc],:wq之外，vi还有非常多的按键可以使用哦。vi的三种模式只有一般指令模式可以与编辑、指令列模式切换，编辑模式与指令模式之间不能切换。</p>
-<h2 id="一般指令模式可用的按钮说明"><a href="#一般指令模式可用的按钮说明" class="headerlink" title="一般指令模式可用的按钮说明"></a>一般指令模式可用的按钮说明</h2><p>一般指令模式可用的按钮说明：游标移动，复制粘贴，搜寻替代等；</p>
-        
-          <a class="article-more-a" href="/2017/10/13/vim编辑器的常用按键说明/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/13/vim编辑器的常用按键说明/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux档案系统的压缩、打包与备份" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/10/Linux档案系统的压缩、打包与备份/">Linux档案系统的压缩、打包与备份</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/10/Linux档案系统的压缩、打包与备份/" class="archive-article-date">
-  	<time datetime="2017-10-10T07:17:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Linux系统常见的压缩指令"><a href="#Linux系统常见的压缩指令" class="headerlink" title="Linux系统常见的压缩指令"></a>Linux系统常见的压缩指令</h2><p>Linux支持的压缩指令非常多，且不同的指令所用的压缩技术并不相同，当然彼此间可能就无法互通压缩／解压缩档案。常见的压缩档案的副档名大多是：<code>*.tar, *.tar.gz, *.tgz, *.gz, *.Z, *.bz2, *.xz</code>。Linux常见的压缩指令就是gzip，bzip2以及xz，至于compress已经退出流行了。</p>
-<h3 id="gzip-zcat-zmore-zless-zgrep"><a href="#gzip-zcat-zmore-zless-zgrep" class="headerlink" title="gzip,zcat/zmore/zless/zgrep"></a>gzip,zcat/zmore/zless/zgrep</h3><p>gzip可以说是应用度最广的压缩指令了！gzip所建立的压缩档案为*.gz，它可以解开compress、zip与gzip等软件所压缩的<br>档案。用法：</p>
-        
-          <a class="article-more-a" href="/2017/10/10/Linux档案系统的压缩、打包与备份/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/10/Linux档案系统的压缩、打包与备份/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
@@ -1032,10 +1040,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1052,15 +1056,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1072,7 +1076,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1080,11 +1084,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Laravel,事件</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1100,10 +1100,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
@@ -1112,11 +1108,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
             
             <div class="clearfix"></div>
