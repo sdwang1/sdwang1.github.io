@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Archives: 2020/9 | Sdwang1的博客</title>
+  <title>《GO语言核心36讲》之“命令源码文件与库源码文件” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/archives/2020/09/index.html">
+  <meta name="description" content="Go 语言的源码文件分为命令源码文件、库源码文件和测试源码文件三种，它们都有着不同的用途和编写规则。本节我们就学习下命令源码文件和库源码文件的知识点。 命令源码文件命令源码文件是程序运行入口，是每个可独立运行的程序必须拥有的。它需要声明属于main包，且包含一个无参数声明且无结果声明的main函数（建议同个代码包中不要放多个命令源码文件，并且命令源码文件和库源码文件也不要放在同个代码包下）。我们可">
+<meta name="keywords" content="GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《GO语言核心36讲》之“命令源码文件与库源码文件”">
+<meta property="og:url" content="http://www.sdwangblog.cn/2020/08/16/《GO语言核心36讲》之“命令源码文件与库源码文件”/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="Go 语言的源码文件分为命令源码文件、库源码文件和测试源码文件三种，它们都有着不同的用途和编写规则。本节我们就学习下命令源码文件和库源码文件的知识点。 命令源码文件命令源码文件是程序运行入口，是每个可独立运行的程序必须拥有的。它需要声明属于main包，且包含一个无参数声明且无结果声明的main函数（建议同个代码包中不要放多个命令源码文件，并且命令源码文件和库源码文件也不要放在同个代码包下）。我们可">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-11-12T08:55:40.930Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="《GO语言核心36讲》之“命令源码文件与库源码文件”">
+<meta name="twitter:description" content="Go 语言的源码文件分为命令源码文件、库源码文件和测试源码文件三种，它们都有着不同的用途和编写规则。本节我们就学习下命令源码文件和库源码文件的知识点。 命令源码文件命令源码文件是程序运行入口，是每个可独立运行的程序必须拥有的。它需要声明属于main包，且包含一个无参数声明且无结果声明的main函数（建议同个代码包中不要放多个命令源码文件，并且命令源码文件和库源码文件也不要放在同个代码包下）。我们可">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,60 +155,218 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-《GO语言核心36讲》之“命令源码文件与库源码文件”" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/" class="archive-article-date">
-  	<time datetime="2020-09-01T06:13:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-01</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/">Rest，GraphQL，Webhooks和gRPC如何选型</a>
+    <h1 class="article-title" itemprop="name">
+      《GO语言核心36讲》之“命令源码文件与库源码文件”
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/08/16/《GO语言核心36讲》之“命令源码文件与库源码文件”/" class="archive-article-date">
+  	<time datetime="2020-08-16T06:33:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 语言的源码文件分为命令源码文件、库源码文件和测试源码文件三种，它们都有着不同的用途和编写规则。本节我们就学习下<strong>命令源码文件和库源码文件</strong>的知识点。</p>
+<h2 id="命令源码文件"><a href="#命令源码文件" class="headerlink" title="命令源码文件"></a>命令源码文件</h2><p><strong>命令源码文件是程序运行入口，是每个可独立运行的程序必须拥有的。它需要声明属于main包，且包含一个无参数声明且无结果声明的main函数</strong>（建议同个代码包中不要放多个命令源码文件，并且命令源码文件和库源码文件也不要放在同个代码包下）。<br>我们可以通过<code>go build</code>或<code>go install</code>命令生成与其对应的可执行文件，后者一般会与该命令源码文件的直接父目录同名。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt”</span><br><span class="line"></span><br><span class="line">func main() &#123;                           # 无参数声明且无结果声明的main函数，返回状态可通过os.Exit获取</span><br><span class="line">    fmt.Println(&quot;Hello, world!”)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>当需要模块化编程时，我们往往会将代码拆分到多个文件，甚至拆分到不同的代码包中。但无论怎样，对于一个独立的程序来说，命令源码文件永远只会也只能有一个。如果有与命令源码文件同包的源码文件，那么它们也应该声明属于main包。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="命令源码文件传入参数"><a href="#命令源码文件传入参数" class="headerlink" title="命令源码文件传入参数"></a>命令源码文件传入参数</h2><p>通过构建或安装命令源码文件，生成的可执行文件就可以被视为“命令”，既然是命令，那么就应该具备接收参数的能力。下面，我们就来了解一下有“<strong>命令参数的接收和解析</strong>”的相关代码包和具体使用：</p>
+<ul>
+<li><strong><code>os.Agrs</code> 是一个string型的切片, 用于储存所有的命令行参数</strong>，使用简单，示例代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">   &quot;fmt&quot;</span><br><span class="line">   &quot;os&quot;</span><br><span class="line">   &quot;strconv&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">   for idx, args := range os.Args&#123;                             # for循环遍历os.Args所有元素</span><br><span class="line">      fmt.Println(&quot;参数&quot; + strconv.Itoa(idx) + &quot;:&quot;, args)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>运行结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go 1 3 -X ?</span><br><span class="line">参数0: /var/folders/ly/dn3892gj7bb3jp4clwbgx5g40000gn/T/go-build011064750/b001/exe/main        # 构建上述命令源码文件时临时生成的可执行文件的完整路径</span><br><span class="line">参数1: 1</span><br><span class="line">参数2: 3</span><br><span class="line">参数3: -X</span><br><span class="line">参数4: ?</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>flag代码包是专门用于接收和解析命令参数</strong>，定义形式有如下两种：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1) var nFlag = flag.Int(&quot;n&quot;, 1234, &quot;help message for flag n”)        # 返回相应类型的指针，比如 *int</span><br><span class="line"></span><br><span class="line">2) var nFlag int</span><br><span class="line">   flag.IntVar(&amp;nFlag, “n&quot;, 1234, &quot;help message for flag n”)         # 使用Var（）函数将 flag 绑定到某个变量</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中，flag.Xxx()除了Int()外，还可以是String(), Bool(), etc【<strong>默认情况下，命令源码文件接受的参数值类型有布尔类型、整数类型、浮点数类型、字符串类型，以及time.Duration类型</strong>】。它的三个参数作用分别为：<strong>1. 参数1指定该命令参数的名称；2. 参数2指定在未追加该命令参数时的默认值；3. 参数3是该命令参数的简短说明，这在打印命令说明时会用到</strong>。简单示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">   &quot;flag&quot;</span><br><span class="line">   &quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var name string</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func init()  &#123;</span><br><span class="line">   flag.StringVar(&amp;name, &quot;name&quot;, &quot;everyone&quot;, &quot;The greeting object&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">   flag.Parse()</span><br><span class="line">   fmt.Printf(&quot;Hello, %s!\n&quot;, name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go -name=&quot;Robert&quot;</span><br><span class="line">Hello, Robert!</span><br><span class="line"></span><br><span class="line">$ go run main.go --help</span><br><span class="line">Usage of /var/folders/ly/dn3892gj7bb3jp4clwbgx5g40000gn/T/go-build875528637/b001/exe/main:</span><br><span class="line">  -name string</span><br><span class="line">        The greeting object (default &quot;everyone&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>其中，<strong>flag.Parse()用于真正解析命令参数，并把它们的值赋给相应的变量。对该函数的调用必须在所有命令参数存储载体的声明（这里是对变量name的声明）和设置（这里是init()函数体）之后，并且在读取任何命令参数值之前进行</strong>。解析后的命令参数可通过 <strong>flag.Arg(i)</strong>函数获取（第 i 个参数，tips:i=0就是第一个参数，不是应用程序路径），有关 flag 包的更详细用法，请<a href="https://golang.google.cn/pkg/flag/" target="_blank" rel="noopener">查看文档</a>。</p>
+<h2 id="库源码文件"><a href="#库源码文件" class="headerlink" title="库源码文件"></a>库源码文件</h2><p><strong>库源码文件是不能被直接运行的源码文件，它仅用于存放程序实体，这些程序实体可以被其他代码使用（只要遵从 Go 语言规范的话）</strong>。<br>Go 语言中代码包package是基本复用模块单元，<strong>名称的首字母为大写的程序实体才可以被当前包外的代码引用，否则它就只能被当前包内的其他代码引用</strong>。<br>除此之外，关于“程序实体的访问权限规则”，Go 1.5及后续版本中，我们可以<strong>通过创建internal代码包让一些程序实体仅仅能被当前模块中的其他代码引用——模块级私有</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">具体规则是，internal代码包中声明的公开程序实体仅能被该代码包的直接父包及其子包中的代码引用。当然，引用前需要先导入这个internal包。对于其他代码包，导入该internal包都是非法的，无法通过编译。</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2020/08/16/《GO语言核心36讲》之“命令源码文件与库源码文件”/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Rest，GraphQL，Webhooks和gRPC如何选型
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《GO语言核心36讲》之”工作区和GOPATH“</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令源码文件"><span class="toc-number">1.</span> <span class="toc-text">命令源码文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令源码文件传入参数"><span class="toc-number">2.</span> <span class="toc-text">命令源码文件传入参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#库源码文件"><span class="toc-number">3.</span> <span class="toc-text">库源码文件</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,8 +389,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

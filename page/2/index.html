@@ -152,6 +152,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Laravel学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/15/Laravel学习笔记/">Laravel学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/15/Laravel学习笔记/" class="archive-article-date">
+  	<time datetime="2019-09-15T02:58:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Laravel是一个在当下依然算得上比较流行的PHP框架，就个人而言，虽未曾大规模地使用过（公司使用的是自主研发的PHP框架），但因其盛名零零碎碎地还是有过些了解（亦曾实现过几个教程项目）。私以为它就个“全栈框架”，框架结构算得上合理，其内并没运用什么超前的原理，丰富的第三方库还略嫌笨重，没啥出彩之处。近来机缘巧合，有了进一步接触后才明白：“管中窥豹实乃短见”。</p>
+<p>本系列文章是针对Laravel 的、以实例驱动的、深入浅出的非官方实战指南，适用于有一定开发经验人员来概览Laravel框架。</p>
+<ul>
+<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279573" target="_blank" rel="noopener"><strong>搭建适用于Mac的轻量级开发环境Valet</strong></a></li>
+<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279659" target="_blank" rel="noopener"><strong>创建并运行一个新的Laravel项目</strong></a></li>
+<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279660" target="_blank" rel="noopener"><strong>基础篇之路由章</strong></a></li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-跳跃表原理及实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -921,83 +1003,6 @@
 
 
   
-    <article id="post-PHP读出Docx文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/08/PHP读出Docx文件/">PHP读出Docx文件</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/08/PHP读出Docx文件/" class="archive-article-date">
-  	<time datetime="2018-11-08T02:58:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>书接上文，本节我们继续探讨doc(x)文件的解析读取。了解了<a href="http://www.sdwangblog.cn/2018/11/07/PHP%E5%86%99%E5%85%A5Word%E6%96%87%E4%BB%B6/">PHP如何写入Doc(x)文件</a>后，我们知道生成doc文件的内容形式可以有两种：原生的二进制格式和兼容的网页格式。“因地制宜”，对于原生的二进制格式同样可以使用Microsoft Office自带的ActiveX/<a href="http://www.php.net/manual/en/class.com.php" target="_blank" rel="noopener">COM组件</a>解析，而对于兼容的网页格式，不同的生成过程对应的逆向过程就是解析方法了（不考虑部分信息丢失），此不再赘述。对比而言，生成docx文件的内容形式就相对统一多了，它是我们本节讨论的主角。</p>
-<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx 是一个微软开发的基于XML的文字处理文件, 解压缩后文件（夹）内容如下图示。其中，最重要的就是/word/document.xml文件，它存储着文档的真实文本内容。<br><img src="http://www.sdwangblog.cn/blogimg/content_structure_docx_file.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1103,15 +1108,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1123,19 +1132,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1147,15 +1152,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1171,15 +1172,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
             
             <div class="clearfix"></div>
