@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2019-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。<br>最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt></p>
+        
+          <a class="article-more-a" href="/2019/03/07/一条SQL语句是如何执行的/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/07/一条SQL语句是如何执行的/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-PHP读出Docx文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -898,83 +975,6 @@
 
 
   
-    <article id="post-PHP的数据库扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/31/PHP的数据库扩展/">PHP的数据库扩展</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/31/PHP的数据库扩展/" class="archive-article-date">
-  	<time datetime="2018-07-31T10:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>绝大多数时候你的 PHP 程序都需要使用数据库来长久地保存数据，这时你有一些不同的选择可以来连接并与数据库进行交互。在 <strong>PHP 5.1.0</strong> 之前，我们推荐的方式是使用例如 <a href="http://php.net/mysqli" target="_blank" rel="noopener">mysqli</a>，<a href="http://php.net/pgsql" target="_blank" rel="noopener">pgsql</a>，<a href="http://php.net/mssql" target="_blank" rel="noopener">mssql</a> 等原生驱动。<br>原生驱动是 <strong>在只使用一个数据库的情况下是不错选择</strong>，但如果你同时使用了 MySQL 和一点点 MSSQL，或者你需要使用 Oracle 的数据库，那你就不能够只使用一个数据库驱动了。你需要为每一个数据库去学习各自不同的 API——这样做显然不科学。</p>
-<h2 id="MySQL扩展"><a href="#MySQL扩展" class="headerlink" title="MySQL扩展"></a>MySQL扩展</h2><p>PHP中的<a href="http://php.net/manual/zh/mysql.php" target="_blank" rel="noopener">mysql</a>扩展已经不再进行新的开发了，<strong>在PHP5.0版本中正式标记为废弃，并在7.0正式被移除</strong>。想要辨别 mysql 是否被使用，你不需要到 php.ini 去查看。只需要使用编辑器打开你的项目，然后全局搜索 <code>mysql_*</code> ，如果有类似 mysql_connect() 或者 mysql_query() 方法出现，那么你就使用了 mysql。<br>mysql扩展为连接MySQL4.1之前版本编写，<strong>不支持Bind Column（易于被SQL Injection）和事务等特性</strong>，后来为解决注入风险问题发展出了 <strong>mysql_escape_string(5.3.0之后弃用)以及mysql_real_escape_string()</strong>，但整个叙述变得复杂且丑陋，而且如果机位多了，可以想见会是怎样情形。。。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql_connect($db_host, $db_user, $db_password);  </span><br><span class="line">mysql_select_db($dn_name);</span><br><span class="line"></span><br><span class="line">$query = sprintf(<span class="string">"SELECT * FROM users WHERE user='%s' AND password='%s'"</span>,  </span><br><span class="line">            mysql_real_escape_string($user),  </span><br><span class="line">            mysql_real_escape_string($password));  </span><br><span class="line"></span><br><span class="line">mysql_query($query);</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1080,15 +1080,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1116,7 +1116,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,15 +1124,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1153,10 +1157,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
             
             <div class="clearfix"></div>

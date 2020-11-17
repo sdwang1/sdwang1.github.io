@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-深入了解Linux目录结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/28/深入了解Linux目录结构/">深入了解Linux目录结构</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/28/深入了解Linux目录结构/" class="archive-article-date">
+  	<time datetime="2017-09-28T06:44:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Linux系统和Windows系统最本质的区别莫过于它们对自己的用户所做的假设。Linux的假设是：用户自己知道想要什么，也明白自己在做什么，并且会为自己的行为负责；而Windows则恰好相反：用户并不知道自己想要什么，也不明白自己在做什么，更不打算为自己的行为负责。作为Linux的支持者和初学者，其实在<a href="http://www.sdwangblog.cn/2017/09/07/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%BA%8C%E4%B9%8BLinux%E7%9A%84%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE/">Linux文件系统总览</a>一文后，我就打算深入了解下Linux系统的目录结构的标准和每个目录的详细功能，毕竟”知己知彼，百战不殆”。</p>
+<p>关于”Linux目录结构”，相信大家随便Google／Baidu下都是一搜一箩筐的讲解，比如鸟哥私房菜吧啦啦，共同处都是”长篇累牍”，最重要的是你发现看过一遍后并没什么特别感觉，毕竟都是纯文字描述类的东西。不过大家不要灰心丧气，我们耐心点【基础知识的确是琐碎的】，先给自己定个”小目标”——对Linux的目录结构有感性认知，并熟知些常用目录，具体目录细节后期使用过程中慢慢加深印象。</p>
+        
+          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux常用命令-ln命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -866,89 +943,6 @@
 
 
   
-    <article id="post-macOS下动态添加pcntl扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/04/macOS下动态添加pcntl扩展/">macOS下动态添加pcntl扩展</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/04/macOS下动态添加pcntl扩展/" class="archive-article-date">
-  	<time datetime="2017-09-04T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>初始目的是想给本地的邮件发送队列写一个守护进程，故需要添加PHP的pcntl扩展。本以为只是简单的安装下pcntl.so的支持扩展，应该是分分钟搞定的事情，没想到一念之差，折腾半天。。。</p>
-<h2 id="检查php扩展模块的支持情况"><a href="#检查php扩展模块的支持情况" class="headerlink" title="检查php扩展模块的支持情况"></a>检查php扩展模块的支持情况</h2><p>本地PHP开发环境：Nginx+php-fpm+php5.6;<br>PHP源码包目录：~/dev/soft/php-5.6.30<br>php编译安装路径：/usr/local/php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看php 已安装并且成功加载的扩展模块</span><br><span class="line">$ /usr/local/php/bin/php -m |grep pcntl</span><br></pre></td></tr></table></figure></p>
-<p>若输出信息为空，说明目前环境不支持，需要安装。</p>
-<h2 id="动态添加pcntl扩展"><a href="#动态添加pcntl扩展" class="headerlink" title="动态添加pcntl扩展"></a>动态添加pcntl扩展</h2><p>要动态添加php扩展，一般常规的解决途径有以下两种：</p>
-<ol>
-<li>pcntl源码编译、安装、添加配置到php.ini；</li>
-<li>借助第三方工具集成安装：<br><code>$ brew reinstall --build-from-source php56-pcntl</code></li>
-</ol>
-        
-          <a class="article-more-a" href="/2017/09/04/macOS下动态添加pcntl扩展/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">php杂集</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/04/macOS下动态添加pcntl扩展/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
@@ -1054,15 +1048,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1090,7 +1084,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1098,15 +1092,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1127,10 +1125,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
             
             <div class="clearfix"></div>
