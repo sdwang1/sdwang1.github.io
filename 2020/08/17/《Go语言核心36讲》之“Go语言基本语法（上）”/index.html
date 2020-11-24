@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Archives: 2018/11 | Sdwang1的博客</title>
+  <title>《Go语言核心36讲》之“Go语言基本语法（上）” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/archives/2018/11/index.html">
+  <meta name="description" content="Go 语言的程序实体包括变量、常量、函数、结构体和接口。本节我们就学习下Go 语言的变量、常量、以及数据类型的相关知识点。Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要指定它们的类型，或者给予足够的信息，让 Go 语言能够推导出它们的类型（自动类型推断）。 Go 语言变量Go 语言声明变量的一般形式为var identifier type，type类型可以是其预定义的基本类">
+<meta name="keywords" content="GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Go语言核心36讲》之“Go语言基本语法（上）”">
+<meta property="og:url" content="http://www.sdwangblog.cn/2020/08/17/《Go语言核心36讲》之“Go语言基本语法（上）”/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="Go 语言的程序实体包括变量、常量、函数、结构体和接口。本节我们就学习下Go 语言的变量、常量、以及数据类型的相关知识点。Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要指定它们的类型，或者给予足够的信息，让 Go 语言能够推导出它们的类型（自动类型推断）。 Go 语言变量Go 语言声明变量的一般形式为var identifier type，type类型可以是其预定义的基本类">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/golang_slice.png">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/golang_slice_share_memory.png">
+<meta property="og:updated_time" content="2020-11-24T05:41:32.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="《Go语言核心36讲》之“Go语言基本语法（上）”">
+<meta name="twitter:description" content="Go 语言的程序实体包括变量、常量、函数、结构体和接口。本节我们就学习下Go 语言的变量、常量、以及数据类型的相关知识点。Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要指定它们的类型，或者给予足够的信息，让 Go 语言能够推导出它们的类型（自动类型推断）。 Go 语言变量Go 语言声明变量的一般形式为var identifier type，type类型可以是其预定义的基本类">
+<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/golang_slice.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,98 +158,238 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-《Go语言核心36讲》之“Go语言基本语法（上）”" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/08/PHP读出Docx文件/" class="archive-article-date">
-  	<time datetime="2018-11-08T02:58:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-08</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/08/PHP读出Docx文件/">PHP读出Docx文件</a>
+    <h1 class="article-title" itemprop="name">
+      《Go语言核心36讲》之“Go语言基本语法（上）”
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/08/17/《Go语言核心36讲》之“Go语言基本语法（上）”/" class="archive-article-date">
+  	<time datetime="2020-08-17T07:28:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 语言的程序实体包括变量、常量、函数、结构体和接口。本节我们就学习下<strong>Go 语言的变量、常量、以及数据类型</strong>的相关知识点。<br>Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要<strong>指定它们的类型</strong>，或者给予足够的信息，让 Go 语言能够推导出它们的类型（<strong>自动类型推断</strong>）。</p>
+<h2 id="Go-语言变量"><a href="#Go-语言变量" class="headerlink" title="Go 语言变量"></a>Go 语言变量</h2><p>Go 语言声明变量的一般形式为<code>var identifier type</code>，type类型可以是其预定义的基本类型，也可以是程序自定义的函数、结构体或接口。声明变量的方式有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1) var name string                       // 系统自动赋予它该类型的零值，比如string &quot;&quot;  </span><br><span class="line">   var firstName, lastName string        // 声明多个变量同类型变量</span><br><span class="line"></span><br><span class="line">2) var name = &quot;Robert&quot;                   // 定义并初始化变量，可省略类型</span><br><span class="line">   var name, age = &quot;Robert&quot;, 25          // 定义并初始化多个变量，类型可相同/不同，自动推断类型</span><br><span class="line"></span><br><span class="line">3) name := &quot;Robert&quot;                      // 简短变量定义，自动推断类型</span><br></pre></td></tr></table></figure></p>
+<p><strong>所谓“类型推断”，就是一种编程语言在编译期自动解释表达式类型的能力，它只能用于变量或常量的初始化</strong>。Go 语言的类型推断可以明显提升程序的灵活性，使得代码重构变得更加容易，同时又不会给代码的维护带来额外负担（实际上，它恰恰可以避免散弹式的代码修改），更不会损失程序的运行效率（这种类型确定是在编译期完成）。<br>特别说明的是，<strong>简短变量定义只能在函数体内部使用（局部变量）</strong>，比如在编写if、for、switch语句时，经常把它按插在初始化子句中，用来声明一些临时的变量。var 形式的声明语句则没有啥子要求。<br>Go 语言还具有 <strong>“多重赋值”特性，可以轻松完成变量交换的任务</strong>。多重赋值在Go语言的错误处理和函数返回值中会大量地使用。</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a, b = 100, 200</span><br><span class="line"></span><br><span class="line">a, b = b, a                             // 多重赋值时，变量类型必须相同，并按从左到右顺序赋值</span><br><span class="line"></span><br><span class="line">fmt.Println(a, b)</span><br></pre></td></tr></table></figure>
+<p>Go 语言还有一种特殊变量——<strong>“匿名变量”，它以’_’为标志符，可以像其他标识符那样用于变量的声明或赋值（任何类型都可以赋值给它），但任何赋给这个标识符的值都将被抛弃。它不占用内存空间，也不会分配内存</strong>，所以匿名变量与匿名变量之间也不会因为多次声明而无法使用。</p>
+<p>关于 <strong>“Go 语言变量的作用域”（局部变量、全局变量、形式参数）</strong>，静态语言一贯尿性，不再赘述。</p>
+<h2 id="Go-语言常量"><a href="#Go-语言常量" class="headerlink" title="Go 语言常量"></a>Go 语言常量</h2><p>Go 语言常量是程序编译阶段就确定的值，在程序运行过程中无法被修改。它的<strong>数据类型只能是其预定义的基本类型</strong>，声明方式也更简单一些：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const a = 100</span><br><span class="line"></span><br><span class="line">const (</span><br><span class="line">    a = 100</span><br><span class="line">    b = 200    </span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言常量声明可以<strong>使用iota常量生成器初始化</strong>，它用于生成一组以相似规则初始化的常量，而不用每行都写一遍初始化表达式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 定义连续常量或位常量等，类似枚举类型</span><br><span class="line">const (</span><br><span class="line">	Monday = iota + 1                     # 枚举值：1, 2, 3,...       </span><br><span class="line">	Tuesday</span><br><span class="line">	Wednesday</span><br><span class="line">	Thursday</span><br><span class="line">	Friday</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">const (</span><br><span class="line">	Open = 1 &lt;&lt; iota                     # 枚举值：1, 2, 4</span><br><span class="line">	Close</span><br><span class="line">	Pending</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言常量还有个不同寻常之处——<strong>无类型常量</strong>，编译器为这些没有明确的基础类型的数字常量提供比基础类型更高精度的算术运算，可以认为至少有 256bit 的运算精度。它们可以<strong>直接用于表达式而不需要显式的类型转换</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 有 六种 未明确类型的常量类型：无类型的布尔型、无类型的整数、无类型的字符、无类型的浮点数、无类型的复数、无类型的字符串</span><br><span class="line"></span><br><span class="line">math.MaxFloat32                                      // 表示 float32 能取到的最大数值，大约是 3.4e38；</span><br><span class="line">math.MaxFloat64                                      // 表示 float64 能取到的最大数值，大约是 1.8e308；</span><br><span class="line"></span><br><span class="line">var x float32 = math.Pi</span><br><span class="line">var y float64 = math.Pi</span><br></pre></td></tr></table></figure></p>
+<h2 id="Go-语言数据类型"><a href="#Go-语言数据类型" class="headerlink" title="Go 语言数据类型"></a>Go 语言数据类型</h2><p>Go 语言的基本数据类型有：</p>
+<ul>
+<li>布尔类型(bool)；</li>
+<li>有符号整数类型 int(32 或 64位)、int8、int16、int32、int64；</li>
+<li>无符号整数类型 uint(32bit 或 64bit)、uint8、uint16、uint32、uint64、uintptr(<strong>不指定具体的bit但足以容纳指针值</strong>)；</li>
+<li>字节类型(byte)，uint8的别名，一般用于强调数值是一个原始数据而不是一个小整数；</li>
+<li>rune 类型，int32 的别名，<strong>通常用于表示一个 Unicode 码点</strong>；</li>
+<li>浮点类型 float32、float64；</li>
+<li>复数类型 complex64、complex128；</li>
+<li>字符串类型(string)，<strong>只读的byte slice</strong>，Go 语言内部使用 UTF-8 编码标识 Unicode 文本，通过 rune 类型可方便地对每个 UTF-8 字符进行访问。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var s = &quot;中华人民共和国&quot;</span><br><span class="line"></span><br><span class="line">r := []rune(s)                                         // rune(unicode) 类型切片</span><br><span class="line">fmt.Println(len(r))                                    // 7</span><br><span class="line">fmt.Printf(&quot;华的unicode %x\n&quot;, r[1])                   // 华的unicode 534e</span><br><span class="line"></span><br><span class="line">for _, c := range s&#123;                                  // 注意string类型range循环输出的是rune，而不是byte</span><br><span class="line">  fmt.Printf(&quot;%[1]c %[1]x\n&quot;, c)                      // %[1]c表示第一个参数以%c格式化输出</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>除此之外，Go 语言还有一些派生类型，包括：<strong>指针类型(pointer)、数组类型、结构化类型(struct)、channel类型、函数类型、切片类型、接口类型(interface)、map类型</strong>。<br>特别说明的是，<strong>Go 语言不允许隐式类型转换（比如某些主流语言默认允许将一个取值范围较小的类型转换到一个取值范围较大的类型【相同底层类型】），使用时必须显式的对类型进行转换（别名和原有类型也不能进行隐式类型转换）。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valueOfTypeB = typeB(valueOfTypeA)</span><br></pre></td></tr></table></figure></p>
+<h3 id="Go-语言指针"><a href="#Go-语言指针" class="headerlink" title="Go 语言指针"></a>Go 语言指针</h3><p>从传统意义上说，指针是一个指向某个确切的内存地址的值，该内存地址可以是任何数据或代码的起始地址，比如，某个变量、某个字段或某个函数。Go 语言中可以代表“指针”的常见类型有 <code>Go内建的uintptr类型</code>、<code>标准库的unsafe.Pointer</code>。<br>Go 语言的<strong>类型指针不能进行偏移和运算</strong>。<br>Go 语言中有些值是 <strong>不可寻址（ &amp; 引发编译错误）</strong>，这些值会具有以下某个特性：<strong>不可变的值（比如常量、字符串变量的值、函数以及方法的字面量等）、临时结果的值（比如算术操作、针对值字面量的表达式结果值等）、不安全操作（取址可能会破坏程序的一致性，比如对字典的索引结果值的取址操作）</strong>。另外，我们也<strong>无法调用一个不可寻址值的指针方法</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- 常量的值。</span><br><span class="line">- 基本类型值的字面量。</span><br><span class="line">- 算术操作的结果值。</span><br><span class="line">- 对各种字面量的索引表达式和切片表达式的结果值。不过有一个例外，对切片字面量的索引结果值却是可寻址的。</span><br><span class="line">- 对字符串变量的索引表达式和切片表达式的结果值。</span><br><span class="line">- 对字典变量的索引表达式的结果值。</span><br><span class="line">- 函数字面量和方法字面量，以及对它们的调用表达式的结果值。</span><br><span class="line">- 结构体字面量的字段值，也就是对结构体字面量的选择表达式的结果值。</span><br><span class="line">- 类型转换表达式的结果值。</span><br><span class="line">- 类型断言表达式的结果值。</span><br><span class="line">- 接收表达式的结果值。</span><br></pre></td></tr></table></figure></p>
+<h3 id="Go-语言数组"><a href="#Go-语言数组" class="headerlink" title="Go 语言数组"></a>Go 语言数组</h3><p>Go 语言数组同样是一个由固定长度的特定类型元素组成的序列，这种类型可以是任意的基础数据类型、或自定义类型。声明数组的方式有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1) var arr [5] float32                                 // 默认情况下，数组的每个元素都会被初始化为元素类型对应的零值</span><br><span class="line"></span><br><span class="line">2) var arr = [5]float32&#123;1000.0, 2.0, 3.4, 7.0, 50.0&#125;   // 声明并初始化数组</span><br><span class="line">   var arr = [5]float32&#123;0:1000.0, 2:3.4&#125;               // 声明并初始化数组中指定元素，其余为元素类型的默认零值</span><br><span class="line">   var arr = [...]float32&#123;1000.0, 2.0, 3.4, 7.0, 50.0&#125; // Go 语言会根据元素的个数来设置数组的大小</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//打印索引和元素</span><br><span class="line">for i, v := range arr&#123;</span><br><span class="line">  fmt.Printf(&quot;%d %d \n&quot;, i, v)                        // v是对应索引的值拷贝，具有只读性质</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Go 语言中如果两个数组类型相同（包括数组的长度，数组中元素的类型），我们可以直接通过较运算符（==和!=）来判断它们是否相等，只有当两个数组的所有元素都是相等的时候数组才是相等的</strong>。<br>Go 语言中允许使用多维数组，常用的多维数组声明方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var arr [SIZE1][SIZE2]...[SIZEN] float32</span><br><span class="line"></span><br><span class="line">//二维数组是最简单的多维数组，本质上是由一维数组组成的</span><br><span class="line">1) var arr [4][2] int</span><br><span class="line"></span><br><span class="line">2) var arr = [4][2]int&#123;&#123;10, 11&#125;, &#123;20, 21&#125;, &#123;30, 31&#125;, &#123;40, 41&#125;&#125;</span><br><span class="line">   var arr = [4][2]int&#123;1: &#123;20, 21&#125;, 3: &#123;40, 41&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言还支持快速的 <strong>数组截取(结果为切片)</strong>，<code>arr[开始索引(包含), 结束索引(不包含)]</code>。</p>
+<h3 id="Go-语言切片-Slice"><a href="#Go-语言切片-Slice" class="headerlink" title="Go 语言切片(Slice)"></a>Go 语言切片(Slice)</h3><p>Go 语言切片<strong>默认指向一段连续的内存空间（切片的底层数组），使用上类似可变长数组</strong>，本质上是个如下图示的结构体，声明切片的方式有：<br><img src="http://www.sdwangblog.cn/blogimg/golang_slice.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1) var s [] int                                 // 声明空(nil)切片 len(s) = cap(s) = 0</span><br><span class="line"></span><br><span class="line">2) var s = make([]int, length, capacity)        // 使用 make() 函数创建切片</span><br><span class="line"></span><br><span class="line">3) var s = []int&#123;1,2,3&#125;                       // 声明并初始化切片 len(s) = cap(s) = 3</span><br><span class="line"></span><br><span class="line">4) var s = arr[startIndex:endIndex]           // 数组截取以创建新的分片，注意s是数组arr的引用</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言的内建函数<code>append()</code>可以为切片动态追加元素，如果空间不足以容纳足够多的元素，切片就会进行 <strong>“扩容”（创建新的大小连续存储空间，并将原值COPY过去）</strong>。<br>切片容量的扩展规律默认是按容量的 <strong>2 倍数</strong>进行扩充（如果我们一次追加的元素过多，以至于使新长度比原容量的 2 倍还要大，那么新容量就会以新长度为基准），但当切片的长度 &gt;=1024 时，Go 语言将按容量的 <strong>1.25 倍</strong>作为新扩充基准。最终，新容量往往会比新长度大一些，当然相等也是可能的。更多细节可参见<code>runtime</code>包中 <code>slice.go</code> 文件里的<code>growslice()</code>等相关函数的具体实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var s []int</span><br><span class="line">for i:=0; i&lt;10; i++&#123;</span><br><span class="line">  s = append(s, i)</span><br><span class="line">  fmt.Printf(&quot;len: %d  cap: %d pointer: %p\n&quot;, len(s), cap(s), s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言的内置函数<code>copy()</code>可以将一个数组切片复制到另一个数组切片中，如果加入的两个数组切片不一样大，就会按照其中较小的那个数组切片的元素个数进行复制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">copy( destSlice, srcSlice []T) int</span><br><span class="line"></span><br><span class="line">其中，目标切片必须分配过空间且足够承载复制的元素个数，并且来源和目标的类型必须一致，copy() 函数的返回值表示实际发生复制的元素个数</span><br></pre></td></tr></table></figure></p>
+<p><strong>切片具有共享存储结构的特性（包括数组截取和切片截取）</strong>，我们来看个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">year := []string&#123;&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;&#125;</span><br><span class="line"></span><br><span class="line">Q2 := year[3:6]</span><br><span class="line">fmt.Println(Q2, len(Q2), cap(Q2))                   // [Apr May Jun] 3 9</span><br><span class="line"></span><br><span class="line">summer := year[5:8]</span><br><span class="line">fmt.Println(summer, len(summer), cap(summer))       // [Jun Jul Aug] 3 7</span><br><span class="line">summer[0] = &quot;Unknown&quot;</span><br><span class="line">fmt.Print(Q2)                                       // [Apr May Unknown]</span><br></pre></td></tr></table></figure></p>
+<p>上例的切片变量内存结构示意图如下，这部分大家容易在实际编程中犯错，使用时慎重(<strong>配合gc，及时将不再使用的slice置为nil</strong>)。<br><img src="http://www.sdwangblog.cn/blogimg/golang_slice_share_memory.png" alt></p>
+<h3 id="Go-语言Map"><a href="#Go-语言Map" class="headerlink" title="Go 语言Map"></a>Go 语言Map</h3><p>Go 语言Map 是一种无序的键值对集合，也称为关联数组或字典（底层使用hash表来实现）。声明 map 的方式有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1) var mapLit map[string] int                      // 声明空(nil) map，cannot assignment</span><br><span class="line">   var mapLit = map[string] int&#123;&#125;                  // 初始化空map，can assignment</span><br><span class="line"></span><br><span class="line">2) var mapLit = make(map[string] int [,cap])       // 使用  make() 函数创建map，可选性标明初始容量 capacity(不支持cap())</span><br><span class="line"></span><br><span class="line">3) var mapLit = map[string] int&#123;&quot;one&quot;:1, &quot;tow&quot;:2&#125;  // 声明并初始化 map</span><br></pre></td></tr></table></figure></p>
+<p>其中，map 的 key 类型是受限的，value 则可以是任意类型。key 类型宥于限制的根本原因在于哈希表的映射过程（键值 -&gt; hash function哈希值 -&gt; (低几位定位)哈希桶 -&gt; 查找哈希值 + 判等键值）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. Go 语言键类型的值必须支持 判等 操作，所以不能是函数类型、字典类型和切片类型；</span><br><span class="line">   如果键类型是接口类型，那么键值的实际类型也不能是上述三种类型(引发panic)；</span><br><span class="line">   如果键的类型 是数组类型，请确保该类型的元素类型不是函数类型、字典类型或切片类型</span><br><span class="line"></span><br><span class="line">2. 求哈希和判等操作的速度越快，对应类型就越适合作为键类型；</span><br><span class="line">   优先选用数值类型和指针类型，通常情况下类型的宽度越小越好。如果非要选择字符串类型的话，最好对键值的长度进行额外的约束；</span><br><span class="line">   不建议使用派生（高级数据）类型作为字典的键类型，不仅仅是因为对它们的值求哈希，以及判等的速度较慢，更是因为在它们的值中存在变数；</span><br></pre></td></tr></table></figure></p>
+<p>当 value 类型为函数时，结合 Go 的 Dock type 接口方式，可以方便地实现单一方法对象的工程模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 计算参数 N 次幂</span><br><span class="line">m := map[int]func(op int) int&#123;&#125;</span><br><span class="line">m[1] = func(op int) int&#123; return op&#125;</span><br><span class="line">m[2] = func(op int) int&#123; return op*op&#125;</span><br><span class="line">m[3] = func(op int) int&#123; return op*op*op&#125;</span><br><span class="line">fmt.Println(m[1](2), m[2](2), m[3](2))             // 输出 2, 4, 8</span><br></pre></td></tr></table></figure></p>
+<p><strong>当访问Go 语言 map 中不存在的 key 时，它不会报错并直接返回值类型对应的零值</strong>。为了区分“访问的 key 不存在” 与 “m[key]=零值”的情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if v, ok := m[key];ok&#123;</span><br><span class="line">  fmt.Println(&quot;m[key] = &quot;, v)</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  fmt.Println(&quot;key is not existing&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言的内置函数<code>delete()</code>，可以删除容器中的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scene := map[string]int&#123;&quot;route&quot;:66, &quot;brazil&quot;:4, &quot;china&quot;:960&#125;</span><br><span class="line"></span><br><span class="line">delete(scene, &quot;brazil&quot;)</span><br><span class="line"></span><br><span class="line">for k, v := range scene &#123;</span><br><span class="line">	fmt.Println(k, v)                              // route 66    china 960</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Go 语言的内置集合中没有 Set 实现，我们可以用<code>map[type]bool</code>模拟实现</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Go 语言里不存在像 Java 等编程语言中令人困惑的“传值或传引用”问题。在 Go 语言中，我们<strong>判断所谓的“传值”或者“传引用”只要看被传递的值的类型</strong>就好了。<strong>Go 语言的切片类型属于引用类型，同属引用类型的还有字典类型、通道类型、函数类型等；而 Go 语言的数组类型则属于值类型，同属值类型的有基础数据类型以及结构体类型</strong>。当然，从传递成本的角度讲，引用类型的值往往要比值类型的值低很多。</p>
+<p>由于<code>结构化类型(struct)</code>、<code>channel类型</code>、<code>函数类型</code>、<code>切片类型</code>、<code>接口类型(interface)</code>的相关知识点较多，我们将在后续章节中继续学习。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2020/08/17/《Go语言核心36讲》之“Go语言基本语法（上）”/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/07/PHP写入Word文件/" class="archive-article-date">
-  	<time datetime="2018-11-07T08:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-07</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Rest，GraphQL，Webhooks和gRPC如何选型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/16/《GO语言核心36讲》之“命令源码文件与库源码文件”/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《GO语言核心36讲》之“命令源码文件与库源码文件”</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/07/PHP写入Word文件/">PHP写入Word文件</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言变量"><span class="toc-number">1.</span> <span class="toc-text">Go 语言变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言常量"><span class="toc-number">2.</span> <span class="toc-text">Go 语言常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言数据类型"><span class="toc-number">3.</span> <span class="toc-text">Go 语言数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-语言指针"><span class="toc-number">3.1.</span> <span class="toc-text">Go 语言指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-语言数组"><span class="toc-number">3.2.</span> <span class="toc-text">Go 语言数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-语言切片-Slice"><span class="toc-number">3.3.</span> <span class="toc-text">Go 语言切片(Slice)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-语言Map"><span class="toc-number">3.4.</span> <span class="toc-text">Go 语言Map</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -264,8 +412,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
