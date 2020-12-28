@@ -230,6 +230,88 @@
 
 
   
+    <article id="post-《Go语言核心36讲》之“使用函数的正确姿势”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/">《Go语言核心36讲》之“使用函数的正确姿势”</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/" class="archive-article-date">
+  	<time datetime="2020-08-26T06:52:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 语言中，函数是一等公民(first-class)，函数类型也是一等的数据类型。简单来说，这意味着函数不但可以用于封装代码、分割功能、解耦逻辑，还<strong>可以化身为普通的值，在其他函数间传递、赋予变量、做类型判断和转换等等</strong>，就像切片和字典的值那样。更深层次的含义就是，<strong>函数值可以由此成为能够被随意传播的独立逻辑组件（或者说功能模块）</strong>。</p>
+<h2 id="Go-语言函数声明"><a href="#Go-语言函数声明" class="headerlink" title="Go 语言函数声明"></a>Go 语言函数声明</h2><p>Go 语言函数声明与其他主流编程语言大同小异，主要差别在于：</p>
+<ol>
+<li><strong>函数可以有多个返回值（Go语言经常使用多返回值中的最后一个返回参数返回函数执行中可能发生的错误）</strong>；</li>
+<li><strong>所有参数都是值传递，slice、map、channel会有传引用的错觉（实际上是底层数据结构的缘故）</strong>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func function_name( [parameter list] ) [(return_types)] &#123;</span><br><span class="line">   函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+        
+          <a class="article-more-a" href="/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《Go语言核心36讲》之“Go语言基本语法”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -861,90 +943,6 @@
 
 
   
-    <article id="post-Laravel进阶之缓存篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/28/Laravel进阶之缓存篇/">Laravel进阶之缓存篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/28/Laravel进阶之缓存篇/" class="archive-article-date">
-  	<time datetime="2019-11-28T07:49:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel 为不同的缓存系统提供了统一的 API，缓存配置位于 <code>config/cache.php</code>，在该文件中你可以指定在应用中默认使用哪个缓存驱动。Laravel 开箱支持主流的缓存后端如 <a href="https://memcached.org/" target="_blank" rel="noopener">Memcached</a> 和 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 等。<br>缓存配置文件还包含其他文档化的选项，确保仔细阅读这些选项。默认情况下，Laravel 被配置成使用文件缓存（<code>file</code> 驱动），这会将序列化数据和缓存对象存储到文件系统。对于大型应用，建议使用内存缓存如 Memcached 或 APC，你甚至可以为同一驱动配置多个缓存配置。</p>
-<ul>
-<li><p>使用<code>database</code>缓存驱动，你需要（提前）设置一张表存储缓存项。下面是该表的<code>Schema</code>声明：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//亦可使用 php artisan cache:table命令通过相应的schema生成迁移。</span></span><br><span class="line">Schema::create(<span class="string">'cache'</span>, <span class="function"><span class="keyword">function</span><span class="params">($table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;string(<span class="string">'key'</span>)-&gt;unique();</span><br><span class="line">    $table-&gt;text(<span class="string">'value'</span>);</span><br><span class="line">    $table-&gt;integer(<span class="string">'expiration'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>Memcached</code>缓存，需要安装PHP Memcached扩展。你可以在配置文件<code>config/cache.php</code>中列出所有Memcached服务器：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'memcached'</span> =&gt; [</span><br><span class="line">            <span class="string">'driver'</span> =&gt; <span class="string">'memcached'</span>,</span><br><span class="line">            <span class="string">'persistent_id'</span> =&gt; env(<span class="string">'MEMCACHED_PERSISTENT_ID'</span>),</span><br><span class="line">            <span class="string">'sasl'</span> =&gt; [</span><br><span class="line">                env(<span class="string">'MEMCACHED_USERNAME'</span>),</span><br><span class="line">                env(<span class="string">'MEMCACHED_PASSWORD'</span>),</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'options'</span> =&gt; [</span><br><span class="line">                <span class="comment">// Memcached::OPT_CONNECT_TIMEOUT  =&gt; 2000,</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'servers'</span> =&gt; [</span><br><span class="line">                [</span><br><span class="line">                    <span class="string">'host'</span> =&gt; env(<span class="string">'MEMCACHED_HOST'</span>, <span class="string">'127.0.0.1'</span>),  <span class="comment">//host可设置为UNIX socket路径，此时port应置为0</span></span><br><span class="line">                    <span class="string">'port'</span> =&gt; env(<span class="string">'MEMCACHED_PORT'</span>, <span class="number">11211</span>),</span><br><span class="line">                    <span class="string">'weight'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">                ],</span><br><span class="line">            ],</span><br><span class="line">        ],</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1066,11 +1064,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1106,10 +1104,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
@@ -1118,15 +1112,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
             
             <div class="clearfix"></div>

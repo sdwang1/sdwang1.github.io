@@ -152,6 +152,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Laravel进阶之缓存篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/28/Laravel进阶之缓存篇/">Laravel进阶之缓存篇</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/28/Laravel进阶之缓存篇/" class="archive-article-date">
+  	<time datetime="2019-11-28T07:49:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Laravel 为不同的缓存系统提供了统一的 API，缓存配置位于 <code>config/cache.php</code>，在该文件中你可以指定在应用中默认使用哪个缓存驱动。Laravel 开箱支持主流的缓存后端如 <a href="https://memcached.org/" target="_blank" rel="noopener">Memcached</a> 和 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 等。<br>缓存配置文件还包含其他文档化的选项，确保仔细阅读这些选项。默认情况下，Laravel 被配置成使用文件缓存（<code>file</code> 驱动），这会将序列化数据和缓存对象存储到文件系统。对于大型应用，建议使用内存缓存如 Memcached 或 APC，你甚至可以为同一驱动配置多个缓存配置。</p>
+<ul>
+<li><p>使用<code>database</code>缓存驱动，你需要（提前）设置一张表存储缓存项。下面是该表的<code>Schema</code>声明：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//亦可使用 php artisan cache:table命令通过相应的schema生成迁移。</span></span><br><span class="line">Schema::create(<span class="string">'cache'</span>, <span class="function"><span class="keyword">function</span><span class="params">($table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;string(<span class="string">'key'</span>)-&gt;unique();</span><br><span class="line">    $table-&gt;text(<span class="string">'value'</span>);</span><br><span class="line">    $table-&gt;integer(<span class="string">'expiration'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>Memcached</code>缓存，需要安装PHP Memcached扩展。你可以在配置文件<code>config/cache.php</code>中列出所有Memcached服务器：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'memcached'</span> =&gt; [</span><br><span class="line">            <span class="string">'driver'</span> =&gt; <span class="string">'memcached'</span>,</span><br><span class="line">            <span class="string">'persistent_id'</span> =&gt; env(<span class="string">'MEMCACHED_PERSISTENT_ID'</span>),</span><br><span class="line">            <span class="string">'sasl'</span> =&gt; [</span><br><span class="line">                env(<span class="string">'MEMCACHED_USERNAME'</span>),</span><br><span class="line">                env(<span class="string">'MEMCACHED_PASSWORD'</span>),</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'options'</span> =&gt; [</span><br><span class="line">                <span class="comment">// Memcached::OPT_CONNECT_TIMEOUT  =&gt; 2000,</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'servers'</span> =&gt; [</span><br><span class="line">                [</span><br><span class="line">                    <span class="string">'host'</span> =&gt; env(<span class="string">'MEMCACHED_HOST'</span>, <span class="string">'127.0.0.1'</span>),  <span class="comment">//host可设置为UNIX socket路径，此时port应置为0</span></span><br><span class="line">                    <span class="string">'port'</span> =&gt; env(<span class="string">'MEMCACHED_PORT'</span>, <span class="number">11211</span>),</span><br><span class="line">                    <span class="string">'weight'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">                ],</span><br><span class="line">            ],</span><br><span class="line">        ],</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《memcached全面剖析》读书笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -921,89 +1005,6 @@
 
 
   
-    <article id="post-认识MySQL的事务日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/09/认识MySQL的事务日志/">认识MySQL的事务日志</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/09/认识MySQL的事务日志/" class="archive-article-date">
-  	<time datetime="2019-03-09T07:00:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。<br>MySQL主要有以下几种日志，可通过<code>show variables like &#39;%log%&#39;;</code>命令查看：</p>
-<ul>
-<li><p>log_error：错误日志功能默认开启且无法被禁止，默认情况下，错误日志位于在mysql文件夹的data目录下，通常名称为hostname.err(hostname为服务器主机名)。mysqld服务器动时使用<code>--log-error=[file-name]</code>参数可指定错误日志存放的位置，也可通过在my.cnf配置文件中添加行<code>log_error = /var/mysqld.err</code>来指定其存放位置。<br>通常情况下错误日志主要记录记录了mysqld服务启动和关闭过程中信息（比如如何启动InnoDB的表空间文件的、如何初始化自己的存储引擎等），服务运行过程中错误信息；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;log_error%&apos;;</span><br><span class="line">| log_error                               | /usr/local/mysql/data/mysqld.local.err                    |  </span><br><span class="line">| log_error_verbosity                     | 3                                                         |</span><br><span class="line"></span><br><span class="line">#为保证mysqld服务的硬盘空间，重命名历史的错误日志并手动冲洗日志创建新的</span><br><span class="line">$ mv stu18.magedu.com.err  stu18.magedu.com.err.old</span><br><span class="line">$ mysqladmin -u root -p flush-logs</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>general_log：查询日志默认情况是关闭的，通常也建议关闭此日志。这是因为查询日志记录了客户端操作的所有SQL语句（增删改查），在高并发操作下会产生大量写入信息从而导致不必要的磁盘IO，影响mysqld性能。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/09/认识MySQL的事务日志/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1125,11 +1126,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1165,10 +1166,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
@@ -1177,15 +1174,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
             
             <div class="clearfix"></div>

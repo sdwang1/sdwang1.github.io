@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Archives: 2020/2 | Sdwang1的博客</title>
+  <title>《Go语言核心36讲》之“使用函数的正确姿势” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/archives/2020/02/index.html">
+  <meta name="description" content="Go 语言中，函数是一等公民(first-class)，函数类型也是一等的数据类型。简单来说，这意味着函数不但可以用于封装代码、分割功能、解耦逻辑，还可以化身为普通的值，在其他函数间传递、赋予变量、做类型判断和转换等等，就像切片和字典的值那样。更深层次的含义就是，函数值可以由此成为能够被随意传播的独立逻辑组件（或者说功能模块）。 Go 语言函数声明Go 语言函数声明与其他主流编程语言大同小异，主要">
+<meta name="keywords" content="GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Go语言核心36讲》之“使用函数的正确姿势”">
+<meta property="og:url" content="http://www.sdwangblog.cn/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="Go 语言中，函数是一等公民(first-class)，函数类型也是一等的数据类型。简单来说，这意味着函数不但可以用于封装代码、分割功能、解耦逻辑，还可以化身为普通的值，在其他函数间传递、赋予变量、做类型判断和转换等等，就像切片和字典的值那样。更深层次的含义就是，函数值可以由此成为能够被随意传播的独立逻辑组件（或者说功能模块）。 Go 语言函数声明Go 语言函数声明与其他主流编程语言大同小异，主要">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-12-28T06:49:17.560Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="《Go语言核心36讲》之“使用函数的正确姿势”">
+<meta name="twitter:description" content="Go 语言中，函数是一等公民(first-class)，函数类型也是一等的数据类型。简单来说，这意味着函数不但可以用于封装代码、分割功能、解耦逻辑，还可以化身为普通的值，在其他函数间传递、赋予变量、做类型判断和转换等等，就像切片和字典的值那样。更深层次的含义就是，函数值可以由此成为能够被随意传播的独立逻辑组件（或者说功能模块）。 Go 语言函数声明Go 语言函数声明与其他主流编程语言大同小异，主要">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,60 +155,232 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-《Go语言核心36讲》之“使用函数的正确姿势”" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/" class="archive-article-date">
-  	<time datetime="2020-02-10T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-10</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">科学上网工具V2Ray简介及具体搭建过程</a>
+    <h1 class="article-title" itemprop="name">
+      《Go语言核心36讲》之“使用函数的正确姿势”
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/" class="archive-article-date">
+  	<time datetime="2020-08-26T06:52:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 语言中，函数是一等公民(first-class)，函数类型也是一等的数据类型。简单来说，这意味着函数不但可以用于封装代码、分割功能、解耦逻辑，还<strong>可以化身为普通的值，在其他函数间传递、赋予变量、做类型判断和转换等等</strong>，就像切片和字典的值那样。更深层次的含义就是，<strong>函数值可以由此成为能够被随意传播的独立逻辑组件（或者说功能模块）</strong>。</p>
+<h2 id="Go-语言函数声明"><a href="#Go-语言函数声明" class="headerlink" title="Go 语言函数声明"></a>Go 语言函数声明</h2><p>Go 语言函数声明与其他主流编程语言大同小异，主要差别在于：</p>
+<ol>
+<li><strong>函数可以有多个返回值（Go语言经常使用多返回值中的最后一个返回参数返回函数执行中可能发生的错误）</strong>；</li>
+<li><strong>所有参数都是值传递，slice、map、channel会有传引用的错觉（实际上是底层数据结构的缘故）</strong>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func function_name( [parameter list] ) [(return_types)] &#123;</span><br><span class="line">   函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<a id="more"></a>
+<h2 id="Go-语言函数变量"><a href="#Go-语言函数变量" class="headerlink" title="Go 语言函数变量"></a>Go 语言函数变量</h2><p>Go 语言函数类型作为一等的数据类型，<strong>可以和其他类型一样作为变量的值、参数和返回值</strong>。对函数类型而言，<strong>只要两个函数的参数列表和结果列表中的元素顺序及其类型一致（各个参数和结果的名称不能算作函数签名的一部分），我们就可以说它们是一样的函数，或者说是实现了同一个函数类型的函数</strong>。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"># 声明一个参数列表(<span class="keyword">string</span>), 结果列表(<span class="keyword">int</span>, error)的函数类型Printer</span><br><span class="line"><span class="keyword">type</span> Printer <span class="function"><span class="keyword">func</span><span class="params">(contents <span class="keyword">string</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">printToStd</span><span class="params">(str <span class="keyword">string</span>)</span> <span class="params">(byteNum <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Println(str)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p Printer</span><br><span class="line">	p = printToStd</span><br><span class="line">	p(<span class="string">"something"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Go 语言在语言层面支持了函数式编程——<strong>高阶函数是函数式编程中的重要概念和特征</strong>。所谓高阶函数，可以满足下面两个条件的任意一个：</p>
+<ul>
+<li>接受其他的函数作为参数传入；</li>
+<li>把其他函数作为结果返回；</li>
+</ul>
+<p>假设我们想编写calculate函数来实现两个整数间的加减乘除运算，但是希望两个整数和具体的操作都由该函数的调用方给出，那这样的函数该怎么实现呢？<br>首先，声明一个名叫operate的函数类型，它有两个int类型参数和一个int型结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type operate func(x, y int) int</span><br></pre></td></tr></table></figure></p>
+<p>然后，编写calculate函数的签名部分，它应该有两个int类型的参数和一个operate类型参数，函数返回值也应该有两个——int类型的操作结果和error类型的可能执行错误：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(x <span class="keyword">int</span>, y <span class="keyword">int</span>, op operate)</span> <span class="params">(<span class="keyword">int</span>, error)</span></span>&#123;</span><br><span class="line">  <span class="comment">//函数类型属于引用类型，默认/零值是nil</span></span><br><span class="line">  <span class="keyword">if</span> op == <span class="literal">nil</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>, errors.New(<span class="string">"invalid operation"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> op(x,y), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>calculate 函数就是一个高阶函数，它只展示了高阶函数的其中一个特点：接受其他的函数作为参数传入，那另一个特点“把其他函数作为结果返回”又是怎么玩的呢？<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> calculateFunc <span class="function"><span class="keyword">func</span><span class="params">(x <span class="keyword">int</span>, y <span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">int</span>, error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">genCalculator</span><span class="params">(op operate)</span> <span class="title">calculateFunc</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(x <span class="keyword">int</span>, y <span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">int</span>, error)</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> op == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>, errors.New(<span class="string">"invalid operation"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> op(x,y), <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Go-语言闭包-Closure-——引用了外部变量的匿名函数"><a href="#Go-语言闭包-Closure-——引用了外部变量的匿名函数" class="headerlink" title="Go 语言闭包(Closure)——引用了外部变量的匿名函数"></a>Go 语言闭包(Closure)——引用了外部变量的匿名函数</h2><p>闭包，就是<strong>在一个函数中存在对外来标识符的引用</strong>。所谓的外来标识符，既不代表当前函数的任何参数或结果，也不是函数内部声明的，它是直接从外边拿过来的——自由变量。<br>换句话说，<strong>【闭包】函数因为引用了自由变量，它的内部逻辑并是不完整的【呈现一种“不确定状态”】，有一部分逻辑需要这个自由变量参与完成，而后者到底代表了什么在闭包函数被定义的时候却是未知的</strong>。<br>上文刚提到的genCalculator函数内部，实际上就实现了一个闭包，该函数就是定义一个匿名的、calculateFunc类型的函数并把它作为结果值返回。而这个匿名的函数就是一个闭包函数。它里面使用的变量op既不代表它的任何参数或结果也不是它自己声明的，而是定义它的genCalculator函数的参数——<strong>一个自由变量</strong>。当程序运行到这里的时候，op就是那个参数值了，这个闭包函数的状态就由“不确定”变为了“确定”，或者说转到了“闭合”状态，从而真正地形成了一个闭包。<br>那么，实现闭包的意义又在哪里呢？表面上看，我们只是延迟实现了一部分程序逻辑或功能而已，但实际上，我们是在<strong>动态地生成那部分程序逻辑。我们可以借此在程序运行的过程中，根据需要生成功能不同的函数，继而影响后续的程序行为</strong>。这与 GoF 设计模式中的模板方法模式有着异曲同工之妙。</p>
+<h2 id="Go-语言可变参数"><a href="#Go-语言可变参数" class="headerlink" title="Go 语言可变参数"></a>Go 语言可变参数</h2><p>可变参数是指函数传入的参数类型一致，但个数不确定。它是一个“语法糖”，从内部实现机理上来说，类型<code>...type</code>本质上是一个数组切片<code>[]type</code>，这种语法对语言的功能并没有影响，但更方便程序员使用。比如下例的求和函数：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sum</span><span class="params">(ops ...<span class="keyword">int</span>)</span> <span class="title">int</span></span>&#123;</span><br><span class="line">  s := <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> _, op := <span class="keyword">range</span> ops &#123;</span><br><span class="line">    sum += op</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//若函数实现使用 ops []int, 调用方就必须构造个数组切片实例来调用sum([]int&#123;1, 3, 7, 13&#125;)，而不能直接调用sum(1, 3, 7, 13)</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Go-语言defer（延迟执行语句）"><a href="#Go-语言defer（延迟执行语句）" class="headerlink" title="Go 语言defer（延迟执行语句）"></a>Go 语言defer（延迟执行语句）</h2><p>Go语言的 defer 语句会将其后面跟随的语句进行延迟处理，即 <strong>在 defer 归属的函数即将返回时，才处理defer 语句（当有多个 defer 行为被注册时，以堆栈式执行）</strong>，用法上类似于面向对象编程语言 Java 和 C++ 的 finally 语句块，<strong>通常用于释放某些已分配的资源</strong>，比如互斥解锁，或者关闭文件等。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Clear resources"</span>)</span><br><span class="line">	&#125;()</span><br><span class="line">	fmt.Println(<span class="string">"Started"</span>)</span><br><span class="line">	<span class="built_in">panic</span>(<span class="string">"Fatal error"</span>)    <span class="comment">//defer仍会执行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Go-语言宕机-panic"><a href="#Go-语言宕机-panic" class="headerlink" title="Go 语言宕机(panic)"></a>Go 语言宕机(panic)</h2><p>Go 语言运行时系统可能会在程序出现严重错误（比如数组访问越界、空指针引用）时自动地抛出 panic，我们（需要时）也可以<strong>通过调用<code>panic()</code>函数引发 panic</strong>。<br>但不论怎样，当宕机(panic)发生时，该程序的控制权会立即从此行代码(引发panic处)转移至调用栈中的上一级（<strong>defer机制后，所属函数执行随即终止</strong>），紧接着，控制权并不会在此有片刻停留，它会一级一级地沿着调用栈的反方向传播至最外层函数——对于主 goroutine 来说就是main函数，最后被Go 语言运行时系统收回。随后，程序崩溃并输出日志信息，<strong>日志信息包括panic value（通常是某种错误信息）和函数调用的堆栈跟踪信息</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//数组访问越界</span><br><span class="line">panic: runtime error: index out of range</span><br><span class="line">goroutine 1 [running]:</span><br><span class="line">main.main()</span><br><span class="line">/Users/haolin/GeekTime/Golang_Puzzlers/src/puzzlers/article19/q0/demo47.go:5 +0x3d</span><br><span class="line">exit status 2</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Go 语言的 panic机制类似于其他语言的异常，但 panic的适用场景有一些不同，由于 panic 会引起程序的崩溃，因此 panic 一般用于严重错误，如程序内部的逻辑不一致。任何崩溃都表明了我们的代码中可能存在漏洞，所以对于大部分漏洞，我们应该使用Go语言提供的错误机制，而不是 panic。</p>
+</blockquote>
+<p>对于无意间引发的panic，那么其中的值只能由Go 语言运行时系统给定，比如上例中<code>runtime error: index out of range</code>。但当我们使用<code>panic()</code>有意地引发一个panic时，就可以自行指定其包含的值。<br>由于<code>panic()</code>函数的唯一一个参数是空接口(interface{})类型，所以从语法上讲，它可以接受任何类型的值。但是我们<strong>最好传入error类型的错误值（error类型值的Error方法与其他类型值的String方法是等价的，它们的唯一结果都是string类型），或者其他的可以被有效序列化的值</strong>。在程序崩溃的时候，panic 包含的那个值字符串表示形式会被打印出来。如果我们施加了某种保护措施(<code>recover()</code>)避免程序的崩溃，这时 panic 包含的值可以被取出来打印或者记录到日志里。</p>
+<h2 id="Go-语言宕机恢复-recover"><a href="#Go-语言宕机恢复-recover" class="headerlink" title="Go 语言宕机恢复(recover)"></a>Go 语言宕机恢复(recover)</h2><p>Go 语言的内建函数<code>recover()</code>可以让进入宕机流程中的 goroutine 恢复过来。<strong><code>recover()</code>函数无需任何参数，并且会返回一个空接口类型的值，一般放在延迟函数<code>defer()</code>中调用。在正常的执行过程中，调用<code>recover()</code>会返回 nil 且没有其他任何效果；如果当前的 goroutine 陷入恐慌，调用<code>recover()</code>可以捕获到 panic 包含的值，并且恢复正常的执行</strong>。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">// 发生宕机时，获取panic传递的上下文并打印</span></span><br><span class="line">  err := <span class="built_in">recover</span>()</span><br><span class="line">  <span class="keyword">switch</span> err.(<span class="keyword">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> runtime.Error: <span class="comment">// 运行时错误</span></span><br><span class="line">      fmt.Println(<span class="string">"runtime error:"</span>, err)</span><br><span class="line">    <span class="keyword">default</span>: <span class="comment">// 非运行时错误</span></span><br><span class="line">      mt.Println(<span class="string">"error:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure></p>
+<p>通常来说，<strong>不应该对进入 panic 宕机的程序做任何处理(当心recover形成僵尸服务进程，导致health check失效)</strong>，但有时，我们确实需要从宕机中恢复，至少在程序崩溃前执行一些操作，比如当 web 服务器遇到不可预料的严重问题时，在崩溃前应该将所有的连接关闭，如果不做任何处理，会使得客户端一直处于等待状态。</p>
+<blockquote>
+<p>Go语言没有异常机制，其使用 panic 触发宕机类似于其他语言的抛出异常，recover 的宕机恢复机制就对应其他语言中的 try/catch 机制，但并不建议在编写普通函数时也经常性使用这种特性。</p>
+</blockquote>
+<h2 id="Go-语言错误处理"><a href="#Go-语言错误处理" class="headerlink" title="Go 语言错误处理"></a>Go 语言错误处理</h2><p>Go语言没有类似 Java 或 C++ 中的异常处理机制，虽然可以使用 defer、panic、recover 模拟，但<strong>官方并不主张这样做</strong>，Go语言的设计者认为其他语言的异常机制已被过度使用，上层逻辑需要为函数发生的异常付出太多的资源，开发者应该将错误处理视为正常开发必须实现的环节，正确地处理每一个可能发生错误的函数(同时Go语言支持使用返回值返回错误的机制）。<br>Go 语言的内建类型<strong><code>error类型</code>是一个接口类型，其声明中只包含了一个方法Error</strong>。这个方法不接受任何参数，但会返回一个string类型的结果——返回错误信息的字符串表示形式。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;</span><br><span class="line">  Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们使用<code>error类型</code>的方式，<strong>通常是在函数声明的结果列表最后声明一个该类型的结果，同时在调用这个函数后，先判断它返回的最后一个结果值是否“不为nil”。如果这个值“不为nil”，那么就进入错误处理流程，否则就继续进行正常的流程</strong>。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"errors"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> _, req := <span class="keyword">range</span> []<span class="keyword">string</span>&#123;<span class="string">""</span>, <span class="string">"Hello!"</span>&#125;&#123;</span><br><span class="line">		resp,err := echo(req)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">			fmt.Printf(<span class="string">"error: %s\n"</span>, err)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Printf(<span class="string">"response: %s\n"</span>, resp)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">echo</span><span class="params">(request <span class="keyword">string</span>)</span> <span class="params">(response <span class="keyword">string</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> request == <span class="string">""</span> &#123;</span><br><span class="line">		err = errors.New(<span class="string">"empty request"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	response = fmt.Sprintf(<span class="string">"echo: %s"</span>, request)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如上例示，Go 语言可以通过<code>errors.New</code>来快速创建错误实例，这是一种最基本的生成错误值的方式：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建错误对象</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">New</span><span class="params">(text <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &amp;errorString&#123;text&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误字符串</span></span><br><span class="line"><span class="keyword">type</span> errorString <span class="keyword">struct</span> &#123;</span><br><span class="line">  s <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回发生何种错误，error类型值的Error方法就相当于其他类型值的String方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *errorString)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> e.s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在代码中使用错误定义时，我们通常会定义不同的错误变量。这样，使用方可以轻松获取到它的类型、值以及它携带的错误信息。<br>如果我们可以确定其类型范围或者值的范围，那么就可以使用一些明确的手段获知具体的错误种类。否则，我们就只能通过匹配其携带的错误信息来大致区分它们的种类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 定义除数为0的错误</span><br><span class="line">var errDivisionByZero = errors.New(&quot;division by zero&quot;)</span><br><span class="line"></span><br><span class="line">if err == errDivisionByZero&#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">V2Ray</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2020/08/26/《Go语言核心36讲》之“使用函数的正确姿势”/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Rest，GraphQL，Webhooks和gRPC如何选型
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/08/17/《Go语言核心36讲》之“Go语言基本语法”/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《Go语言核心36讲》之“Go语言基本语法”</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言函数声明"><span class="toc-number">1.</span> <span class="toc-text">Go 语言函数声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言函数变量"><span class="toc-number">2.</span> <span class="toc-text">Go 语言函数变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言闭包-Closure-——引用了外部变量的匿名函数"><span class="toc-number">3.</span> <span class="toc-text">Go 语言闭包(Closure)——引用了外部变量的匿名函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言可变参数"><span class="toc-number">4.</span> <span class="toc-text">Go 语言可变参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言defer（延迟执行语句）"><span class="toc-number">5.</span> <span class="toc-text">Go 语言defer（延迟执行语句）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言宕机-panic"><span class="toc-number">6.</span> <span class="toc-text">Go 语言宕机(panic)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言宕机恢复-recover"><span class="toc-number">7.</span> <span class="toc-text">Go 语言宕机恢复(recover)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言错误处理"><span class="toc-number">8.</span> <span class="toc-text">Go 语言错误处理</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,8 +403,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
