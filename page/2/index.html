@@ -152,6 +152,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-科学上网工具V2Ray简介及具体搭建过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">科学上网工具V2Ray简介及具体搭建过程</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/" class="archive-article-date">
+  	<time datetime="2020-02-10T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>原本在 <a href="https://bwh88.net/cart.php" target="_blank" rel="noopener">搬瓦工</a> 上面购买的 VPS 上面搭建的 VPN 不能用了，具体原因就是 GTW 经过一波加强，可以通过 TCP 阻断来封锁一些用于搭建 VPN 的 VPS。TCP 阻断的结果就是在国内无法通过 tcp 来连接访问国外的 VPS，从而在国内无法 SSH 登录 VPS，但是使用 ping 工具【基于 ICMP】却能 ping 通被 tcp 阻断的服务器。<br>当 VPS 被 TCP 阻断时，原本<a href="https://www.textarea.com/ExpectoPatronum/shiyong-shadowsocks-kexue-shangwang-265/" target="_blank" rel="noopener">基于 shadowsocks 的科学上网</a>方式就不能使用了，本文就是针对被 TCP 阻断的 VPS，通过 <a href="https://guide.v2fly.org/#%E5%A3%B0%E6%98%8E" target="_blank" rel="noopener">V2Ray 来实现科学上网</a>。当然对于没有被 TCP 阻断的 VPS 使用该方法来搭梯子也不容易被封。</p>
+<h2 id="基础条件"><a href="#基础条件" class="headerlink" title="基础条件"></a>基础条件</h2><p>搭建V2Ray的基础条件与SSR基本一致，无(一)甚(贯)特(尿)殊(性)：</p>
+<ol>
+<li>购买一台国外VPS服务器：选择自己喜欢的服务商即可【这里有<a href="https://www.vpser.net/ten-dollars-vps" target="_blank" rel="noopener">评比</a>】，不建议选择主流服务商像vultr,搬瓦工等，即使正常使用也很有可能被墙。我这次选择的是<a href="https://www.hostwinds.com/vps/unmanaged-linux" target="_blank" rel="noopener">hostwinds</a>最低配置Linux vps（<strong>建议位置选择Seattle，系统选择以稳定著称的CentOS 7</strong>），4.49美元/月，有1T流量，最重要的是支持免费更换ip，不限次数（<strong>注意购买hostwinds时，不要使用代理ip，直接用本机ip访问hostwinds官网购买，否则会导致购买完成后，vps显示“Pending”状态，不能即时创建服务，需要联系客服进行人工审核</strong>）。</li>
+<li>购买一个域名：V2Ray的节点可以伪装成正常的网站，将其流量与正常的网页流量混淆以避开第三方干扰，自然就需要有域名。我这里选择的是<a href="https://www.namesilo.com/account_domains.php" target="_blank" rel="noopener">namesilo</a>，在域名搜索框搜索自己喜欢的域名，找域名后缀最便宜的购买即可，我的域名后缀是club，1.59美元/年。</li>
+</ol>
+        
+          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">V2Ray</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Laravel进阶之事件篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -915,96 +996,6 @@
 
 
   
-    <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
-  	<time datetime="2019-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>提到事务，你肯定会想到事务的四大特性——ACID：</p>
-<ul>
-<li>原子性（ Atomicity ）：事务是数据库的逻辑工作单位，事务中包括的诸操作要么全做，要么全不做；</li>
-<li>一致性（ Consistency ）：事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。一致性与原子性是密切相关的；</li>
-<li>隔离性（ Isolation ）：一个事务的执行不能被其他事务干扰；</li>
-<li>持续性（ Durability ）：一个事务一旦提交，它对数据库中数据的改变就应该是永久性的；</li>
-</ul>
-<p>我们今天就主要讨论在多个事务并发的情况下，Very Important的事务的隔离性。<strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了构建这些隔离级别，我们的数据库锁算是发挥了“中流砥柱”的作用。</p>
-<h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>InnoDB引擎中常见的锁类型有如下几种，其间兼容性如图示：</p>
-<ul>
-<li><strong>S共享锁</strong>：也叫读锁，行级锁，其它事务可以继续加共享锁，但不能加排它锁(SELECT … LOCK IN SHARE MODE)；</li>
-<li><strong>X排他锁</strong>：也叫写锁，行级锁，一旦加了写锁后，其它事务不能再获得任何锁；</li>
-<li><strong>I意向锁</strong>：表级锁，表达一个事务想要获取什么，可分为意向共享锁（表中某几行的共享锁）、意向排他锁（表中某几行的排他锁）。有了意向锁的话，当需要給表加表锁时就不需要逐行遍历是否有行锁，只要判断是否有意向锁即可；</li>
-<li><strong>自增长锁</strong>：用于提升并发插入性能的特殊表锁机制，有几个特点：1.SQL执行完就释放锁，而不是事务执行完；2.对于 insert…select 大数据量插入会影响插入性能，因为会阻塞另外一个事务执行；3.使用不同模式来调整自增加锁的方式（mysql&gt;=5.7 innodb_autoinc_lock_mode参数）；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_lock_type_capacity.png" alt></li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1106,10 +1097,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1126,7 +1113,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1134,7 +1121,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">php杂集</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1147,6 +1134,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
