@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-浅谈XSS攻击方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/25/浅谈XSS攻击方式/">浅谈XSS攻击方式</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/25/浅谈XSS攻击方式/" class="archive-article-date">
+  	<time datetime="2018-03-25T01:55:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="XSS是什么"><a href="#XSS是什么" class="headerlink" title="XSS是什么"></a>XSS是什么</h2><p>XSS(Cross Site Scripting，CSS)跨站脚本攻击，是Web程序中常见的漏洞，XSS属于被动式且用于客户端的攻击方式，所以容易被忽略其危害性。它的攻击原理与<code>SQL注入攻击</code>(以SQL语句作为用户输入，从而达到查询/修改/删除数据的目的)类似，<code>通过向有XSS漏洞的网站中输入(传入)恶意的HTML代码，当其它用户浏览该网站时，这段HTML代码会自动执行，从而达到攻击的目的</code>，比如盗取用户Cookie、破坏页面结构、重定向到其它网站等。</p>
+<h2 id="XSS攻击类型"><a href="#XSS攻击类型" class="headerlink" title="XSS攻击类型"></a>XSS攻击类型</h2><p>XSS攻击之前，我们先找到一个存在XSS漏洞的网站，XSS漏洞分为两种：一种是DOM Based XSS漏洞，另一种是Stored XSS漏洞。<strong>理论上，所有可输入的地方没有对输入数据进行处理的话，都会存在XSS漏洞，漏洞的危害取决于攻击代码的威力，攻击代码也不局限于script。</strong></p>
+        
+          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/25/浅谈XSS攻击方式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MYSQL索引详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -863,92 +940,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析五之钩子类文件Hooks-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">CodeIgniter框架源码解析五之钩子类文件Hooks.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/" class="archive-article-date">
-  	<time datetime="2018-02-26T08:33:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架可以实现在不修改系统核心文件的基础上来改变或增加系统的核心运行功能（如重写缓存、输出等），这就是Hooks。它的主要作用是 <strong>CI框架下扩展base_system</strong>，能够在CI启动时运行一些开发者定义的一些方法，来实现一些特定的功能。Hooks，是一种事件驱动模式，必然包含两大步骤：1)，事件注册。对于Hook而言，就是指Hook钩子的挂载。(2).事件触发。在特定的时间点call特定的钩子，执行相应的钩子程序。需要注意的是，启动Hook钩子之后，程序的流程可能会发生变化（在一定程度上变得复杂，难以调试），且钩子之间可能有相互调用的可能性，如果处理不当，会有死循环的可能性。</p>
-<p>先看看CI框架有哪些钩子：</p>
-<ul>
-<li>pre_system：系统执行的早期调用.仅仅在benchmark 和 hooks 类 加载完毕的时候，没有执行路由或者其它过程。</li>
-<li>pre_controller：在调用你的任何控制器之前调用，此时所用的基础类,路由选择和安全性检查都已完成。</li>
-<li>post_controller_constructor：在你的控制器实例化之后，任何方法调用之前调用。</li>
-<li>post_controller：在你的控制器完全运行之后调用。</li>
-<li>display_override：覆盖_display()函数，用来在系统执行末尾向web浏览器发送最终页面。这允许你用自己的方法来显示。注意，你需要通过 $this-&gt;CI =&amp; get_instance() 引用 CI 超级对象，然后这样的最终数据可以通过调用 $this-&gt;CI-&gt;output-&gt;get_output() 来获得。</li>
-<li>cache_override：可以让你调用自己的函数来取代output类中的_display_cache() 函数。这可以让你使用自己的缓存显示方法。</li>
-<li>post_system：在最终着色页面发送到浏览器之后，浏览器接收完最终数据的系统执行末尾调用 。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/26/CodeIgniter框架源码解析五之钩子类文件Hooks-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -963,7 +954,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2020 Shudan Wang
+    		&copy; 2021 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1070,11 +1061,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1094,11 +1085,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1110,10 +1101,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
@@ -1122,15 +1109,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
             
             <div class="clearfix"></div>
