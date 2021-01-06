@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-《Go语言核心36讲》之“Go语言并发通信”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/">《Go语言核心36讲》之“Go语言并发通信”</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/" class="archive-article-date">
+  	<time datetime="2021-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：<strong>共享数据和消息</strong>。<br>共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享。被共享的数据可能有多种形式，实际应用中最常见的就是<strong>共享内存</strong>。<br>消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。<strong>每个并发单元的输入和输出只有消息</strong>，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 <strong>channel</strong>。</p>
+<h2 id="共享内存并发机制"><a href="#共享内存并发机制" class="headerlink" title="共享内存并发机制"></a>共享内存并发机制</h2><p>共享内存经常会设置一个共享变量，然后基于锁机制实现并发控制（线程安全），通用示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  //process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line"></span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《Go语言核心36讲》之“Go语言协程机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -868,84 +945,6 @@
 
 
   
-    <article id="post-《Docker从入门到实践》之Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/">《Docker从入门到实践》之Dockerfile</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/09/《Docker从入门到实践》之Dockerfile/" class="archive-article-date">
-  	<time datetime="2020-04-09T08:49:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>迄今为止，我们所使用的都是直接来自于 Docker Hub 的镜像，但有时候这些镜像无法直接满足需求（或者想创建自己的镜像），这时我们就需要定制镜像了。镜像的定制实际上就是定制每一层所添加的配置、文件，我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，然后用它用来构建、定制镜像，这个脚本就是Dockerfile.<br>Dockerfile是一个文本文件，其内包含了一条条的 <strong>指令(Instruction)</strong>，每一条指令构建一层，因此 <strong>每一条指令的内容，就是描述该层应当如何构建</strong>。</p>
-<h2 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h2><p>在<a href="#">《Docker从入门到实践》之基础篇</a>我们提到过”使用<code>docker commit</code>命令将容器的存储层保存下来，并以此定制Nginx镜像”例子，还以此为例，这次我们使用Dockerfile来定制。<br>首先，我们在一个空白目录中建立一个文本文件，命名为<code>Dockerfile</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir mynginx</span><br><span class="line">$ cd mynginx/</span><br><span class="line">$ touch Dockerfile</span><br></pre></td></tr></table></figure></p>
-<p>其内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx</span><br><span class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1087,15 +1086,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1107,15 +1106,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux用户和组管理相关文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/26/Linux用户和组管理相关文件/">Linux用户和组管理相关文件</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/26/Linux用户和组管理相关文件/" class="archive-article-date">
+  	<time datetime="2017-09-26T06:32:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在介绍chgrp命令时，我们提到<code>它可以用来改变变文件与目录所属群组，使用时采用群组名称或群组识别码均可</code>，那么何处可以获取群组名和群组识别码呢？</p>
+<p>首先，将用户分组是Linux系统中对用户进行管理及控制访问权限的一种手段，具有某种共同特征的用户集合起来就是用户组（Group），分组与用户间为多对多的关系；</p>
+<p>Linux /etc/group与/etc/passwd文件都是关于系统管理员对用户和用户组管理时相关的文件：<strong>/etc/group文件存放了Linux用户组的所有信息；/etc/passwd文件中记录用户所属的主组</strong>，即当一个用户同时是多个组中的成员时，其登录时所属的默认组，而其他组称为附加组。</p>
+        
+          <a class="article-more-a" href="/2017/09/26/Linux用户和组管理相关文件/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/26/Linux用户和组管理相关文件/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux远程文件传输命令scp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -868,90 +946,6 @@
 
 
   
-    <article id="post-PHP的缓存技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/04/PHP的缓存技术/">PHP的缓存技术</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/04/PHP的缓存技术/" class="archive-article-date">
-  	<time datetime="2017-06-04T08:31:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通常PHP 应用程序中最耗费时间的任务是数据检索。实际上，用于从存储库（文件或数据库服务器）中获取信息的时间远高于编译并且甚至是执行 PHP 程序所需耗费的时间。连接至数据库服务器所需的时间是一次延迟，等待查询完成添加附加停顿，并且结果的传输甚至会导致更多延迟。此外，如果代码使用对象，则有指向对象的导致负担过重的映射平面行。<br>在网络传输延迟不定的情况下，为了更高的速度需求，我们可以从两个方面优化效率：<strong>数据层数据库缓存，或应用层内容缓存</strong>。</p>
-<h2 id="数据库缓存"><a href="#数据库缓存" class="headerlink" title="数据库缓存"></a>数据库缓存</h2><p>对于优化数据库的速度，可先采取如下这些步骤，它应当对常见问题有所帮助。</p>
-<h3 id="将数据库放在自己的机器上"><a href="#将数据库放在自己的机器上" class="headerlink" title="将数据库放在自己的机器上"></a>将数据库放在自己的机器上</h3><p>数据库查询自身可以变得相当激烈，通常在对大小合理的数据集执行简单的 SELECT 语句时限定在 100% 的 CPU。如果您的 web 服务器和数据库服务器都在竞用单一机器上的 CPU 时间，这无疑将减慢您的请求速度。因此我想第一步最好是将 web 服务器和数据库服务器放在单独的机器上，确保您的数据库服务器是两者中更强健的（数据库服务器喜欢大量内存和多个 CPU）。</p>
-<h3 id="合理设计和编制表索引"><a href="#合理设计和编制表索引" class="headerlink" title="合理设计和编制表索引"></a>合理设计和编制表索引</h3><p>数据库性能的最大问题可能源自于不良数据库设计和缺失索引。SELECT 语句通常是运行在典型 web 应用程序中的最常见的查询类型。它们也是在数据库服务器上运行的最耗时的查询。此外，这些类型的 SQL 语句对适当的索引和数据库设计最敏感，因此查看以下指示，获取实现最优性能的技巧。</p>
-<ul>
-<li>确保每个表都有一个主键。这为表提供一个默认顺序和快速方式来连接其他表；</li>
-<li>确保一个表中的任何外键（即链接记录到另一个表中的记录的键）的索引得到合理编制。许多数据库会自动对这些键施加约束，以便值真正匹配另一个表中的一条记录，这有助于摆脱这一困难；</li>
-<li>试图限制一个表中的列数。一个表中有太多列比仅有一些列时进行查询所需的扫描时间要长。此外如果您有不常用的含多个列的一个表，您也在通过NULL值字段浪费磁盘空间（文本或blob等可变大小字段也是如此），在这种情况下应当考虑将其他栏分成不同的表，在记录的主键上将其联合起来。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/06/04/PHP的缓存技术/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/04/PHP的缓存技术/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/">Next &raquo;</a>
@@ -1093,15 +1087,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1113,15 +1107,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

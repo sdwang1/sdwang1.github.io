@@ -152,6 +152,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-InnoDB使用全文索引-FullText-Index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">InnoDB使用全文索引(FullText Index)</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" class="archive-article-date">
+  	<time datetime="2019-03-27T10:19:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.cn/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
+<h2 id="InnoDB全文索引简介"><a href="#InnoDB全文索引简介" class="headerlink" title="InnoDB全文索引简介"></a>InnoDB全文索引简介</h2><p>InnoDB引擎对FULLTEXT索引的支持是MySQL5.6新引入的特性，语法层面上大多数兼容之前 <strong>MyISAM引擎</strong> 的全文索引模式。<strong>所谓全文索引，是一种通过建立倒排索引，快速匹配文档的方式</strong>。MySQL支持以下三种全文检索模式：</p>
+<ul>
+<li><strong>自然语言模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-natural-language.html" target="_blank" rel="noopener">IN NATURAL LANGUAGE MODE</a>）</strong>，即通过<code>MATCH (column...) AGAINST (val)</code>传递某个特定的字符串来进行检索。<strong>默认模式</strong>；</li>
+<li><p><strong>布尔模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html" target="_blank" rel="noopener">IN BOOLEAN MODE</a>）</strong>，可以为检索的字符串增加操作符，例如“+”表示必须包含，“-”表示不包含，<code>*</code>表示通配符（这种情况， 即使传递的字符串较小或出现在停词中也不会被过滤掉），其他还有很多特殊的布尔操作符，可以通过如下参数控制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%ft_boolean_syntax%&apos;;</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| Variable_name     | Value          |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| ft_boolean_syntax | + -&gt;&lt;()~*:&quot;&quot;&amp;| |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>查询扩展模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-query-expansion.html" target="_blank" rel="noopener">WITH QUERY EXPANSION</a>）</strong>，这种模式是自然语言模式下的一个变种，会执行两次检索，第一次使用给定的短语进行检索，第二次是结合第一次相关性比较高的行进行检索。</p>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MongoDB-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -872,129 +957,6 @@
 
 
   
-    <article id="post-如何建立安全的会话管理机制一之Session本质" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/26/如何建立安全的会话管理机制一之Session本质/">如何建立安全的会话管理机制一之Session本质</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/26/如何建立安全的会话管理机制一之Session本质/" class="archive-article-date">
-  	<time datetime="2018-09-26T03:26:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Http是一种无状态协议，此种协议不要求浏览器在每次请求中标明它自己的身份，并且浏览器以及服务器之间并没有保持一个持久性的连接用于多个页面之间的访问（HTTP/1.1默认的”Connection:Keep-Alive”不会改变这种无状态结果，不要让程序依赖于Keep-Alive的保持连接特性，否则会有意想不到的后果）。当一个用户访问一个站点的时候，用户的浏览器发送一个http请求到服务器，服务器返回给浏览器一个http响应，这就是整个基于http协议的通讯过程。</p>
-<p>为了维护web应用程序的状态，早期的Web站点设计者们都有自己的用户识别技术，比如：承载用户身份信息的HTTP首部、客户端IP地址跟踪、用认证的方式识别用户、URL中嵌入识别信息（胖URL）、cookie等等。以下表中是七种最常见的用来承载用户相关信息的HTTP请求首部：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">首部名称</th>
-<th style="text-align:left">首部类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">From</td>
-<td style="text-align:left">请求</td>
-<td>用户的E-mail地址</td>
-</tr>
-<tr>
-<td style="text-align:left">User-Agent</td>
-<td style="text-align:left">请求</td>
-<td>用户的浏览器软件</td>
-</tr>
-<tr>
-<td style="text-align:left">Referer</td>
-<td style="text-align:left">请求</td>
-<td>用户是从这个页面上依照链接跳转过来的</td>
-</tr>
-<tr>
-<td style="text-align:left">Authorization</td>
-<td style="text-align:left">请求</td>
-<td>用户名和密码</td>
-</tr>
-<tr>
-<td style="text-align:left">Client-IP</td>
-<td style="text-align:left">扩展（请求）</td>
-<td>客户端的IP地址</td>
-</tr>
-<tr>
-<td style="text-align:left">X-Forwarded-For</td>
-<td style="text-align:left">扩展（请求）</td>
-<td>客户端的IP地址</td>
-</tr>
-<tr>
-<td style="text-align:left">Cookie</td>
-<td style="text-align:left">扩展（请求）</td>
-<td>服务器产生的ID标签</td>
-</tr>
-</tbody>
-</table>
-        
-          <a class="article-more-a" href="/2018/09/26/如何建立安全的会话管理机制一之Session本质/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/26/如何建立安全的会话管理机制一之Session本质/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1136,15 +1098,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1156,15 +1118,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

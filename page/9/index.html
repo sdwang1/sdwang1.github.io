@@ -152,6 +152,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-例行性工作排程（crontab）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/23/例行性工作排程（crontab）/">例行性工作排程（crontab）</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/23/例行性工作排程（crontab）/" class="archive-article-date">
+  	<time datetime="2017-10-23T07:37:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>每个人或多或少都有一些日程安排或工作，有些工作是例行性的，比如一日三餐，有些工作则是临时发生的，比如总公司高管来访啦，Linux下也有两种类型的工作排程方式——at和cron命令:</p>
+<ul>
+<li>at：处理执行一次就结束的指令。执行时需要atd服务的支援，在某些新版distributions中，atd可能并灭有被启动；</li>
+<li>crontab：设定工作将循环的一直进行下去，可循环的时间为分钟，小时，每周，每月或每年等，执行时需要crond服务的支援。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2017/10/23/例行性工作排程（crontab）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/23/例行性工作排程（crontab）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux格式化文件输出命令-printf-awk命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -851,88 +931,6 @@
 
 
   
-    <article id="post-Linux用户权限管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/09/Linux用户权限管理/">Linux用户权限管理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/09/Linux用户权限管理/" class="archive-article-date">
-  	<time datetime="2017-10-09T07:11:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Linux是典型的多用户（Multi-users）和多任务（Multi-tasks）系统，即一台Linux主机可以给很多用户提供服务同时运行多种服务，那么系统是区分用户并控制访问操作的呢？这就牵涉到了Linux的用户类别和权限管理。</p>
-<h2 id="用户和组类型"><a href="#用户和组类型" class="headerlink" title="用户和组类型"></a>用户和组类型</h2><p>在Linux系统中有着用户和组两个概念：用户泛指计算机的使用者，可用UID标识；用户分组则是将具有某种共同特征的用户集合起来（Group），可用GID标识，分组与用户间为多对多的关系。另外UID和GID都是16位二进制数，即取值范围为0-65535。<br><strong>用户的类别</strong>：</p>
-<ul>
-<li>管理员用户：即通常所说的root，UID=0；</li>
-<li>系统用户：为让有些后台进程或服务类进程以非管理员的身份运行，通常需要为此创建多个普通用户，此类用户从不登录系统<br>【一般位于/sbin/nologin目录下，比如用户bin、daemon、adm等】，UID：1-499（centos6）,1-999（centos7）；</li>
-<li>登录用户：真正使用计算机的普通用户，UID：500-60000（centos6），1000-60000（centos7）；</li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/10/09/Linux用户权限管理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/09/Linux用户权限管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
@@ -1074,15 +1072,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1094,15 +1092,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

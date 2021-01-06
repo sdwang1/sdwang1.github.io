@@ -18,7 +18,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/goroutine_gpm.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/goroutine_gpm2.png">
-<meta property="og:updated_time" content="2021-01-04T02:45:51.620Z">
+<meta property="og:updated_time" content="2021-01-06T06:34:09.349Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“Go语言协程机制”">
 <meta name="twitter:description" content="Go 语言通过编译器运行时（runtime），从语言上支持了并发的特性。谈及Go 语言并发特性前，我们先来了解几个概念。 进程、线程、协程 进程：进程是程序在操作系统中的一次执行过程，系统进行资源分配（有独立的内存空间）和调度的一个独立单位。 线程：线程是进程的一个执行实体，是CPU调度和分派的基本单位(Kernel Space Entity, KSE)。线程依附于进程存在（一个进程可以创建和撤销">
@@ -186,11 +186,11 @@
 </li>
 </ul>
 <a id="more"></a>
-<p><strong>使用 go 关键字创建 goroutine时，被调用函数的返回值会被忽略。如果需要在 goroutine中返回数据，可以使用后面介绍的的通道(channel)特性，通过通道把数据从goroutine中作为返回值传出</strong>。简单示例代码如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每隔一秒打印一次计数器</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">running</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="keyword">var</span> times <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">for</span>  &#123;</span><br><span class="line">		times++</span><br><span class="line">		fmt.Println(<span class="string">"tick"</span>, times)</span><br><span class="line">		<span class="comment">//延时1秒</span></span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">//并发程序执行</span></span><br><span class="line">	<span class="keyword">go</span> running()</span><br><span class="line"></span><br><span class="line">	<span class="comment">//接受用户输入，直到按 Enter 键时将输入的内容写入 input 变量中并返回，整个程序终止</span></span><br><span class="line">	<span class="keyword">var</span> input <span class="keyword">string</span></span><br><span class="line">	fmt.Scanln(&amp;input)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用 go 关键字创建 goroutine时，被调用函数的返回值会被忽略。如果需要在 goroutine中返回数据，可以使用后面介绍的的通道(channel)特性，通过通道把数据从goroutine中作为返回值传出</strong>。简单示例代码如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每隔一秒打印一次计数器</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">running</span><span class="params">()</span></span>  &#123;</span><br><span class="line">  <span class="keyword">var</span> times <span class="keyword">int</span></span><br><span class="line">  <span class="keyword">for</span>  &#123;</span><br><span class="line">    times++</span><br><span class="line">    fmt.Println(<span class="string">"tick"</span>, times)</span><br><span class="line">    <span class="comment">//延时1秒</span></span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">//并发程序执行</span></span><br><span class="line">  <span class="keyword">go</span> running()</span><br><span class="line"></span><br><span class="line">  <span class="comment">//接受用户输入，直到按 Enter 键时将输入的内容写入 input 变量中并返回，整个程序终止</span></span><br><span class="line">  <span class="keyword">var</span> input <span class="keyword">string</span></span><br><span class="line">  fmt.Scanln(&amp;input)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="Go-调度机制"><a href="#Go-调度机制" class="headerlink" title="Go 调度机制"></a>Go 调度机制</h2><p>Go 调度器模型我们通常叫做<strong>G-P-M模型，它包括G、P、M、Sched 4个重要结构</strong>：</p>
 <ul>
 <li><strong>G(Goroutine)，每个 Goroutine对应一个 G结构体，存储着 Goroutine的运行堆栈、状态以及任务函数信息，可重用。注意 G是结构体，而非执行体，每个 G需要绑定到 P才能被调度执行</strong>。</li>
-<li><strong>P(Processor)，表示逻辑处理器</strong>，对于 G来说，P相当于CPU核，G只有绑定到 P才能被调度；对于 M来说，P提供了相关的执行环境(Context)，如内存分配状态、任务队列等（<strong>Goroutine并不直接绑定 OS 线程 M - Machine运行，而是由 Goroutine Scheduler 中的 P - Processor来作获取内核线程资源的『中介』</strong>）。<br>P 的数量决定了系统内最大可并行的 G的数量（物理 CPU 核数 &gt;= P 的数量），<strong>由用户设置的GoMAXPROCS 决定（最大值为256）</strong>。</li>
+<li><strong>P(Processor)，表示逻辑处理器</strong>，对于 G来说，P相当于CPU核，G只有绑定到 P才能被调度；对于 M来说，P提供了相关的执行环境(Context)，如内存分配状态、任务队列等（<strong>Goroutine并不直接绑定 OS 线程 M - Machine运行，而是由 Goroutine Scheduler 中的 P - Processor来作获取内核线程资源的『中介』</strong>）。<br>P 的数量决定了系统内最大可并行的 G的数量（<strong>物理 CPU 核数 &gt;= P 的数量，Go 1.5之后默认执行runtime.GOMAXPROCS(runtime.NumCPU())以并发执行代码），由用户设置的GoMAXPROCS 决定（最大值为256）</strong>。</li>
 <li><strong>M(Machine)，OS 内核线程抽象，表示真正执行计算的资源，在绑定有效的P后，进入schedule循环</strong>。<br><strong>M 的数量是不定的，由 Go Runtime调整</strong>，为了防止创建过多 OS线程导致系统调度不过来，目前默认最大限制为10000 个。</li>
 <li><strong>Sched(Schedule)，Go调度器</strong>，它维护了存储 M和 G的队列以及调度器的一些状态信息等。<strong>调度器循环的机制大致是从各种队列、P的本地队列中获取 G，切换到 G的执行栈上并执行 G的函数，调用 Goexit做清理工作并回到 M，如此反复</strong>。</li>
 </ul>
@@ -198,7 +198,7 @@
 <blockquote>
 <p>从宏观上说，G和 M由于 P的存在可以呈现出多对多的关系。当一个正在与某个 M对接并运行着的 G需要因某个时间（比如等待 I/O 或锁的解除）而暂停运行的时候，调度器总会及时地发现并把这个 G与那个 M分离开，以释放计算资源供那些等待运行的 G使用。<br>而当一个 G需要恢复运行的时候，调度器又会尽快地为它寻找空闲的计算资源（包括 M）并安排运行。另外，当 M不够用时，调度器会帮我们向操作系统申请新的系统级线程，而当某个 M已无用时，调度器又会负责把它及时的销毁掉。</p>
 </blockquote>
-<h2 id="关键字-go-语句的执行规则"><a href="#关键字-go-语句的执行规则" class="headerlink" title="(关键字)go 语句的执行规则"></a>(关键字)go 语句的执行规则</h2><p>我们具体来看一道面试编程题：“请问下例文件被执行后会打印出什么内容？”<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			fmt.Println(i)</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//典型回答：不会有任何内容被打印出来</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="关键字-go-语句的执行规则"><a href="#关键字-go-语句的执行规则" class="headerlink" title="(关键字)go 语句的执行规则"></a>(关键字)go 语句的执行规则</h2><p>我们具体来看一道面试编程题：“请问下例文件被执行后会打印出什么内容？”<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++&#123;</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      fmt.Println(i)</span><br><span class="line">    &#125;()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//典型回答：不会有任何内容被打印出来</span></span><br></pre></td></tr></table></figure></p>
 <p><strong>go函数（go语句携带的那个函数调用）真正被执行的时间总会与其所属的go语句被执行的时间不同</strong>。当程序执行到一条go语句时，Go 语言运行时系统会先试图从某个存放空闲的 G的队列（<strong>全局队列GRQ</strong>）中获取一个 G，<strong>它只有在找不到空闲 G的情况下才会去创建新的 G——创建成本非常低</strong>，在 Go 语言的运行时系统内部就可以完全做到了（一个 G 仅相当于为需要并发执行代码片段服务的上下文环境而已）。<br>在拿到一个空闲的 G后，Go 语言运行时系统会 <strong>用这个 G去包装当前的那个go函数，然后再把这个 G追加到某个可运行的 G的队列中（本地运行队列LRQ）</strong>，很快地由运行时系统内部的调度器安排运行。由于上面所说的那些准备工作还是不可避免的，因此go函数的执行时间总是会明显滞后（对于计算机的 CPU 时钟和 Go 程序来说的，我们在大多数时候都不会有明显感觉）于它所属的go语句的执行时间。<br>我们再来看这种原理下的表象，<strong>只要go语句本身执行完毕，Go程序完全不会等待go函数的执行，它会立刻去执行后面的语句，这就是所谓“异步并发地执行”</strong>。对应上例，这里“后面的语句”指的一般是for语句中的下一个迭代。代码中的 for语句会以很快的速度执行完毕，而当它执行完毕时，那 10个包含了 go函数的goroutine往往还没有获得运行的机会（思考下此时它们引用的变量i的值将会是什么？）。<br>同时，<strong>一旦主 goroutine 中的代码（也就是main函数中的那些代码）执行完毕，当前的 Go 程序就会结束运行</strong>。如此一来，如果在 Go 程序结束的那一刻，还有 goroutine 未得到运行机会，那么它们就真的没有运行机会了，它们中的代码也就不会被执行了。所以就上例而言，绝大多数情况都会是“不会有任何内容被打印出来”。</p>
 <blockquote>
 <p>实际上，Go 语言并不会去保证这些 goroutine 会以怎样的顺序运行。由于主 goroutine 会与我们手动启用的其他 goroutine 一起接受调度，而调度器很可能会在 goroutine 中的代码只执行了一部分的时候暂停，以期所有的 goroutine 有更公平的运行机会。所以哪个 goroutine 先执行完、哪个 goroutine 后执行完往往是不可预知的，除非我们使用了某种 Go 语言提供的方式进行了人为干预。</p>
@@ -316,6 +316,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          《Go语言核心36讲》之“Go语言并发通信”
+        
+      </div>
+    </a>
   
   
     <a href="/2020/09/14/《Go语言核心36讲》之“接口类型的合理运用”/" id="article-nav-older" class="article-nav-link-wrap">
@@ -502,15 +511,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,15 +531,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
