@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Sdwang1的博客</title>
+  <title>《Go语言核心36讲》之“共享内存并发机制” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/page/2/index.html">
+  <meta name="description" content="不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：共享数据和消息。共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享，被共享的数据可能有多种形式，实际应用中最常见的就是共享内存。共享内存并发机制，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申">
+<meta name="keywords" content="GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Go语言核心36讲》之“共享内存并发机制”">
+<meta property="og:url" content="http://www.sdwangblog.cn/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：共享数据和消息。共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享，被共享的数据可能有多种形式，实际应用中最常见的就是共享内存。共享内存并发机制，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-01-21T08:44:59.086Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="《Go语言核心36讲》之“共享内存并发机制”">
+<meta name="twitter:description" content="不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：共享数据和消息。共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享，被共享的数据可能有多种形式，实际应用中最常见的就是共享内存。共享内存并发机制，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,40 +155,91 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-《GO语言核心36讲》之”工作区和GOPATH“" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-《Go语言核心36讲》之“共享内存并发机制”" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/">《GO语言核心36讲》之”工作区和GOPATH“</a>
+    <h1 class="article-title" itemprop="name">
+      《Go语言核心36讲》之“共享内存并发机制”
     </h1>
   
 
         
-        <a href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/" class="archive-article-date">
-  	<time datetime="2020-08-13T02:55:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-13</time>
+        <a href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/" class="archive-article-date">
+  	<time datetime="2020-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="下载Go语言开发包"><a href="#下载Go语言开发包" class="headerlink" title="下载Go语言开发包"></a>下载Go语言开发包</h2><p>根据自己电脑的计算架构，从<a href="https://golang.google.cn/" target="_blank" rel="noopener">Go语言官网</a>下载对应的二进制包解压安装，并通过在命令行中输入<code>go version</code>来验证是否安装成功。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 默认最新稳定版本</span><br><span class="line">$ brew intall go</span><br><span class="line"></span><br><span class="line">$ go version</span><br><span class="line">go version go1.15.4 darwin/amd64</span><br></pre></td></tr></table></figure></p>
-<p>在这个过程中，我们需要了解（或配置） 3 个环境变量：GOROOT、GOPATH 和 GOBIN：</p>
+        <p>不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：<strong>共享数据和消息</strong>。<br>共享数据是指<strong>多个并发单元分别保持对同一个数据的引用，实现对该数据的共享</strong>，被共享的数据可能有多种形式，实际应用中最常见的就是<strong>共享内存</strong>。<br><strong>共享内存并发机制</strong>，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申请对该资源的访问权限，且只有在申请成功之后访问才能真正开始。而当线程对共享资源的访问结束时，它还必须归还对该资源的访问权限，若要再次访问仍需申请（访问串行化），通用示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  //process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line"></span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>Go 语言中可供我们选择的同步工具并不少，比如互斥锁(sync.Mutex)，读写锁(sync.RWMutex)，以及针对少数数据类型的值提供的原子操作函数(sync/atomic包)等。大家对互斥锁应该已屡见不鲜了，简单示例如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> mut sync.Mutex                        <span class="comment">//该类型是结构体类型、值类型，把它作为函数参数、返回值、进入某个通道都会导致其副本的产生</span></span><br><span class="line">  counter := <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> i:=<span class="number">0</span>; i&lt;<span class="number">5000</span>; i++ &#123;</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        mut.Unlock()                        <span class="comment">//对于同一个goroutine，既不要重复锁定一个互斥锁也不要忘记对它进行解锁</span></span><br><span class="line">      &#125;()</span><br><span class="line">      mut.Lock()</span><br><span class="line">      counter++                                </span><br><span class="line">    &#125;()</span><br><span class="line">  &#125;</span><br><span class="line">  time.Sleep(<span class="number">1</span> *time.Second)</span><br><span class="line">  fmt.Printf(<span class="string">"counter=%d"</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>使用互斥变量时，要注意死锁(deadlock)的发生。所谓的死锁，是指当前程序中的主 goroutine，以及我们启用的那些 goroutine 都已经被阻塞，即整个程序都已经停滞不前了。<br>Go 语言运行时系统是不允许这种情况出现的，只要它发现所有的用户级 goroutine 都处于等待状态，就会自行抛出一个带有如下信息的 panic：<br>“fatal error: all goroutines are asleep - deadlock!”。<br>这种由 Go 语言运行时系统自行抛出的 panic 都属于致命错误，无法被恢复，调用recover函数对它们起不到任何作用。即一旦产生死锁，程序必然崩溃。</p>
+</blockquote>
+<h2 id="条件变量sync-Cond"><a href="#条件变量sync-Cond" class="headerlink" title="条件变量sync.Cond"></a>条件变量sync.Cond</h2><p>条件变量是<strong>基于互斥锁的一种同步工具，它必须有互斥锁的支撑才能发挥作用</strong>。它并不是用来保护临界区/共享资源的，而是<strong>用于协调那些想要访问共享资源的线程。当共享资源的状态发生变化时，它可以被用来通知被互斥锁阻塞的线程</strong>。</p>
+<blockquote>
+<p>听个故事，抗战时期情报的传递非常重要，现在小余要向一个信箱中放置情报，而小翠则要从信箱中获取情报。<br>【这个信箱就相当于一个共享资源/临界区，余翠二人虽然都有信箱的钥匙，但同一时刻只能有一个人插入钥匙并打开信箱，从而进行写操作或者读操作。如果小余在放置的时候发现信箱还有未被取走的情报，那就先行离开；而如果小翠在获取的时候发现信箱没有情报，那也只能先行离开。这就相当于写线程或者读线程阻塞的情况。】<br>为了尽力完成任务，小余每过一段时间带着新情报去检查一次，若发现信箱空了就及时地把新情报放到里面。小翠也要每过一段时间去打开看看，一旦有了情报就及时地取走。但这样做双方出现频率会太高，很容易被敌人发现。<br>后来，余翠二人想了个计策：各自雇佣一个不起眼的小孩儿。如果早上七点有一个戴红色帽子的小孩儿从小翠家楼下路过，那么就意味着信箱里有了新情报。另一边，如果上午九点有一个戴蓝色帽子的小孩儿从小余家楼下路过，那就说明信箱中情报已被取走（假设信箱绝对安全地受限于二人）。<br>这样一来，二人执行任务的隐蔽性高多了，并且效率的提升非常显著。这两个戴不同颜色帽子的小孩儿就相当于条件变量，在共享资源的状态产生变化的时候，起到了通知的作用。</p>
+</blockquote>
+<p>那么，条件变量怎样与互斥锁配合使用呢？<br><strong>条件变量的初始化离不开互斥锁，并且它的有些方法也是基于互斥锁的</strong>。条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。我们在利用条件变量等待通知的时候，需要在它基于的那个互斥锁保护下进行；相反地，在进行单发通知或广播通知的时候，需要在对应的互斥锁解锁之后再做操作。<br>下面我们将用代码实现前面那个例子，同时讨论条件变量的使用。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">//0代表信箱是空的，1代表信箱是满的</span></span><br><span class="line">  <span class="keyword">var</span> mailbox <span class="keyword">uint8</span></span><br><span class="line">  <span class="comment">//lock 代表信箱上的锁</span></span><br><span class="line">  <span class="keyword">var</span> lock sync.RWMutex</span><br><span class="line">  <span class="comment">//sendCond 代表专用于发信的条件变量</span></span><br><span class="line">  sendCond := sync.NewCond(&amp;lock)</span><br><span class="line">  <span class="comment">// recvCond 代表专用于收信的条件变量</span></span><br><span class="line">  <span class="comment">// RLocker所拥有的Lock()/Unlock()方法, 在其内部会分别调用lock变量的RLock方法和RUnlock方法</span></span><br><span class="line">  recvCond := sync.NewCond(lock.RLocker())</span><br><span class="line"></span><br><span class="line">  <span class="comment">// sign 用于传递演示完成的信号</span></span><br><span class="line">  sign := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">3</span>)</span><br><span class="line">  max := <span class="number">5</span></span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(max <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">//用于发信</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= max; i++ &#123;</span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">      lock.Lock()</span><br><span class="line">      <span class="keyword">for</span> mailbox == <span class="number">1</span>&#123;</span><br><span class="line">        <span class="comment">//Wait方法会 1）把调用它的 goroutine加入到当前条件变量的通知队列中；2）解锁当前条件变量基于的那个互斥锁；3）让当前 goroutine处于等待状态，等到通知到来再决定是否唤醒它；4）如果通知到来并且决定唤醒该 goroutine，那么就在唤醒它之后重新锁定当前条件变量基于的互斥锁，继续执行后面代码</span></span><br><span class="line">        sendCond.Wait()</span><br><span class="line">      &#125;</span><br><span class="line">      log.Printf(<span class="string">"sender [%d]: the mailbox is empty."</span>, i)</span><br><span class="line">      mailbox = <span class="number">1</span></span><br><span class="line">      log.Printf(<span class="string">"sender [%d]: the letter has been sent."</span>, i)</span><br><span class="line">      lock.Unlock()</span><br><span class="line">      recvCond.Signal()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;(max)</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(max <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 用于收信</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> j := <span class="number">1</span>; j &lt;= max; j++ &#123;</span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">      lock.RLock()</span><br><span class="line">      <span class="keyword">for</span> mailbox == <span class="number">0</span> &#123;</span><br><span class="line">        recvCond.Wait()</span><br><span class="line">      &#125;</span><br><span class="line">      log.Printf(<span class="string">"receiver [%d]: the mailbox is full."</span>, j)</span><br><span class="line">      mailbox = <span class="number">0</span></span><br><span class="line">      log.Printf(<span class="string">"receiver [%d]: the letter has been received."</span>, j)</span><br><span class="line">      lock.RUnlock()</span><br><span class="line">      sendCond.Signal()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;(max)</span><br><span class="line"></span><br><span class="line">  &lt;-sign</span><br><span class="line">  &lt;-sign</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>利用条件变量可以实现单向的通知，而双向的通知则需要两个条件变量</strong>。</p>
+<h2 id="原子操作-sync-atomic"><a href="#原子操作-sync-atomic" class="headerlink" title="原子操作 sync/atomic"></a>原子操作 sync/atomic</h2><p>通过对互斥锁的合理使用，我们可以使一个 goroutine 在执行临界区中的代码时，不被其他的 goroutine 打扰，但是 <strong>它仍然可能会被中断（interruption）</strong>。对于一个 Go程序来说，Go语言运行时系统中的调度器（为了公平起见）总是会频繁地换上或换下这些 goroutine（在同一时刻，只可能有固定少数的 goroutine真正地处于运行状态）。<br>这个中断的时机有很多，任何两条语句执行的间隙，甚至在某条语句执行的过程中都是可以的，即使这些语句在临界区之内也是如此。所以，<strong>互斥锁虽然可以保证临界区中代码的串行执行，但却不能保证这些代码执行的原子性（atomicity）</strong>。在众多的同步工具中，真正能够保证原子性执行的只有 <strong>原子操作（atomic operation）——执行过程中不允许中断，由底层CPU提供芯片级别的支持</strong>。显然，原子操作可以完全地消除竞态条件，并能够绝对地保证并发安全性。亦正因如此，<strong>它需要足够简单，并且要求快速</strong>，不然将会给计算机执行指令的效率带来很大的影响。<br>Go 语言只针对少数数据类型的值提供了原子操作函数，这些函数都存在于 <strong>标准库代码包sync/atomic中。这些数据类型有：int32、int64、uint32、uint64、uintptr，以及unsafe包中的Pointer。对这些类型中的每一个，sync/atomic包都会有一套函数给予支持——加法（add）、比较并交换（compare and swap，CAS）、加载（load）、存储（store）和交换（swap）</strong>。特别的，针对unsafe.Pointer类型，该包并未提供进行原子加法操作的函数。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">  <span class="string">"sync/atomic"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  num := <span class="keyword">uint32</span>(<span class="number">18</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 无符号整数减法方式一</span></span><br><span class="line">  delta := <span class="keyword">int32</span>(<span class="number">-3</span>)</span><br><span class="line">  atomic.AddUint32(&amp;num, <span class="keyword">uint32</span>(delta))</span><br><span class="line">  fmt.Printf(<span class="string">"The number: %d\n"</span>, num)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 无符号整数减法方式二，利用补码</span></span><br><span class="line">  atomic.AddUint32(&amp;num, ^<span class="keyword">uint32</span>(-(<span class="number">-3</span>)<span class="number">-1</span>))</span><br><span class="line">  fmt.Printf(<span class="string">"The number: %d\n"</span>, num)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 交换，把新值赋给变量，并返回变量的旧值</span></span><br><span class="line">  <span class="comment">// 比较交换【操作组合】，先判断当前被操作变量的值是否与预期的旧值相等，若相等就把新值赋给该变量并返回 true；否则就忽略交换操作并返回 false</span></span><br><span class="line">  forAndCAS1()</span><br><span class="line">  fmt.Println()</span><br><span class="line">  forAndCAS2()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 简易自旋锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">forAndCAS1</span><span class="params">()</span></span>  &#123;</span><br><span class="line">  sign := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">2</span>)</span><br><span class="line">  num := <span class="keyword">int32</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//定时增加num的值</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">      newNum := atomic.AddInt32(&amp;num, <span class="number">2</span>)</span><br><span class="line">      <span class="keyword">if</span> newNum == <span class="number">10</span> &#123;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//定时检查num的值，若等于10就将其归零</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;num, <span class="number">10</span>, <span class="number">0</span>)&#123;</span><br><span class="line">        fmt.Println(<span class="string">"The number has gone to zero."</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      &#125;</span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  &lt;- sign</span><br><span class="line">  &lt;- sign</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//简易且更加宽松的自旋锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">forAndCAS2</span><span class="params">()</span></span>  &#123;</span><br><span class="line">  sign := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">2</span>)</span><br><span class="line">  num := <span class="keyword">int32</span>(<span class="number">0</span>)</span><br><span class="line">  max := <span class="keyword">int32</span>(<span class="number">20</span>)</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(id <span class="keyword">int</span>, max <span class="keyword">int32</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 定时增加num的值</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; ; i++ &#123;</span><br><span class="line">      currNum := atomic.LoadInt32(&amp;num)</span><br><span class="line">      <span class="keyword">if</span> currNum &gt;= max &#123;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      &#125;</span><br><span class="line">      newNum := currNum + <span class="number">2</span></span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">200</span>)</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;num, currNum, newNum) &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"The number: %d [%d-%d]\n"</span>, newNum, id, i)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"The CAS operation failed. [%d-%d]\n"</span>, id, i)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;(<span class="number">1</span>, max)</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(id <span class="keyword">int</span>, max <span class="keyword">int32</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 定时增加num的值</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      sign &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">for</span> j := <span class="number">0</span>; ; j++ &#123;</span><br><span class="line">      currNum := atomic.LoadInt32(&amp;num)</span><br><span class="line">      <span class="keyword">if</span> currNum &gt;= max &#123;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      &#125;</span><br><span class="line">      newNum := currNum + <span class="number">2</span></span><br><span class="line">      time.Sleep(time.Millisecond * <span class="number">200</span>)</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;num, currNum, newNum) &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"The number: %d [%d-%d]\n"</span>, newNum, id, j)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"The CAS operation failed. [%d-%d]\n"</span>, id, j)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;(<span class="number">2</span>, max)</span><br><span class="line">  &lt;-sign</span><br><span class="line">  &lt;-sign</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>原子操作明显比互斥锁要更加轻便，但是限制也同样明显。如果要对原子值和互斥锁进行二选一，你认为最重要的三个决策条件应该是什么？<br>首选需要考虑下面几个问题：</p>
 <ul>
-<li>GOROOT：Go 语言安装根目录的路径，即 GO 语言的安装路径。</li>
-<li>GOPATH：若干工作区目录的路径，自定义的工作空间。</li>
-<li>GOBIN：GO 程序生成的可执行文件（executable file）的路径。</li>
+<li>被保护的数据是什么类型？是值类型还是引用类型？</li>
+<li>操作被保护数据的方式是怎样的？是简单的读和写还是更复杂的操作？</li>
+<li>操作被保护数据的代码是集中的还是分散的？如果是分散的，是否可以变为集中的？<br>在搞清楚上述问题（以及你关注的其他问题）之后，优先使用原子值。</li>
 </ul>
-        
-          <a class="article-more-a" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/#more">more >></a>
-        
+</blockquote>
+<h2 id="等待组-sync-WaitGroup"><a href="#等待组-sync-WaitGroup" class="headerlink" title="等待组 sync.WaitGroup"></a>等待组 sync.WaitGroup</h2><p>在之前的一些场合下，为了“让主 goroutine等待其他 goroutine的运行结束”，我们或是“让主 goroutine<code>Sleep(x *time.Second)</code>睡会儿”，或是“通过声明一个容量与启动的 goroutine数量相同的通道，让其他的 goroutine在运行结束前向这个通道发送一个元素值，并且让主 goroutine 在最后从这个通道中接收元素值”，是不是睡看起来有点丑陋？<br>实际上，在这种应用场景下，我们可以<strong>使用等待组(sync.WaitGroup)更合理地进行多个任务的同步，等待组可以保证在并发环境中完成指定数量的任务</strong>。等待组内部拥有一个计数器(初始默认值为0)，计数器的值可以通过方法调用实现计数器的增加（添加某个并发任务）和减少（某个任务完成时），在另外一个 goroutine 中等待这个等待组的计数器值为 0 时，表示所有任务已经完成。<br><strong>对于一个可寻址的 sync.WaitGroup值wg</strong>：</p>
+<ul>
+<li><strong>使用<code>(wg * WaitGroup) Add(delta int)</code>方法来改变值 wg 维护的计数</strong>；</li>
+<li><strong>使用<code>(wg * WaitGroup) Done()</code>方法让值 wg 的计数器 -1，与调用<code>wg.Add(-1)</code>完全等价</strong>；<br>如果调用 wg.Add(delta) 或者 wg.Done() 后将 wg 维护的计数更改成一个负数，将会产生一个运行时恐慌；</li>
+<li><strong>使用<code>(wg * WaitGroup) Wait()</code>方法让等待组计数器不等于 0 者阻塞直至变 0</strong>；<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> mut sync.Mutex</span><br><span class="line">  <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">  counter := <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> i:=<span class="number">0</span>; i&lt;<span class="number">5000</span>; i++ &#123;</span><br><span class="line">    wg.Add(<span class="number">1</span>)                                      <span class="comment">//每个任务开始时，将等待组计数器 +1</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        mut.Unlock()</span><br><span class="line">        wg.Done()                                 <span class="comment">//任务完成时，将等待组计数器 -1</span></span><br><span class="line">      &#125;()</span><br><span class="line">      mut.Lock()</span><br><span class="line">      counter++</span><br><span class="line">    &#125;()</span><br><span class="line">  &#125;</span><br><span class="line">  wg.Wait()                                      <span class="comment">//等待所有的任务完成</span></span><br><span class="line">  fmt.Printf(<span class="string">"counter=%d"</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>关于 WaitGroup值的使用禁忌：不要把增加其计数器值的操作和调用其 Wait方法的代码，放在不同的goroutine中执行。换句话说，要杜绝对同一个 WaitGroup值的两种操作的并发执行。</p>
+</blockquote>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -203,16 +259,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          《Go语言核心36讲》之“CSP并发机制”
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《Go语言核心36讲》之“Go语言协程机制”</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -227,728 +351,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Protocol-Buffers3-简明教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/28/Protocol-Buffers3-简明教程/">Protocol Buffers3 简明教程</a>
-    </h1>
-  
-
-        
-        <a href="/2020/06/28/Protocol-Buffers3-简明教程/" class="archive-article-date">
-  	<time datetime="2020-06-28T08:35:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://github.com/google/protobuf" target="_blank" rel="noopener">Protocol Buffers</a> 是Google“出品”的一种与语言、平台无关、可扩展的序列化结构数据的方法(think XML, but smaller, faster and simpler)。你只需通过proto文件定义出结构化的数据，便可使用其自带代码生成器（数据解析类自动生成）轻松地编写和读取结构化数据（支持多种语言）。<br>现有许多流行的RPC(gRPC)框架都是基于Protocol Buffers，它目前有proto 2和proto 3两个版本号。本教程介绍的是最新的proto3版本的语法。</p>
-<h2 id="使用ProtoBuf"><a href="#使用ProtoBuf" class="headerlink" title="使用ProtoBuf"></a>使用ProtoBuf</h2><p>使用ProtoBuf通常有如下几个步骤：1. 创建.proto 文件，定义数据结构；2. 使用ProtoBuf 编译器将.proto 文件编译成指定语言类库；3. 使用ProtoBuf 对数据进行序列化和反序列化。</p>
-<h3 id="创建-proto-文件"><a href="#创建-proto-文件" class="headerlink" title="创建.proto 文件"></a>创建.proto 文件</h3><p>定义 .proto 文件就是定义我们所需存储或者传输的数据结构（协议格式）。ProtoBuf的消息结构是通过一种叫做<a href="https://developers.google.com/protocol-buffers/docs/overview" target="_blank" rel="noopener">Protocol Buffers Language</a>的语言进行定义和描述的，下面我们就以版本3为例定义个<code>searchRequest.proto</code>文件：</p>
-        
-          <a class="article-more-a" href="/2020/06/28/Protocol-Buffers3-简明教程/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/06/28/Protocol-Buffers3-简明教程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量sync-Cond"><span class="toc-number">1.</span> <span class="toc-text">条件变量sync.Cond</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原子操作-sync-atomic"><span class="toc-number">2.</span> <span class="toc-text">原子操作 sync/atomic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#等待组-sync-WaitGroup"><span class="toc-number">3.</span> <span class="toc-text">等待组 sync.WaitGroup</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-《Docker从入门到实践》之Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/">《Docker从入门到实践》之Dockerfile</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/09/《Docker从入门到实践》之Dockerfile/" class="archive-article-date">
-  	<time datetime="2020-04-09T08:49:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>迄今为止，我们所使用的都是直接来自于 Docker Hub 的镜像，但有时候这些镜像无法直接满足需求（或者想创建自己的镜像），这时我们就需要定制镜像了。镜像的定制实际上就是定制每一层所添加的配置、文件，我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，然后用它用来构建、定制镜像，这个脚本就是Dockerfile.<br>Dockerfile是一个文本文件，其内包含了一条条的 <strong>指令(Instruction)</strong>，每一条指令构建一层，因此 <strong>每一条指令的内容，就是描述该层应当如何构建</strong>。</p>
-<h2 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h2><p>在<a href="#">《Docker从入门到实践》之基础篇</a>我们提到过”使用<code>docker commit</code>命令将容器的存储层保存下来，并以此定制Nginx镜像”例子，还以此为例，这次我们使用Dockerfile来定制。<br>首先，我们在一个空白目录中建立一个文本文件，命名为<code>Dockerfile</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir mynginx</span><br><span class="line">$ cd mynginx/</span><br><span class="line">$ touch Dockerfile</span><br></pre></td></tr></table></figure></p>
-<p>其内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx</span><br><span class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/09/《Docker从入门到实践》之Dockerfile/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《Docker从入门到实践》之基础篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/02/《Docker从入门到实践》之基础篇/">《Docker从入门到实践》之基础篇</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/02/《Docker从入门到实践》之基础篇/" class="archive-article-date">
-  	<time datetime="2020-04-02T07:32:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为一种新兴的虚拟化方式，Docker从2013年发布至今，一直广受瞩目，被认为可能会改变软件行业。那么，Docker到底什么，要解决什么问题，好处又在哪里？<br>传统的虚拟机技术是在宿主机上虚拟出一套硬件后在其上运行一个完整操作系统，再在该系统上运行所需应用进程；而Docker容器里面的进程直接运行于宿主内核（Docker在容器的基础上，进行了进一步封装，从文件系统、网络互联到进程隔离等等），这样Docker就会“体积更轻、跑的更快、同宿主机可创建的个数更多”。<br><img src="http://www.sdwangblog.cn/blogimg/virtualMachine_vs_Docker.png" alt></p>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker包括三个基本概念：镜像（Image）、容器（Container）、仓库（Repository），理解了这三个概念就理解了Docker的整个生命周期。</p>
-        
-          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-科学上网工具V2Ray简介及具体搭建过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">科学上网工具V2Ray简介及具体搭建过程</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/" class="archive-article-date">
-  	<time datetime="2020-02-10T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>原本在 <a href="https://bwh88.net/cart.php" target="_blank" rel="noopener">搬瓦工</a> 上面购买的 VPS 上面搭建的 VPN 不能用了，具体原因就是 GTW 经过一波加强，可以通过 TCP 阻断来封锁一些用于搭建 VPN 的 VPS。TCP 阻断的结果就是在国内无法通过 tcp 来连接访问国外的 VPS，从而在国内无法 SSH 登录 VPS，但是使用 ping 工具【基于 ICMP】却能 ping 通被 tcp 阻断的服务器。<br>当 VPS 被 TCP 阻断时，原本<a href="https://www.textarea.com/ExpectoPatronum/shiyong-shadowsocks-kexue-shangwang-265/" target="_blank" rel="noopener">基于 shadowsocks 的科学上网</a>方式就不能使用了，本文就是针对被 TCP 阻断的 VPS，通过 <a href="https://guide.v2fly.org/#%E5%A3%B0%E6%98%8E" target="_blank" rel="noopener">V2Ray 来实现科学上网</a>。当然对于没有被 TCP 阻断的 VPS 使用该方法来搭梯子也不容易被封。</p>
-<h2 id="基础条件"><a href="#基础条件" class="headerlink" title="基础条件"></a>基础条件</h2><p>搭建V2Ray的基础条件与SSR基本一致，无(一)甚(贯)特(尿)殊(性)：</p>
-<ol>
-<li>购买一台国外VPS服务器：选择自己喜欢的服务商即可【这里有<a href="https://www.vpser.net/ten-dollars-vps" target="_blank" rel="noopener">评比</a>】，不建议选择主流服务商像vultr,搬瓦工等，即使正常使用也很有可能被墙。我这次选择的是<a href="https://www.hostwinds.com/vps/unmanaged-linux" target="_blank" rel="noopener">hostwinds</a>最低配置Linux vps（<strong>建议位置选择Seattle，系统选择以稳定著称的CentOS 7</strong>），4.49美元/月，有1T流量，最重要的是支持免费更换ip，不限次数（<strong>注意购买hostwinds时，不要使用代理ip，直接用本机ip访问hostwinds官网购买，否则会导致购买完成后，vps显示“Pending”状态，不能即时创建服务，需要联系客服进行人工审核</strong>）。</li>
-<li>购买一个域名：V2Ray的节点可以伪装成正常的网站，将其流量与正常的网页流量混淆以避开第三方干扰，自然就需要有域名。我这里选择的是<a href="https://www.namesilo.com/account_domains.php" target="_blank" rel="noopener">namesilo</a>，在域名搜索框搜索自己喜欢的域名，找域名后缀最便宜的购买即可，我的域名后缀是club，1.59美元/年。</li>
-</ol>
-        
-          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">V2Ray</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel进阶之事件篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/30/Laravel进阶之事件篇/">Laravel进阶之事件篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/30/Laravel进阶之事件篇/" class="archive-article-date">
-  	<time datetime="2019-11-30T07:39:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel 事件提供了简单的观察者模式实现，允许你订阅和监听应用中的事件。事件类通常存放在<code>app/Events</code>目录，监听器存放在<code>app/Listeners</code>。如果你在应用中没有看到这些目录，不要担心，它们会在你使用 Artisan 命令生成事件和监听器的时候自动创建。<br>事件为应用功能模块解耦提供了行之有效的解决办法，因为单个事件可以有多个监听器而这些监听器之间并不相互依赖。例如，你可能想要在每次订单发送时给用户发送一个 Slack 通知，有了事件之后，你大可不必将订单处理代码和 Slack 通知代码耦合在一起，而只需要简单触发一个可以被监听器接收并处理为 Slack 通知的 <code>OrderShipped</code> 事件即可。</p>
-<h2 id="注册事件-监听器"><a href="#注册事件-监听器" class="headerlink" title="注册事件/监听器"></a>注册事件/监听器</h2><p>Laravel 自带的<code>EventServiceProvider</code>为事件监听器注册提供了方便之所。其中 <code>listen</code> 属性包含了事件（键）和对应监听器（值）数组。如果应用需要，你可以添加多个事件到该数组。下面让我们添加一个 <code>OrderShipped</code> 事件：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用的事件监听器映射.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@translator</span> laravelacademy.org</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> $listen = [</span><br><span class="line">    <span class="string">'App\Events\OrderShipped'</span> =&gt; [</span><br><span class="line">        <span class="string">'App\Listeners\SendShipmentNotification'</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel进阶之缓存篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/28/Laravel进阶之缓存篇/">Laravel进阶之缓存篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/28/Laravel进阶之缓存篇/" class="archive-article-date">
-  	<time datetime="2019-11-28T07:49:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel 为不同的缓存系统提供了统一的 API，缓存配置位于 <code>config/cache.php</code>，在该文件中你可以指定在应用中默认使用哪个缓存驱动。Laravel 开箱支持主流的缓存后端如 <a href="https://memcached.org/" target="_blank" rel="noopener">Memcached</a> 和 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 等。<br>缓存配置文件还包含其他文档化的选项，确保仔细阅读这些选项。默认情况下，Laravel 被配置成使用文件缓存（<code>file</code> 驱动），这会将序列化数据和缓存对象存储到文件系统。对于大型应用，建议使用内存缓存如 Memcached 或 APC，你甚至可以为同一驱动配置多个缓存配置。</p>
-<ul>
-<li><p>使用<code>database</code>缓存驱动，你需要（提前）设置一张表存储缓存项。下面是该表的<code>Schema</code>声明：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//亦可使用 php artisan cache:table命令通过相应的schema生成迁移。</span></span><br><span class="line">Schema::create(<span class="string">'cache'</span>, <span class="function"><span class="keyword">function</span><span class="params">($table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;string(<span class="string">'key'</span>)-&gt;unique();</span><br><span class="line">    $table-&gt;text(<span class="string">'value'</span>);</span><br><span class="line">    $table-&gt;integer(<span class="string">'expiration'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>Memcached</code>缓存，需要安装PHP Memcached扩展。你可以在配置文件<code>config/cache.php</code>中列出所有Memcached服务器：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'memcached'</span> =&gt; [</span><br><span class="line">            <span class="string">'driver'</span> =&gt; <span class="string">'memcached'</span>,</span><br><span class="line">            <span class="string">'persistent_id'</span> =&gt; env(<span class="string">'MEMCACHED_PERSISTENT_ID'</span>),</span><br><span class="line">            <span class="string">'sasl'</span> =&gt; [</span><br><span class="line">                env(<span class="string">'MEMCACHED_USERNAME'</span>),</span><br><span class="line">                env(<span class="string">'MEMCACHED_PASSWORD'</span>),</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'options'</span> =&gt; [</span><br><span class="line">                <span class="comment">// Memcached::OPT_CONNECT_TIMEOUT  =&gt; 2000,</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'servers'</span> =&gt; [</span><br><span class="line">                [</span><br><span class="line">                    <span class="string">'host'</span> =&gt; env(<span class="string">'MEMCACHED_HOST'</span>, <span class="string">'127.0.0.1'</span>),  <span class="comment">//host可设置为UNIX socket路径，此时port应置为0</span></span><br><span class="line">                    <span class="string">'port'</span> =&gt; env(<span class="string">'MEMCACHED_PORT'</span>, <span class="number">11211</span>),</span><br><span class="line">                    <span class="string">'weight'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">                ],</span><br><span class="line">            ],</span><br><span class="line">        ],</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《memcached全面剖析》读书笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/18/《memcached全面剖析》读书笔记/">《memcached全面剖析》读书笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/18/《memcached全面剖析》读书笔记/" class="archive-article-date">
-  	<time datetime="2019-11-18T06:35:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见<a href="http://www.sdwangblog.cn/2017/06/04/PHP%E7%9A%84%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF/">PHP的缓存技术</a>。</p>
-<h2 id="Memcache的安装与启动"><a href="#Memcache的安装与启动" class="headerlink" title="Memcache的安装与启动"></a>Memcache的安装与启动</h2><p>memcached 支持许多平台，比如Linux, FreeBSD, Solaris(memcached 1.2.5以上版本), Mac OS X等。这里使用Mac OS X进行说明。</p>
-<h3 id="memcached的安装："><a href="#memcached的安装：" class="headerlink" title="memcached的安装："></a>memcached的安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//安装Hombrew： ruby -e &quot;$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)&quot;</span><br><span class="line">$ brew search memcache</span><br><span class="line">==&gt; Formulae</span><br><span class="line">libmemcached 【客户端】                          memcache-top                           memcached 【服务器】</span><br><span class="line">$ brew install memcached</span><br><span class="line">//查看安装结果</span><br><span class="line">$ memcached -h</span><br><span class="line">memcached 1.5.20</span><br><span class="line">-p, --port=&lt;num&gt;          TCP port to listen on (default: 11211)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/11/18/《memcached全面剖析》读书笔记/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Memcached</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/18/《memcached全面剖析》读书笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/15/Laravel学习笔记/">Laravel学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/15/Laravel学习笔记/" class="archive-article-date">
-  	<time datetime="2019-09-15T02:58:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel是一个在当下依然算得上比较流行的PHP框架，就个人而言，虽未曾大规模地使用过（公司使用的是自主研发的PHP框架），但因其盛名零零碎碎地还是有过些了解（亦曾实现过几个教程项目）。私以为它就个“全栈框架”，框架结构算得上合理，其内并没运用什么超前的原理，丰富的第三方库还略嫌笨重，没啥出彩之处。近来机缘巧合，有了进一步接触后才明白：“管中窥豹实乃短见”。</p>
-<p>本系列文章是针对Laravel 的、以实例驱动的、深入浅出的非官方实战指南，适用于有一定开发经验人员来概览Laravel框架。</p>
-<ul>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279573" target="_blank" rel="noopener"><strong>搭建适用于Mac的轻量级开发环境Valet</strong></a></li>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279659" target="_blank" rel="noopener"><strong>创建并运行一个新的Laravel项目</strong></a></li>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279660" target="_blank" rel="noopener"><strong>基础篇之路由章</strong></a></li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-跳跃表原理及实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/08/跳跃表原理及实现/">跳跃表原理及实现</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/08/跳跃表原理及实现/" class="archive-article-date">
-  	<time datetime="2019-07-08T08:35:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间曾欲<a href="http://www.sdwangblog.cn/2019/03/27/InnoDB%E4%BD%BF%E7%94%A8%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95-FullText-Index/">使用InnoDB全文索引</a>优化表上某字段的模糊查询，但考虑到线上MySQL版本(&gt;=5.6)及参数兼容性(innodb_ft_min_token_size)等因素，最后还是另写了个<a href="#">简略版分词器</a>。在了解全文检索相关技术时，Lucenne、Sphinx及ElasticSearch自然就“不期而遇”了。对于这几种技术，除了Elasticsearch略微有所接触外，其他真的是一无所知，虽有心探究但由于工期因素就暂时加在了“TODO List豪华菜单“。But Now。。。（没错，我又是个闲人了😂）。。。接下来一段时间我们会多聊一聊Elasticearch和Lucene的相关知识。<br>全文检索技术由来已久，绝大多数都基于 <strong>倒排索引【顾名思义，相反于一篇文章包含了哪些词，它从词出发，记载了这个词在哪些文档中出现过】</strong> 来做（曾有过一些其他方案如文件指纹），<strong>通常由词典和倒排表两部分组成</strong>。其中词典结构尤为重要，在一个索引系统中，需要权衡各个因素（索引效率，磁盘空间、内存空间）来找到适合你当前业务的词典（数据）结构进行存储，才能让索引发挥最大能效。对于倒排索引的词典结构，常见的有 <strong>哈希表、B+树、跳跃表、字典树、FST(Finite State Transducers)等几种数据结构（其实只要是快速查找型的数据结构就可以用来做词典结构）</strong>。对于“哈希表、B+树”，大家应该都不陌生，那“跳跃表”又是个什么东东呢？</p>
-        
-          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -971,8 +399,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

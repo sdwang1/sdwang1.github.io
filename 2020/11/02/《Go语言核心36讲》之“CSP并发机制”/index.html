@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Archives: 2021/10 | Sdwang1的博客</title>
+  <title>《Go语言核心36讲》之“CSP并发机制” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/archives/2021/10/index.html">
+  <meta name="description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Go语言核心36讲》之“CSP并发机制”">
+<meta property="og:url" content="http://www.sdwangblog.cn/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_channel_buffer_difference.png">
+<meta property="og:updated_time" content="2021-01-21T08:43:24.982Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="《Go语言核心36讲》之“CSP并发机制”">
+<meta name="twitter:description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
+<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/go_channel_buffer_difference.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,60 +156,196 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-《Go语言核心36讲》之“CSP并发机制”" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/" class="archive-article-date">
-  	<time datetime="2021-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-28</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/">《Go语言核心36讲》之“Go语言并发通信”</a>
+    <h1 class="article-title" itemprop="name">
+      《Go语言核心36讲》之“CSP并发机制”
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        <a href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/" class="archive-article-date">
+  	<time datetime="2020-11-02T07:56:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>消息机制认为<strong>每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息</strong>，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 <strong>channel</strong>。它可以在多个 goroutine 之间传递数据，<strong>是 Go 语言自带的、唯一一个可以满足并发安全性的类型</strong>。<br>作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine 并驾齐驱，共同代表 Go 语言独有的并发编程模式和编程哲学。</p>
+<blockquote>
+<p>Don’t communicate by sharing memory; share memory by communicating.<br>不要通过共享内存来通信，而应该通过通信来共享内存。</p>
+</blockquote>
+<h2 id="通道类型的声明及初始化"><a href="#通道类型的声明及初始化" class="headerlink" title="通道类型的声明及初始化"></a>通道类型的声明及初始化</h2><p>在声明通道类型变量时，我们需要指定该通道类型的元素类型（<strong>支持内置类型、命名类型、结构类型和引用类型的值或者指针</strong>），这决定了我们可以通过该通道传递什么类型的数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//通道类型是引用类型，声明后默认零值是nil</span><br><span class="line">var ch1 chan T                                //T为通道的元素类型    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//使用make函数声明并初始化一个通道</span><br><span class="line">ch1 := make(chan T)                           //创建非缓冲通道</span><br><span class="line">ch2 := make(chan T, cap int)                  //cap&gt;0，创建缓冲通道</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>特别说明，<strong>非缓冲通道和缓冲通道有着不同的数据传递方式</strong>，具体区别如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/go_channel_buffer_difference.png" alt></p>
+<h2 id="通道的发送和接收操作"><a href="#通道的发送和接收操作" class="headerlink" title="通道的发送和接收操作"></a>通道的发送和接收操作</h2><p>一个通道相当于一个先进先出（FIFO）队列，也就是说，<strong>通道中的各个元素值都是严格地按照发送的顺序排列的，先被发送通道的元素值一定会先被接收</strong>。元素值的发送和接收都需要用到接送操作符(&lt;-)，形象地代表了元素值的传输方向。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>)</span><br><span class="line">  ch1 &lt;- <span class="number">2</span></span><br><span class="line">  ch1 &lt;- <span class="number">1</span></span><br><span class="line">  ch1 &lt;- <span class="number">3</span></span><br><span class="line">  elem1 := &lt;- ch1</span><br><span class="line">  fmt.Printf(<span class="string">"The first element received from channel: %v\n"</span>, elem1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那，对通道的发送和接收操作都有哪些基本特性呢？</p>
+<ul>
+<li><strong>对于同一个通道，发送操作之间是互斥的，接收操作之间也是互斥的</strong>。在同一时刻，Go 语言的运行时系统只会执行对同一个通道的任意个发送（接收）操作中的某一个，直到这个元素值被完全复制进（移出）该通道之后，其他针对该通道的发送（接收）操作才可能被执行。即使这些操作是并发执行的也是如此。<br>另外，<strong>对于通道中的同一个元素值来说，发送操作和接收操作之间也是互斥的</strong>（比如正在被复制进通道但还未复制完成的元素值，绝不会被接收方看到和取走）。</li>
+<li><strong>发送操作和接收操作中对元素值的处理是不可分割的</strong>，即它们处理元素值时“一气呵成，绝不会被打断”。<br>比如发送操作要么还没复制元素值，要么已经复制完毕，绝不会出现只复制了一部分的情况；接收操作在准备好元素值的副本之后，一定会删除掉通道中的原值，绝不会出现通道中仍有残留的情况；<br><strong>对于通道中的同一个元素值来说，它只可能是某一个发送操作放入的，同时也只可能被某一个接收操作取出</strong>。</li>
+<li><strong>发送（接收）操作在完全完成之前会被阻塞</strong>。一般情况下，<strong>发送操作包括了“复制元素值”和“放置副本到通道内部”这两个步骤</strong>，在这两个步骤完全完成之前，发起这个发送操作的那句代码会一直阻塞在那里；接收操作通常包含了 <strong>“复制通道内的元素值”“放置副本到接收方”“删掉原值”三个步骤</strong>，在所有这些步骤完全完成之前，发起该操作的代码也会一直阻塞；<br><strong>如此阻塞代码其实就是为了实现操作的互斥和元素值的完整</strong>。<blockquote>
+<p>对于值为nil的通道，不论它的具体类型是什么，对它的发送操作和接收操作都会永久地处于阻塞状态。它们所属的 goroutine 中的任何代码，都不再会被执行。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="通道的遍历、关闭"><a href="#通道的遍历、关闭" class="headerlink" title="通道的遍历、关闭"></a>通道的遍历、关闭</h2><p>Go 通过 range 关键字来实现遍历读取到的数据，类似于与数组或切片，格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for data := range ch &#123;</span><br><span class="line">  ... ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对于一个已经初始化、但未关闭的通道来说，收发操作自然毫无问题。但<strong>若通道已经关闭，无论是再对它进行发送操作、还是再试图关闭，都会引发 panic</strong>。<br><strong>接收操作是可以感知到通道的关闭的，并能够安全退出</strong>。更具体地说，<strong>当我们把接收表达式的结果同时赋给两个变量时<code>data, ok := &lt;-ch</code>，如果<code>ok</code>为false就说明通道已经关闭，并且再没有元素值可取了。如果通道关闭时里面还有元素值未被取出，那么接收表达式的<code>data</code>仍会是通道中的某一个元素值，而<code>ok</code>值一定会是true（通过接收表达式的<code>ok</code>值来判断通道是否关闭可能有延时）</strong>。<br>所以，我们千万不要让接收方关闭通道，而应当让发送方做这件事，下例是一个简单的模式可供参考：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">2</span>)</span><br><span class="line">  <span class="comment">// 发送方。</span></span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      fmt.Printf(<span class="string">"Sender: sending element %v...\n"</span>, i)</span><br><span class="line">      ch1 &lt;- i</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"Sender: close the channel..."</span>)</span><br><span class="line">    <span class="built_in">close</span>(ch1)</span><br><span class="line">  &#125;()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 接收方。</span></span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    elem, ok := &lt;-ch1</span><br><span class="line">    <span class="keyword">if</span> !ok &#123;</span><br><span class="line">      fmt.Println(<span class="string">"Receiver: closed channel"</span>)</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(<span class="string">"Receiver: received an element: %v\n"</span>, elem)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fmt.Println(<span class="string">"End."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Go-语言单向通道"><a href="#Go-语言单向通道" class="headerlink" title="Go 语言单向通道"></a>Go 语言单向通道</h2><p>Go 语言的类型系统提供了单方向的 channel 类型，顾名思义，单向 channel 就是<strong>只能用于写入或者只能用于读取数据</strong>。当然 channel 本身必然是同时支持读写的（语法层面），所谓的单向 channel ，只是对 channel 的一种使用层面的限制。<br><strong>一个通道是双向的，还是单向的是由它的类型字面量体现的</strong>。单向通道的声明及初始化示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var chSendOnly chan&lt;- T                        //声明一个只能写入数据的通道类型</span><br><span class="line">var chRecvOnly &lt;-chan T                        //声明一个只能读取数据的通道类型</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//使用make函数声明并初始化一个通道</span><br><span class="line">chSendOnly := make(chan&lt;- int, 2)</span><br><span class="line">chRecvOnly := make(&lt;-chan int, 2)</span><br></pre></td></tr></table></figure></p>
+<p>从上述变量的名字上你也能猜到，这样的通道是没用的。通道就是为了传递数据而存在的，声明一个只有一端（发送端或者接收端）能用的通道没有任何意义。那么，单向通道的用途究竟在哪儿呢？<br>概括地说，<strong>单向通道最主要的用途就是约束其他代码的行为</strong>。在实际场景中，这种约束一般会出现在接口类型声明中的某个方法定义上，比如下例中 Notifier 接口的SendInt方法只会接受一个发送通道作为参数，那么在该接口的所有实现类型中的SendInt方法都会受到限制（编写模板代码或者可扩展的程序库）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type Notifier interface&#123;</span><br><span class="line">  SendInt(ch chan&lt;- int)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>顺便说下，我们在调用SendInt函数的时候，只需要把一个元素类型匹配的双向通道传给它就行了，没必要用发送通道，因为 Go 语言在这种情况下会自动地把双向通道转换为函数所需的单向通道。</p>
 
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/11/05/《Go语言核心36讲》之“多路选择和超时”/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          《Go语言核心36讲》之“多路选择和超时”
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《Go语言核心36讲》之“共享内存并发机制”</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,8 +368,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

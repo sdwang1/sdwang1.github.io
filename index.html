@@ -152,30 +152,29 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-《Go语言核心36讲》之“Go语言并发通信”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-《Go语言核心36讲》之“多路选择和超时”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/">《Go语言核心36讲》之“Go语言并发通信”</a>
+      <a class="article-title" href="/2020/11/05/《Go语言核心36讲》之“多路选择和超时”/">《Go语言核心36讲》之“多路选择和超时”</a>
     </h1>
   
 
         
-        <a href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/" class="archive-article-date">
-  	<time datetime="2021-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-28</time>
+        <a href="/2020/11/05/《Go语言核心36讲》之“多路选择和超时”/" class="archive-article-date">
+  	<time datetime="2020-11-05T06:54:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-05</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：<strong>共享数据和消息</strong>。<br>共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享。被共享的数据可能有多种形式，实际应用中最常见的就是<strong>共享内存</strong>。<br>消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。<strong>每个并发单元的输入和输出只有消息</strong>，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 <strong>channel</strong>。</p>
-<h2 id="共享内存并发机制"><a href="#共享内存并发机制" class="headerlink" title="共享内存并发机制"></a>共享内存并发机制</h2><p>共享内存经常会设置一个共享变量，然后基于锁机制实现并发控制（线程安全），通用示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  //process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line"></span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>Go 语言中的<code>select语句</code>能够让 Goroutine 同时等待多个 Channel 可读或者可写，在多个文件或者 Channel状态改变之前，<code>select</code>会一直阻塞当前线程或者 Goroutine（<strong>类I/O多路复用机制</strong>）。<br><code>select语句</code>与<code>switch语句</code>有相似的控制结构，较为特别的是，它的<strong><code>case表达式</code>都只能包含操作通道的表达式</strong>，比如接收表达式。大致结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select &#123;</span><br><span class="line">  case data &lt;- ch1:</span><br><span class="line">  ...</span><br><span class="line">  case ch2 &lt;- data:</span><br><span class="line">  ...</span><br><span class="line">  default:</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
         
-          <a class="article-more-a" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/#more">more >></a>
+          <a class="article-more-a" href="/2020/11/05/《Go语言核心36讲》之“多路选择和超时”/#more">more >></a>
         
       
 
@@ -199,7 +198,152 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/10/28/《Go语言核心36讲》之“Go语言并发通信”/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/05/《Go语言核心36讲》之“多路选择和超时”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-《Go语言核心36讲》之“CSP并发机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/">《Go语言核心36讲》之“CSP并发机制”</a>
+    </h1>
+  
+
+        
+        <a href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/" class="archive-article-date">
+  	<time datetime="2020-11-02T07:56:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>消息机制认为<strong>每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息</strong>，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 <strong>channel</strong>。它可以在多个 goroutine 之间传递数据，<strong>是 Go 语言自带的、唯一一个可以满足并发安全性的类型</strong>。<br>作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine 并驾齐驱，共同代表 Go 语言独有的并发编程模式和编程哲学。</p>
+<blockquote>
+<p>Don’t communicate by sharing memory; share memory by communicating.<br>不要通过共享内存来通信，而应该通过通信来共享内存。</p>
+</blockquote>
+<h2 id="通道类型的声明及初始化"><a href="#通道类型的声明及初始化" class="headerlink" title="通道类型的声明及初始化"></a>通道类型的声明及初始化</h2><p>在声明通道类型变量时，我们需要指定该通道类型的元素类型（<strong>支持内置类型、命名类型、结构类型和引用类型的值或者指针</strong>），这决定了我们可以通过该通道传递什么类型的数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//通道类型是引用类型，声明后默认零值是nil</span><br><span class="line">var ch1 chan T                                //T为通道的元素类型    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//使用make函数声明并初始化一个通道</span><br><span class="line">ch1 := make(chan T)                           //创建非缓冲通道</span><br><span class="line">ch2 := make(chan T, cap int)                  //cap&gt;0，创建缓冲通道</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-《Go语言核心36讲》之“共享内存并发机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/">《Go语言核心36讲》之“共享内存并发机制”</a>
+    </h1>
+  
+
+        
+        <a href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/" class="archive-article-date">
+  	<time datetime="2020-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：<strong>共享数据和消息</strong>。<br>共享数据是指<strong>多个并发单元分别保持对同一个数据的引用，实现对该数据的共享</strong>，被共享的数据可能有多种形式，实际应用中最常见的就是<strong>共享内存</strong>。<br><strong>共享内存并发机制</strong>，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申请对该资源的访问权限，且只有在申请成功之后访问才能真正开始。而当线程对共享资源的访问结束时，它还必须归还对该资源的访问权限，若要再次访问仍需申请（访问串行化），通用示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  //process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line"></span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/">展开全文 >></a>
         </p>
       
 
@@ -756,166 +900,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/08/16/《GO语言核心36讲》之“命令源码文件与库源码文件”/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《GO语言核心36讲》之”工作区和GOPATH“" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/">《GO语言核心36讲》之”工作区和GOPATH“</a>
-    </h1>
-  
-
-        
-        <a href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/" class="archive-article-date">
-  	<time datetime="2020-08-13T02:55:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="下载Go语言开发包"><a href="#下载Go语言开发包" class="headerlink" title="下载Go语言开发包"></a>下载Go语言开发包</h2><p>根据自己电脑的计算架构，从<a href="https://golang.google.cn/" target="_blank" rel="noopener">Go语言官网</a>下载对应的二进制包解压安装，并通过在命令行中输入<code>go version</code>来验证是否安装成功。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 默认最新稳定版本</span><br><span class="line">$ brew intall go</span><br><span class="line"></span><br><span class="line">$ go version</span><br><span class="line">go version go1.15.4 darwin/amd64</span><br></pre></td></tr></table></figure></p>
-<p>在这个过程中，我们需要了解（或配置） 3 个环境变量：GOROOT、GOPATH 和 GOBIN：</p>
-<ul>
-<li>GOROOT：Go 语言安装根目录的路径，即 GO 语言的安装路径。</li>
-<li>GOPATH：若干工作区目录的路径，自定义的工作空间。</li>
-<li>GOBIN：GO 程序生成的可执行文件（executable file）的路径。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/13/《GO语言核心36讲》之”工作区和GOPATH“/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Protocol-Buffers3-简明教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/28/Protocol-Buffers3-简明教程/">Protocol Buffers3 简明教程</a>
-    </h1>
-  
-
-        
-        <a href="/2020/06/28/Protocol-Buffers3-简明教程/" class="archive-article-date">
-  	<time datetime="2020-06-28T08:35:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://github.com/google/protobuf" target="_blank" rel="noopener">Protocol Buffers</a> 是Google“出品”的一种与语言、平台无关、可扩展的序列化结构数据的方法(think XML, but smaller, faster and simpler)。你只需通过proto文件定义出结构化的数据，便可使用其自带代码生成器（数据解析类自动生成）轻松地编写和读取结构化数据（支持多种语言）。<br>现有许多流行的RPC(gRPC)框架都是基于Protocol Buffers，它目前有proto 2和proto 3两个版本号。本教程介绍的是最新的proto3版本的语法。</p>
-<h2 id="使用ProtoBuf"><a href="#使用ProtoBuf" class="headerlink" title="使用ProtoBuf"></a>使用ProtoBuf</h2><p>使用ProtoBuf通常有如下几个步骤：1. 创建.proto 文件，定义数据结构；2. 使用ProtoBuf 编译器将.proto 文件编译成指定语言类库；3. 使用ProtoBuf 对数据进行序列化和反序列化。</p>
-<h3 id="创建-proto-文件"><a href="#创建-proto-文件" class="headerlink" title="创建.proto 文件"></a>创建.proto 文件</h3><p>定义 .proto 文件就是定义我们所需存储或者传输的数据结构（协议格式）。ProtoBuf的消息结构是通过一种叫做<a href="https://developers.google.com/protocol-buffers/docs/overview" target="_blank" rel="noopener">Protocol Buffers Language</a>的语言进行定义和描述的，下面我们就以版本3为例定义个<code>searchRequest.proto</code>文件：</p>
-        
-          <a class="article-more-a" href="/2020/06/28/Protocol-Buffers3-简明教程/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/06/28/Protocol-Buffers3-简明教程/">展开全文 >></a>
         </p>
       
 
