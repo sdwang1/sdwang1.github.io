@@ -152,6 +152,238 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP的数据库扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/31/PHP的数据库扩展/">PHP的数据库扩展</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/31/PHP的数据库扩展/" class="archive-article-date">
+  	<time datetime="2018-07-31T10:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>绝大多数时候你的 PHP 程序都需要使用数据库来长久地保存数据，这时你有一些不同的选择可以来连接并与数据库进行交互。在 <strong>PHP 5.1.0</strong> 之前，我们推荐的方式是使用例如 <a href="http://php.net/mysqli" target="_blank" rel="noopener">mysqli</a>，<a href="http://php.net/pgsql" target="_blank" rel="noopener">pgsql</a>，<a href="http://php.net/mssql" target="_blank" rel="noopener">mssql</a> 等原生驱动。<br>原生驱动是 <strong>在只使用一个数据库的情况下是不错选择</strong>，但如果你同时使用了 MySQL 和一点点 MSSQL，或者你需要使用 Oracle 的数据库，那你就不能够只使用一个数据库驱动了。你需要为每一个数据库去学习各自不同的 API——这样做显然不科学。</p>
+<h2 id="MySQL扩展"><a href="#MySQL扩展" class="headerlink" title="MySQL扩展"></a>MySQL扩展</h2><p>PHP中的<a href="http://php.net/manual/zh/mysql.php" target="_blank" rel="noopener">mysql</a>扩展已经不再进行新的开发了，<strong>在PHP5.0版本中正式标记为废弃，并在7.0正式被移除</strong>。想要辨别 mysql 是否被使用，你不需要到 php.ini 去查看。只需要使用编辑器打开你的项目，然后全局搜索 <code>mysql_*</code> ，如果有类似 mysql_connect() 或者 mysql_query() 方法出现，那么你就使用了 mysql。<br>mysql扩展为连接MySQL4.1之前版本编写，<strong>不支持Bind Column（易于被SQL Injection）和事务等特性</strong>，后来为解决注入风险问题发展出了 <strong>mysql_escape_string(5.3.0之后弃用)以及mysql_real_escape_string()</strong>，但整个叙述变得复杂且丑陋，而且如果机位多了，可以想见会是怎样情形。。。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql_connect($db_host, $db_user, $db_password);  </span><br><span class="line">mysql_select_db($dn_name);</span><br><span class="line"></span><br><span class="line">$query = sprintf(<span class="string">"SELECT * FROM users WHERE user='%s' AND password='%s'"</span>,  </span><br><span class="line">            mysql_real_escape_string($user),  </span><br><span class="line">            mysql_real_escape_string($password));  </span><br><span class="line"></span><br><span class="line">mysql_query($query);</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/31/PHP的数据库扩展/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-HTM-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/08/HTM-Tutorial/">HTM Tutorial</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/08/HTM-Tutorial/" class="archive-article-date">
+  	<time datetime="2018-07-08T09:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>HTML(HyperText Markup Language)超文本标记语言</strong>，由一系列的元素（Opening tag,Closing tag,Content）组成，您可以使用它来封装、包装或标记内容的不同部分，使其以某种方式显示，或以某种方式执行。总而言之，<strong>HTML用于告诉浏览器如何构造您访问的页面</strong>。对于后端开发者，因实际使用场景的限制（比如前后端分离而不常实践前端）或许成不了“熟能生巧”的前端“老师傅”，然HTML+CSS+JavaScript亦须作为基本技能掌握。本文的定位就是一篇“入门篇”的HTML概述。</p>
+<h2 id="分析HTML文档"><a href="#分析HTML文档" class="headerlink" title="分析HTML文档"></a>分析HTML文档</h2><p>HTML文件的基本结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;                                   #声明文档类型</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;                                  #根元素标签，lang为文档设定主语言</span><br><span class="line">  &lt;head&gt;                                            </span><br><span class="line">      &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">      &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>分析如下：</p>
+        
+          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">HTML</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/08/HTM-Tutorial/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Nginx-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/25/Nginx-Tutorial/">Nginx-Tutorial</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/25/Nginx-Tutorial/" class="archive-article-date">
+  	<time datetime="2018-05-25T03:45:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下主要为<a href="http://www.nginx.cn/doc/" target="_blank" rel="noopener">Nginx中文文档</a>的读书笔记。Nginx是一个高性能的Web和反向代理服务器，它具有很多优越特性（作为Web服务器，作为负载均衡服务器，作为邮件代理服务器；安装简单及配置文件简洁（还支持perl）语法，Bugs非常少），本文就先简要概览下。</p>
+<h2 id="Installing-Nginx"><a href="#Installing-Nginx" class="headerlink" title="Installing Nginx"></a>Installing Nginx</h2><p>Unix环境下，类似于其他开源项目，Nginx使用libtool和autoconf建立编译环境。</p>
+        
+          <a class="article-more-a" href="/2018/05/25/Nginx-Tutorial/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Nginx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/25/Nginx-Tutorial/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Apache与PHP的工作机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -696,239 +928,9 @@
 
 
   
-    <article id="post-简单粗暴的文件上传漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/04/简单粗暴的文件上传漏洞/">简单粗暴的文件上传漏洞</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/04/简单粗暴的文件上传漏洞/" class="archive-article-date">
-  	<time datetime="2018-04-04T02:36:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 <strong>由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用</strong>。<br>首先看一段PHP代码，假设对于上传的文件可在<code>/var/www/hackable/uploads/</code>目录下找到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))&#123;</span><br><span class="line">  $target_path = $CONFIG-&gt;basePath.<span class="string">"uploads/"</span>;</span><br><span class="line">  $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  <span class="comment">// $_FILES[‘file’][‘name’] 客户端文件名称;    </span></span><br><span class="line">  $upload_name = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">  $uploaded_ext = strtolower(substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>));</span><br><span class="line">  $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (in_array($uploaded_ext,[<span class="string">'jpg'</span>,<span class="string">'gif'</span>,<span class="string">'jpeg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>]) &amp;&amp; $uploaded_size &lt; <span class="number">100000</span>)&#123;</span><br><span class="line">    <span class="comment">//$_FILES[‘file’][‘tmp_name’] 文件被上传后在服务器端临时文件名，可以在php.ini中指定，脚本运行完毕，自动删除临时文件</span></span><br><span class="line">    <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $target_path))&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;'</span>.$target_path . <span class="string">' succesfully uploaded!&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Fail to move uploaded file to '</span>.$target_path;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Please upload a proper image file&lt;/pre&gt;'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上例代码看起来似乎不错，<strong>为了避免webshell上传到服务器，谨慎地——甚至“贴心地”考虑到中文名的编码问题——验证上传文件的扩展名和大小后，才将其移动到服务器target_path路径下。当然相较于不做任何验证的“裸奔者“，这算不错了，然鹅问题还是出现了，因为iconv函数在转码过程中，可能存在字符串截断问题</strong>：</p>
-        
-          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/04/简单粗暴的文件上传漏洞/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-CodeIgniter框架源码解析十六之加载器类文件Loader-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/28/CodeIgniter框架源码解析十六之加载器类文件Loader-php/">CodeIgniter框架源码解析十六之加载器类文件Loader.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/28/CodeIgniter框架源码解析十六之加载器类文件Loader-php/" class="archive-article-date">
-  	<time datetime="2018-03-28T07:41:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>加载器，顾名思义，是用于加载元素的，加载的元素可以是库（类），视图文件，驱动器，辅助函数，模型或其他你自己的文件，该类由系统自动加载，无需手工加载。</p>
-<p>CI加载器还支持包（Package）概念，应用程序包（Package）可以很便捷的将你的应用部署在一个独立的目录中，以实现自己整套的类库，模型，辅助函数，配置，文件和语言包。建议将这些应用程序包放置在application/third_party目录下，比如下面是一个名为“Foo Bar”的应用程序包目录的例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/application/third_party/foo_bar</span><br><span class="line"></span><br><span class="line">config/</span><br><span class="line">helpers/</span><br><span class="line">language/</span><br><span class="line">libraries/</span><br><span class="line">models/</span><br></pre></td></tr></table></figure></p>
-<p>我们先来看下CI框架中加载器类的实现框架：</p>
-        
-          <a class="article-more-a" href="/2018/03/28/CodeIgniter框架源码解析十六之加载器类文件Loader-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/28/CodeIgniter框架源码解析十六之加载器类文件Loader-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-CodeIgniter框架源码解析十五之模型类文件Model-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/28/CodeIgniter框架源码解析十五之模型类文件Model-php/">CodeIgniter框架源码解析十五之模型类文件Model.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/28/CodeIgniter框架源码解析十五之模型类文件Model-php/" class="archive-article-date">
-  	<time datetime="2018-03-28T07:25:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>模型类文件CI_Model.php，即我们通常所说的MVC中的M，我们在开发项目过程中开发模型时所有的模型类都要继承自这个文件。Model类的代码也非常少，有用的方法就<code>__get()</code>一个，它是为了在Model里面可以像控制器那么通过$this-&gt;做很多事情。例如想在model里面加载某个library，就可以$this-&gt;load-&gt;library(xxx)，其实它都是盗用CI_Controller的。</p>
-<p>此文件中代码没什么可解析的，模型类文件Model.php的源码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CI_Model</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($key)</span></span>&#123;</span><br><span class="line">    <span class="comment">// Debugging <span class="doctag">note:</span></span></span><br><span class="line">    <span class="comment">//	If you're here because you're getting an error message</span></span><br><span class="line">    <span class="comment">//	saying 'Undefined Property: system/core/Model.php', it's</span></span><br><span class="line">    <span class="comment">//	most likely a typo in your model code.</span></span><br><span class="line">    <span class="keyword">return</span> get_instance()-&gt;$key;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/28/CodeIgniter框架源码解析十五之模型类文件Model-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 
@@ -1047,11 +1049,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1059,11 +1061,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1075,7 +1073,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1088,14 +1098,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

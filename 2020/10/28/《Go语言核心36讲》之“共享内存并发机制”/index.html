@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：共享数据和消息。共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享，被共享的数据可能有多种形式，实际应用中最常见的就是共享内存。共享内存并发机制，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-01-21T08:44:59.086Z">
+<meta property="og:updated_time" content="2021-01-29T02:29:50.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“共享内存并发机制”">
 <meta name="twitter:description" content="不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：共享数据和消息。共享数据是指多个并发单元分别保持对同一个数据的引用，实现对该数据的共享，被共享的数据可能有多种形式，实际应用中最常见的就是共享内存。共享内存并发机制，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申">
@@ -196,16 +196,6 @@
 <li>操作被保护数据的代码是集中的还是分散的？如果是分散的，是否可以变为集中的？<br>在搞清楚上述问题（以及你关注的其他问题）之后，优先使用原子值。</li>
 </ul>
 </blockquote>
-<h2 id="等待组-sync-WaitGroup"><a href="#等待组-sync-WaitGroup" class="headerlink" title="等待组 sync.WaitGroup"></a>等待组 sync.WaitGroup</h2><p>在之前的一些场合下，为了“让主 goroutine等待其他 goroutine的运行结束”，我们或是“让主 goroutine<code>Sleep(x *time.Second)</code>睡会儿”，或是“通过声明一个容量与启动的 goroutine数量相同的通道，让其他的 goroutine在运行结束前向这个通道发送一个元素值，并且让主 goroutine 在最后从这个通道中接收元素值”，是不是睡看起来有点丑陋？<br>实际上，在这种应用场景下，我们可以<strong>使用等待组(sync.WaitGroup)更合理地进行多个任务的同步，等待组可以保证在并发环境中完成指定数量的任务</strong>。等待组内部拥有一个计数器(初始默认值为0)，计数器的值可以通过方法调用实现计数器的增加（添加某个并发任务）和减少（某个任务完成时），在另外一个 goroutine 中等待这个等待组的计数器值为 0 时，表示所有任务已经完成。<br><strong>对于一个可寻址的 sync.WaitGroup值wg</strong>：</p>
-<ul>
-<li><strong>使用<code>(wg * WaitGroup) Add(delta int)</code>方法来改变值 wg 维护的计数</strong>；</li>
-<li><strong>使用<code>(wg * WaitGroup) Done()</code>方法让值 wg 的计数器 -1，与调用<code>wg.Add(-1)</code>完全等价</strong>；<br>如果调用 wg.Add(delta) 或者 wg.Done() 后将 wg 维护的计数更改成一个负数，将会产生一个运行时恐慌；</li>
-<li><strong>使用<code>(wg * WaitGroup) Wait()</code>方法让等待组计数器不等于 0 者阻塞直至变 0</strong>；<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"fmt"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> mut sync.Mutex</span><br><span class="line">  <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">  counter := <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> i:=<span class="number">0</span>; i&lt;<span class="number">5000</span>; i++ &#123;</span><br><span class="line">    wg.Add(<span class="number">1</span>)                                      <span class="comment">//每个任务开始时，将等待组计数器 +1</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        mut.Unlock()</span><br><span class="line">        wg.Done()                                 <span class="comment">//任务完成时，将等待组计数器 -1</span></span><br><span class="line">      &#125;()</span><br><span class="line">      mut.Lock()</span><br><span class="line">      counter++</span><br><span class="line">    &#125;()</span><br><span class="line">  &#125;</span><br><span class="line">  wg.Wait()                                      <span class="comment">//等待所有的任务完成</span></span><br><span class="line">  fmt.Printf(<span class="string">"counter=%d"</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>关于 WaitGroup值的使用禁忌：不要把增加其计数器值的操作和调用其 Wait方法的代码，放在不同的goroutine中执行。换句话说，要杜绝对同一个 WaitGroup值的两种操作的并发执行。</p>
-</blockquote>
 
       
 
@@ -320,11 +310,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/11/02/《Go语言核心36讲》之“CSP并发机制”/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/11/02/《Go语言核心36讲》之“sync-WaitGroup和sync-Once”/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          《Go语言核心36讲》之“CSP并发机制”
+          《Go语言核心36讲》之“sync.WaitGroup和sync.Once”
         
       </div>
     </a>
@@ -358,7 +348,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量sync-Cond"><span class="toc-number">1.</span> <span class="toc-text">条件变量sync.Cond</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原子操作-sync-atomic"><span class="toc-number">2.</span> <span class="toc-text">原子操作 sync/atomic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#等待组-sync-WaitGroup"><span class="toc-number">3.</span> <span class="toc-text">等待组 sync.WaitGroup</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量sync-Cond"><span class="toc-number">1.</span> <span class="toc-text">条件变量sync.Cond</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原子操作-sync-atomic"><span class="toc-number">2.</span> <span class="toc-text">原子操作 sync/atomic</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -494,11 +484,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -506,11 +496,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,7 +508,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -535,14 +533,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

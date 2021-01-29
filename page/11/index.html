@@ -152,6 +152,250 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-深入了解Linux目录结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/28/深入了解Linux目录结构/">深入了解Linux目录结构</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/28/深入了解Linux目录结构/" class="archive-article-date">
+  	<time datetime="2017-09-28T06:44:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Linux系统和Windows系统最本质的区别莫过于它们对自己的用户所做的假设。Linux的假设是：用户自己知道想要什么，也明白自己在做什么，并且会为自己的行为负责；而Windows则恰好相反：用户并不知道自己想要什么，也不明白自己在做什么，更不打算为自己的行为负责。作为Linux的支持者和初学者，其实在<a href="http://www.sdwangblog.cn/2017/09/07/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%BA%8C%E4%B9%8BLinux%E7%9A%84%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE/">Linux文件系统总览</a>一文后，我就打算深入了解下Linux系统的目录结构的标准和每个目录的详细功能，毕竟”知己知彼，百战不殆”。</p>
+<p>关于”Linux目录结构”，相信大家随便Google／Baidu下都是一搜一箩筐的讲解，比如鸟哥私房菜吧啦啦，共同处都是”长篇累牍”，最重要的是你发现看过一遍后并没什么特别感觉，毕竟都是纯文字描述类的东西。不过大家不要灰心丧气，我们耐心点【基础知识的确是琐碎的】，先给自己定个”小目标”——对Linux的目录结构有感性认知，并熟知些常用目录，具体目录细节后期使用过程中慢慢加深印象。</p>
+        
+          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux常用命令-ln命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/28/Linux常用命令-ln命令/">Linux常用命令-ln命令</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/28/Linux常用命令-ln命令/" class="archive-article-date">
+  	<time datetime="2017-09-28T01:47:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>ln命令，为某一个文件在另一个位置建立一个同步的链接。当在不同的目录下需要用到相同的文件时，ln命令使得它不必占用重复的磁盘空间。</strong></p>
+<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   ln命令为Linux文件系统中文件创建’硬链接’或者’软链接’。<br>   硬链接，是创建文件的一个副本，同时建立两者之间的连接关系，<code>直接指向同一个inode的不同路径彼此之间称为硬链接</code>。</p>
+<ul>
+<li>两者之中修改其中一个，与其连接的文件同时被修改；</li>
+<li>删除其中任意一个其余的文件将不受影响；</li>
+<li><p>硬链接只有在同一个文件系统中，不允许给目录创建文件。</p>
+<p>软链接，也叫符号连接，只是对源文件在新的位置建立一个“快捷方式”，指向另一个路径（字符串）。<strong>对连接文件的使用、引用都是直接调用源文件</strong>。</p>
+</li>
+<li>当源文件删除时，符号连接的文件将成为无源之水——仅仅剩下个文件名了，当然删除这个连接，也不会影响到源文件。</li>
+<li><p>软链接可跨文件系统，亦可对目录进行链接，甚至可以对一个不存在的文件进行链接。</p>
+<p>ln命令用于链接文件或目录时，如同时指定两个以上的文件或目录，且最后的目的地是一个已经存在的目录，则会把前面指定的所有文件或目录都复制到该目录中，反之若最后的目的地并非一个已存在的目录，则会出现错误信息。</p>
+</li>
+</ul>
+<h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln [参数] [源文件或目录][目标文件或目录]</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2017/09/28/Linux常用命令-ln命令/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/28/Linux常用命令-ln命令/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux常用命令-lsof命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/27/Linux常用命令-lsof命令/">Linux常用命令-lsof命令</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/27/Linux常用命令-lsof命令/" class="archive-article-date">
+  	<time datetime="2017-09-27T07:21:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>lsof(list open files)命令查看进程打开的文件【包括端口TCP、UDP等】，需要ROOT权限才能执行。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的</strong>。</p>
+<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   lsof(list open files)命令查看进程打开的文件【包括端口TCP、UDP等】。</p>
+<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof [选项] [文件]</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2017/09/27/Linux常用命令-lsof命令/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/27/Linux常用命令-lsof命令/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux常用命令-fuser命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -699,248 +943,9 @@
 
 
   
-    <article id="post-macOS下动态添加pcntl扩展" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/04/macOS下动态添加pcntl扩展/">macOS下动态添加pcntl扩展</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/04/macOS下动态添加pcntl扩展/" class="archive-article-date">
-  	<time datetime="2017-09-04T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>初始目的是想给本地的邮件发送队列写一个守护进程，故需要添加PHP的pcntl扩展。本以为只是简单的安装下pcntl.so的支持扩展，应该是分分钟搞定的事情，没想到一念之差，折腾半天。。。</p>
-<h2 id="检查php扩展模块的支持情况"><a href="#检查php扩展模块的支持情况" class="headerlink" title="检查php扩展模块的支持情况"></a>检查php扩展模块的支持情况</h2><p>本地PHP开发环境：Nginx+php-fpm+php5.6;<br>PHP源码包目录：~/dev/soft/php-5.6.30<br>php编译安装路径：/usr/local/php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看php 已安装并且成功加载的扩展模块</span><br><span class="line">$ /usr/local/php/bin/php -m |grep pcntl</span><br></pre></td></tr></table></figure></p>
-<p>若输出信息为空，说明目前环境不支持，需要安装。</p>
-<h2 id="动态添加pcntl扩展"><a href="#动态添加pcntl扩展" class="headerlink" title="动态添加pcntl扩展"></a>动态添加pcntl扩展</h2><p>要动态添加php扩展，一般常规的解决途径有以下两种：</p>
-<ol>
-<li>pcntl源码编译、安装、添加配置到php.ini；</li>
-<li>借助第三方工具集成安装：<br><code>$ brew reinstall --build-from-source php56-pcntl</code></li>
-</ol>
-        
-          <a class="article-more-a" href="/2017/09/04/macOS下动态添加pcntl扩展/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">php杂集</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/04/macOS下动态添加pcntl扩展/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令-tar命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/30/Linux常用命令-tar命令/">Linux常用命令:tar命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/30/Linux常用命令-tar命令/" class="archive-article-date">
-  	<time datetime="2017-08-30T13:59:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>tar命令可以为linux的文件和目录创建档案。利用tar，可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件</strong>。</p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   tar用来打包和解压文件。tar本身不具有压缩功能。他是调用压缩功能实现的。</p>
-<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar[必要参数][选择参数][文件]</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/08/30/Linux常用命令-tar命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/30/Linux常用命令-tar命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令-find命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/30/Linux常用命令-find命令/">Linux常用命令-find命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/30/Linux常用命令-find命令/" class="archive-article-date">
-  	<time datetime="2017-08-30T09:49:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>find命令在目录结构中搜索文件，并执行指定的操作。</strong></p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   find 用于在文件树中查找文件，并作出相应的处理。</p>
-<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find pathname -options [-print -exec -ok...]</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/08/30/Linux常用命令-find命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/30/Linux常用命令-find命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/12/">Next &raquo;</a>
     </nav>
   
 
@@ -1059,11 +1064,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1071,11 +1076,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1087,7 +1088,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1100,14 +1113,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

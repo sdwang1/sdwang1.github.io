@@ -152,6 +152,237 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux常用命令-cut命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Linux常用命令-cut命令/">Linux常用命令-cut命令</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/19/Linux常用命令-cut命令/" class="archive-article-date">
+  	<time datetime="2017-10-19T08:03:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>cut命令通常以行为单位，即针对一行行分析，将一段讯息的某一段『切』出來。主要用于『同一行里面的资料进行分解』，但其在处理多空格相连的资料时，可能会比较吃力，某些时刻可以用awk命令替代</strong>。</p>
+<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   cut命令通常以行为单位，将一段讯息的某一段『切』出來。</p>
+<h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cut -d&apos;分割字元&apos; -f fields</span><br><span class="line">cut -c 字元区间</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2017/10/19/Linux常用命令-cut命令/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/19/Linux常用命令-cut命令/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-认识与学习BASH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/17/认识与学习BASH/">认识与学习BASH</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/17/认识与学习BASH/" class="archive-article-date">
+  	<time datetime="2017-10-17T06:45:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文字界面的Shell作为Linux的”任督二脉”，目前我们的Linux（以CentOS 7.x为例）有多少我们可以使用的shells呢？你可以自行检查下/etc/shells档案【记录了系统上合法的Shell】。虽然各家shell功能都差不多，但在某些语法的下达方面则有所不同，籍此我们就先选择学习下Linux预设的shell——bash吧。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/shells</span><br><span class="line"># List of acceptable shells for chpass(1).</span><br><span class="line"># Ftpd will not allow users to connect who are not using</span><br><span class="line"># one of these shells.</span><br><span class="line"></span><br><span class="line">/bin/bash      #Linux预设的shell</span><br><span class="line">/bin/csh       #已经被/bin/tcsh所取代</span><br><span class="line">/bin/ksh</span><br><span class="line">/bin/sh        #已经被/bin/bash所取代</span><br><span class="line">/bin/tcsh      #整合C Shell，提供更多的功能</span><br><span class="line">/bin/zsh</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2017/10/17/认识与学习BASH/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/17/认识与学习BASH/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux下wget-apt-get-yum三个命令的区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/16/Linux下wget-apt-get-yum三个命令的区别/">Linux下wget,apt-get,yum(附赠brew)命令的区别</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/16/Linux下wget-apt-get-yum三个命令的区别/" class="archive-article-date">
+  	<time datetime="2017-10-16T07:42:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>“深憾识的晚，没有早入坑”，接触Linux以来，越来越体会到*Uinx系统的开源性和便捷性。说起开源性，包管理工具对大神们应该都不陌生。鄙人短见，早期看到某些技术文章中使用wget,apt-get或yum直接安装软件（包括其依赖关系）还觉得很神奇，实在是贻笑于大方之家了。此文无甚特殊，只为像我一样曾经无知的小朋友扫盲而已。</p>
+<h2 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h2><p>wget（World Wide Web Get），Linux平台上开源的优秀工具之一。它不是一种安装方式，而是一种下载工具（比如迅雷），主要通过HTTP，HTTPS，FTP三个常见的TCP/IP协议下载，使用方式：<br><code>wget 下载地址</code></p>
+        
+          <a class="article-more-a" href="/2017/10/16/Linux下wget-apt-get-yum三个命令的区别/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/16/Linux下wget-apt-get-yum三个命令的区别/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-vim编辑器的常用按键说明" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -699,253 +930,9 @@
 
 
   
-    <article id="post-深入了解Linux目录结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/28/深入了解Linux目录结构/">深入了解Linux目录结构</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/28/深入了解Linux目录结构/" class="archive-article-date">
-  	<time datetime="2017-09-28T06:44:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Linux系统和Windows系统最本质的区别莫过于它们对自己的用户所做的假设。Linux的假设是：用户自己知道想要什么，也明白自己在做什么，并且会为自己的行为负责；而Windows则恰好相反：用户并不知道自己想要什么，也不明白自己在做什么，更不打算为自己的行为负责。作为Linux的支持者和初学者，其实在<a href="http://www.sdwangblog.cn/2017/09/07/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%BA%8C%E4%B9%8BLinux%E7%9A%84%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE/">Linux文件系统总览</a>一文后，我就打算深入了解下Linux系统的目录结构的标准和每个目录的详细功能，毕竟”知己知彼，百战不殆”。</p>
-<p>关于”Linux目录结构”，相信大家随便Google／Baidu下都是一搜一箩筐的讲解，比如鸟哥私房菜吧啦啦，共同处都是”长篇累牍”，最重要的是你发现看过一遍后并没什么特别感觉，毕竟都是纯文字描述类的东西。不过大家不要灰心丧气，我们耐心点【基础知识的确是琐碎的】，先给自己定个”小目标”——对Linux的目录结构有感性认知，并熟知些常用目录，具体目录细节后期使用过程中慢慢加深印象。</p>
-        
-          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/28/深入了解Linux目录结构/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令-ln命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/28/Linux常用命令-ln命令/">Linux常用命令-ln命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/28/Linux常用命令-ln命令/" class="archive-article-date">
-  	<time datetime="2017-09-28T01:47:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>ln命令，为某一个文件在另一个位置建立一个同步的链接。当在不同的目录下需要用到相同的文件时，ln命令使得它不必占用重复的磁盘空间。</strong></p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   ln命令为Linux文件系统中文件创建’硬链接’或者’软链接’。<br>   硬链接，是创建文件的一个副本，同时建立两者之间的连接关系，<code>直接指向同一个inode的不同路径彼此之间称为硬链接</code>。</p>
-<ul>
-<li>两者之中修改其中一个，与其连接的文件同时被修改；</li>
-<li>删除其中任意一个其余的文件将不受影响；</li>
-<li><p>硬链接只有在同一个文件系统中，不允许给目录创建文件。</p>
-<p>软链接，也叫符号连接，只是对源文件在新的位置建立一个“快捷方式”，指向另一个路径（字符串）。<strong>对连接文件的使用、引用都是直接调用源文件</strong>。</p>
-</li>
-<li>当源文件删除时，符号连接的文件将成为无源之水——仅仅剩下个文件名了，当然删除这个连接，也不会影响到源文件。</li>
-<li><p>软链接可跨文件系统，亦可对目录进行链接，甚至可以对一个不存在的文件进行链接。</p>
-<p>ln命令用于链接文件或目录时，如同时指定两个以上的文件或目录，且最后的目的地是一个已经存在的目录，则会把前面指定的所有文件或目录都复制到该目录中，反之若最后的目的地并非一个已存在的目录，则会出现错误信息。</p>
-</li>
-</ul>
-<h3 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln [参数] [源文件或目录][目标文件或目录]</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/09/28/Linux常用命令-ln命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/28/Linux常用命令-ln命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令-lsof命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/27/Linux常用命令-lsof命令/">Linux常用命令-lsof命令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/27/Linux常用命令-lsof命令/" class="archive-article-date">
-  	<time datetime="2017-09-27T07:21:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2><p><strong>lsof(list open files)命令查看进程打开的文件【包括端口TCP、UDP等】，需要ROOT权限才能执行。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的</strong>。</p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>   lsof(list open files)命令查看进程打开的文件【包括端口TCP、UDP等】。</p>
-<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof [选项] [文件]</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/09/27/Linux常用命令-lsof命令/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux之常用命令</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/27/Linux常用命令-lsof命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
     </nav>
   
 
@@ -1064,11 +1051,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1076,11 +1063,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1092,7 +1075,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1105,14 +1100,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

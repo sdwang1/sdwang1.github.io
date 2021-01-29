@@ -152,6 +152,248 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PHP输出缓冲区-output-buffer探究" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">PHP输出缓冲区(output buffer)探究</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/15/PHP输出缓冲区-output-buffer探究/" class="archive-article-date">
+  	<time datetime="2018-03-15T02:16:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下内容主要转载自<a href="http://gywbd.github.io/posts/2015/1/php-output-buffer-in-deep.html" target="_blank" rel="noopener">深入理解php的输出缓冲区(output buffer)</a>。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP的输出流包含很多字节，通常都是程序员要PHP输出的文本，这些文本大多是echo语句或者printf()函数输出的。大家可能知道PHP中有一个名为“输出缓冲层”的东西【ob_start,ob_end_flush等系列函数】，那么它到底是个什么东西？PHP内部是怎么实现它的？以及在PHP程序中怎么使用它？事先声明，我们要讨论的东西是基于PHP 5.4（及以上版本），PHP中的OB层从5.4版开始就发生了很多变化，确切说是完全重写了，有些地方可能都不兼容PHP 5.3了。</p>
+<p>对于PHP中的输出缓冲区，你要知道三点内容：</p>
+<ul>
+<li>PHP程序任何会输出点什么东西的函数都会用到输出缓冲区。如果你是编写PHP扩展，你使用的函数（C函数）可能会直接将输出写到SAPI缓冲区层，而不需要经过OB层。你可以在源文件main/php_output.h中了解到这些C函数的API文档，这个文件给我们提供了很多其他的信息，例如默认的缓冲区大小。</li>
+<li>输出缓冲层不是唯一作用于缓冲输出的层，它实际上是只是很多层中的一个；</li>
+<li>输出缓冲层的行为跟你使用的SAPI(web or cli)相关，不同的SAPI可能有不同的行为；</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/15/PHP输出缓冲区-output-buffer探究/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CodeIgniter框架源码解析十之输出类文件Output-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/">CodeIgniter框架源码解析十之输出类文件Output.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/" class="archive-article-date">
+  	<time datetime="2018-03-14T02:16:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一般情况下，你可能根本就不会注意到输出类，因为它无需你的干涉， 对你来说完全是透明的。例如，当你使用 加载器 加载一个视图文件时，它会自动传入到输出类，并在系统执行的最后由 CodeIgniter 自动调用。尽管如此，输出类依然是核心类，它的主要功能就是负责向浏览器输出最终结果，如果你开启缓存，它也负责缓存你的 Web 页面。</p>
+<p>⏸️这里不妨也先暂停思考下，如果要负责响应内容到客户端和处理缓存，你写时要打算如何处理呢？。。。。。。</p>
+<p>Output类主要功能负责向浏览器输出最终结果，其中包括从缓存加载内容输出，根据控制器方法产生的内容输出，还包括写缓存、设置头信息、加载CI内部分析器，其结构和方法属性功能描述如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Final output string</span></span><br><span class="line"><span class="keyword">public</span> $final_output;</span><br><span class="line"><span class="comment">//Cache expiration time</span></span><br><span class="line"><span class="keyword">public</span> $cache_expiration = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//List of server headers</span></span><br><span class="line"><span class="keyword">public</span> $headers = <span class="keyword">array</span>();</span><br><span class="line"><span class="comment">//List of mime types</span></span><br><span class="line"><span class="keyword">public</span> $mimes =	<span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Mime-type for the current page</span></span><br><span class="line"><span class="keyword">protected</span> $mime_type = <span class="string">'text/html'</span>;</span><br><span class="line"><span class="comment">//Enable Profiler flag 性能分析器</span></span><br><span class="line"><span class="keyword">public</span> $enable_profiler = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//php.ini zlib.output_compression flag</span></span><br><span class="line"><span class="keyword">protected</span> $_zlib_oc = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//CI output compression flag</span></span><br><span class="line"><span class="keyword">protected</span> $_compress_output = <span class="keyword">FALSE</span>;</span><br><span class="line"><span class="comment">//List of profiler sections</span></span><br><span class="line"><span class="keyword">protected</span> $_profiler_sections =	<span class="keyword">array</span>();</span><br><span class="line"><span class="comment">//Parse markers flag 分析器变量解析</span></span><br><span class="line"><span class="comment">//Whether or not to parse variables like &#123;elapsed_time&#125; and &#123;memory_usage&#125;.</span></span><br><span class="line"><span class="keyword">public</span> $parse_exec_vars = <span class="keyword">TRUE</span>;</span><br><span class="line"><span class="comment">//mbstring.func_overload flag</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> $func_overload;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/14/CodeIgniter框架源码解析十之输出类文件Output-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CodeIgniter框架源码解析九之路由类文件Router-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/13/CodeIgniter框架源码解析九之路由类文件Router-php/">CodeIgniter框架源码解析九之路由类文件Router.php</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/13/CodeIgniter框架源码解析九之路由类文件Router-php/" class="archive-article-date">
+  	<time datetime="2018-03-13T02:55:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架Router路由类将URI映射到对应的控制器及方法，Router类大量代码处理的是自定义路由，该类要支撑以下几个功能点：</p>
+<ul>
+<li>自定义路由规则：在application/config/routes.php文件中的$route数组，利用它可以设置路由规则，在路由规则中可以使用通配符或正则表达式，比如：<code>$route[&#39;product/:num&#39;] = &#39;catalog/product_lookup&#39;; $route[&#39;products/([a-z]+)/(\d+)&#39;] = $1/id_$2;</code>;</li>
+<li>支持回调函数：在路由规则中使用回调函数来处理逆向引用，比如：<code>$route[&#39;products/([a-zA-Z]+)/edit/(\d+)&#39;] = function ($product_type, $id){return &#39;catalog/product_edit/&#39; . strtolower($product_type) . &#39;/&#39; . $id;};</code>;</li>
+<li>支持使用HTTP动词：在路由数组后面再加一个键，键名为HTTP动词，可以使用标准的 HTTP 动词（GET、PUT、POST、DELETE、PATCH），也可以使用自定义的动词 （例如：PURGE），不区分大小写。比如：<code>$route[&#39;products&#39;][&#39;put&#39;] = &#39;product/insert&#39;;</code>；</li>
+</ul>
+        
+          <a class="article-more-a" href="/2018/03/13/CodeIgniter框架源码解析九之路由类文件Router-php/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/13/CodeIgniter框架源码解析九之路由类文件Router-php/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CodeIgniter框架源码解析八之地址解析类文件URI-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -707,244 +949,9 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析一之入口文件index-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/">CodeIgniter框架源码解析一之入口文件index.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/" class="archive-article-date">
-  	<time datetime="2018-02-23T09:32:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>index.php作为CI框架的入口文件，源码分析，自然而然由此开始。在源码分析的过程中，我们并不会逐行进行解释，而只解释核心的功能和实现，如果英文水平很好的话，读过index.php文件的英文注释之后也就基本明白了index.php都做了些什么。基于CodeIgniter-v3.1.7最新版本进行解读分析，index.php文件大体上一共完成了四项工作：<br>① 设置框架应用的环境状态<br>② 配置系统、应用、视图等程序目录<br>③ 系统、应用、视图等目录的正确性验证<br>④ 载入 core/CodeIgniter.php框架核心文件，启动框架</p>
-        
-          <a class="article-more-a" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/23/CodeIgniter框架源码解析一之入口文件index-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-PHP安全地获取随机字符串" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/22/PHP安全地获取随机字符串/">PHP安全地获取随机字符串</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/22/PHP安全地获取随机字符串/" class="archive-article-date">
-  	<time datetime="2018-01-22T02:21:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们在日常工作编程中很多场景都会用到获取随机字符串，比如登录时输入的验证码，发送短信验证码，生成随机且唯一订单号等等，这都需要一种简单且安全的解决方案来生成这些随机整数或字符串。对于这种“屡见不鲜”的任务，一些开发人员甚至“自行操刀”设计出了一些随机算法，但却很少有人能正确完成任务，比如涉及到的安全敏感信息的处理（为用户生成随机密码)。</p>
-<h2 id="随机生成器类型"><a href="#随机生成器类型" class="headerlink" title="随机生成器类型"></a>随机生成器类型</h2><p>现有的web 应用程序中使用的随机数生成器，主要可分为两大类：弱随机生成器和强随机生成器，即如下两种。其实这里所谓的“强弱”，是指生成的随机数是否可重复，是否可预测。</p>
-<ul>
-<li>伪随机数生成器, 比如 php 的 rand()、mt_rand()【较rand()随机性更强、更快】、uniqid()和 lcg_value ()；</li>
-<li>密码学安全的伪随机数生成器, 比如/devp/urandom 和 CryptGenRandom；</li>
-</ul>
-<p>事先说明，所有的随机数生成器软件生成 “伪随机” 值，而不是真正的 “随机” 值。这是因为数字计算机是确定性的, 没有专门的硬件来产生真正的随机性，除非你有充分的理由关心这种区别, 否则你可以把这些术语当作可以互换的术语来对待。</p>
-        
-          <a class="article-more-a" href="/2018/01/22/PHP安全地获取随机字符串/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/22/PHP安全地获取随机字符串/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-HTTP原理之服务器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/17/HTTP原理之服务器/">HTTP原理之服务器</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/17/HTTP原理之服务器/" class="archive-article-date">
-  	<time datetime="2018-01-17T01:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续探究HTTP事务的目的端——Web服务器。</p>
-<p>Web服务器有着各种不同的风格，形状和尺寸，比如可以在PC机上安装并运行的通用软件Web服务器Apache，Nginx等，已经预装并配置好相关程式的Web服务器设备以及某些便携式的嵌入式Web服务器。但不论功能有何差异，所有的Web 服务器都要能接受请求资源的HTTP请求，将内容回送给客户端。</p>
-        
-          <a class="article-more-a" href="/2018/01/17/HTTP原理之服务器/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">HTTP原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/17/HTTP原理之服务器/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 
@@ -1063,11 +1070,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1075,11 +1082,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1091,7 +1094,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+                <a href="javascript:void(0)" class="js-tag color3">GO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1104,14 +1119,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
