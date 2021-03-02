@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-《Go语言核心36讲》之“测试的基本规则和性能分析”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/23/《Go语言核心36讲》之“测试的基本规则和性能分析”/">《Go语言核心36讲》之“测试的基本规则和性能分析”</a>
+    </h1>
+  
+
+        
+        <a href="/2020/12/23/《Go语言核心36讲》之“测试的基本规则和性能分析”/" class="archive-article-date">
+  	<time datetime="2020-12-23T08:10:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Go 语言中，我们可以为 Go 程序编写三类测试：<strong>功能测试（test）、基准测试（benchmark，也称性能测试）以及示例测试（example）</strong>。前两类测试见名知意，而示例测试严格来讲也是一种功能测试，只不过它更关注程序打印出来的内容（相较于，在什么情况下因什么样的输入应该产生什么样的输出）。<br>一般情况下，一个测试源码文件只会针对某个命令源码文件，或库源码文件做测试，所以我们<strong>总会（并且应该）把它们放在同一个代码包内。测试源码文件的主名称应该以被测源码文件的主名称为前导，并且必须以“_test”为后缀</strong>（比如被测源码文件 demo.go 的测试源码文件名应该是 demo_test.go）。每个测试源码文件都必须至少包含一个测试函数，从语法上讲，每个测试源码文件中都可以包含用来做任何一类测试的测试函数，即使把这三类测试函数都塞进去也没有问题（只要把控好测试函数的分组和数量就行）。<br>Go 语言内置了一套单元测试和性能测试系统，仅需添加很少的代码就可以快速测试一段需求代码。</p>
+<h2 id="go-test命令"><a href="#go-test命令" class="headerlink" title="go test命令"></a><code>go test</code>命令</h2><p><code>go test</code>命令会自动读取源码目录下面名为 <code>*_test.go</code> 的文件，生成并运行测试用的可执行文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">go test [...]</span><br><span class="line"></span><br><span class="line">常用参数：</span><br><span class="line">-bench regexp 执行匹配 regexp 的 benchmarks；</span><br><span class="line">-cover 开启测试覆盖率；</span><br><span class="line">-run regexp 运行匹配 regexp 的函数；</span><br><span class="line">-v 显示测试的详细命令；</span><br></pre></td></tr></table></figure></p>
+<p><code>go test</code>命令会先做一些准备工作，比如确定内部需要用到的命令、检查我们指定的代码包或源码文件的有效性、以及判断我们给予的标记是否合法等等。在准备工作顺利完成之后，<code>go test</code>命令会针对每个被测代码包依次地进行构建、执行包中符合要求的测试函数，清理临时文件，打印测试结果。</p>
+        
+          <a class="article-more-a" href="/2020/12/23/《Go语言核心36讲》之“测试的基本规则和性能分析”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/12/23/《Go语言核心36讲》之“测试的基本规则和性能分析”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《Go语言核心36讲》之“临时对象池sync-Pool”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -340,6 +418,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -846,84 +935,6 @@
 
 
   
-    <article id="post-Rest，GraphQL，Webhooks和gRPC如何选型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/">Rest，GraphQL，Webhooks和gRPC如何选型</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/" class="archive-article-date">
-  	<time datetime="2020-09-01T06:13:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>翻译自<a href="https://nordicapis.com/when-to-use-what-rest-graphql-webhooks-grpc/" target="_blank" rel="noopener">When to Use What: REST, GraphQL, Webhooks, &amp; gRPC</a></strong>。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>REST 是众所周知的、最常用的接口设计方案，但是对于更细微的场景，我们还有其他的接口方案选项。为了帮助开发人员了解“在何种情况下应使用哪种API设计方案”，我们结合实际场景，综合分析了REST 与 GraphQL，Webhooks &amp; gRPC的优缺点，以理解它们都分别适用于哪些场景。</p>
-<h2 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h2><p>REST(Representational State Transfer, 表述层状态转移) 是最常见、最通用的接口设计方案，它是Roy Fielding在2000年的博士论文中提出来的一种 <strong>软件架构风格(不是标准)</strong>，建议使用无状态的设计思想和标准化的方法来构建 web APIs。<br>REST 本质上是无状态的，基于其上的任何Web服务都可以无状态方式与 textual resource representations(资源)进行交互，标准化交互（资源操作）则通常使用GET，POST，PUT等HTTP动词来定义（简单点说，<strong>URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作</strong>）。<br>REST 的主要特性之一就是支持丰富的超媒体，超媒体和REST 非常紧密相关，甚至于Roy Fielding表示：“如果API不支持超媒体，那么它们在技术上就不是RESTful的”。这就意味着REST API的客户端和服务器之间是松散耦合的，双方在资源操作上都富有极大的自由度。因此，<strong>REST 架构风格可以支持快速迭代，服务器演进，资源供应弹性等其他特性</strong>。<br>REST 所支持的特性远远超过我们这里要介绍的内容，它还具有分层的体系结构，高效的缓存和高可伸缩性，是针对众多问题和约束的高可用、易扩展的解决方案。总的来说，<strong>它以资源为核心，针对如何操作资源定义了一系列 URL 约定（标准化），操作类型通过HTTP 动词定义，是现代微服务API行业非常高效且强大的解决方案</strong>。</p>
-        
-          <a class="article-more-a" href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/01/Rest，GraphQL，Webhooks和gRPC如何选型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1029,15 +1040,31 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1053,22 +1080,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -1081,15 +1092,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

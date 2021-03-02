@@ -9,6 +9,7 @@
   <title>《Go语言核心36讲》之“CSP并发机制” | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
+<meta name="keywords" content="GO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《Go语言核心36讲》之“CSP并发机制”">
 <meta property="og:url" content="http://www.sdwangblog.cn/2020/11/05/《Go语言核心36讲》之“CSP并发机制”/index.html">
@@ -16,7 +17,7 @@
 <meta property="og:description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_channel_buffer_difference.png">
-<meta property="og:updated_time" content="2021-01-29T02:38:30.727Z">
+<meta property="og:updated_time" content="2021-02-24T07:49:59.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“CSP并发机制”">
 <meta name="twitter:description" content="消息机制认为每个并发单元是自包含的、独立的个体，都有自己的变量，但在不同并发单元间这些变量不共享。每个并发单元的输入和输出只有消息，这有点类似于进程的概念，Go语言中提供的消息通信机制被称为 channel。它可以在多个 goroutine 之间传递数据，是 Go 语言自带的、唯一一个可以满足并发安全性的类型。作为 Go 语言最有特色的数据类型，通道(channel)完全可以与 goroutine">
@@ -237,6 +238,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -331,6 +343,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通道类型的声明及初始化"><span class="toc-number">1.</span> <span class="toc-text">通道类型的声明及初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通道的发送和接收操作"><span class="toc-number">2.</span> <span class="toc-text">通道的发送和接收操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通道的遍历、关闭"><span class="toc-number">3.</span> <span class="toc-text">通道的遍历、关闭</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-语言单向通道"><span class="toc-number">4.</span> <span class="toc-text">Go 语言单向通道</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>
@@ -446,15 +471,31 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -470,22 +511,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -498,15 +523,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-SQL、XML和CRLF注入攻击" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/07/SQL、XML和CRLF注入攻击/">SQL、XML和CRLF注入攻击</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/07/SQL、XML和CRLF注入攻击/" class="archive-article-date">
+  	<time datetime="2018-04-07T06:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>注入攻击代指一类攻击，它们 <strong>通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据</strong>。这种类别的攻击包括<a href="http://www.sdwangblog.cn/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/">跨站脚本攻击（XSS）</a>、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。<br>这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 <strong>将不可信数据（比如用户输入）作为命令或请求的一部分被发送到解释程序时发生</strong>。当然限于篇幅，这里只是简单介绍几种类型。</p>
+<h2 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h2><p>目前最常见的注入攻击形式是臭名昭著的 SQL 注入攻击（<strong>常见且致命</strong>）。它通常是把 <strong>SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令</strong>。具体来说，它是利用现有应用程序，将（恶意的）SQL命令注入到后台数据库引擎执行的能力，它可以通过在Web表单中输入（恶意）SQL语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行SQL语句。<br>看一下这条请求：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$db = <span class="keyword">new</span> mysqli(<span class="string">'localhost'</span>, <span class="string">'username'</span>, <span class="string">'password'</span>, <span class="string">'storedb'</span>);</span><br><span class="line">$result = $db-&gt;query( <span class="string">'SELECT * FROM transactions WHERE user_id = '</span> . $_POST[<span class="string">'user_id'</span>] );</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/04/07/SQL、XML和CRLF注入攻击/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络安全</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/07/SQL、XML和CRLF注入攻击/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-简单粗暴的文件上传漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -849,83 +926,6 @@
 
 
   
-    <article id="post-CodeIgniter框架源码解析十一之安全类文件Security-php" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/">CodeIgniter框架源码解析十一之安全类文件Security.php</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/" class="archive-article-date">
-  	<time datetime="2018-03-21T03:39:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CI框架安全类包含了一些方法，用于安全的处理输入数据，帮助你创建一个安全的应用。CI框架安全类提供了全局防御<a href="http://www.sdwangblog.cn/2018/03/21/%E6%B5%85%E8%B0%88CSRF%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/"><strong>CSRF攻击</strong></a>和<a href="http://www.sdwangblog.cn/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/"><strong>XSS攻击</strong></a>策略，只需要在配置文件开启即可。此外，CI也提供了一些实用的安全函数，xss_clean()——xss过滤，sanitize_filename()——净化文件名，do_hash()——md5或sha加密等等。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$config[<span class="string">'csrf_protection'</span>] = <span class="keyword">TRUE</span>;</span><br><span class="line">$config[<span class="string">'global_xss_filtering'</span>] = <span class="keyword">TRUE</span>;</span><br></pre></td></tr></table></figure></p>
-<p>我们先来看下CI框架中安全类的实现框架：</p>
-        
-          <a class="article-more-a" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CI框架源码解析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/21/CodeIgniter框架源码解析十一之安全类文件Security-php/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -1031,15 +1031,31 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1055,22 +1071,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -1083,15 +1083,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SSH</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
               </li>
              
               <li class="article-tag-list-item">
