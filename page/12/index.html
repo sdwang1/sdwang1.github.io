@@ -152,6 +152,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux文件系统二之Linux的目录配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/07/Linux文件系统二之Linux的目录配置/">Linux文件系统二之Linux的目录配置</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/07/Linux文件系统二之Linux的目录配置/" class="archive-article-date">
+  	<time datetime="2017-09-07T03:55:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们一直强调：任何装置在Linux底下都是档案，甚至连资料沟通的界面也有专门的档案在负责，接下来就让我们一起打开新世界的大门吧～～</p>
+<h2 id="Linux文件类型"><a href="#Linux文件类型" class="headerlink" title="Linux文件类型"></a>Linux文件类型</h2><p>Linux下面的文件类型主要如下：</p>
+<ul>
+<li>普通文件：’-‘，分为纯文本和二进制文件，比如C语言源代码、SHELL脚本、二进制的可执行文件等；</li>
+<li>目录文件：’d’；</li>
+<li>字符设备或块设备文件：’c’/‘b’，这类文件通常用mknode创建，rm删除，通常在/dev下面，因其多与系统外设或内核相关联，故而我们一般不用自己来创建设备文件。区块(block)设备档 ：提供系统随机存取的接口设备，比如硬盘与软盘等；字符(character)设备文件：是一些串行端口的接口设备， 例如键盘、鼠标等等（特色就是一次性读取的，不能够截断输出）。</li>
+<li>套接口文件：’s’，通常被用于网络上的数据承接，最常在/var/run这个目录中；我们可以启动一个程序来监听客户端的要求， 而客户端就可以透过这个socket来进行数据的沟通了，例如：当我们启动MySQL服务器时，会产生一个mysql.sock的文件。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2017/09/07/Linux文件系统二之Linux的目录配置/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Linux基础篇</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/07/Linux文件系统二之Linux的目录配置/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Linux文件系统一之主机规则与磁盘分隔" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -876,82 +959,6 @@
 
 
   
-    <article id="post-了解SSH原理与运用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/了解SSH原理与运用/">了解SSH原理与运用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/20/了解SSH原理与运用/" class="archive-article-date">
-  	<time datetime="2017-04-20T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：<code>ssh user@host</code>。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢<code>问题</code>！！！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  ssh open@lab.lpicn.org</span><br><span class="line">ssh: connect to host lab.lpicn.org port 22: Connection refused</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2017/04/20/了解SSH原理与运用/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSH</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/20/了解SSH原理与运用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
@@ -1057,7 +1064,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1065,23 +1072,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1097,6 +1092,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -1105,7 +1104,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1114,6 +1117,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

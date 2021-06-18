@@ -8,23 +8,23 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>认识MySQL的事务日志 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志功能默">
+  <meta name="description" content="日志文件记录着 MySQL 数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL 主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志，默认开启且无法被禁止，主要记录了m">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="认识MySQL的事务日志">
 <meta property="og:url" content="http://www.sdwangblog.cn/2019/03/09/认识MySQL的事务日志/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志功能默">
+<meta property="og:description" content="日志文件记录着 MySQL 数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL 主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志，默认开启且无法被禁止，主要记录了m">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_sync_redo_file.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_flush_log_at_trx_commit.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_redo_log_group.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_update_statement_flowchart.png">
-<meta property="og:updated_time" content="2019-05-09T08:57:15.420Z">
+<meta property="og:updated_time" content="2021-03-26T07:21:03.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="认识MySQL的事务日志">
-<meta name="twitter:description" content="前言日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志功能默">
+<meta name="twitter:description" content="日志文件记录着 MySQL 数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。MySQL 主要有以下几种日志，可通过show variables like &amp;#39;%log%&amp;#39;;命令查看：  log_error：错误日志，默认开启且无法被禁止，主要记录了m">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -181,32 +181,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>日志是MySQL的重要组成部分。日志文件记录着MySQL数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。<br>MySQL主要有以下几种日志，可通过<code>show variables like &#39;%log%&#39;;</code>命令查看：</p>
+        <p>日志文件记录着 MySQL 数据库在运行期间发生的变化，比如客户端连接情况、SQL语句的执行情况和错误信息等等。当数据库发生异常或遭到意外损坏时，就可以通过日志文件查看出错原因，甚至还可通过日志文件进行数据恢复。<br>MySQL 主要有以下几种日志，可通过<code>show variables like &#39;%log%&#39;;</code>命令查看：</p>
 <ul>
-<li><p>log_error：错误日志功能默认开启且无法被禁止，默认情况下，错误日志位于在mysql文件夹的data目录下，通常名称为hostname.err(hostname为服务器主机名)。mysqld服务器动时使用<code>--log-error=[file-name]</code>参数可指定错误日志存放的位置，也可通过在my.cnf配置文件中添加行<code>log_error = /var/mysqld.err</code>来指定其存放位置。<br>通常情况下错误日志主要记录记录了mysqld服务启动和关闭过程中信息（比如如何启动InnoDB的表空间文件的、如何初始化自己的存储引擎等），服务运行过程中错误信息；</p>
+<li><p><strong>log_error：错误日志</strong>，默认开启且无法被禁止，主要记录了mysqld服务启动和关闭过程中信息（比如如何启动InnoDB的表空间文件的、如何初始化自己的存储引擎等），服务运行过程中错误信息；<br>默认存放于在 mysql 文件夹的 data 目录下，通常名称为hostname.err(hostname为服务器主机名)。mysqld 服务器动时使用<code>--log-error=[file-name]</code>参数可指定错误日志存放的位置，也可通过在my.cnf配置文件中添加行<code>log_error = /var/mysqld.err</code>来指定其存放位置。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;log_error%&apos;;</span><br><span class="line">| log_error                               | /usr/local/mysql/data/mysqld.local.err                    |  </span><br><span class="line">| log_error_verbosity                     | 3                                                         |</span><br><span class="line"></span><br><span class="line">#为保证mysqld服务的硬盘空间，重命名历史的错误日志并手动冲洗日志创建新的</span><br><span class="line">$ mv stu18.magedu.com.err  stu18.magedu.com.err.old</span><br><span class="line">$ mysqladmin -u root -p flush-logs</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>general_log：查询日志默认情况是关闭的，通常也建议关闭此日志。这是因为查询日志记录了客户端操作的所有SQL语句（增删改查），在高并发操作下会产生大量写入信息从而导致不必要的磁盘IO，影响mysqld性能。</p>
+<li><p><strong>general_log：查询日志</strong>，默认关闭（通常也建议关闭），记录了客户端操作的所有SQL语句（增删改查）——若开启查询日志，在高并发操作下会产生大量写入信息进而导致不必要的磁盘IO，影响mysqld性能。</p>
 </li>
 </ul>
 <a id="more"></a>
 <ul>
-<li><p>慢查询日志：慢查询日志用来记录执行时间超过指定时间的查询语句，一般建议开启。通过慢查询日志，可以查找出哪些查询语句的执行效率低下，以帮助我们定位问题并优化性能。启动和设置慢查询日志的两种方法：1.配置my.cnf中的log-slow-queries选项来开启慢查询日志——<code>slow_query_log=1   log-slow-queries=filename</code>；2.通过登陆mysql服务器直接定义（具有全局权限）——<code>mysql &gt; set global slow_query_log=1;</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%slow%&apos;;</span><br><span class="line">| log_slow_admin_statements | OFF                                                |</span><br><span class="line">| log_slow_slave_statements | OFF                                                |</span><br><span class="line">| slow_launch_time          | 2                                                  |</span><br><span class="line">| slow_query_log            | OFF                                                |</span><br><span class="line">| slow_query_log_file       | /usr/local/mysql/data/hannahdeMacBook-Pro-slow.log |</span><br><span class="line"></span><br><span class="line">mysql &gt; show variables like &apos;long%&apos;;</span><br><span class="line">| long_query_time           | 10.000000                                          |</span><br><span class="line">mysql &gt; set session long_query_time=0.001;                               #设置慢查询时间</span><br><span class="line">#慢查询日志中包括由于任何原因导致的执行时间超过指定时间的SQL语句。也就是说，被记录的SQL语句并不是只表示其自身执行超过10秒，还包含由于其他资源被征用造成阻塞（或其他）而导致的查询执行时间超过long_query_time。</span><br></pre></td></tr></table></figure>
+<li><p><strong>slow_query_log：慢查询日志</strong>，用来记录由于任何原因(包括阻塞)导致的执行时间超过指定时间的 SQL 语句，建议开启。通过慢查询日志，可以查找出哪些查询语句的执行效率低下，以帮助我们定位问题并优化性能。<br>启动和设置慢查询日志的两种方法：1.配置my.cnf中的log-slow-queries选项来开启慢查询日志——<code>slow_query_log=1   log-slow-queries=filename</code>；2.通过登陆mysql服务器直接定义（具有全局权限）——<code>mysql &gt; set global slow_query_log=1;</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%slow%&apos;;</span><br><span class="line">| log_slow_admin_statements | OFF                                                |</span><br><span class="line">| log_slow_slave_statements | OFF                                                |</span><br><span class="line">| slow_launch_time          | 2                                                  |</span><br><span class="line">| slow_query_log            | OFF                                                |</span><br><span class="line">| slow_query_log_file       | /usr/local/mysql/data/hannahdeMacBook-Pro-slow.log |</span><br><span class="line"></span><br><span class="line">mysql &gt; show variables like &apos;long%&apos;;</span><br><span class="line">| long_query_time           | 10.000000                                          |</span><br><span class="line">mysql &gt; set session long_query_time=0.001;                               #设置慢查询时间</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>事务日志：<strong>redo log,undo log，InnoDB存储引擎特有</strong>，帮助提高事务效率，后文详解。</p>
 </li>
-<li>log_bin：二进制日志也叫做变更日志，主要用于记录修改数据或有可能引起数据改变的SQL语句（DDL和DML），同时记录了语句发生时间、执行时长、操作数据等等。同样可通过登陆mysql服务器直接定义（具有全局权限），或配置my.cnf中的log-bin选项开启二进制日志——<code>log-bin [=DIR \ [filename]]</code>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%log%&apos;;</span><br><span class="line">| sql_log_bin                     | ON    |       #默认ON，用于控制会话级别的二进制日志功能的开启或关闭；</span><br><span class="line">| log_bin                         | OFF   |       #可直接定义为文件路径，也可以为ON|OFF</span><br><span class="line">| binlog_cache_size               | 32768 |       #用来提高binlog的记录效率而设计的一个用于短时间内临时缓存binlog数据的内存区域</span><br><span class="line">| binlog_stmt_cache_size          | 32768 |</span><br><span class="line">| binlog_format                   | ROW   |       #&#123;ROW|STATEMENT|MIXED&#125;指定二进制日志类型，默认为STATEMENT</span><br><span class="line">| max_binlog_cache_size           | 18446744073709547520|</span><br><span class="line">| max_binlog_size                 | 1073741824|</span><br><span class="line">| max_binlog_stmt_cache_size      | 18446744073709547520|</span><br><span class="line">| expire_log_days                 | 0     |       #设定二进制日志的过期天数，超出此天数的二进制日志文件将被自动删除</span><br><span class="line">| sync_binlog                     | 1     |       #每次事务的binlog都持久化到磁盘</span><br></pre></td></tr></table></figure>
+<li><strong>log_bin：二进制日志(变更日志)</strong>，主要用于记录修改数据或有可能引起数据改变的SQL语句（DDL和DML），同时记录了语句发生时间、执行时长、操作数据等。<br>通过登陆 mysql 服务器后直接定义（具有全局权限），或配置 my.cnf 中的 log-bin 选项可以开启二进制日志——<code>log-bin [=DIR \ [filename]]</code>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%log%&apos;;</span><br><span class="line">| sql_log_bin                     | ON    |       #默认ON，用于控制会话级别的二进制日志功能的开启或关闭；</span><br><span class="line">| log_bin                         | OFF   |       #可直接定义为文件路径，也可以为ON|OFF</span><br><span class="line">| binlog_cache_size               | 32768 |       #用来提高binlog的记录效率而设计的一个用于短时间内临时缓存binlog数据的内存区域</span><br><span class="line">| binlog_stmt_cache_size          | 32768 |</span><br><span class="line">| binlog_format                   | ROW   |       #&#123;ROW|STATEMENT|MIXED&#125;指定二进制日志类型，默认为STATEMENT</span><br><span class="line">| max_binlog_cache_size           | 18446744073709547520|</span><br><span class="line">| max_binlog_size                 | 1073741824|</span><br><span class="line">| max_binlog_stmt_cache_size      | 18446744073709547520|</span><br><span class="line">| expire_log_days                 | 0     |       #设定二进制日志的过期天数，超出此天数的二进制日志文件将被自动删除</span><br><span class="line">| sync_binlog                     | 1     |       #每次事务的binlog都持久化到磁盘</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>在这些日志文件中，<strong>redo log、undo log以及binlog</strong> 都与事务操作有一定的关系，“理顺”它们对我们理解MySQL中的事务操作十分重要。</p>
-<h2 id="MYSQL常见的几种存储引擎"><a href="#MYSQL常见的几种存储引擎" class="headerlink" title="MYSQL常见的几种存储引擎"></a>MYSQL常见的几种存储引擎</h2><p>说起事务操作，就不得不简要介绍下MySQL的常见的几种存储引擎。<strong>存储引擎的概念是MySQL的特点</strong>，比如Oracle中没有专门的存储引擎的概念，它有OLTP(联机事物处理On-Line Transaction Processing)和OLAP(联机分析处理On-Line Analytical Processing)模式的区分。</p>
-<p>在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">一条SQL语句是如何执行的</a>一文中，我们知道：<strong>存储引擎负责数据的存储和读取，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同</strong>。简单来说，存储引擎就是指<code>表的类型及表在计算机上的存储方式（数据特点）</code>。MySQL中存储引擎类型可以通过<code>SHOW ENGINES</code>命令来查看：<br><img src="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png" alt></p>
+<h3 id="MYSQL常见的几种存储引擎"><a href="#MYSQL常见的几种存储引擎" class="headerlink" title="MYSQL常见的几种存储引擎"></a>MYSQL常见的几种存储引擎</h3><p><strong>存储引擎的概念是MySQL的特点</strong>，比如Oracle中没有专门的存储引擎的概念，它有OLTP(联机事物处理On-Line Transaction Processing)和OLAP(联机分析处理On-Line Analytical Processing)模式的区分。<br>在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">一条SQL语句是如何执行的</a>一文中，我们知道：<strong>存储引擎负责数据的存储和读取，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同</strong>。简单来说，存储引擎就是指<code>表的类型及表在计算机上的存储方式（数据特点）</code>。MySQL中存储引擎类型可以通过<code>SHOW ENGINES</code>命令来查看：<br><img src="http://www.sdwangblog.cn/blogimg/mysql_show_engines.png" alt></p>
 <ul>
-<li>MyISAM存储引擎：MySQL <strong>曾经</strong> 的默认存储引擎，其数据文件和索引文件放到了不同目录（需要在创建表的时候通过DATA DIRECTORY和INDEX DIRECTORY语句指定文件绝对路径），平均分配了IO，具有较快访问速度，<strong>适合插入新纪录和读出记录</strong>；<br>MyISAM的表存储成3个文件，这些文件名均和表名相同：扩展名为frm——存储表结构，MYD——存储数据，MYI——存储索引。每个MyISAM类型表都有一个AUTO_INCREMENT的内部列，执行insert或update操作时该列会被同时刷新【MyISAM类型的AUTO_INCREMENT列更新比InnoD的AUTO_INCREMENT列更快】，但 <strong>MyISAM不提供事务完整性支持和外键约束</strong>；</li>
-<li>InnoDB存储引擎：MYSQL <strong>现默认存储引擎，提供了事务处理，回滚，崩溃修复(binlog和redo log)和多版本并发控制(MVCC)的事务安全，适合更新密集表；提供行级锁定，支持外键完整性约束</strong>；在主内存中缓存数据和索引并维持它自己的缓冲池，读写效率差，占用的数据空间相对较大；<br>InnoDB中，创建的表结构存储在.frm文件中，数据和索引存储在innodb_data_home_dir和innodb_data_file_path定义的表空间中；</li>
-<li>MEMORY存储引擎：每个基于MEMORY存储引擎的表实际对应一个磁盘文件（文件名与表名相同，类型为frm类型），该文件中只存储表的结构，而其数据文件都是存储在内存中。这样有 <strong>利于数据的快速处理，提高整个表的效率，但服务器需要有足够的内存来维持MEMORY存储引擎的表的使用，且如果内存出现异常就会影响数据，所以基于MEMORY的表的生命周期很短</strong>。<br>MEMORY默认使用哈希索引，当然可以在创建索引时指定B-Tree索引。MEMORY使用一个固定的记录长度格式，不支持BLOB或TEXT列；</li>
+<li>MyISAM存储引擎：<strong>曾经的默认存储引擎</strong>，其数据文件和索引文件放到了不同目录（需要在创建表的时候通过DATA DIRECTORY和INDEX DIRECTORY语句指定文件绝对路径），平均分配了IO，具有较快访问速度，<strong>适合插入新纪录和读出记录</strong>；</li>
 </ul>
+<p>MyISAM的表存储成3个文件，这些文件名均和表名相同：扩展名为frm——存储表结构，MYD——存储数据，MYI——存储索引。每个MyISAM类型表都有一个AUTO_INCREMENT的内部列，执行insert或update操作时该列会被同时刷新【MyISAM类型的AUTO_INCREMENT列更新比InnoD的AUTO_INCREMENT列更快】，但 <strong>MyISAM不提供事务完整性支持和外键约束</strong>；</p>
+<ul>
+<li>InnoDB存储引擎：<strong>现默认存储引擎，提供了事务处理，回滚，崩溃修复(binlog和redo log)和多版本并发控制(MVCC)的事务安全，适合更新密集表；提供行级锁定，支持外键完整性约束</strong>；在主内存中缓存数据和索引并维持它自己的缓冲池，读写效率差，占用的数据空间相对较大；</li>
+</ul>
+<p>InnoDB中，创建的表结构存储在.frm文件中，数据和索引存储在innodb_data_home_dir和innodb_data_file_path定义的表空间中；</p>
+<ul>
+<li>MEMORY存储引擎：每个基于MEMORY存储引擎的表实际对应一个磁盘文件（文件名与表名相同，类型为frm类型），该文件中只存储表的结构，而其数据文件都是存储在内存中。这样有 <strong>利于数据的快速处理，提高整个表的效率，但服务器需要有足够的内存来维持MEMORY存储引擎的表的使用，且如果内存出现异常就会影响数据，所以基于MEMORY的表的生命周期很短</strong>。</li>
+</ul>
+<p>MEMORY默认使用哈希索引，当然可以在创建索引时指定B-Tree索引。MEMORY使用一个固定的记录长度格式，不支持BLOB或TEXT列；</p>
 <p><strong>不同的存储引擎都各有特点，一个数据库中多个表可以使用不同引擎以满足各种性能和实际需求，使用合适的存储引擎，将会提高整个数据库的性能</strong>：</p>
 <table>
 <thead>
@@ -319,50 +325,56 @@
 </tr>
 </tbody>
 </table>
-<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><p><strong>redo log（InnoDB引擎特有的）是物理格式上的日志，它记录的是数据库中每个页的修改</strong>，关于其具体作用的理解，个人觉得《MySQL实战45讲》中的举例就蛮不错的，通晓易懂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">话说酒店掌柜有一个粉板，专门用来记录客人的赊账记录。如果赊账的人不多，那么他可以把顾客账目写在板上，但如果赊账的人多了，粉板总会有记不下的时候，这时候掌柜一定还有一个专门记录赊账的账本。 如果有人要赊账或者还账的话，掌柜一般有两种做法：</span><br><span class="line">- 直接翻出账本，把这次赊的账加上去或者扣件掉；</span><br><span class="line">- 先在粉板上记下这次的账，等打烊后再把账本翻出来核算。</span><br><span class="line"></span><br><span class="line">在生意红火的时候，掌柜一定会选择后者，因为前者操作实在太麻烦：首先要在密密麻麻几十页的账本上找个那个人名字，然后再拿出算盘计算下，最后再将结果写回到账本上。同理试想：“如果MySQL每一次更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高”。</span><br></pre></td></tr></table></figure></p>
-<p>这种粉板（log）和账本（数据文件）配合的过程，其实就是MySQL中常说的 <strong>WAL(Write-Ahead Logging)技术</strong>。它的关键点就是先写日志，再写磁盘，也就是先写粉板，等不忙的时候再写账本。</p>
-<p>InnoDB的redo log包括两部分：内存中的日志缓存（redo log buffer）——易失性、磁盘上的重做日志文件(redo log file)——持久性。在概念上，InnoDB通过 <strong>force log at commit</strong> 机制实现事务的持久性，即在事务提交的时候，必须先将该事务的所有日志写入到磁盘上的redo log file和undo log file——经过操作系统内核空间的os buffer,调用fsync()——进行持久化，过程如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_sync_redo_file.png" alt><br><strong>特别说明下，通常所说的log file并不是磁盘上的物理日志文件，而是操作系统缓存中的log file，官方手册上的意思也是如此(例如：With a value of 2, the contents of the InnoDB log buffer are written to the log file after each transaction commit and the log file is flushed to disk approximately once per second)</strong>。这的确很让人误解，“既然都称为file 了，竟然不是磁盘物理文件？”</p>
-<p><strong>MySQL支持用户通过设置innodb_flush_log_at_trx_commit值来决定在commit时如何将log_buffer(redo log buffer、undo log buffer等)中的日志刷到log file</strong>。该变量有0，1，2三种值，默认为1：</p>
+<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><p><strong>redo log（InnoDB引擎）记录了对实际数据文件的物理变更(数据文件的什么位置数据做了如何的变更)</strong>。关于其具体作用的理解，个人觉得《MySQL实战45讲》中的举例就挺通晓易懂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">话说酒店掌柜有一个粉板，专门用来记录客人的赊账记录。如果赊账的人不多，那么他可以把顾客账目写在板上，但如果赊账的人多了，粉板总会有记不下的时候，这时候掌柜一定还有一个专门记录赊账的账本。 如果有人要赊账或者还账的话，掌柜一般有两种做法：</span><br><span class="line">- 直接翻出账本，把这次赊的账加上去或者扣件掉；</span><br><span class="line">- 先在粉板上记下这次的账，等打烊后再把账本翻出来核算。</span><br><span class="line"></span><br><span class="line">在生意红火的时候，掌柜一定会选择后者，因为前者操作实在太麻烦：首先要在密密麻麻几十页的账本上找个那个人名字，然后再拿出算盘计算下，最后再将结果写回到账本上。同理试想：“如果MySQL每一次更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高”。</span><br></pre></td></tr></table></figure></p>
+<p>这种粉板（log）和账本（数据文件）配合的过程，就是MySQL中常说的 <strong>WAL(Write-Ahead Logging)技术</strong>。它的关键点就是先写日志，再写磁盘，对应到上例就先写粉板，等不忙的时候再写账本【<strong>从而保证事务的持久性Crash Recovery</strong>】。</p>
+<p>InnoDB的 redo log 包括两部分：一是内存中的日志缓存（redo log buffer）——易失性；二是磁盘上的重做日志文件(redo log file)——持久性。在概念上，InnoDB通过 <strong>force log at commit</strong> 机制实现事务的持久性，即在事务提交的时候，必须先将该事务的所有日志写入到磁盘上的 redo log file 和 undo log file ——经过操作系统内核空间的 os buffer，调用系统的 fsync()——进行持久化，过程如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_sync_redo_file.png" alt></p>
+<blockquote>
+<p>特别说明，通常所说的 log file并不是磁盘上的物理日志文件，而是操作系统缓存中的 log file，官方手册上的意思也是如此(例如：With a value of 2, the contents of the InnoDB log buffer are written to the log file after each transaction commit and the log file is flushed to disk approximately once per second)。</p>
+</blockquote>
+<p><strong>MySQL支持用户通过设置 innodb_flush_log_at_trx_commit值来决定在 commit时如何将 log_buffer(redo log buffer、undo log buffer)中的日志刷到 log file</strong>。该变量有0，1，2三种值，默认为1：</p>
 <ul>
-<li>当设置为1的时，事务每次提交都会将log buffer中的日志写入os buffer并调用fsync()刷到log file on disk中。这种方式即使系统崩溃也不会丢失任何数据（原子性），但是因为每次提交都写入磁盘，IO的性能较差；</li>
-<li>当设置为0时，事务提交时不会将log buffer中的日志写入os buffer，而是每秒写入os buffer并调用fsync()写入到log file on disk中。也就是说，这种（大约）每秒刷新写入磁盘的方式，当系统崩溃时会丢失1秒钟的数据；</li>
-<li>当设置为2时，每次提交都仅写入到os buffer，然后是每秒调用fsync()将os buffer中的日志写入到log file on disk；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_flush_log_at_trx_commit.png" alt><h3 id="log-group-和redo-log-file"><a href="#log-group-和redo-log-file" class="headerlink" title="log group 和redo log file"></a>log group 和redo log file</h3><strong>InnoDB的redo log是固定大小的</strong>。具体来说，redo log group由多个大小完全相同的redo log file组成，组内redo log file的数量由变量 <strong>innodb_log_files_group</strong> 决定，默认值为2。这个组是一个逻辑概念，并没有真正的文件来表示出这个组合文件，但是可以通过变量 <strong>innodb_log_group_home_dir</strong> 来定义组的目录，默认值是datadir：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#redo log file都在innodb_log_group_home_dir目录下</span><br><span class="line">$ ll /mydata/data/ib*</span><br><span class="line">-rw-rw---- 1 mysql mysql 79691776 Mar 30 23:12 /mydata/data/ibdata1</span><br><span class="line">-rw-rw---- 1 mysql mysql 50331648 Mar 30 23:12 /mydata/data/ib_logfile0</span><br><span class="line">-rw-rw---- 1 mysql mysql 50331648 Mar 30 23:12 /mydata/data/ib_logfile1</span><br><span class="line">#ib_logfile0和ib_logfile1就是log group中的redo log file，大小相等且都等于innodb_log_file_size定义大小</span><br></pre></td></tr></table></figure>
+<li>当设置为1的时，事务每次提交都会将 log buffer中的日志写入 os buffer并调用 fsync()刷到 log file on disk中。这种方式即使系统崩溃也不会丢失任何数据（原子性），但是因为每次提交都写入磁盘，IO的性能较差；</li>
+<li>当设置为0时，每秒(而非事务提交)将 log buffer中的日志写入 os buffer并调用 fsync()写入到log file on disk中。这种（大约）每秒刷新写入磁盘的方式，在系统崩溃时会丢失1秒钟的数据；</li>
+<li>当设置为2时，每次提交都仅写入 log buffer中的日志到 os buffer，然后是每秒调用fsync()将 os buffer中的日志写入到log file on disk；<br><img src="http://www.sdwangblog.cn/blogimg/innodb_flush_log_at_trx_commit.png" alt><h3 id="log-group-和redo-log-file"><a href="#log-group-和redo-log-file" class="headerlink" title="log group 和redo log file"></a>log group 和redo log file</h3><strong>InnoDB的 redo log是固定大小的</strong>。具体来说，redo log group由多个大小完全相同的 redo log file组成，组内 redo log file的数量由变量 <strong>innodb_log_files_group</strong> 决定，默认值为2。这个组是一个逻辑概念，并没有真正的文件来表示出这个组合文件，但是可以通过变量 <strong>innodb_log_group_home_dir</strong> 来定义组的目录，redo log file都放在这个目录下，默认是在 datadir下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#ib_logfilex 大小相等且都等于innodb_log_file_size定义的值</span><br><span class="line">$ ll /mydata/data/ib*</span><br><span class="line">-rw-rw---- 1 mysql mysql 79691776 Mar 30 23:12 /mydata/data/ibdata1</span><br><span class="line">-rw-rw---- 1 mysql mysql 50331648 Mar 30 23:12 /mydata/data/ib_logfile0</span><br><span class="line">-rw-rw---- 1 mysql mysql 50331648 Mar 30 23:12 /mydata/data/ib_logfile1</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p><strong>InnoDB在将log buffer刷到这些log file中时，会以追加写入的方式循环轮训写入(固定大小2*512字节)</strong>。比如下图配置为一组4个文件，write_pos是当前记录的位置，一边写一边后移，写到3号文件末尾时回到0号文件开头。checkpoint是当前要擦除的位置，也是往后推移且循环的。write_pos和checkpoint之间空着的部分，可用来记录新的操作。如果write_pos追上checkpoint，就表示“粉板”满了，这时候不能再执行新的更新，得停下来擦除一些记录（<strong>擦除记录前要把记录更新到数据文件</strong>）再把checkpoint推进一下。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_redo_log_group.png" alt><br><strong>有了redo log，InnoDB就可以保证即使数据库发生异常重启(innodb_init时会自动根据redo log恢复数据，刷脏)，之前提交的记录都不会丢失，这个能力称为 crash_safe</strong>。要理解 crash-safe 这个概念，可以想想我们前面赊账记录的例子：只要赊账记录记在了粉板（redo log file）上，之后即使掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板的数据明确赊账账目。</p>
-<h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><p>当修改数据时，MySQL不仅记录了redo log，还记录了相对应的undo log。undo log主要有两个作用：<strong>1.事务因某些原因导致失败或回滚时，从undo log的逻辑记录中读取相应内容并进行回滚；2.多版本并发控制（MVCC）中当欲读取的某一行被其他事务锁定时，从undo log中分析出该行记录以前的数据是什么，从而提供该行版本信息，让用户实现非锁定一致性读取</strong>。</p>
-<p>undo log不同于redo log，<strong>它记录的是逻辑日志——事务开始前被修改数据x的版本(T，x，v）</strong>。简单来说，你可以认为当delete一条记录时，undo log中会记录一条对应的insert记录，当update一条记录时，它会记录一条对应相反的update记录。<strong>产生undo log的时候，同样会伴随类似于保护事务持久化机制的redo log的产生</strong>。</p>
-<p><strong>undo log的存储方式</strong>：</p>
+<p><strong>InnoDB在将 log buffer刷到这些 log file中时，会以追加写入的方式循环写入</strong>。比如下图配置为一组4个文件，write_pos是当前记录的位置，一边写一边后移，写到3号文件末尾时回到0号文件开头。checkpoint是当前要擦除的位置，也是往后推移且循环的。<br>write_pos和checkpoint之间空着的部分，可用来记录新的操作。如果write_pos追上checkpoint，就表示“粉板”满了，这时候不能再执行新的更新，得停下来擦除一些记录（<strong>擦除记录前要把记录更新到数据文件</strong>）再把checkpoint推进一下。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_redo_log_group.png" alt><br><strong>有了 redo log，InnoDB就可以保证即使数据库发生异常重启(innodb_init时会自动根据redo log恢复数据，刷脏)，之前提交的记录都不会丢失，这个能力称为 crash_safe</strong>。类比们前面赊账记录的例子：只要赊账记录记在了粉板（redo log file）上，之后即使掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板的数据明确赊账账目。</p>
+<h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><p>在数据修改的时候，InnoDB不仅记录了 redo log，还记录了相对应的undo log。它主要有两个作用：</p>
 <ul>
-<li>在MySQL5.6之前，undo log存放于共享表空间的回滚段中（变量innodb_undo_logs指定每个回滚段中有多少个undo rollback segment），共享表空间的默认的名称是ibdata，位于数据文件data目录中。rollback segment默认全部写在一个文件中，但可以通过指定变量innodb_undo_tablespaces平均分配到多少个文件中；</li>
-<li>在MySQL5.6之后，undo log存放位置可以配置成独立的文件，但需要在初始化数据库之前在配置文件中进行相关配置。MySQL5.6之后undo log的相关参数变量如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%undo%&apos;;</span><br><span class="line">| innodb_max_undo_log_size | 1073741824 |</span><br><span class="line">| innodb_undo_directory    | ./         |                       #undo独立表空间的存放目录</span><br><span class="line">| innodb_undo_log_truncate | OFF        |</span><br><span class="line">| innodb_undo_logs         | 128        |</span><br><span class="line">| innodb_undo_tablespaces  | 0          |</span><br></pre></td></tr></table></figure>
-</li>
+<li><strong>事务因某些原因导致失败或回滚时，从 undo log的逻辑记录中读取相应内容并进行回滚【从而保证事务的原子性】</strong>；</li>
+<li><strong>多版本并发控制（MVCC）中当欲读取的某一行被其他事务锁定时，从undo log中分析出该行记录以前的数据是什么，从而提供该行版本信息，让用户实现非锁定一致性读取</strong>；</li>
 </ul>
-<p><strong>在事务提交的时候，InnoDB并不会立即删除undo log，而是将事务对应的undo log放入待清理链表，由purge线程判断是否有其他事务在使用undo段中表的上一个事务之前的版本信息（比如隔离级别为“可重复读”），决定是否可以清理undo log的日志空间</strong>。在事务提交时，InnoDB还会判断undo log分配的页是否可以重用，如果可以重用，则会分配给后面来的事务，避免为每个独立的事务分配独立的undo log页而浪费存储空间和性能。</p>
-<h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><p><strong>在事务提交的时候，不仅InnoDB会记录事务日志(redo log、undo log)，Server层还会记录二进制日志binlog（所有引擎都可以使用）</strong>。binlog主要作用有：1. 在主从复制中，从库利用主库上的binlog（+备份）进行重播，实现主从同步；2. 用于的基于时间点对数据库进行还原（“删库跑路”）。</p>
-<p><strong>binlog是逻辑日志，记录的是这个语句的原始逻辑（比如“给ID=2这行的c字段加1”），每次事务提交的时一次性写入缓存中的日志”文件”</strong>。如果你使用mysqlbinlog(<code>mysqlbinlog mysql-bin.000017 &gt; /tmp/a.sql</code>)查看过二进制日志的话，你会发现binlog并不仅仅是记录了执行过的事务中的sql语句，它还包括了执行的sql语句（增删改）反向的信息——delete操作对应着delete本身和其反向的insert，update操作对应着update执行前后的版本的信息等等。</p>
-<p><strong>此外，相较于redo log的循环写入固定空间，binlog采用追加写形式，也就是说，binlog文件在写到一定大小时会切换到下一个，并不会覆盖以前的日志</strong>。这就是为何DBA能够让 <strong>“数据库恢复到半个月内任何一秒的状态”</strong>，假如你的DBA承诺半个月内可恢复，那么备份系统中一定会保存最近半个月所有的binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，比如一天一备，一周一备。当需要恢复到指定某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，你可以这么做：</p>
+<p>undo log不同于 redo log，<strong>它记录的是逻辑日志——事务开始前被修改数据x的版本(T，x，v）</strong>。简单来说，你可以认为当delete一条记录时，undo log中会记录一条对应的insert记录，当update一条记录时，它会记录一条对应相反的update记录。<strong>当然，数据修改产生undo log的时候（写入时机？），同样会伴随（类似于保护事务持久化机制的）redo log的产生</strong>。</p>
+<p>InnoDB的 undo log 同样也包括 undo log buffer(force log at commit机制与 redo log buffer一致)和 undo log file两部分。<strong>undo log file默认存放在共享表空间中，如果开启了 innodb_file_per_table 将放在每个表的.ibd文件中</strong>。在 MySQL5.6之后，可通过 innodb_undo_directory 变量自定义存放目录，默认值为”.”表示datadir。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%undo%&apos;;</span><br><span class="line">| innodb_max_undo_log_size | 1073741824 |</span><br><span class="line">| innodb_undo_directory    | .         |                       #undo独立表空间的存放目录</span><br><span class="line">| innodb_undo_log_truncate | OFF        |</span><br><span class="line">| innodb_undo_logs         | 128        |</span><br><span class="line">| innodb_undo_tablespaces  | 0          |</span><br></pre></td></tr></table></figure></p>
+<p><strong>在事务提交的时候，InnoDB不会立即删除 undo log（比如隔离级别为“可重复读”时，事务读取的是开启事务时的最新提交行版本，只要该事务不结束，该行版本就不能删除），会将事务对应的 undo log放入待清理链表，由 purge线程决定是否可以清理日志空间</strong>（ purge线程两个主要作用是：清理 undo页和清除 page里面带有 Delete_Bit标识的数据行）。<br>在事务提交时，InnoDB还会判断 undo log分配的页是否可以重用，如果可以重用，则会分配给后面来的事务，避免为每个独立的事务分配独立的 undo log页而浪费存储空间和性能。</p>
+<h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><p><strong>binlog（归档日志）是 Server层日志</strong>，它记录了语句的原始逻辑（<strong>逻辑日志</strong>），比如“给 ID=2 这一行的 c 字段加 1”，<strong>每次事务提交的时一次性写入缓存中的日志”文件”</strong>。如果你使用mysqlbinlog(<code>mysqlbinlog mysql-bin.000017 &gt; /tmp/a.sql</code>)查看过二进制日志的话，你会发现binlog并不仅仅是记录了执行过的事务中的sql语句，它还包括了执行的sql语句（增删改）反向的信息——delete操作对应着delete本身和其反向的insert，update操作对应着update执行前后的版本的信息等等。</p>
+<p>binlog主要作用有：</p>
+<ul>
+<li><strong>在主从复制中，从库利用主库上的binlog（+备份）进行重播，实现主从同步</strong>；</li>
+<li><strong>用于的基于时间点对数据库进行还原（“删库跑路”）</strong>；</li>
+</ul>
+<p><strong>相较于redo log的循环写入固定空间，binlog采用追加写形式，也就是说，binlog文件在写到一定大小时会切换到下一个，并不会覆盖以前的日志</strong>。这就是为何DBA能够让 <strong>“数据库恢复到半个月内任何一秒的状态”</strong>，假如你的DBA承诺半个月内可恢复，那么备份系统中一定会保存最近半个月所有的binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，比如一天一备，一周一备。当需要恢复到指定某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，你可以这么做：</p>
 <ul>
 <li>首先找到最近一次的全量备份，运气好的话可能就是昨天晚上的一个备份，从这个备份恢复到临时库；</li>
 <li>从备份时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻；</li>
 <li>最后将表数据从临时库取出来，按需恢复到线上库去。</li>
 </ul>
 <p>任何事情都具有两面性，“追加写”形式的binlog一段时间后就会记录大量信息（其中包含一些无用的信息），这会浪费很多的磁盘空间。因此需要定期删除一些“无用”（<strong>全量备份前的日志，新产生的日志信息可能用来做做即时点还原</strong>）的二进制日志，删除前记得导出备份数据库和二进制日志文件进行压缩归档存储（<strong>切记不要在关闭mysql服务器之后直接删除——可能会给数据库带来错误</strong>）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; PURGE &#123; BINARY | MASTER &#125; LOGS &#123;TO &apos;log_name&apos; | BEFORE datetime_expr &#125;</span><br><span class="line">#TO&apos;log_name&apos;表示把这个文件之前的其他文件都删除掉，BEFORE datetime_expr指定把哪个时间之前的二进制文件删除</span><br><span class="line">mysql&gt; PURGEBINARY LOGS TO &apos;mysql-bin.000007&apos;;</span><br><span class="line">Query OK, 0 rowsaffected (0.11 sec)</span><br></pre></td></tr></table></figure></p>
-<h3 id="binlog和redo-log的两阶段提交"><a href="#binlog和redo-log的两阶段提交" class="headerlink" title="binlog和redo log的两阶段提交"></a>binlog和redo log的两阶段提交</h3><p>我们先来看下执行器和InnoDB引擎在执行某个简单的update语句——<code>update T set c=c+1 where ID=2;</code>时的内部流程，如下图示（图中浅色框表示在InnoDB内部执行，深色框表示在执行器中执行）：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_update_statement_flowchart.png" alt></p>
+<h2 id="binlog和-redo-log的两阶段提交"><a href="#binlog和-redo-log的两阶段提交" class="headerlink" title="binlog和 redo log的两阶段提交"></a>binlog和 redo log的两阶段提交</h2><p>我们先来看下执行器和InnoDB引擎在执行某个简单的update语句——<code>update T set c=c+1 where ID=2;</code>时的内部流程，如下图示（图中浅色框表示在InnoDB内部执行，深色框表示在执行器中执行）：<br><img src="http://www.sdwangblog.cn/blogimg/innodb_update_statement_flowchart.png" alt></p>
 <ol>
-<li>执行器先找存储引擎取ID=2这行数据（ID是主键就直接用树搜索找到该行记录）。首先根据innodb_buffer_pool的data dictionary(元数据信息)去lock info中查找相关锁信息，并将该update语句所需要的锁信息写入lock info；然后将涉及的老数据通过快照方式存储在innodb_buffer_pool里的undo page中并记录undo log；最后若该这行数据页本就在内存中，就直接返回给执行器，否则就要先从磁盘读入内存再返回数据；</li>
+<li>执行器先找存储引擎取ID=2这行数据（ID是主键就直接用树搜索找到该行记录）。首先根据 innodb_buffer_pool的 data dictionary(元数据信息)去 lock info中查找相关锁信息，并将该 update语句所需要的锁信息写入 lock info；然后将涉及的老数据通过快照方式存储在 innodb_buffer_pool里的 undo page中并记录undo log；最后若该这行数据页本就在内存中，就直接返回给执行器，否则就要先从磁盘读入内存再返回数据；</li>
 <li>执行器拿到存储引擎返回的数据，把这个值+1得到新的一行数据，然后调用存储引擎接口写入这行新数据；</li>
-<li>存储引擎将这行数据更新到内存，同时将此更新操作记录到redo log，此时redo log处于prepare状态。然后告知执行器执行完成，随时可以提交事务；</li>
-<li>执行器生成这个操作的binlog，并把binlog写入磁盘；</li>
-<li>执行器调用存储引擎的提交事务接口，引擎把刚刚写入的redo log改成提交commit状态，更新完成。</li>
+<li>存储引擎将这行数据更新到内存，同时将此更新操作记录到 redo log，此时redo log处于prepare状态。然后告知执行器执行完成，随时可以提交事务；</li>
+<li>执行器生成这个操作的binlog，并把 binlog写入磁盘；</li>
+<li>执行器调用存储引擎的提交事务接口，引擎把刚刚写入的 redo log改成提交commit状态，更新完成。</li>
 </ol>
 <p>这里的最后三步看上去有点“绕”，将redo log的写入拆成了两个步骤——prepare和commit，这就是 <strong>两阶段提交</strong>。那为什么日志需要“两阶段提交”呢？</p>
 <p>由于redo log（InnoDB引擎）和binlog（Server层）是两个独立的逻辑，如果不用两阶段提交，那就是要先写完redo log再写 binlog，或者采用反过来的顺序。我们看看这两种方式会有什么问题。依然以前面的update语句为例，假设当前ID=2这行字段c的值是0，如果执行update语句过程中在写完第一个日志后，第二个日志还没有写完期间发生了crash，会出现什么情况呢？</p>
 <ol>
-<li><strong>先写redo log后写binlog</strong>：假设在redo log写完binlog还没写完的时候，MySQL进程发生异常重启：首先由于redo log已经写完，MySQL崩溃重恢复后是能够将数据“刷脏”的（见上文），即MySQL重启后该行记录c=1；然后由于binlog还没写完就crash了，这个时候binlog里面是没有记录这个语句的，因此当你使用某全量备份+此binlog来恢复临时数据库时，由于这个语句binlog的丢失就会导致临时库少了这次更新，恢复出来该行记录c=0，与原库值不同；</li>
-<li><strong>先写bin log后写redo log</strong>：假设在binlog写完redo log还没写完的时候，MySQL进程发生异常重启：首先由于redo log还没写，MySQL崩溃重恢复后这个事务无效，即MySQL重启后该行记录c=0，但是binlog 里面却已经记录了“把 c 从 0 改成 1“这个日志。同理在之后使用binlog恢复数据时，临时数据库就多了这次更新，恢复出来该行记录c=1，与原库值不同；</li>
+<li><strong>先写 redo log后写 binlog</strong>：假设在 redo log写完 binlog还没写完的时候，MySQL进程发生异常重启：首先由于 redo log已经写完，MySQL崩溃重恢复后是能够将数据“刷脏”的（见上文），即 MySQL重启后该行记录c=1；然后由于 binlog还没写完就 crash了，这个时候 binlog里面是没有记录这个语句的，因此当你使用某全量备份+此binlog来恢复临时数据库时，由于这个语句 binlog的丢失就会导致临时库少了这次更新，恢复出来该行记录 c=0，与原库值不同；</li>
+<li><strong>先写 bin log后写 redo log</strong>：假设在 binlog写完 redo log还没写完的时候，MySQL进程发生异常重启：首先由于 redo log还没写，MySQL崩溃重恢复后这个事务无效，即 MySQL重启后该行记录c=0，但是 binlog 里面却已经记录了“把 c 从 0 改成 1“这个日志。同理在之后使用 binlog恢复数据时，临时数据库就多了这次更新，恢复出来该行记录 c=1，与原库值不同；</li>
 </ol>
-<p>由上可知，如果不使用“两阶段提交”，数据库的状态就有可能和它用binlog日志恢复出来的库的状态不一致，比如数据库扩容时这个“不一致”就会导致线上出现主从数据库不一致的情况。<strong>简单来说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致</strong>。</p>
+<p>由上可知，如果不使用“两阶段提交”，数据库的状态就有可能和它用 binlog日志恢复出来的库的状态不一致，比如数据库扩容时这个“不一致”就会导致线上出现主从数据库不一致的情况。<strong>简单来说，redo log和 binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致</strong>。</p>
 <p>至此，InnoDB的事务日志——redo log、undo log、binlog我们算是简单了解一番，有兴趣继续深入研究的同学可以看看<a href="https://juejin.im/entry/5ba0a254e51d450e735e4a1f" target="_blank" rel="noopener">详细分析MySQL事务日志(redo log和undo log)</a>这篇文章。</p>
 
       
@@ -516,8 +528,8 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MYSQL常见的几种存储引擎"><span class="toc-number">2.</span> <span class="toc-text">MYSQL常见的几种存储引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redo-log"><span class="toc-number">3.</span> <span class="toc-text">redo log</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#log-group-和redo-log-file"><span class="toc-number">3.1.</span> <span class="toc-text">log group 和redo log file</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undo-log"><span class="toc-number">4.</span> <span class="toc-text">undo log</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binlog"><span class="toc-number">5.</span> <span class="toc-text">binlog</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binlog和redo-log的两阶段提交"><span class="toc-number">5.1.</span> <span class="toc-text">binlog和redo log的两阶段提交</span></a></li></ol></li></ol>
-                    </div>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#MYSQL常见的几种存储引擎"><span class="toc-number">1.</span> <span class="toc-text">MYSQL常见的几种存储引擎</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#redo-log"><span class="toc-number"></span> <span class="toc-text">redo log</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#log-group-和redo-log-file"><span class="toc-number">1.</span> <span class="toc-text">log group 和redo log file</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undo-log"><span class="toc-number"></span> <span class="toc-text">undo log</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binlog"><span class="toc-number"></span> <span class="toc-text">binlog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binlog和-redo-log的两阶段提交"><span class="toc-number"></span> <span class="toc-text">binlog和 redo log的两阶段提交</span></a>
+                    </li></div>
                 </span>
             </div>
         </div>
@@ -636,7 +648,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -644,23 +656,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -676,6 +676,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -684,7 +688,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -693,6 +701,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">

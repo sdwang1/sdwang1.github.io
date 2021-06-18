@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>一条SQL语句是如何执行的 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
+  <meta name="description" content="作为软件开发从业人员，想必使用 MySQL 都相当有些年头了。在应用实践过程中，相信大家也都遇到过一些疑问，但通常Google下就”止步“了，可能一直停留在“指哪打哪”的使用者层面。我亦曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一条SQL语句是如何执行的">
 <meta property="og:url" content="http://www.sdwangblog.cn/2019/03/07/一条SQL语句是如何执行的/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
+<meta property="og:description" content="作为软件开发从业人员，想必使用 MySQL 都相当有些年头了。在应用实践过程中，相信大家也都遇到过一些疑问，但通常Google下就”止步“了，可能一直停留在“指哪打哪”的使用者层面。我亦曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png">
 <meta property="og:image" content="http://www.sdwangblog.cn/blogimg/select_sql_execute_flowchart.png">
-<meta property="og:updated_time" content="2019-04-12T06:03:14.657Z">
+<meta property="og:updated_time" content="2021-03-26T07:20:31.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一条SQL语句是如何执行的">
-<meta name="twitter:description" content="前言作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
+<meta name="twitter:description" content="作为软件开发从业人员，想必使用 MySQL 都相当有些年头了。在应用实践过程中，相信大家也都遇到过一些疑问，但通常Google下就”止步“了，可能一直停留在“指哪打哪”的使用者层面。我亦曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL">
 <meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -178,7 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为“实打实”的软件开发从业人员，接触使用MySQL可以说是有些年头了。在具体实践过程中的确产生过一些疑问，通常Google下也就”止步“了，故而一直停留在“指哪打哪”的使用者层面，曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。<br>最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
+        <p>作为软件开发从业人员，想必使用 MySQL 都相当有些年头了。在应用实践过程中，相信大家也都遇到过一些疑问，但通常Google下就”止步“了，可能一直停留在“指哪打哪”的使用者层面。<br>我亦曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
 <h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt></p>
 <a id="more"></a>
 <p>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
@@ -189,8 +189,11 @@
 <h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。使用客户端工具mysql跟服务端建立连接的命令一般这么写：<code>mysql -h$ip -P$port -u$user -p</code>。<br>在完成TCP握手后，连接器会使用$user+$passwd认证客户端身份，若认证通过连接器会在权限表里查出客户端拥有的权限，之后在这个连接里的权限判断逻辑，都将依赖于此时读到的权限。也就是说，<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。</p>
 <p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。客户端如果太长时间【<strong>由参数interactive_timeout和wait_timeout控制</strong>】没动静，连接器会自动将它断开。<br><strong>特别说明下，关于数据库的长连接和短连接</strong>：</p>
 <ul>
-<li>短连接是指每次执行完很少的几次查询就断开连接【<strong>请求消息得到响应后连接关闭</strong>】，下次查询再重新建立一个。</li>
-<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。一般还需要定义 <strong>心跳信息</strong>，即定期发送消息检测连接链路是否异常。</li>
+<li>短连接是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</li>
+<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。一般还需要定义 <strong>心跳信息</strong>，即定期发送消息检测连接链路是否异常。<blockquote>
+<p>比如 PHP $pdo = new PDO($dsn, $username, $passwd, [PDO::ATTR_PERSISTENT =&gt; false]); 默认采用短连接形式，即脚本结束时会自动关闭连接（欲设置 $pdo=null 明确关闭连接时，需要销毁对象确保所有剩余到它的引用都被删除）；<br>当设置参数 PDO::ATTR_PERSISTENT =&gt; true 采用长连接形式（长驻内存的程序），它现在基本上是被连接池替代了（比如swoole），连接池可提供更多的连接管理功能，同时还能保持数据库的开销可控。</p>
+</blockquote>
+</li>
 </ul>
 <p><strong>由于建立连接的过程通常比较复杂，所以建议尽量使用长连接</strong>。但全部使用长连接可能会导致MySQL占用内存涨的特别快，这是因为MySQL在执行过程中临时使用的内存是管理在连接对象里面的，这些资源在连接断开时才会释放。<strong>如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。解决方案有两种：</p>
 <ol>
@@ -359,7 +362,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL基本架构"><span class="toc-number">2.</span> <span class="toc-text">MySQL基本架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接器"><span class="toc-number">2.1.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询缓存"><span class="toc-number">2.2.</span> <span class="toc-text">查询缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析器"><span class="toc-number">2.3.</span> <span class="toc-text">分析器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化器"><span class="toc-number">2.4.</span> <span class="toc-text">优化器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行器"><span class="toc-number">2.5.</span> <span class="toc-text">执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句的查询流程"><span class="toc-number">3.</span> <span class="toc-text">SQL语句的查询流程</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL基本架构"><span class="toc-number">1.</span> <span class="toc-text">MySQL基本架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接器"><span class="toc-number">1.1.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询缓存"><span class="toc-number">1.2.</span> <span class="toc-text">查询缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析器"><span class="toc-number">1.3.</span> <span class="toc-text">分析器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化器"><span class="toc-number">1.4.</span> <span class="toc-text">优化器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行器"><span class="toc-number">1.5.</span> <span class="toc-text">执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句的查询流程"><span class="toc-number">2.</span> <span class="toc-text">SQL语句的查询流程</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -479,7 +482,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -487,23 +490,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络技术</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,6 +510,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">GO</a>
               </li>
              
@@ -527,7 +522,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,6 +535,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">V2Ray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
