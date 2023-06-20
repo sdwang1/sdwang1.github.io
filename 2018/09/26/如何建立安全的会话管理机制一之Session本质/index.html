@@ -16,18 +16,18 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言Http是一种无状态协议，此种协议不要求浏览器在每次请求中标明它自己的身份，并且浏览器以及服务器之间并没有保持一个持久性的连接用于多个页面之间的访问（HTTP/1.1默认的”Connection:Keep-Alive”不会改变这种无状态结果，不要让程序依赖于Keep-Alive的保持连接特性，否则会有意想不到的后果）。当一个用户访问一个站点的时候，用户的浏览器发送一个http请求到服务器，服务">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_header_authorization.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_set_cookie.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/session_one_server.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/session_many_server.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/session_consistency_sycns.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/session_consistency_four_level_hash.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/session_consistency_stored_db_cache.png">
-<meta property="og:updated_time" content="2018-12-19T08:25:44.576Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_header_authorization.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_set_cookie.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/session_one_server.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/session_many_server.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/session_consistency_sycns.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/session_consistency_four_level_hash.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/session_consistency_stored_db_cache.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何建立安全的会话管理机制一之Session本质">
 <meta name="twitter:description" content="前言Http是一种无状态协议，此种协议不要求浏览器在每次请求中标明它自己的身份，并且浏览器以及服务器之间并没有保持一个持久性的连接用于多个页面之间的访问（HTTP/1.1默认的”Connection:Keep-Alive”不会改变这种无状态结果，不要让程序依赖于Keep-Alive的保持连接特性，否则会有意想不到的后果）。当一个用户访问一个站点的时候，用户的浏览器发送一个http请求到服务器，服务">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/http_header_authorization.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/http_header_authorization.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -235,14 +235,14 @@
 <ul>
 <li>对于这些早期的用户识别技术，首先 From、User-Agent和Referer首部都不足以实现可靠的识别。</li>
 <li>在实际应用中，很多Internet服务器提供商都会在用户登录时为其动态分配IP地址，而登录后的用户为了提高安全性，大多数会通过NAT防火墙来浏览网页内容（将实际的客户端IP地址转换为一个共享的防火墙IP地址），HTTP代理和网关也通常会打开一些新的、到原始服务器的TCP连接（Web服务器看到的将是代理服务器IP地址，而不是客户端的），这些因素都限制了将客户端IP地址跟踪作为用户识别技术的效能。</li>
-<li>HTTP包含了一种内建机制，可使用WWW-Authenticate首部和Authorization首部向Web站点传送用户的相关信息，其认证过程如下图示。这种HTTP的基本认知，需要用户每次认证时都重新输入用户名和密码，而且攻击者可以轻易地从Authorization首部中破解出用户名和密码，安全系数很低。<br><img src="http://www.sdwangblog.cn/blogimg/http_header_authorization.png" alt></li>
+<li>HTTP包含了一种内建机制，可使用WWW-Authenticate首部和Authorization首部向Web站点传送用户的相关信息，其认证过程如下图示。这种HTTP的基本认知，需要用户每次认证时都重新输入用户名和密码，而且攻击者可以轻易地从Authorization首部中破解出用户名和密码，安全系数很低。<br><img src="http://www.sdwangblog.top/blogimg/http_header_authorization.png" alt></li>
 <li>在真正的URL路径开始或结束的地方添加一些用户状态信息而形成的 <strong>胖URL</strong>，它存在诸多缺陷：丑陋，无法共享URL（共享他人可能会无意中泄漏个人信息），破坏缓存（为每个URL生成用特有的版本就意味着不再有可供公共访问的URL需要缓存了），在会话间是非持久的等。</li>
 </ul>
 <h2 id="Session与Cookie"><a href="#Session与Cookie" class="headerlink" title="Session与Cookie"></a>Session与Cookie</h2><p>Cookies是作为http的一个扩展诞生的，其主要用途是弥补http的无状态特性，提供了一种保持客户端与服务器端之间状态的途径，它仍然是当前实现持久会话的常用方式之一。那么cookie是如何工作的呢？</p>
 <ol>
 <li>用户首次访问Web站点时，服务器通过Set-Cookie或Set-Cookie2HTTP响应（扩展）首部将一个由<code>名字 = 值(name=value)</code>这样的信息构成的任意列表“贴”到用户身上去；</li>
 <li>浏览器会记住从服务器返回的Set-Cookie或Set-Cookie2首部中的cookie内容，并将cookie集存储在浏览器的cookie数据库中（不同的浏览器会以不同的方式来存储cookie）。</li>
-<li>将来用户再访问同一站点时，浏览器会挑中那些相关对应的cookie（有效会话期限），并在一个Cookie请求首部中将其传回去。<br><img src="http://www.sdwangblog.cn/blogimg/http_set_cookie.png" alt></li>
+<li>将来用户再访问同一站点时，浏览器会挑中那些相关对应的cookie（有效会话期限），并在一个Cookie请求首部中将其传回去。<br><img src="http://www.sdwangblog.top/blogimg/http_set_cookie.png" alt></li>
 </ol>
 <p><strong>实际应用中的会话管理，不仅要维持各个请求之间的状态，还需要维持会话期间针对每个特定用户使用到的数据，我们常常把这种数据叫做session数据。如果你是用PHP内置的session管理机制，那么session数据一般是保存在/tmp这个服务器的文件夹中，并且其中的session数据会被自动地保存到超级数组<code>$_SESSION</code>中。So，这也就是为何大多人对“session与cookie区别”的简单认知是：“session数据保存在服务器端，cookie数据保存在客户端”。</strong></p>
 <h3 id="PHP-内置的Session管理"><a href="#PHP-内置的Session管理" class="headerlink" title="PHP 内置的Session管理"></a>PHP 内置的Session管理</h3><p>为了使客户端在多个页面请求间保存及共享用户信息，PHP(服务器)会为每个独立用户分配唯一的会话ID，实现针对不同用户分别存储数据的功能。一般来说，会话 ID 通过 cookie 的方式发送到浏览器，并且在服务器端也是通过会话 ID 来取回会话中的数据（会话 ID 的name由php.ini配置项session.name决定，默认值”PHPSESSID”）。</p>
@@ -273,23 +273,23 @@
 <h3 id="Session的安全性问题"><a href="#Session的安全性问题" class="headerlink" title="Session的安全性问题"></a>Session的安全性问题</h3><p>一直以来很多开发者都认为php内置的session管理机制是具有一定的安全性，可以对一般的session攻击起到防御。事实上，这是一种误解，php团队只实现了一种方便有效的机制。你需要采取额外的手段来确保会话中的机密信息，至于采用何种方式来保护机密信息，取决于你在会话中存储的数据。事实上，增加额外的保护机制，通常需要付出一定的代价，同时会降低便利性。一些具体场景建议如下：</p>
 <ul>
 <li>如果你需要保护用户免受社会工程学攻击， 请启用 session.use_only_cookies 选项。 这就要求用户在使用过程中，必须把浏览器设置为接受 cookie， 否则就无法正常使用会话功能了。</li>
-<li>有很多种方式可导致会话被泄漏给第三方，比如JavaScript 注入,（<a href="http://www.sdwangblog.cn/2018/03/21/%E6%B5%85%E8%B0%88CSRF%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/">CSRF攻击</a>）———增加cookie token验证机制，URL 中包含会话 ID———禁用session.use_trans_sid、防止会话标识出现在Referer标题中，数据包侦听———始终使用 HTTPs， 或者直接访问你的物理设备等。</li>
+<li>有很多种方式可导致会话被泄漏给第三方，比如JavaScript 注入,（<a href="http://www.sdwangblog.top/2018/03/21/%E6%B5%85%E8%B0%88CSRF%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/" target="_blank" rel="noopener">CSRF攻击</a>）———增加cookie token验证机制，URL 中包含会话 ID———禁用session.use_trans_sid、防止会话标识出现在Referer标题中，数据包侦听———始终使用 HTTPs， 或者直接访问你的物理设备等。</li>
 <li>启用session.use_strict_mode，使用严格会话管理。默认情况下，PHP是以自适应的方式来管理会话的，这种方式使用起来很灵活，但同样也带来了一定的风险。比如攻击者预测出会话 ID并通过邮件给受害者发送一个包含会话 ID的链接：<code>http://example.com/page.php?PHPSESSID=123456789</code>，默认情况PHP会为此会话ID创建会话，并写入session数据。<strong>启用session.use_strict_mode（PHP&gt;5.5.2）这个配置项后，并且你所用的会话存储器支持的话，未经初始化的会话 ID 会被拒绝， 并为其生成一个全新的会话，这可以避免攻击者使用一个已知的会话 ID 来进行攻击。</strong></li>
 <li>重新生成会话ID，会话 ID 重生机制可以有效的降低会话被窃取的风险， 所以必须周期性的调用 session_regenerate_id() 函数 来重新生成会话 ID， 例如，对于机密内容，每隔 15 分钟就重新生成会话 ID。<strong>默认情况下，session_regenerate_id() 函数 不会删除旧的会话， 所以即使重生了会话 ID，旧的会话可能还是可用的。开发者不要依赖session.gc_maxlifetime配置项，你需要自己实现基于时间戳的 会话数据管理机制。</strong></li>
 <li>默认情况下为保证会话数据在多个请求间的一致性，对于会话数据的访问是加锁进行的，但这种锁定机制可被攻击者利用，进行对于用户的拒绝服务攻击。<strong>为了降低这种风险，请在访问会话数据的时候，尽可能的缩短锁定的时间。 当某个请求不需要更新会话数据的时候，使用只读模式访问会话数据。</strong></li>
 <li>开发者需要自己来追踪每个用户的活跃会话（PHP 不会自动完成这项工作），即每个用户创建了多少活跃会话，每个活跃会话来自那个 IP 地址， 活跃了多长时间等。<strong>简单方式之一就是“使用用户 ID 作为会话 ID 前缀”，并且保存必要的信息到 $_SESSION 中。为了实现这种方式，可以使用session_regenerate_id()和session_create_id()函数。</strong></li>
 </ul>
-<h2 id="session一致性问题"><a href="#session一致性问题" class="headerlink" title="session一致性问题"></a>session一致性问题</h2><p>我们知道，web-server可以为同一个浏览器的访问用户自动创建session，提供数据存储功能，比如将用户的登录信息、用户信息存储在session中，以保持登录状态。当只有一台web-server提供服务时，每次http短连接请求，显然都能够正确路由到存储session对应web-server，只有一台嘛。。。<br><img src="http://www.sdwangblog.cn/blogimg/session_one_server.png" alt><br>在高并发网络请求下，采用“冗余+故障转移”的多台web-server来保证高可用时，每次http短连接请求就不一定能路由到正确的session了。<br><img src="http://www.sdwangblog.cn/blogimg/session_many_server.png" alt><br>如上图，假设包含用户登录信息的session记录在第一台web-server上，反向代理如果将某次请求路由到另一台web-server上，找不到用户相关登录信息就会导致用户需要重登录。</p>
+<h2 id="session一致性问题"><a href="#session一致性问题" class="headerlink" title="session一致性问题"></a>session一致性问题</h2><p>我们知道，web-server可以为同一个浏览器的访问用户自动创建session，提供数据存储功能，比如将用户的登录信息、用户信息存储在session中，以保持登录状态。当只有一台web-server提供服务时，每次http短连接请求，显然都能够正确路由到存储session对应web-server，只有一台嘛。。。<br><img src="http://www.sdwangblog.top/blogimg/session_one_server.png" alt><br>在高并发网络请求下，采用“冗余+故障转移”的多台web-server来保证高可用时，每次http短连接请求就不一定能路由到正确的session了。<br><img src="http://www.sdwangblog.top/blogimg/session_many_server.png" alt><br>如上图，假设包含用户登录信息的session记录在第一台web-server上，反向代理如果将某次请求路由到另一台web-server上，找不到用户相关登录信息就会导致用户需要重登录。</p>
 <p>那么，在web-server高可用时，如何保证session路由的一致性，即处理session一致性问题呢？架构设计种常见的方法有如下几种。</p>
-<h3 id="session同步法"><a href="#session同步法" class="headerlink" title="session同步法"></a>session同步法</h3><p>既然不知如何保证session路由的一致性，那么最干脆的办法：多个web-server之间相互同步session，这样每个web-server之间都包含全部的session。这样做的优点：web-server支持的功能，<strong>应用程序不需要修改代码。</strong> 缺点是：1. session的同步需要数据传输，<strong>占内网带宽，有时延</strong>；2. 所有web-server都包含所有session数据，数据量 <strong>受内存限制，无法水平扩展</strong>；3. <strong>有更多web-server时要歇菜</strong>；<br><img src="http://www.sdwangblog.cn/blogimg/session_consistency_sycns.png" alt></p>
+<h3 id="session同步法"><a href="#session同步法" class="headerlink" title="session同步法"></a>session同步法</h3><p>既然不知如何保证session路由的一致性，那么最干脆的办法：多个web-server之间相互同步session，这样每个web-server之间都包含全部的session。这样做的优点：web-server支持的功能，<strong>应用程序不需要修改代码。</strong> 缺点是：1. session的同步需要数据传输，<strong>占内网带宽，有时延</strong>；2. 所有web-server都包含所有session数据，数据量 <strong>受内存限制，无法水平扩展</strong>；3. <strong>有更多web-server时要歇菜</strong>；<br><img src="http://www.sdwangblog.top/blogimg/session_consistency_sycns.png" alt></p>
 <h3 id="反向代理hash一致性"><a href="#反向代理hash一致性" class="headerlink" title="反向代理hash一致性"></a>反向代理hash一致性</h3><p>web-server为了保证高可用，有多台冗余，反向代理层能不能做一些事情，让 <strong>同一个用户的请求保证落在一台web-server上呢？</strong> 常见的方案如下：</p>
 <ul>
-<li>四层代理hash：反向代理层使用 <strong>用户IP来做hash</strong>，以保证同一个IP请求落在同一个web-server上。<br><img src="http://www.sdwangblog.cn/blogimg/session_consistency_four_level_hash.png" alt></li>
+<li>四层代理hash：反向代理层使用 <strong>用户IP来做hash</strong>，以保证同一个IP请求落在同一个web-server上。<br><img src="http://www.sdwangblog.top/blogimg/session_consistency_four_level_hash.png" alt></li>
 <li>七层代理hash：反向代理使用http请求中的 <strong>某些业务属性来做hash</strong>，例如sid，city_id，user_id等，能够更加灵活的实施hash策略，以保证同一个浏览器用户的请求落在同一个web-server上；</li>
 </ul>
 <p><strong>对于四层hash还是七层hash，个人推荐前者：让专业的软件做专业的事情</strong>，反向代理就负责转发，尽量不要引入应用层业务属性，除非不得不这么做（例如，有时候多机房多活需要按照业务属性路由到不同机房的web-server）。</p>
 <p>反向代理hash一致性的优点是：1. 只需要修改nginx配置，<strong>不需要修改应用代码。2. 负载均衡，</strong> 只要hash属性是均匀的，多台web-server是均衡的；3. 可以 <strong>支持web-server水平扩展</strong>；缺点是：<strong>1. 如果web-server重启，一部分session会丢失；</strong> 2. 如果web-server水平扩展，<strong>rehash后session重新分布，也会有一部分用户路由不到正确的session；</strong> 这两个缺点产生的业务影响，比如部分用户重登录，一般问题不大。</p>
-<h3 id="后端统一存储"><a href="#后端统一存储" class="headerlink" title="后端统一存储"></a>后端统一存储</h3><p><strong>将session存储在web-server后端的存储层</strong>， 数据库或者缓存（原则上讲或许这是 <strong>最合适</strong> 的方法，毕竟session属于用户状态，不宜放在web层）。这样做的优点是：<strong>1. 没有安全隐患；2. 可以水平扩展</strong>，数据库/缓存水平切分即可；3. web-server重启或者扩容都 <strong>不会有session丢失</strong>。缺点是：增加了一次网络调用，并且 <strong>需要修改应用代码</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/session_consistency_stored_db_cache.png" alt><br><strong>特别说明，有些用户希望借助memcached提高Session读取速度，请<a href="https://www.infoq.cn/article/2015%2F01%2Fmemcached-store-session" target="_blank" rel="noopener">不要直接使用memcached存储Session</a>，可以借鉴Norkūnas 提出的 memcached+RDBMS（在有些情况下，NoSQL 也可以）的模式：</strong></p>
+<h3 id="后端统一存储"><a href="#后端统一存储" class="headerlink" title="后端统一存储"></a>后端统一存储</h3><p><strong>将session存储在web-server后端的存储层</strong>， 数据库或者缓存（原则上讲或许这是 <strong>最合适</strong> 的方法，毕竟session属于用户状态，不宜放在web层）。这样做的优点是：<strong>1. 没有安全隐患；2. 可以水平扩展</strong>，数据库/缓存水平切分即可；3. web-server重启或者扩容都 <strong>不会有session丢失</strong>。缺点是：增加了一次网络调用，并且 <strong>需要修改应用代码</strong>。<br><img src="http://www.sdwangblog.top/blogimg/session_consistency_stored_db_cache.png" alt><br><strong>特别说明，有些用户希望借助memcached提高Session读取速度，请<a href="https://www.infoq.cn/article/2015%2F01%2Fmemcached-store-session" target="_blank" rel="noopener">不要直接使用memcached存储Session</a>，可以借鉴Norkūnas 提出的 memcached+RDBMS（在有些情况下，NoSQL 也可以）的模式：</strong></p>
 <ul>
 <li>当用户登录时，将Session “set”到memcached，并写入数据库；</li>
 <li>在Session中增加一个字段，标识Session最后写入数据库的时间；</li>
@@ -479,7 +479,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -610,10 +610,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -626,15 +622,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -16,21 +16,21 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="以下文章内容主要转载自如果这样来理解HTTPS，一篇就够了！。 前言当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_origin_send_message.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_symmetric_encryption_send_message.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_www_symmetric_encryption.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_www_talk_symmetric_encryption_format.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_nonsymmetric_encryption.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_nonsymmetric_middle_attack.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_digital_signature.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_client_inline_ca.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_how_apply_ca.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/https_interaction.png">
-<meta property="og:updated_time" content="2018-11-23T06:26:31.715Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_origin_send_message.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_symmetric_encryption_send_message.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_www_symmetric_encryption.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_www_talk_symmetric_encryption_format.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_nonsymmetric_encryption.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_nonsymmetric_middle_attack.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_digital_signature.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_client_inline_ca.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_how_apply_ca.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/https_interaction.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTPS加密那点事">
 <meta name="twitter:description" content="以下文章内容主要转载自如果这样来理解HTTPS，一篇就够了！。 前言当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/https_origin_send_message.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/https_origin_send_message.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -189,8 +189,8 @@
         <p>以下文章内容主要转载自<a href="https://www.tuicool.com/articles/QzQnAnM" target="_blank" rel="noopener">如果这样来理解HTTPS，一篇就够了！</a>。</p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当今主流的移动端IM数据通信，总结下来无外乎就是长连接+短连接的方式，长连接就是众所周之的TCP、UDP、WebSocket（WebSocket的本质还是TCP），而短连接就是HTTP/HTTPS了。即时通讯IM应用中，短连接的安全跟长连接相比，同样很重要。市面上的主流短连接通信方式，都已逐步从HTTP过渡到HTTPS了，So 鉴于其普及性，尽快拥抱它才是符合技术潮流的。<br>本文将尝试用通俗易懂的语言，一步步还原HTTPS的设计过程，以便您能轻松理解为什么HTTPS最终会是这副模样。但鉴于HTTPS的复杂性，本文的文字主要是为了方便您的理解，而并不代表完全遵从HTTPS的真实设计过程。</p>
 <a id="more"></a>
-<p>假设我们想要实现A能发一个hello消息给B（本文只考虑安全性问题），那么它在安全性上必须达到：“A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容。”对于解决方案，很容易就想到了 <strong>对消息进行加密</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/https_origin_send_message.png" alt></p>
-<h2 id="对称加密算法"><a href="#对称加密算法" class="headerlink" title="对称加密算法"></a>对称加密算法</h2><p>对于A与B这样的简单通信模型，我们很容易作出选择：<strong>对称加密算法</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/https_symmetric_encryption_send_message.png" alt><br>其中，图中密钥S同时扮演加密和解密角色。这种场景中，<strong>只要这个密钥S不公开给第三者【二者要初始化安全地约定好密钥S】，同时密钥S足够安全</strong>，我们就解决了我们一开始所设定问题了（具体细节不是本文范畴）。</p>
+<p>假设我们想要实现A能发一个hello消息给B（本文只考虑安全性问题），那么它在安全性上必须达到：“A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容。”对于解决方案，很容易就想到了 <strong>对消息进行加密</strong>。<br><img src="http://www.sdwangblog.top/blogimg/https_origin_send_message.png" alt></p>
+<h2 id="对称加密算法"><a href="#对称加密算法" class="headerlink" title="对称加密算法"></a>对称加密算法</h2><p>对于A与B这样的简单通信模型，我们很容易作出选择：<strong>对称加密算法</strong>。<br><img src="http://www.sdwangblog.top/blogimg/https_symmetric_encryption_send_message.png" alt><br>其中，图中密钥S同时扮演加密和解密角色。这种场景中，<strong>只要这个密钥S不公开给第三者【二者要初始化安全地约定好密钥S】，同时密钥S足够安全</strong>，我们就解决了我们一开始所设定问题了（具体细节不是本文范畴）。</p>
 <h3 id="知名的对称密码"><a href="#知名的对称密码" class="headerlink" title="知名的对称密码"></a>知名的对称密码</h3><p>知名的密码算法有 AES（2001）、3DES、Blowfish（1993）、DES（1977），再远一点，有二战时期的恩尼格码（转轮机原理，德国）、紫色密码（转轮机原理，日本），以及著名的凯撒密码（没错就是地中海北岸那个凯撒）、栅栏密码等。现在比较常用对称密码有DES，3DES及AES：</p>
 <ul>
 <li>DES（Data Encryption Standard)，明文按64位进行分组后和 <strong>56位的密钥</strong> 按位替代或位交换的方法形成密文（容易被暴力破解）。工作模式有：ECB、CBC、PCBC、CTR、CTS、CFB、CFB8-CFB128、OFB、OFB8-OFB128；填充方式：NoPadding、PKCS5Padding、ISO10126Padding；</li>
@@ -198,27 +198,27 @@
 <li>AES（Advanced Encryption Standard)，目前最流行的对称加密算法，比DES算法的加密强度更高,更为安全。<strong>密钥长度为128，192，256，默认密钥长度128</strong>；工作模式有：ECB、CBC、PCBC、CTR、CTS、CFB、CFB8-CFB128、OFB、OFB8-OFB128；填充方式：NoPadding、PKCS5Padding、ISO10126Padding；</li>
 </ul>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//$key previously generated safely, ie: openssl_random_pseudo_bytes</span></span><br><span class="line">$plaintext = <span class="string">"message to be encrypted"</span>;</span><br><span class="line">$ivlen = openssl_cipher_iv_length($cipher=<span class="string">"AES-128-CBC"</span>);</span><br><span class="line">$iv = openssl_random_pseudo_bytes($ivlen);</span><br><span class="line">$ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);</span><br><span class="line">$hmac = hash_hmac(<span class="string">'sha256'</span>, $ciphertext_raw, $key, $as_binary=<span class="keyword">true</span>);</span><br><span class="line">$ciphertext = base64_encode( $iv.$hmac.$ciphertext_raw );</span><br><span class="line"></span><br><span class="line"><span class="comment">//decrypt later....</span></span><br><span class="line">$c = base64_decode($ciphertext);</span><br><span class="line">$ivlen = openssl_cipher_iv_length($cipher=<span class="string">"AES-128-CBC"</span>);</span><br><span class="line">$iv = substr($c, <span class="number">0</span>, $ivlen);</span><br><span class="line">$hmac = substr($c, $ivlen, $sha2len=<span class="number">32</span>);</span><br><span class="line">$ciphertext_raw = substr($c, $ivlen+$sha2len);</span><br><span class="line">$original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);</span><br><span class="line">$calcmac = hash_hmac(<span class="string">'sha256'</span>, $ciphertext_raw, $key, $as_binary=<span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">if</span> (hash_equals($hmac, $calcmac))<span class="comment">//PHP 5.6+ timing attack safe comparison</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> $original_plaintext.<span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="WWW环境下的对称加密算法"><a href="#WWW环境下的对称加密算法" class="headerlink" title="WWW环境下的对称加密算法"></a>WWW环境下的对称加密算法</h3><p>在WWW环境下，我们的Web服务器通信模型就没那么简单了：如果服务器端对所有的客户端通信都使用同样的对称加密算法，无异于没有加密。那怎么办呢？即能使用对称加密算法，又不公开密钥？<strong>那么，Web服务器就要与每个客户端使用不同的对称加密算法。</strong><br><img src="http://www.sdwangblog.cn/blogimg/https_www_symmetric_encryption.png" alt><br>此时，另一个问题来了，我们的服务器端如何告诉客户端该使用哪种对称加密算法？当然是通过协商了，<br><img src="http://www.sdwangblog.cn/blogimg/https_www_talk_symmetric_encryption_format.png" alt><br>但是，你协商的过程是没有加密的，还是会被中间人拦截。那我们再对这个协商过程进行对称加密就好了，那你对协商过程加密的加密还是没有加密，怎么办？再加密不就好了……好吧，进行鸡生蛋蛋生鸡的问题了。</p>
-<p>新问题来了，如何对协商过程进行加密？密码学领域中，有一种称为“非对称加密”的加密算法，特点是私钥加密后的密文，只要是公钥，都可以解密，但是公钥加密后的密文，只有私钥可以解密。私钥只有一个人有，而公钥可以发给所有的人。<br><img src="http://www.sdwangblog.cn/blogimg/https_nonsymmetric_encryption.png" alt><br><strong>虽然服务器端向A、B…的方向还是不安全的，但至少A、B向服务器端方向是安全的。OK，我们解决了：使用非对称加密算法进行对称加密算法协商过程。</strong></p>
+<h3 id="WWW环境下的对称加密算法"><a href="#WWW环境下的对称加密算法" class="headerlink" title="WWW环境下的对称加密算法"></a>WWW环境下的对称加密算法</h3><p>在WWW环境下，我们的Web服务器通信模型就没那么简单了：如果服务器端对所有的客户端通信都使用同样的对称加密算法，无异于没有加密。那怎么办呢？即能使用对称加密算法，又不公开密钥？<strong>那么，Web服务器就要与每个客户端使用不同的对称加密算法。</strong><br><img src="http://www.sdwangblog.top/blogimg/https_www_symmetric_encryption.png" alt><br>此时，另一个问题来了，我们的服务器端如何告诉客户端该使用哪种对称加密算法？当然是通过协商了，<br><img src="http://www.sdwangblog.top/blogimg/https_www_talk_symmetric_encryption_format.png" alt><br>但是，你协商的过程是没有加密的，还是会被中间人拦截。那我们再对这个协商过程进行对称加密就好了，那你对协商过程加密的加密还是没有加密，怎么办？再加密不就好了……好吧，进行鸡生蛋蛋生鸡的问题了。</p>
+<p>新问题来了，如何对协商过程进行加密？密码学领域中，有一种称为“非对称加密”的加密算法，特点是私钥加密后的密文，只要是公钥，都可以解密，但是公钥加密后的密文，只有私钥可以解密。私钥只有一个人有，而公钥可以发给所有的人。<br><img src="http://www.sdwangblog.top/blogimg/https_nonsymmetric_encryption.png" alt><br><strong>虽然服务器端向A、B…的方向还是不安全的，但至少A、B向服务器端方向是安全的。OK，我们解决了：使用非对称加密算法进行对称加密算法协商过程。</strong></p>
 <p><strong>这里不禁要问：“既然都是加密算法，为何不直接使用非对称加密算法加密通信报文，而仅是用来加密协商过程？” 这是因为非对称加密在加密时速度特别慢，比对称加密慢上了上百倍，而对称加密之所以不安全，是因为密钥无法安全交付给客户端，所以这种结合 对称加密+非对称加密 的处理方式才是优化的最终方案。</strong> 这下明白为什么HTTPS同时需要对称对称加密算法和非对称加密算法了吧？</p>
 <h2 id="非对称加密算法"><a href="#非对称加密算法" class="headerlink" title="非对称加密算法"></a>非对称加密算法</h2><p>非对称加密算法又称为公开密钥加密算法,它需要两个密钥,一个称为公开密钥(public key), 即公钥,另一个称为私有密钥(private key),即私钥。<strong>公钥与私钥需要配对使用,如果用公钥对数据进行加密,只有用对应的私钥才能进行解密,而如果使用私钥对数据进行加密,那么只有用对应的公钥才能进行解密。</strong> ，下例为PHP中使用生成的公钥、私钥进行加密解密的显例代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本地创建秘钥对</span></span><br><span class="line"><span class="comment">#$ ssh-keygen -t rsa -b 4096 -C "mail@debugtalk.com"</span></span><br><span class="line"></span><br><span class="line">$pi_key =  openssl_pkey_get_private(<span class="string">'file://path/to/id_rsa'</span>);</span><br><span class="line">$plaintext = <span class="string">"message to be encrypted"</span>;</span><br><span class="line">$encrypted = <span class="string">""</span>;</span><br><span class="line">$encryptionOk = openssl_private_encrypt($plaintext, $encrypted, $pi_key, OPENSSL_PKCS1_PADDING);</span><br><span class="line"><span class="keyword">if</span>($encryptionOk === <span class="keyword">false</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">$encrypted = base64_encode($encrypted);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//For decryption we would use:</span></span><br><span class="line">$pu_key = openssl_pkey_get_public(<span class="string">'file://path/to/id_rsa.pub'</span>);</span><br><span class="line">$decrypted = <span class="string">""</span>;</span><br><span class="line">$decryptionOK = openssl_public_decrypt(base64_decode($data), $decrypted, $pu_key, OPENSSL_PKCS1_PADDING);</span><br><span class="line"><span class="keyword">if</span>($decryptionOK === <span class="keyword">false</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure></p>
-<p>让我们继续回到问题域，细心的人可能已经注意到了如果使用非对称加密算法，我们的客户端A，B需要一开始就持有公钥，要不没法开展加密行为啊。这下，我们又遇到新问题了，如何让A、B客户端安全地得到公钥？服务器端发送公钥给客户端时，最出名的攻击就是“中间攻击”了。<br><img src="http://www.sdwangblog.cn/blogimg/https_nonsymmetric_middle_attack.png" alt><br>显然，让每个客户端的每个浏览器默认保存所有网站的公钥是不现实的。</p>
+<p>让我们继续回到问题域，细心的人可能已经注意到了如果使用非对称加密算法，我们的客户端A，B需要一开始就持有公钥，要不没法开展加密行为啊。这下，我们又遇到新问题了，如何让A、B客户端安全地得到公钥？服务器端发送公钥给客户端时，最出名的攻击就是“中间攻击”了。<br><img src="http://www.sdwangblog.top/blogimg/https_nonsymmetric_middle_attack.png" alt><br>显然，让每个客户端的每个浏览器默认保存所有网站的公钥是不现实的。</p>
 <h2 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h2><p><strong>公钥被调包的问题出现，是因为我们的客户端无法分辨返回公钥的人到底是中间人，还是真的服务器。</strong> 我们需要找到一种策略来证明这把公钥就是服务器的，而不是别人冒充的。解决这个问题的方式是使用 <strong>数字证书</strong>，具体是这样的：</p>
 <ul>
 <li>找到一个拥有公信力，大家都认可的 <strong>认证中心（CA）</strong>；</li>
 <li><p>服务器在给客户端传输公钥的过程中，会把 “公钥+服务器个人信息” 通过 <strong>Hash算法生成信息摘要。为了防止信息摘要被人调换，服务器还会用CA提供的私钥对信息摘要进行加密形成数字签名。</strong>；</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数字摘要也称为消息摘要,它是一个唯一对应一个消息或文本的固定长度的值,它由一个单向Hash函数对消息进行计算而产生。</span></span><br><span class="line"><span class="comment">//MD5即Message Digest Algorithm5，摘要长度为128位</span></span><br><span class="line">string md5(string $str[,bool $raw_output=<span class="keyword">FALSE</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">//SHA即Secure Hash Algorithm（基于MD4），现公认的最安全的散列算法，相较于MD5运行更慢也更安全</span></span><br><span class="line">string sha1(string $str[,bool $raw_output=<span class="keyword">false</span>]);</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>最后把原来没Hash算法之前的个人信息以及公钥、和数字签名合并在一起，形成数字证书。如图：<br><img src="http://www.sdwangblog.cn/blogimg/https_digital_signature.png" alt></p>
+<li><p>最后把原来没Hash算法之前的个人信息以及公钥、和数字签名合并在一起，形成数字证书。如图：<br><img src="http://www.sdwangblog.top/blogimg/https_digital_signature.png" alt></p>
 </li>
 <li>当客户端拿到这份数字证书后，用CA提供的公钥来对数字证书里面的数字签名进行解密来得到信息摘要，然后对数字证书里服务器的公钥以及个人信息进行Hash得到另外一份信息摘要。最后把两份信息摘要进行对比，如果一样，则证明这个人是服务器，否则就不是。这样来保证服务器的公钥安全着陆交给了客户端。</li>
 </ul>
 <p><strong>新的问题又来了，CA的公钥怎么安全的拿给客户端？服务器又怎么有CA的私钥呢？</strong> 如果选择网络加密传输，是不是又回到鸡生蛋蛋生鸡的问题了?😂</p>
 <ol>
-<li>“CA的公钥怎么安全的拿给客户端”？事实上，浏览器和操作系统都会维护一个权威的第三方机构列表（包括它们的公钥）。因为客户端接收到的证书中会写有颁发机构，客户端就根据这个颁发机构的值在本地找相应的公钥（如果浏览器和操作系统这道防线被攻破了，就没办法）。如下图：<br><img src="http://www.sdwangblog.cn/blogimg/https_client_inline_ca.png" alt></li>
-<li>“CA如何颁发数字证书给服务器端”？其实问题应该是“CA如何颁发给我们的网站管理员，而我们的管理员又如何将这个数字证书放在我们的服务器上？” 如何申请CA的数字证书，每个CA机构都大同小异，比如下图。拿到证书后，我们就可以将证书配置到自己的服务器，至于如何配置，具体细节自行Google。<br><img src="http://www.sdwangblog.cn/blogimg/https_how_apply_ca.png" alt></li>
+<li>“CA的公钥怎么安全的拿给客户端”？事实上，浏览器和操作系统都会维护一个权威的第三方机构列表（包括它们的公钥）。因为客户端接收到的证书中会写有颁发机构，客户端就根据这个颁发机构的值在本地找相应的公钥（如果浏览器和操作系统这道防线被攻破了，就没办法）。如下图：<br><img src="http://www.sdwangblog.top/blogimg/https_client_inline_ca.png" alt></li>
+<li>“CA如何颁发数字证书给服务器端”？其实问题应该是“CA如何颁发给我们的网站管理员，而我们的管理员又如何将这个数字证书放在我们的服务器上？” 如何申请CA的数字证书，每个CA机构都大同小异，比如下图。拿到证书后，我们就可以将证书配置到自己的服务器，至于如何配置，具体细节自行Google。<br><img src="http://www.sdwangblog.top/blogimg/https_how_apply_ca.png" alt></li>
 </ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文上面一大堆工作都是为了让客户端与服务器端安全地协商出一个对称加密算法，这就是HTTPS中的SSL/TLS协议主要干的活。在此之后，剩下的就是通信时双方使用这个对称加密算法进行加密解密，以下是一张HTTPS协议的真实交互图：<br><img src="http://www.sdwangblog.cn/blogimg/https_interaction.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文上面一大堆工作都是为了让客户端与服务器端安全地协商出一个对称加密算法，这就是HTTPS中的SSL/TLS协议主要干的活。在此之后，剩下的就是通信时双方使用这个对称加密算法进行加密解密，以下是一张HTTPS协议的真实交互图：<br><img src="http://www.sdwangblog.top/blogimg/https_interaction.png" alt></p>
 <p>HTTP本身确实很复杂，但我们还是尝试使用一段话来总结它：<strong>“HTTPS要使客户端与服务器端的通信过程得到安全保证，必须使用的对称加密算法，但是协商对称加密算法的过程，需要使用非对称加密算法来保证安全，然而直接使用非对称加密的过程本身也不安全，会有中间人篡改公钥的可能性，所以客户端与服务器不直接使用公钥，而是使用数字证书签发机构颁发的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用该算法进行加密解密。从而解决了客户端与服务器端之间的通信安全问题。”</strong>。</p>
 
       
@@ -401,7 +401,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -532,10 +532,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -548,15 +544,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

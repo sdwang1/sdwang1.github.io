@@ -16,20 +16,20 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见PHP的缓存技术。 Memcache的安装">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/slab_allocation_structure.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/slab_choose_chunk.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/slab_class_growth_factor.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcache_tool_output.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcached_distribution_ready.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcached_distribution_set.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcache_route_mod.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcached_consistent_hash_theory.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/memcached_consistent_hash_add_server.png">
-<meta property="og:updated_time" content="2019-12-09T06:34:13.078Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/slab_allocation_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/slab_choose_chunk.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/slab_class_growth_factor.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcache_tool_output.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcached_distribution_ready.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcached_distribution_set.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcache_route_mod.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcached_consistent_hash_theory.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/memcached_consistent_hash_add_server.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.997Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《memcached全面剖析》读书笔记">
 <meta name="twitter:description" content="前言memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见PHP的缓存技术。 Memcache的安装">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/slab_allocation_structure.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/slab_allocation_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -185,7 +185,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见<a href="http://www.sdwangblog.cn/2017/06/04/PHP%E7%9A%84%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF/">PHP的缓存技术</a>。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见<a href="http://www.sdwangblog.top/2017/06/04/PHP%E7%9A%84%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF/" target="_blank" rel="noopener">PHP的缓存技术</a>。</p>
 <h2 id="Memcache的安装与启动"><a href="#Memcache的安装与启动" class="headerlink" title="Memcache的安装与启动"></a>Memcache的安装与启动</h2><p>memcached 支持许多平台，比如Linux, FreeBSD, Solaris(memcached 1.2.5以上版本), Mac OS X等。这里使用Mac OS X进行说明。</p>
 <h3 id="memcached的安装："><a href="#memcached的安装：" class="headerlink" title="memcached的安装："></a>memcached的安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//安装Hombrew： ruby -e &quot;$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)&quot;</span><br><span class="line">$ brew search memcache</span><br><span class="line">==&gt; Formulae</span><br><span class="line">libmemcached 【客户端】                          memcache-top                           memcached 【服务器】</span><br><span class="line">$ brew install memcached</span><br><span class="line">//查看安装结果</span><br><span class="line">$ memcached -h</span><br><span class="line">memcached 1.5.20</span><br><span class="line">-p, --port=&lt;num&gt;          TCP port to listen on (default: 11211)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
@@ -249,17 +249,17 @@
 </ul>
 <p>memcached的使用方法十分简单，示例如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个memcached连接</span></span><br><span class="line">$men = <span class="keyword">new</span> Memcached();  </span><br><span class="line">$mem-&gt;setOption(Memcached::OPT_COMPRESSION, <span class="keyword">false</span>); <span class="comment">//关闭压缩功能</span></span><br><span class="line">$mem-&gt;setOption(Memcached::OPT_BINARY_PROTOCOL, <span class="keyword">true</span>); <span class="comment">//使用binary二进制协议</span></span><br><span class="line">$mem-&gt;setOption(Memcached::OPT_TCP_NODELAY, <span class="keyword">true</span>); <span class="comment">//php memcached 当get的值不存在，有固定40ms延迟，开启这个参数，可以避免这个bug</span></span><br><span class="line"></span><br><span class="line">$mem-&gt;addServer(<span class="string">'aaaaaaaaaa.m.yyyyyyyyyyy.ocs.aliyuncs.com'</span>, <span class="number">11211</span>);</span><br><span class="line"><span class="comment">//$mem-&gt;setSaslAuthData('aaaaaaaaaa', 'password'); //设置sasl帐号密码进行鉴权，未启用sasl认证时无需此步骤</span></span><br><span class="line"></span><br><span class="line">$things = $mem-&gt;get(<span class="string">'things'</span>);</span><br><span class="line"><span class="keyword">if</span>($things==<span class="keyword">null</span>)&#123;</span><br><span class="line">  <span class="comment">//data doesn't cached or expired</span></span><br><span class="line">  $db = <span class="keyword">new</span> CI_DB_mysqli_driver($db_host,$db_user,$db_password,$db_name);</span><br><span class="line">  $results = $db-&gt;query(<span class="string">"SELECT * FROM tbl_things WHERE needed='yes';"</span>)-&gt;fetch_array(MYSQLI_ASSOC);</span><br><span class="line">  $mem-&gt;set(<span class="string">'things'</span>,$things,<span class="keyword">false</span>,<span class="number">86400</span>);</span><br><span class="line">&#125;</span><br><span class="line">$things = $mem-&gt;get(<span class="string">'things'</span>);</span><br><span class="line"></span><br><span class="line">$mem-&gt;quit();</span><br></pre></td></tr></table></figure></p>
 <h2 id="理解memcached的内存存储"><a href="#理解memcached的内存存储" class="headerlink" title="理解memcached的内存存储"></a>理解memcached的内存存储</h2><p>memcached默认情况下采用了Slab Allocator的机制分配、管理内存。在该机制出现以前，内存的分配是通过对多所有记录简单地进行malloc和free来进行的。这种方式会导致内存碎片，加重操作系统内存管理器的负担，最坏情况下会导致操作系统比memcached进程本身还慢。Slab Allocator就是为解决该问题而诞生的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">the primary goal of the slabs subsystem in memcached was to eliminate memory fragmentation issues</span><br><span class="line">totally by using fixed­size memory chunks coming from a few predetermined size classes.</span><br></pre></td></tr></table></figure></p>
-<p>Slab Allocator的基本原理相当简单，按照预先规定的大小，将分配的内存分割成各种尺寸的块(chunk)，并把尺寸相同的块分成组(chunk的集合)【slab allocator 还有重复使用已分配的内存的目的】，如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/slab_allocation_structure.png" alt><br>memcached根据收到的数据的大小，选择最适合数据大小的slab。memcached中保存着slab内空闲的chunk列表，根据该列表选择chunk，然后将数据缓存于其中。<br><img src="http://www.sdwangblog.cn/blogimg/slab_choose_chunk.png" alt></p>
+<p>Slab Allocator的基本原理相当简单，按照预先规定的大小，将分配的内存分割成各种尺寸的块(chunk)，并把尺寸相同的块分成组(chunk的集合)【slab allocator 还有重复使用已分配的内存的目的】，如下图示：<br><img src="http://www.sdwangblog.top/blogimg/slab_allocation_structure.png" alt><br>memcached根据收到的数据的大小，选择最适合数据大小的slab。memcached中保存着slab内空闲的chunk列表，根据该列表选择chunk，然后将数据缓存于其中。<br><img src="http://www.sdwangblog.top/blogimg/slab_choose_chunk.png" alt></p>
 <h3 id="Slab-Allocator的缺点"><a href="#Slab-Allocator的缺点" class="headerlink" title="Slab Allocator的缺点"></a>Slab Allocator的缺点</h3><p>Slab Allocator解决了当初的内存碎片问题（<strong>类比于房间中提前放好收纳盒子，不再是杂物间里随意扔</strong>），但新的机制也给memcached带来了新的问题。<strong>由于分配的是特定长度的内存，因此无法有效利用分配的内存</strong>，例如将100字节数据缓存到128字节的chunk中，剩余的28字节就浪费了。<br>对于该问题目前还没有完美的解决方案，但在文档中记载了比较有效的解决方案：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The most efficient way to reduce the waste is to use a list of size classes that closely matches (if that&apos;s at all possible) common sizes of objects that the clients of this particular installation of memcached are likely to store.</span><br></pre></td></tr></table></figure></p>
 <p>即如果预先知道客户端发送的数据的公用大小，或者仅缓存大小相同的数据的情况下，只要使用适合数据大小的组的列表，就可以减少浪费，遗憾的是现在还不能进行任何调优，但我们可以使用Growth Factor调节slab class的大小差别。</p>
-<h3 id="使用Growth-Factor进行调优"><a href="#使用Growth-Factor进行调优" class="headerlink" title="使用Growth Factor进行调优"></a>使用Growth Factor进行调优</h3><p>memcached在启动时指定Growth Factor因子（通过-f选项），就可以在某种程度上控制slab之间的差异，默认值为1.25。让我们以verbose模式启动memcached试试看：<br><img src="http://www.sdwangblog.cn/blogimg/slab_class_growth_factor.png" alt><br>从上面的输出结果来看，可能会觉得有些计算误差，这些误差是为了保持字节数的对齐而故意设置的。</p>
+<h3 id="使用Growth-Factor进行调优"><a href="#使用Growth-Factor进行调优" class="headerlink" title="使用Growth Factor进行调优"></a>使用Growth Factor进行调优</h3><p>memcached在启动时指定Growth Factor因子（通过-f选项），就可以在某种程度上控制slab之间的差异，默认值为1.25。让我们以verbose模式启动memcached试试看：<br><img src="http://www.sdwangblog.top/blogimg/slab_class_growth_factor.png" alt><br>从上面的输出结果来看，可能会觉得有些计算误差，这些误差是为了保持字节数的对齐而故意设置的。</p>
 <blockquote>
 <p>将 memcached 引入产品，或是直接使用默认值进行部署时，最好是重新计算一下数据的预期平均长度，调整 growth factor，以获得最恰当的设置。</p>
 </blockquote>
 <h3 id="查看memcached-的内部状态"><a href="#查看memcached-的内部状态" class="headerlink" title="查看memcached 的内部状态"></a>查看memcached 的内部状态</h3><p>memcached 有个名为 stats 的命令，使用它可以获得各种各样的信息。执行命令的方法很多，用telnet 最为简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ telnet 主机名 端口号</span><br><span class="line">stats</span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
 <p>即可获得包括资源利用率在内的各种信息。此外，输入”stats slabs”或”stats items”还可以获得关于缓存记录的信息。</p>
 <h3 id="查看slabs的使用状况"><a href="#查看slabs的使用状况" class="headerlink" title="查看slabs的使用状况"></a>查看slabs的使用状况</h3><p>使用memcached的创造者Brad写的名为memcached-tool的<a href="http://www.netingcn.com/demo/memcached-tool.zip" target="_blank" rel="noopener">Perl脚本</a>，可以方便地获得slab的使用情况（它将 memcached 的返回值整理成容易阅读的格式）。使用方法也极其简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ perl memcached-tool 主机名:端口 选项</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.cn/blogimg/memcache_tool_output.png" alt><br>上图中#表示slab class编号，Item_Size表示Chunk大小，Max_age表示LRU内最旧记录的生存时间，1MB_pages表示分配给Slab的页数，Count表示Slab内的记录数，Full?表示Slab内是否含有空闲的chunk。</p>
+<p><img src="http://www.sdwangblog.top/blogimg/memcache_tool_output.png" alt><br>上图中#表示slab class编号，Item_Size表示Chunk大小，Max_age表示LRU内最旧记录的生存时间，1MB_pages表示分配给Slab的页数，Count表示Slab内的记录数，Full?表示Slab内是否含有空闲的chunk。</p>
 <h2 id="memcached-的删除机制"><a href="#memcached-的删除机制" class="headerlink" title="memcached 的删除机制"></a>memcached 的删除机制</h2><p>memcached不会释放已分配的内存，记录超时后客户端就无法再看见该记录(invisible)，其存储空间即可重复使用。</p>
 <blockquote>
 <p>Lazy Expiration，memcached 内部不会监视记录是否过期，而是在 get 时查看记录的时间戳，检查记录是否过期。这种技术被称为 lazy（惰性）expiration。因此，memcached 不会在过期监视上耗费 CPU 时间。</p>
@@ -279,7 +279,7 @@
 </ul>
 <p>从缓存的实用角度来看，(LRU)该模型十分理想，但有些情况下 LRU 机制反倒会造成麻烦。memcached启动时通过“-M”参数可以禁止LRU，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ memcached -M -m 1024</span><br></pre></td></tr></table></figure></p>
 <p>指定“­-M”参数启动后，内存用尽(add()/set())时 memcached 会返回错误。话说回来，memcached 毕竟不是存储器，而是缓存，所以推荐使用 LRU。</p>
-<h2 id="memcached的分布式算法"><a href="#memcached的分布式算法" class="headerlink" title="memcached的分布式算法"></a>memcached的分布式算法</h2><p>memcached虽然被称为”分布式缓存”，但服务器端并没有“分布式”功能，memcached集群之间也不会相互通信（与之形成对比的，比如JBoss Cache，某台服务器有缓存数据更新时，会通知集群中其他机器更新缓存或清除缓存数据），所谓的”分布式”，完全依赖于客户端程序（散列算法）实现。<br>下面假设 memcached 服务器有 node1～node3 三台，应用程序要保存键名为“tokyo”、“kanagawa”、“chiba”、“saitama”、“gunma”的数据。<br><img src="http://www.sdwangblog.cn/blogimg/memcached_distribution_ready.png" alt><br>首先向memcached中添加“toktyo”，将“tokyo”传给客户端程序库后，客户端实现的算法就会根据“键”（根据“tokyo”的hash值）来决定保存数据的memcached服务器。服务器选定后（获知memcached的IP地址和端口号），即命令他保存“tokyo”及其值。<br>同样，“kanagawa”、“chiba”、“saitama”、“gunma”都是先选择服务器再保存。<br><img src="http://www.sdwangblog.cn/blogimg/memcached_distribution_set.png" alt><br>接下来获取保存的数据。获取时也要将要获取的键“tokyo”传递给函数库。函数库通过与数据保存时相同的算法，根据“键”选择服务器。使用的（路由）算法相同和服务器列表（并且顺序相同），就能选中与保存时相同的服务器，然后发送 get 命令获得保存的值。</p>
+<h2 id="memcached的分布式算法"><a href="#memcached的分布式算法" class="headerlink" title="memcached的分布式算法"></a>memcached的分布式算法</h2><p>memcached虽然被称为”分布式缓存”，但服务器端并没有“分布式”功能，memcached集群之间也不会相互通信（与之形成对比的，比如JBoss Cache，某台服务器有缓存数据更新时，会通知集群中其他机器更新缓存或清除缓存数据），所谓的”分布式”，完全依赖于客户端程序（散列算法）实现。<br>下面假设 memcached 服务器有 node1～node3 三台，应用程序要保存键名为“tokyo”、“kanagawa”、“chiba”、“saitama”、“gunma”的数据。<br><img src="http://www.sdwangblog.top/blogimg/memcached_distribution_ready.png" alt><br>首先向memcached中添加“toktyo”，将“tokyo”传给客户端程序库后，客户端实现的算法就会根据“键”（根据“tokyo”的hash值）来决定保存数据的memcached服务器。服务器选定后（获知memcached的IP地址和端口号），即命令他保存“tokyo”及其值。<br>同样，“kanagawa”、“chiba”、“saitama”、“gunma”都是先选择服务器再保存。<br><img src="http://www.sdwangblog.top/blogimg/memcached_distribution_set.png" alt><br>接下来获取保存的数据。获取时也要将要获取的键“tokyo”传递给函数库。函数库通过与数据保存时相同的算法，根据“键”选择服务器。使用的（路由）算法相同和服务器列表（并且顺序相同），就能选中与保存时相同的服务器，然后发送 get 命令获得保存的值。</p>
 <blockquote>
 <p>memcached使用key-value形式存储和访问数据，并在内存中维护一张巨大的HashTable，使得对数据查询的时间复杂度降低到O(1)。<br> 随着item个数不断增多，hash冲突越来越大（链表解决冲突），hash表如何保证查询效率呢？<br>答：当item总数达到hash表长度的1.5倍时，hash表会动态扩容，rehash将数据重新分布，为了在该过程中避免大锁，采用了“分段迁移”的策略。</p>
 </blockquote>
@@ -287,11 +287,11 @@
 <ul>
 <li>根据余数计算分散：使用键的整数hash值除以服务器数目，得到的余数即为服务器列表下标编号。由于HashCode随机性比较强，在不考虑服务器集群的伸缩性的情况下，余数Hash算法几乎可以满足绝大多数的缓存路由需求（缓存分布均衡）。</li>
 </ul>
-<p>假如有HashCode为0-19的20个数据，变更memcached服务器集群由3台变为4台，若使用余数Hash路由算法:<br><img src="http://www.sdwangblog.cn/blogimg/memcache_route_mod.png" alt><br>如果扩容到20+的台数，只有前三个HashCode对应的Key是命中的，也就是15%。当然现实情况肯定比这个复杂得多，不过这足以说明，余数Hash的路由算法在扩容的时候，造成大量的数据无法正确命中，而当这些因服务器扩容而不能正确读取的缓存数据，访问压力就落回到数据库（数据库的负载能力是以有缓存为前提设计的），严重的可能会导致数据库宕机。</p>
+<p>假如有HashCode为0-19的20个数据，变更memcached服务器集群由3台变为4台，若使用余数Hash路由算法:<br><img src="http://www.sdwangblog.top/blogimg/memcache_route_mod.png" alt><br>如果扩容到20+的台数，只有前三个HashCode对应的Key是命中的，也就是15%。当然现实情况肯定比这个复杂得多，不过这足以说明，余数Hash的路由算法在扩容的时候，造成大量的数据无法正确命中，而当这些因服务器扩容而不能正确读取的缓存数据，访问压力就落回到数据库（数据库的负载能力是以有缓存为前提设计的），严重的可能会导致数据库宕机。</p>
 <ul>
-<li>Consistent Hashing：首先求出各 memcached 服务器（比如使用服务器的IP地址或主机名作为关键字）的哈希值，并将其配置到 0～2^32的圆（continuum）上。然后用同样的方法求出存储数据的键的哈希值，并映射到圆上。然后从数据映射到的位置开始顺时针查找，将数据保存到找到的第一个服务器上。如果超过 2^32仍然找不到服务器，就会保存到第一台 memcached 服务器上。<br><img src="http://www.sdwangblog.cn/blogimg/memcached_consistent_hash_theory.png" alt></li>
+<li>Consistent Hashing：首先求出各 memcached 服务器（比如使用服务器的IP地址或主机名作为关键字）的哈希值，并将其配置到 0～2^32的圆（continuum）上。然后用同样的方法求出存储数据的键的哈希值，并映射到圆上。然后从数据映射到的位置开始顺时针查找，将数据保存到找到的第一个服务器上。如果超过 2^32仍然找不到服务器，就会保存到第一台 memcached 服务器上。<br><img src="http://www.sdwangblog.top/blogimg/memcached_consistent_hash_theory.png" alt></li>
 </ul>
-<p>从上图的状态中添加一台 memcached 服务器。余数分布式算法由于保存键的服务器会发生巨大变化而影响缓存的命中率，但 Consistent Hashing 中，只有在 continuum 上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响（删减服务器同理）。<br><img src="http://www.sdwangblog.cn/blogimg/memcached_consistent_hash_add_server.png" alt><br>因此，Consistent Hashing 最大限度地抑制了键的重新分布。而且，有的 Consistent Hashing 的实现方法还采用了虚拟节点的思想（使用一般的 hash 函数的服务器映射地点的分布非常不均匀），为每个物理节点（服务器）在 continuum 上分配 100～200 个点，这样就能抑制分布不均匀，更加最大限度地减小服务器增减时的缓存重新分布。</p>
+<p>从上图的状态中添加一台 memcached 服务器。余数分布式算法由于保存键的服务器会发生巨大变化而影响缓存的命中率，但 Consistent Hashing 中，只有在 continuum 上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响（删减服务器同理）。<br><img src="http://www.sdwangblog.top/blogimg/memcached_consistent_hash_add_server.png" alt><br>因此，Consistent Hashing 最大限度地抑制了键的重新分布。而且，有的 Consistent Hashing 的实现方法还采用了虚拟节点的思想（使用一般的 hash 函数的服务器映射地点的分布非常不均匀），为每个物理节点（服务器）在 continuum 上分配 100～200 个点，这样就能抑制分布不均匀，更加最大限度地减小服务器增减时的缓存重新分布。</p>
 <blockquote>
 <p>第一个支持 Consistent Hashing 和虚拟节点的 memcached 客户端函数库是名为 <a href="https://www.last.fm/ja/user/RJ/journal/2007/04/10/rz_libketama_-_a_consistent_hashing_algo_for_memcache_clients" target="_blank" rel="noopener">libketama</a> 的 PHP 库，由 last.fm 开发。</p>
 </blockquote>
@@ -515,7 +515,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -646,10 +646,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -662,15 +658,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

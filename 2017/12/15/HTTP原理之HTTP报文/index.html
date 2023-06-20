@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言HTTP报文是HTTP应用程序之间发送的数据块（搬东西的包裹）。这些数据块以文本形式元信息（meta-information）开头，这些信息描述了报文的内容及含义，后面跟着可选的数据部分。这些报文在客户端、服务器和代理之间流动。 报文的组成部分HTTP报文是简单的格式化数据块，每条报文都包含一条来自客户端的请求（请求报文），或者一条来自服务器的响应（响应报文）。它们由三部分组成：对报文进行描述">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_affair.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_request_trace.png">
-<meta property="og:updated_time" content="2017-12-31T09:39:58.786Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_affair.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_request_trace.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之HTTP报文">
 <meta name="twitter:description" content="前言HTTP报文是HTTP应用程序之间发送的数据块（搬东西的包裹）。这些数据块以文本形式元信息（meta-information）开头，这些信息描述了报文的内容及含义，后面跟着可选的数据部分。这些报文在客户端、服务器和代理之间流动。 报文的组成部分HTTP报文是简单的格式化数据块，每条报文都包含一条来自客户端的请求（请求报文），或者一条来自服务器的响应（响应报文）。它们由三部分组成：对报文进行描述">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/http_affair.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/http_affair.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -181,7 +181,7 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>HTTP报文是HTTP应用程序之间发送的数据块（搬东西的包裹）。这些数据块以文本形式元信息（meta-information）开<br>头，这些信息描述了报文的内容及含义，后面跟着可选的数据部分。这些报文在客户端、服务器和代理之间流动。</p>
 <h2 id="报文的组成部分"><a href="#报文的组成部分" class="headerlink" title="报文的组成部分"></a>报文的组成部分</h2><p>HTTP报文是简单的格式化数据块，每条报文都包含一条来自客户端的请求（请求报文），或者一条来自服务器的响应（响<br>应报文）。它们由三部分组成：对报文进行描述的<strong>起始行（start line）</strong>、包含属性的<strong>首部块（header）</strong>，以及可选的、包含数据的<strong>主体（body）</strong> 部分。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">请求报文格式：</span><br><span class="line">    &lt;method&gt; &lt;request-url&gt; &lt;version&gt;</span><br><span class="line">    &lt;headers&gt;</span><br><span class="line">   </span><br><span class="line">    &lt;entity-body&gt;</span><br><span class="line">    </span><br><span class="line">响应报文格式：</span><br><span class="line">    &lt;version&gt; &lt;status&gt; &lt;reason-phrase&gt;</span><br><span class="line">    &lt;headers&gt;</span><br><span class="line"></span><br><span class="line">    &lt;entity-body&gt;</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
-<p>如下实例图示，起始行和首部就是由行分割的ASCII文本，每行都以由两个字符组成的行终止序列（CRLF）作为结束，其中<br>包含一个回车符（ASCII 13）和一个换行符（ASCII 10）。尽管HTTP规范中说明应该用CRLF来表示终止，但稳健的应用<br>程序也应该接受单个换行符作为行的终止（有些老的或者不完整的HTTP应用程序）。<br>报文的主体是一个可选的数据块，与起始行和首部不同的是，主体中可以包含文本或二进制数据，也可以为空。<br><img src="http://www.sdwangblog.cn/blogimg/http_affair.png" alt></p>
+<p>如下实例图示，起始行和首部就是由行分割的ASCII文本，每行都以由两个字符组成的行终止序列（CRLF）作为结束，其中<br>包含一个回车符（ASCII 13）和一个换行符（ASCII 10）。尽管HTTP规范中说明应该用CRLF来表示终止，但稳健的应用<br>程序也应该接受单个换行符作为行的终止（有些老的或者不完整的HTTP应用程序）。<br>报文的主体是一个可选的数据块，与起始行和首部不同的是，主体中可以包含文本或二进制数据，也可以为空。<br><img src="http://www.sdwangblog.top/blogimg/http_affair.png" alt></p>
 <h3 id="起始行"><a href="#起始行" class="headerlink" title="起始行"></a>起始行</h3><p>所有HTTP报文都以一个起始行作为开始，请求报文的起始行说明了<code>要做些什么</code>，响应报文的起始行说明<code>发生了什么</code>。</p>
 <h4 id="请求行"><a href="#请求行" class="headerlink" title="请求行"></a>请求行</h4><p>请求报文的起始行，包含了一个请求方法，一个请求URL和HTTP版本。请求方法（method）描述了客户端希望服务器对<br>资源执行的动作，比如GET、HEAD或POST；请求URL（request-url）描述了所请求资源，或者URL路径组件的完整<br>URL；HTTP版本（version）告知服务器客户端使用了哪种HTTP，<code>HTTP/&lt;major&gt;.&lt;minor&gt;</code>；所有这些字段都由空格符分隔。</p>
 <h4 id="响应行"><a href="#响应行" class="headerlink" title="响应行"></a>响应行</h4><p>响应报文的起始行，包含了响应报文使用的HTTP版本，数字状态码（status-code）和原因短语（reason-phrase）。状<br>态码这三位数字描述了请求过程中发生的情况，每个状态码的第一位数字用于描述状态的一般类别（成功、出错等）；<br>原因短语，数字状态码的可读版本，包含行终止序列之前的所有文本；所有这些字段都由空格符进行分隔，在HTTP/1.0之<br>前，并不要求在响应中包含响应行。</p>
@@ -237,7 +237,7 @@
 <li>GET，最常用方法，通常用于请求服务器发送某个资源。HTTP/1.1要求服务器实现此方法；</li>
 <li>HEAD，与GET方法行为非常类似，但服务器在响应中只返回首部，不用返回实体的主体部分，这允许客户在未获取实际资源的<br>情况下，对首部进行检查。服务器开发者必须保证返回的首部与GET请求返回的首部完全相同；</li>
 <li>PUT，写入服务器文档，让服务器用请求的主体部分来创建一个由所请求的URL命名的新文档，或者如果URL已经存在的话，就用<br>这个主体来替代它（很多Web服务器要求在执行PUT之前用密码登录）；</li>
-<li>TRACE，客户端发起的请求可能要穿过防火墙，代理，网关等其他一些应用程序，每个中间结点都可以修改原始的HTTP请求。TRACE<br>会在目的服务器端发起一个”环回”诊断。行程最后一站的服务器会弹回一条TRACE响应，并在响应主体中携带他收到的原始请求报文，<br>这样客户端可检查请求/响应链上原始报文如何被毁坏或修改过（<strong>TRACE请求不能带有实体的主体部分</strong>）；<br><img src="http://www.sdwangblog.cn/blogimg/http_request_trace.png" alt></li>
+<li>TRACE，客户端发起的请求可能要穿过防火墙，代理，网关等其他一些应用程序，每个中间结点都可以修改原始的HTTP请求。TRACE<br>会在目的服务器端发起一个”环回”诊断。行程最后一站的服务器会弹回一条TRACE响应，并在响应主体中携带他收到的原始请求报文，<br>这样客户端可检查请求/响应链上原始报文如何被毁坏或修改过（<strong>TRACE请求不能带有实体的主体部分</strong>）；<br><img src="http://www.sdwangblog.top/blogimg/http_request_trace.png" alt></li>
 <li>OPTIONS，请求Web服务器告知其支持的各种功能，主要用途有两个：</li>
 </ul>
 <ol>
@@ -515,7 +515,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -646,10 +646,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -662,15 +658,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

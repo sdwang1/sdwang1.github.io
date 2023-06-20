@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="通常PHP 应用程序中最耗费时间的任务是数据检索。实际上，用于从存储库（文件或数据库服务器）中获取信息的时间远高于编译并且甚至是执行 PHP 程序所需耗费的时间。连接至数据库服务器所需的时间是一次延迟，等待查询完成添加附加停顿，并且结果的传输甚至会导致更多延迟。此外，如果代码使用对象，则有指向对象的导致负担过重的映射平面行。在网络传输延迟不定的情况下，为了更高的速度需求，我们可以从两个方面优化效率">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/apc_complier_cache.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/distribute_memcache.png">
-<meta property="og:updated_time" content="2019-12-05T07:01:39.780Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/apc_complier_cache.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/distribute_memcache.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.868Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP的缓存技术">
 <meta name="twitter:description" content="通常PHP 应用程序中最耗费时间的任务是数据检索。实际上，用于从存储库（文件或数据库服务器）中获取信息的时间远高于编译并且甚至是执行 PHP 程序所需耗费的时间。连接至数据库服务器所需的时间是一次延迟，等待查询完成添加附加停顿，并且结果的传输甚至会导致更多延迟。此外，如果代码使用对象，则有指向对象的导致负担过重的映射平面行。在网络传输延迟不定的情况下，为了更高的速度需求，我们可以从两个方面优化效率">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/apc_complier_cache.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/apc_complier_cache.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -201,7 +201,7 @@
 <p>PS：就PHP而言，还有一件事需要考虑：应用程序中require()和include()（以及其同级require_once()和include_once）的使用。从性能来看，文件状态调用（即为检查一个文件是否存在而对底层文件系统进行的调用）相当昂贵，<strong>为所有 require() 和 include() 调用使用绝对路径</strong>；</p>
 <p>如果要查询的数据不经常改变，这种情况下一个好的选择就是在本地存储这些结果，而非针对每个请求调用查询。常见的方法有Opcode Cache 和Memcached。</p>
 <h4 id="操作码缓存"><a href="#操作码缓存" class="headerlink" title="操作码缓存"></a>操作码缓存</h4><p>与其他开发Web应用程序的脚本语言（包括Perl，python和Ruby）相似，每次HTTP请求调用时，PHP代码会被解析翻译为操作码（PHP引擎直接执行的原语指令——类似于汇编语言）再执行。在要求很低或可忽略的情况下，服务器看上去能立即执行这个复杂的解释过程。但是一旦处理的页面增加，解释——从本质上说重复工作——就会对服务器造成很大的负担。在某些情况下，“编译” PHP 代码的时间会远远超过执行该代码所需的时间。因此，当需求增加时，您常常会自食其果，因为处理这些不断解释和动态生成的页面需要消耗更多的系统资源。</p>
-<p>节约CPU周期的一种方法是减少运行PHP应用程序所需的重复工作，没必要每次都把同样的PHP代码翻译一遍。PHP 代码被翻译成操作码后，可以把它保存起来并重复使用 —— 直到原始代码被修改。其实，缓存（用于保存和重用） PHP 操作码有几种 PHP 加速器内部的机制，包括开源 Alternative PHP Cache (APC)、支持 PHP 的 Turck MMCache、XCache、eAccelerator 和商业 Zend Platform。以apc_complier_cache为例：<br><img src="http://www.sdwangblog.cn/blogimg/apc_complier_cache.png" alt><br>由于apc并未内置到PHP解释器内核中，你需要单独安装并在php.ini中添加APC配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://pecl.php.net/get/APC-3.1.6.tgz</span><br><span class="line">$ tar -zxvf APC-3.1.6.tgz</span><br><span class="line">$ cd APC-3.1.6</span><br><span class="line">$ /home/ad/php/bin/phpize ./configure --enable-apc --enable-apc-mmap --with-php-config=/home/ad/php/bin/php-config</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure></p>
+<p>节约CPU周期的一种方法是减少运行PHP应用程序所需的重复工作，没必要每次都把同样的PHP代码翻译一遍。PHP 代码被翻译成操作码后，可以把它保存起来并重复使用 —— 直到原始代码被修改。其实，缓存（用于保存和重用） PHP 操作码有几种 PHP 加速器内部的机制，包括开源 Alternative PHP Cache (APC)、支持 PHP 的 Turck MMCache、XCache、eAccelerator 和商业 Zend Platform。以apc_complier_cache为例：<br><img src="http://www.sdwangblog.top/blogimg/apc_complier_cache.png" alt><br>由于apc并未内置到PHP解释器内核中，你需要单独安装并在php.ini中添加APC配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://pecl.php.net/get/APC-3.1.6.tgz</span><br><span class="line">$ tar -zxvf APC-3.1.6.tgz</span><br><span class="line">$ cd APC-3.1.6</span><br><span class="line">$ /home/ad/php/bin/phpize ./configure --enable-apc --enable-apc-mmap --with-php-config=/home/ad/php/bin/php-config</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure></p>
 <p>apc的使用是比较简单的，主要比较常用的有三个方法：</p>
 <ul>
 <li>apc_add/apc_store: store a variable in the cache. The only difference between apc_add and apc_store is that apc_store overwrites the data if it already exists and apc_add does not；（数据被直接存储到一个共享内存段中）</li>
@@ -224,7 +224,7 @@
 <blockquote>
 <p>⚠️为了改善性能，服务器故意不支持身份验证或安全通行，但不应限制部署选项，<strong>memcache服务器应该存在于您网络的内部并通过防火墙限制外网访问memcache端口，以root权限运行</strong>。</p>
 </blockquote>
-<p>在线上生产环境进行部署时，Memcache一般以服务器集群的方式体现，每台memcached 服务器都存储一些键值，访问模型如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/distribute_memcache.png" alt><br>当应用程序需要向memcached写入缓存数据时：</p>
+<p>在线上生产环境进行部署时，Memcache一般以服务器集群的方式体现，每台memcached 服务器都存储一些键值，访问模型如下图示：<br><img src="http://www.sdwangblog.top/blogimg/distribute_memcache.png" alt><br>当应用程序需要向memcached写入缓存数据时：</p>
 <ol>
 <li>Memcached API将Key输入路由算法模块，路由算法根据Key和MemCache集群服务器列表得到一台服务器编号；</li>
 <li>由服务器编号得到MemCache及其的ip地址和端口号；</li>
@@ -412,7 +412,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -543,10 +543,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -559,15 +555,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

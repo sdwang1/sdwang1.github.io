@@ -16,15 +16,15 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言OAuth是一个关于授权（authorization）的开放网络标准，在世界范围内得到广泛应用，目前版本2.0版。为了理解OAuth的适用场合，让我们来听一个关于授权的故事：123456789101112131415小梁开发了一个“信用卡管家”的程序 ， 可以自动从邮箱中读取信用卡相关邮件，分析、汇总，形成一个报表。小梁找到信用卡达人张大胖试用 ： “你的信用卡那么多，看看我这个程序吧， 保准">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/oauth2_ROPCG.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/oauth2_IGT.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/oauth2_AC.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/oauth2_CCG.png">
-<meta property="og:updated_time" content="2019-03-06T02:29:40.650Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/oauth2_ROPCG.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/oauth2_IGT.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/oauth2_AC.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/oauth2_CCG.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.996Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解OAuth 2.0，一个授权的故事">
 <meta name="twitter:description" content="前言OAuth是一个关于授权（authorization）的开放网络标准，在世界范围内得到广泛应用，目前版本2.0版。为了理解OAuth的适用场合，让我们来听一个关于授权的故事：123456789101112131415小梁开发了一个“信用卡管家”的程序 ， 可以自动从邮箱中读取信用卡相关邮件，分析、汇总，形成一个报表。小梁找到信用卡达人张大胖试用 ： “你的信用卡那么多，看看我这个程序吧， 保准">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/oauth2_ROPCG.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/oauth2_ROPCG.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -198,7 +198,7 @@
 <li>认证服务器确认无误后，向客户端提供访问令牌；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#grant_type表示授权类型，此处固定为password；scope表示权限范围，可选项；</span><br><span class="line"></span><br><span class="line">POST /token HTTP/1.1</span><br><span class="line">Host: server.example.com</span><br><span class="line">Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">grant_type=password&amp;username=johndoe&amp;password=A3ddj3w</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><img src="http://www.sdwangblog.cn/blogimg/oauth2_ROPCG.png" alt><br>在这种模式中，<strong>用户必须把自己的密码给客户端，通常用在用户对客户端高度信任的情况下</strong>，比如客户端是操作系统的一部分（类比iPhone的AppStore），或者由一个著名公司出品。<strong>认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式</strong>。</p>
+<p><img src="http://www.sdwangblog.top/blogimg/oauth2_ROPCG.png" alt><br>在这种模式中，<strong>用户必须把自己的密码给客户端，通常用在用户对客户端高度信任的情况下</strong>，比如客户端是操作系统的一部分（类比iPhone的AppStore），或者由一个著名公司出品。<strong>认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式</strong>。</p>
 <h2 id="简化模式"><a href="#简化模式" class="headerlink" title="简化模式"></a>简化模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">过了一周， 小梁兴致勃勃地把张大胖拉来看“信用卡管家”的升级版。</span><br><span class="line">“升级为2.0了啊， 这次不用问你要网易邮箱的用户名和密码了”</span><br><span class="line">“那你怎么访问我的邮箱？”</span><br><span class="line"></span><br><span class="line">“很简单，我提供了一个新的入口，使用网易账号登录， 你点了以后，其实就会重定向到网易的认证系统去登录，  网易的认证系统会让你输入用户名和密码，并且询问你是否允许信用卡管家访问网易邮箱， 你确认了以后，就再次重定向到我的‘信用卡管家’网站， 同时捎带一个‘token’ 过来， 我用这个token 就可以通过API来访问网易邮箱了。 在这个过程中， 我根本不会接触到你的用户名和密码，怎么样， 这下满意了吧？”</span><br><span class="line"></span><br><span class="line">“你说得轻松， 你这个信用卡管家是个小网站，还没有什么名气， 网易怎么会相信你这个网站呢？”</span><br><span class="line">“我当然要先在网易注册一下啊， 他们会给我发个app_id 和app_secret，  我重定向到网易的时候需要把这个东西发过去， 这样网易就知道是‘信用卡管家’这个应用在申请授权了。”</span><br><span class="line"></span><br><span class="line">张大胖说： “ 你这重定向来重定向去的， 实际上不就是为了拿到一个token 吗？”</span><br><span class="line">“对啊，因为你不信任我的信用卡管家， 不让它保存你的密码，只好用token的方法了 , 它是网易认证中心颁发的，实际上就代表了你对信用卡管家访问邮箱的授权，所以有了这个token 就可以访问你的邮箱了”</span><br><span class="line"></span><br><span class="line">&quot;对了&quot;  张大胖问题， “你为什么用Javascript的方式来读取token啊”</span><br><span class="line">“这样我的后端服务器就不用参与了，工作都在前端搞定， 你注意到那个URL中的#号了吗？ www.a.com/callback#token=&lt;网易返回的token&gt;”</span><br><span class="line"></span><br><span class="line">张大胖说： “我知道啊，这个东西叫做hash fragment,  只会停留在浏览器端， 只有Javascript 能访问它，并且它不会再次通过http request 发到别的服务器器， 我想这是为了提高安全性吧。”</span><br><span class="line">小梁说： “没错， 那个token非常非常重要，得妥善保存，不能泄露！”</span><br><span class="line"></span><br><span class="line">“可是在第6步通过重定向，这个token 以明文的方式发送给了我的浏览器， 虽然是https ，不会被别人窃取，可是浏览器的历史记录或者访问日志中就能找到， 岂不暴露了？”</span><br><span class="line">小梁说： “这个.... ， 我说你这个家伙，安全意识很强烈嘛， 让我想想，有没有更安全的方式。&quot;</span><br></pre></td></tr></table></figure>
 <p>这就是简化模式（implicit grant type），<strong>不通过第三方应用程序的服务器，直接在浏览器中向认证服务器申请令牌</strong>。所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。它的步骤如下：</p>
 <ol>
@@ -208,7 +208,7 @@
 <li>浏览器会访问Location指定的网址，其中不包括上一步收到的Hash值；</li>
 <li>客户端的JS代码提取出令牌并保存。</li>
 </ol>
-<p><img src="http://www.sdwangblog.cn/blogimg/oauth2_IGT.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/oauth2_IGT.png" alt></p>
 <h2 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">又过了一周，小梁成功地把信用卡管家升级为3.0.</span><br><span class="line">他对张大胖说： “这次我成功地把那个非常重要的、表示授权的token 给隐藏起来了， 你要不要看看？”</span><br><span class="line"></span><br><span class="line">“你先说说你是怎么隐藏的？”</span><br><span class="line">“其实整体思路和之前的类似，只是我引入了一个叫做Authorization  Code 的中间层。 当你用网易账号登录的时候， 网易认证中心这一次不给我直接发token,而是发一个授权码(authorization code) ,   我的信用卡管家服务器端取到这个code以后，在后台再次访问网易认证中心， 这一次他才发给我真正的token 。 ”</span><br><span class="line"></span><br><span class="line">张大胖说： “还比较容易理解， 本质上就是你拿着这个返回的授权码在服务器后台‘偷偷地’完成申请token 的过程， 所以token 浏览器端根本就接触不到，对吧？”</span><br><span class="line">“什么叫偷偷地申请token ？ 这是我信用卡管家服务器和网易之间的正常交流， 只是你看不到而已。”</span><br><span class="line"></span><br><span class="line">“开个玩笑了， 你虽然隐藏了token,但是这个授权码确是暴露了啊，你看我在浏览器中都能明文看到，要是被谁取到，不也是照样能取到token吗？”</span><br><span class="line">小梁说： “我们肯定有防御措施， 比如这个授权码和我的信用卡管家申请的app_id，app_secret关联， 只有信用卡管家发出的token请求， 网易认证中心才认为合法； 还可以让授权码有时间限制，比如5分钟失效，还有可以让授权码只能换一次token, 第二次就不行了。 ”</span><br><span class="line"></span><br><span class="line">“听起来似乎不错， 好吧， 这次我可以放心地使用了！”</span><br></pre></td></tr></table></figure>
 <p>这就是授权码模式（authorization code），它是 <strong>功能最完整、流程最严密的授权模式，特点是通过客户端的后台服务器，与服务提供商的认证服务器进行互动。</strong> 它的步骤如下：</p>
 <ol>
@@ -219,13 +219,13 @@
 <li>认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST /token HTTP/1.1</span><br><span class="line">Host: server.example.com</span><br><span class="line">Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">grant_type=authorization_code&amp;code=SplxlOBeZQQYbYS6WxSbIA&amp;appId=4c056204236019ca62be5416154e5b56</span><br><span class="line">&amp;appSecret=c779d66eed7d03ab405abc1de17786a4&amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><img src="http://www.sdwangblog.cn/blogimg/oauth2_AC.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/oauth2_AC.png" alt></p>
 <h2 id="客户端模式"><a href="#客户端模式" class="headerlink" title="客户端模式"></a>客户端模式</h2><p>客户端模式（Client Credentials Grant）指 <strong>客户端以自己的名义，而不是以用户的名义，向”服务提供商“进行认证。</strong> 严格地说，客户端模式 <strong>并不属于OAuth框架要解决的问题</strong>。在这种模式中，<strong>用户直接向客户端注册，客户端以自己的名义要求”服务提供商”提供服务，其实不存在授权问题</strong>。它的步骤如下：</p>
 <ol>
 <li>客户端向认证服务器进行身份认证，并要求一个访问令牌；</li>
 <li>认证服务器确认无误后，向客户端提供访问令牌；</li>
 </ol>
-<p><img src="http://www.sdwangblog.cn/blogimg/oauth2_CCG.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/oauth2_CCG.png" alt></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OAuth在”客户端”与”服务提供商”之间，设置了一个 <strong>授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来</strong>。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。</p>
 <p>“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。为了加深理解，我们依据案例，层层递进的介绍了Oauth 2.0定义的四种客户端授权模式：</p>
 <ul>
@@ -415,7 +415,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -546,10 +546,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -562,15 +558,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

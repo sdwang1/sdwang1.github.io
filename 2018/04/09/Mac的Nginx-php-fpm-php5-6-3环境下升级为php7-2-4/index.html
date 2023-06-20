@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言为了避免OS升级时覆盖php扩展或Apache等配置的隐患，初入坑时鄙人并未使用Mac自带的php软式，而是采用编译源码的方式安装搭建了Nginx+php-fpm+php5.6环境。时光如梭，岁月如歌，php官方版本早就发布到了7.2，项目线上系统php版本也都更新到7.0，与时俱进，欲将本地php5.6.3升级到php7.2.4，并同步更新相关配置。 源码编译安装php7.2123456$">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/make_php7.2.4_error.png">
-<meta property="og:updated_time" content="2018-09-26T08:55:09.789Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/make_php7.2.4_error.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.720Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac的Nginx+php-fpm+php5.6.3环境下升级为php7.2.4">
 <meta name="twitter:description" content="前言为了避免OS升级时覆盖php扩展或Apache等配置的隐患，初入坑时鄙人并未使用Mac自带的php软式，而是采用编译源码的方式安装搭建了Nginx+php-fpm+php5.6环境。时光如梭，岁月如歌，php官方版本早就发布到了7.2，项目线上系统php版本也都更新到7.0，与时俱进，欲将本地php5.6.3升级到php7.2.4，并同步更新相关配置。 源码编译安装php7.2123456$">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/make_php7.2.4_error.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/make_php7.2.4_error.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -187,7 +187,7 @@
 <li>当php编译完成后，php的bin目录下会有phpize这个脚本文件，官方说明phpize是用来扩展php扩展模块的，比如在已编译好的php中加入memcached或者ImageMagick等扩展模块，就可以使用phpize，通过以下几步完成：1. 下载扩展模块源文件；2. 使用phpize配置编译模块源文件并安装之；3. 在php.ini文件中加入extension值：extension = “memcache.so”；<br>————————————————————————<br>tar zxvf memcache-2.2.5.tgz<br>cd memcache-2.2.5/<br>/usr/local/webserver/php/bin/phpize<br>./configure –with-php-config=/usr/local/webserver/php/bin/php-config<br>make<br>make install<br>————————————————————————</li>
 </ul>
 <p><strong>TIPS：编译配置选项的过程中，可能会遇到各种”–with-xxx报错：configure: error: Cannot find libxx/Please reinstall xxx library”，一般–with-xxx=PATH指定外部依赖库路径即可解决。但若本地尚未支持该程式库，遵循着缺啥补啥的原则，直接brew install或者wget源码编译安装后，指定路径即可。另外有两个注意点【鄙人安装过程中遇到的】提醒下：1. 在phh7.1时，官方就开始建议用openssl_<em>系列函数代替Mcrypt_</em>系列的函数；2. –with-gettext与–with-iconv尽量不要同时配置选项，据说前者会覆盖性写入后者。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ make test</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure></p>
-<p>多数人走到这里就大功告成了，然鹅我生不逢时【不晓得是否是因为安装前一日刚更新到Mac OS10.13的缘故】。。。sudo make时遇到了如下图错误：“clang: error: linker command failed with exit code 1 (use -v to see invocation)”，google,bing了一圈，据说是因为什么‘Find Setting path中有重复引入库文件‘，’xcode版本过低‘，’libconv版本过低‘等等巴啦啦根据建议尝试了一圈，很遗憾都未能解决问题。<br><img src="http://www.sdwangblog.cn/blogimg/make_php7.2.4_error.png" alt><br>最后。。。根据<a href="https://php-osx.liip.ch/" target="_blank" rel="noopener"><strong>php-osx</strong></a>“傻瓜式”直接结束了php7.2.4的编译安装【可直接通过/usr/local/php5/php.d/99-liip-developer.ini/usr/local/php5/php.d/99-liip-developer.ini修改php配置，不必改动php.ini】。</p>
+<p>多数人走到这里就大功告成了，然鹅我生不逢时【不晓得是否是因为安装前一日刚更新到Mac OS10.13的缘故】。。。sudo make时遇到了如下图错误：“clang: error: linker command failed with exit code 1 (use -v to see invocation)”，google,bing了一圈，据说是因为什么‘Find Setting path中有重复引入库文件‘，’xcode版本过低‘，’libconv版本过低‘等等巴啦啦根据建议尝试了一圈，很遗憾都未能解决问题。<br><img src="http://www.sdwangblog.top/blogimg/make_php7.2.4_error.png" alt><br>最后。。。根据<a href="https://php-osx.liip.ch/" target="_blank" rel="noopener"><strong>php-osx</strong></a>“傻瓜式”直接结束了php7.2.4的编译安装【可直接通过/usr/local/php5/php.d/99-liip-developer.ini/usr/local/php5/php.d/99-liip-developer.ini修改php配置，不必改动php.ini】。</p>
 <h2 id="配置PHP-FPM"><a href="#配置PHP-FPM" class="headerlink" title="配置PHP-FPM"></a>配置PHP-FPM</h2><p>nginx本身不能处理PHP，它只是个web服务器，当接收到请求后，如果是php请求，nginx一般是把请求发fastcgi管理进程处理【HttpFcgi模块允许Nginx与FastCGI进程交互】，而PHP-FPM是PHP FastCGI管理器的一种，原始为PHP源代码的一个补丁，旨在将FastCGI进程管理整合进PHP包中，现在新版PHP已经集成php-fpm了。<br>以鄙人通过php-osx安装的php7.2.4为例，启动php-fpm：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#修改/private/etc/php-fpm.conf:</span><br><span class="line">&gt; 修改error_log路径【log文件路径不存在】，error_log = /usr/local/php5/var/log/php-fpm.log</span><br><span class="line">&gt; 打开include这一行注释：include=/usr/local/php5/etc/php-fpm.d/*.conf</span><br><span class="line">#修改/usr/local/php5/etc/php-fpm.d/www.conf user=www group=www【www的user和group为以前配置时已创建，若不存在则先添加用户】</span><br><span class="line"></span><br><span class="line">$ sudo /usr/local/php5/sbin/php-fpm</span><br><span class="line">[10-Apr-2018 11:23:52] ERROR: failed to open configuration file &apos;/usr/local/php5/etc/php-fpm.conf&apos;: No such file or directory (2)</span><br><span class="line">[10-Apr-2018 14:14:25] ERROR: FPM initialization failed</span><br><span class="line">$ sudo cp /usr/local/php5/etc/php-fpm.conf.default /usr/local/php5/etc/php-fpm.conf</span><br><span class="line">$ sudo cp /usr/local/php5/etc/php-fpm.d/www.conf.default /usr/local/php5/etc/php-fpm.d/www.conf</span><br><span class="line"></span><br><span class="line">$ sudo php-fpm</span><br><span class="line">[10-Apr-2018 11:45:09] ERROR: failed to open error_log (/usr/local/php5/var/log/php-fpm.log): Permission denied (13)</span><br><span class="line">[10-Apr-2018 11:45:09] ERROR: failed to post process the configuration</span><br><span class="line">[10-Apr-2018 11:45:09] ERROR: FPM initialization failed</span><br><span class="line">$ sudo chmod 777 /usr/local/php5/var/log</span><br><span class="line">$ sudo php-fpm</span><br><span class="line">[10-Apr-2018 11:48:10] ERROR: unable to bind listening socket for address &apos;127.0.0.1:9000&apos;: Address already in use (48)</span><br><span class="line">[10-Apr-2018 11:48:10] ERROR: FPM initialization failed</span><br><span class="line">#关闭 PHP-fpm, 并重新启动OK</span><br><span class="line">$ ps aux | grep &apos;php-fpm&apos;</span><br><span class="line">root           37109   0.0  0.0  4286184    916 s003  S+   12:41下午   0:00.01 grep php-fpm</span><br><span class="line">root           36734   0.0  0.0  4309084    576   ??  S    11:45上午   0:00.00 php-fpm</span><br><span class="line">root           36733   0.0  0.0  4309084    584   ??  S    11:45上午   0:00.00 php-fpm</span><br><span class="line">root           36732   0.0  0.0  4309340    888   ??  Ss   11:45上午   0:00.11 php-fpm</span><br></pre></td></tr></table></figure></p>
 <h2 id="编译安装Nginx"><a href="#编译安装Nginx" class="headerlink" title="编译安装Nginx"></a>编译安装Nginx</h2><p>按照<a href="http://www.nginx.cn/install" target="_blank" rel="noopener">http://www.nginx.cn/install</a> 安装nginx，然后修改nginx配置文件——nginx.conf以支持php-fpm【配置过的小伙伴可忽略以下信息】，在其中server段增加如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000  </span><br><span class="line">#  </span><br><span class="line">location ~ \.php$ &#123;  </span><br><span class="line">root html;  </span><br><span class="line">fastcgi_pass 127.0.0.1:9000;  </span><br><span class="line">fastcgi_index index.php;  </span><br><span class="line">fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;  </span><br><span class="line">include fastcgi_params;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="创建测试php文件"><a href="#创建测试php文件" class="headerlink" title="创建测试php文件"></a>创建测试php文件</h2><p>在/usr/local/nginx/html下创建phpinfo.php文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo phpinfo();</span><br></pre></td></tr></table></figure></p>
@@ -373,7 +373,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -504,10 +504,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -520,15 +516,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

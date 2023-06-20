@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言在Linux系统中，当程式【通常为binary file，以实体档案的型态存在，比如/bin/cp】被触发后，执行者的权限与属性，程式的程式码等所需资料都会被载入记忆体中，作业系统会给这个记忆体内的单元一个识别码PID且依上信息给予这个PID一组有效的权限设定，即程序就是一个正在运作中的程式。Linux的程序呼叫通常为fork-and-exec的流程，即父进程以fork的方式产生一个一摸一样的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-06T09:35:11.181Z">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.693Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux程序管理">
 <meta name="twitter:description" content="前言在Linux系统中，当程式【通常为binary file，以实体档案的型态存在，比如/bin/cp】被触发后，执行者的权限与属性，程式的程式码等所需资料都会被载入记忆体中，作业系统会给这个记忆体内的单元一个识别码PID且依上信息给予这个PID一组有效的权限设定，即程序就是一个正在运作中的程式。Linux的程序呼叫通常为fork-and-exec的流程，即父进程以fork的方式产生一个一摸一样的">
@@ -221,7 +221,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="离线管理问题"><a href="#离线管理问题" class="headerlink" title="离线管理问题"></a>离线管理问题</h3><p>以上工作管理中提到的【背景】都是bash的背景，并不是放到系统的背景去哦，即工作管理的背景依然与终端机有关，比如：假设你以远端连接方式连接到Linux主机且将某工作以&amp;方式放到背景去，那当你在工作尚未结束离开时，该工作是不会继续进行的。那如果你的工作真的需要进行一大段时间，想放置到系统背景下该如何处理呢（可使用<a href="http://www.sdwangblog.cn/2017/10/23/%E4%BE%8B%E8%A1%8C%E6%80%A7%E5%B7%A5%E4%BD%9C%E6%8E%92%E7%A8%8B%EF%BC%88crontab%EF%BC%89/">例行性工作排程</a>章节的at指令）？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup [指令与参数]      《==在终端机前景中工作</span><br><span class="line">nohup [指令与参数] &amp;    《==在终端机背景中工作</span><br></pre></td></tr></table></figure></p>
+<h3 id="离线管理问题"><a href="#离线管理问题" class="headerlink" title="离线管理问题"></a>离线管理问题</h3><p>以上工作管理中提到的【背景】都是bash的背景，并不是放到系统的背景去哦，即工作管理的背景依然与终端机有关，比如：假设你以远端连接方式连接到Linux主机且将某工作以&amp;方式放到背景去，那当你在工作尚未结束离开时，该工作是不会继续进行的。那如果你的工作真的需要进行一大段时间，想放置到系统背景下该如何处理呢（可使用<a href="http://www.sdwangblog.top/2017/10/23/%E4%BE%8B%E8%A1%8C%E6%80%A7%E5%B7%A5%E4%BD%9C%E6%8E%92%E7%A8%8B%EF%BC%88crontab%EF%BC%89/" target="_blank" rel="noopener">例行性工作排程</a>章节的at指令）？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup [指令与参数]      《==在终端机前景中工作</span><br><span class="line">nohup [指令与参数] &amp;    《==在终端机背景中工作</span><br></pre></td></tr></table></figure></p>
 <p>nohup指令可以让你在离线或登出系统后，还能让工作继续执行，注意nohup不支持bash内建指令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ vim sleep500.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">/bin/sleep 500s</span><br><span class="line">/bin/echo &quot;I have slept 500 seconds.&quot;</span><br><span class="line"></span><br><span class="line">#丟到背景中去執行，並且立刻登出系統：</span><br><span class="line">$ chmod a+x sleep500.sh</span><br><span class="line">$ nohup ./sleep500.sh &amp;</span><br><span class="line">[2] 14812</span><br><span class="line">$  nohup: ignoring input and appending output to `~/nohup.out&apos; &lt;==會告知這個訊息！</span><br><span class="line">$ exit</span><br><span class="line">#此时如果你再次登入的话，用pstree去查阅程序会发现sleep500.sh仍在执行中哦</span><br></pre></td></tr></table></figure></p>
 <h2 id="程序管理"><a href="#程序管理" class="headerlink" title="程序管理"></a>程序管理</h2><p>查阅系统上面正在运作当中的程序：静态的ps或是动态的top,及查阅程序树间关系pstree指令。</p>
 <h3 id="ps：将某个时间点的程序运作情况摘取下来"><a href="#ps：将某个时间点的程序运作情况摘取下来" class="headerlink" title="ps：将某个时间点的程序运作情况摘取下来"></a>ps：将某个时间点的程序运作情况摘取下来</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ps aux       &lt;==注意没有-，观察系统所有的程序资料</span><br><span class="line">ps -lA       &lt;==也能观察所有系统的资料</span><br><span class="line">ps axjf      &lt;==连同部分程序树状态</span><br></pre></td></tr></table></figure>
@@ -464,7 +464,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -595,10 +595,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -611,15 +607,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

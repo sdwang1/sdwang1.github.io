@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言URL是因特网资源的标准化名称，HTTP规范将更通用的概念URI作为其资源标识符，但实际上HTTP应用程序处理的只是URI的URL子集。URL定义了用户所需的特定资源，它位于何处以及如何获取它。 URL的语法URL提供了一种定位网络任意资源的手段，这些资源可以通过各种不同的方案（比如HTTP，FTP，SMTP）访问，故URL语法会随方案的不同而有所不同。事实上，大部分URL都遵循通用的URL语">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/trasfer_related_url.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/url_saved_charset.png">
-<meta property="og:updated_time" content="2019-03-18T09:03:23.581Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/trasfer_related_url.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/url_saved_charset.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:16.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之URL与资源">
 <meta name="twitter:description" content="前言URL是因特网资源的标准化名称，HTTP规范将更通用的概念URI作为其资源标识符，但实际上HTTP应用程序处理的只是URI的URL子集。URL定义了用户所需的特定资源，它位于何处以及如何获取它。 URL的语法URL提供了一种定位网络任意资源的手段，这些资源可以通过各种不同的方案（比如HTTP，FTP，SMTP）访问，故URL语法会随方案的不同而有所不同。事实上，大部分URL都遵循通用的URL语">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/trasfer_related_url.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/trasfer_related_url.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -197,7 +197,7 @@
 <li>ftp：文件传输协议，默认端口号21；<code>ftp://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;</code></li>
 <li>rtsp, rtspu：实时流传输协议（Real Time Streaming Protocol，rtspu中的u表示使用UDP协议获取资源），默认端口号554；<br><code>rtsp://&lt;user&gt;:&lt;passowrd&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;</code></li>
 <li>file：指定一台主机（通过本地磁盘、网络文件系统或其他一些文件共享系统）上可以访问的文件，默认主机名为正在使用URL的本地主机；<br><code>file://&lt;host&gt;/&lt;path&gt;</code></li>
-<li>telnet：用于访问交互式业务，他表示的并不是对象本身，而是可通过telnet协议访问的交互式应用程序，默认端口23；<br><code>telnet://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/</code><h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2>关于域名组成、域名解析过程、及域名解析规则可参见博文<a href="http://www.sdwangblog.cn/2017/12/04/DNS%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B/">DNS协议详解及其解析过程</a>。<h2 id="URL快捷方式"><a href="#URL快捷方式" class="headerlink" title="URL快捷方式"></a>URL快捷方式</h2><h3 id="相对URL"><a href="#相对URL" class="headerlink" title="相对URL"></a>相对URL</h3>相对URL是URL的一种便捷缩略记法，它能从基础（base）URL进行解析，比如./hammers.html。相对URL为保持一组资源的便携性提供了一种便捷方式。<br>基础URL可以来自以下几个不同的地方：在资源中显式提供，比如HTML文档中包含一个定义了基础URL的HTML标记<base>；封装资源的基础URL，比如将它所属资源的URL作为基础；没有基础URL；<br>将页面中相对URL解析成绝对URL可通过如下算法转换：<br><img src="http://www.sdwangblog.cn/blogimg/trasfer_related_url.png" alt><h3 id="自动扩展URL"><a href="#自动扩展URL" class="headerlink" title="自动扩展URL"></a>自动扩展URL</h3>有些浏览器在用户提交URL后，或用户输入时尝试自动扩展URL。这些”自动扩展”特效有以下两种方式：主机名扩展，比如在地址栏中输入yahoo，浏览器会自动在主机名中插入www.和.com，构建出<code>www.yahoo.com</code>；历史扩展，历史记录中URL的前缀匹配；<h2 id="URL字符集"><a href="#URL字符集" class="headerlink" title="URL字符集"></a>URL字符集</h2>为了避开安全字符集（是否安全与方案有关）表示法带来的限制，人们设计了一种编码机制，用来在URL中表示各种不安全的字符。这种编码机制就是通过一种”转义”表示法来表示不安全的字符，这种转义表示法包含一个’%’，后面跟着两个表示字符ASCII码的十六进制数（解释URL的应用程序必须在处理URL之前对其进行解码）。<br>在URL中，有些字符有着特殊的含义，不在定义的US-ASCII可打印字符集中，不赞成使用。下图中列出了一些字符，在将其用于保留用途之外的场合时，要在URL中对其进行编码。<br><img src="http://www.sdwangblog.cn/blogimg/url_saved_charset.png" alt></li>
+<li>telnet：用于访问交互式业务，他表示的并不是对象本身，而是可通过telnet协议访问的交互式应用程序，默认端口23；<br><code>telnet://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/</code><h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2>关于域名组成、域名解析过程、及域名解析规则可参见博文<a href="http://www.sdwangblog.top/2017/12/04/DNS%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B/" target="_blank" rel="noopener">DNS协议详解及其解析过程</a>。<h2 id="URL快捷方式"><a href="#URL快捷方式" class="headerlink" title="URL快捷方式"></a>URL快捷方式</h2><h3 id="相对URL"><a href="#相对URL" class="headerlink" title="相对URL"></a>相对URL</h3>相对URL是URL的一种便捷缩略记法，它能从基础（base）URL进行解析，比如./hammers.html。相对URL为保持一组资源的便携性提供了一种便捷方式。<br>基础URL可以来自以下几个不同的地方：在资源中显式提供，比如HTML文档中包含一个定义了基础URL的HTML标记<base>；封装资源的基础URL，比如将它所属资源的URL作为基础；没有基础URL；<br>将页面中相对URL解析成绝对URL可通过如下算法转换：<br><img src="http://www.sdwangblog.top/blogimg/trasfer_related_url.png" alt><h3 id="自动扩展URL"><a href="#自动扩展URL" class="headerlink" title="自动扩展URL"></a>自动扩展URL</h3>有些浏览器在用户提交URL后，或用户输入时尝试自动扩展URL。这些”自动扩展”特效有以下两种方式：主机名扩展，比如在地址栏中输入yahoo，浏览器会自动在主机名中插入www.和.com，构建出<code>www.yahoo.com</code>；历史扩展，历史记录中URL的前缀匹配；<h2 id="URL字符集"><a href="#URL字符集" class="headerlink" title="URL字符集"></a>URL字符集</h2>为了避开安全字符集（是否安全与方案有关）表示法带来的限制，人们设计了一种编码机制，用来在URL中表示各种不安全的字符。这种编码机制就是通过一种”转义”表示法来表示不安全的字符，这种转义表示法包含一个’%’，后面跟着两个表示字符ASCII码的十六进制数（解释URL的应用程序必须在处理URL之前对其进行解码）。<br>在URL中，有些字符有着特殊的含义，不在定义的US-ASCII可打印字符集中，不赞成使用。下图中列出了一些字符，在将其用于保留用途之外的场合时，要在URL中对其进行编码。<br><img src="http://www.sdwangblog.top/blogimg/url_saved_charset.png" alt></li>
 </ul>
 <p>至此，URL的相关知识就介绍到这里了。浏览器根据输入的URL，经过一系列的DNS迭代查询，得到了资源服务器的IP地址（当然若主机组件本来就是服务器IP那就更easy），接下来就要将生成请求报文，建立连接以发送进而获取网络资源啦。</p>
 
@@ -381,7 +381,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -512,10 +512,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -528,15 +524,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

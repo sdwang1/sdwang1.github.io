@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="注入攻击代指一类攻击，它们 通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据。这种类别的攻击包括跨站脚本攻击（XSS）、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 将不可信数据（比如用户输入）作">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/xml_injection_read_file.png">
-<meta property="og:updated_time" content="2019-03-07T08:34:05.859Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/xml_injection_read_file.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL、XML和CRLF注入攻击">
 <meta name="twitter:description" content="注入攻击代指一类攻击，它们 通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据。这种类别的攻击包括跨站脚本攻击（XSS）、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 将不可信数据（比如用户输入）作">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/xml_injection_read_file.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/xml_injection_read_file.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -177,7 +177,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>注入攻击代指一类攻击，它们 <strong>通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据</strong>。这种类别的攻击包括<a href="http://www.sdwangblog.cn/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/">跨站脚本攻击（XSS）</a>、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。<br>这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 <strong>将不可信数据（比如用户输入）作为命令或请求的一部分被发送到解释程序时发生</strong>。当然限于篇幅，这里只是简单介绍几种类型。</p>
+        <p>注入攻击代指一类攻击，它们 <strong>通过注入数据到一个网络应用程序以期获得执行，亦或是通过非预期的一个方式来执行恶意数据</strong>。这种类别的攻击包括<a href="http://www.sdwangblog.top/2018/03/25/%E6%B5%85%E8%B0%88XSS%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/" target="_blank" rel="noopener">跨站脚本攻击（XSS）</a>、SQL 注入攻击、XML注入攻击、CRLF注入攻击、头部注入攻击、日志注入攻击等等。<br>这类攻击是每个程序员的梦魇。它们数量庞大、攻击范围广，并且有时候防御措施很复杂，因此是最常见、成功率最高的网络攻击。它们通常会在 <strong>将不可信数据（比如用户输入）作为命令或请求的一部分被发送到解释程序时发生</strong>。当然限于篇幅，这里只是简单介绍几种类型。</p>
 <h2 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h2><p>目前最常见的注入攻击形式是臭名昭著的 SQL 注入攻击（<strong>常见且致命</strong>）。它通常是把 <strong>SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令</strong>。具体来说，它是利用现有应用程序，将（恶意的）SQL命令注入到后台数据库引擎执行的能力，它可以通过在Web表单中输入（恶意）SQL语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行SQL语句。<br>看一下这条请求：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$db = <span class="keyword">new</span> mysqli(<span class="string">'localhost'</span>, <span class="string">'username'</span>, <span class="string">'password'</span>, <span class="string">'storedb'</span>);</span><br><span class="line">$result = $db-&gt;query( <span class="string">'SELECT * FROM transactions WHERE user_id = '</span> . $_POST[<span class="string">'user_id'</span>] );</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>上面的请求中存在多处问题：1. 我们没有验证POST数据来 <strong>确保这是个有效的user_id</strong>（比如Integer）；2. 我们 <strong>允许一个不可信来源告诉我们使用哪个user_id</strong>——攻击者可任意设置一个有效user_id（也许user_id包含在一个隐藏的表单字段，比如下拉框选项，因为网络表单不允许编辑，我们就以为安全了）；3. 我们 <strong>没有escape 该 user_id，或将其作为一个绑定参数传给请求</strong>，由于我们一开始没有验证 SQL 请求，这就让攻击者有机会注入任意字符串来操纵该请求。上述三点问题在网络应用程序中极其常见。</p>
@@ -190,7 +190,7 @@
 <p>推荐一款可以用来检测和利用SQL注入漏洞的开源工具<a href="http://sqlmap.org/" target="_blank" rel="noopener">sqlmap</a>。下例代码中限制返回的查询结果数量为一行时才输出，防止了大量数据的泄露，同时采用了PDO技术，隔离了代码与数据，使得用户输入的数据不再被当作代码执行，有效地杜绝了SQL注入漏洞的发生：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'Submit'</span>]))&#123;</span><br><span class="line">    <span class="comment">//Check Anti-CSRF token</span></span><br><span class="line">    checkToken($_REQUEST[<span class="string">'user_token'</span>],$_SESSION[<span class="string">'session_token'</span>], <span class="string">'index.php'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Get input</span></span><br><span class="line">    $id = $_GET[<span class="string">'id'</span>];</span><br><span class="line">    <span class="comment">//Was a number entered?</span></span><br><span class="line">    <span class="keyword">if</span> (is_numeric($id))&#123;</span><br><span class="line">        $data = $db-&gt;prepare(<span class="string">'SELECT first_name,last_name FROM users WHERE user_id =</span></span><br><span class="line"><span class="string">                (:id) LIMIT 1;'</span>);</span><br><span class="line">        $data-&gt;bindParam(<span class="string">':id'</span>,$id,PDO::PARAM_INT);</span><br><span class="line">        $data-&gt;execute();</span><br><span class="line">        $row = $data-&gt;fetch();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Make sure only 1 result is returned</span></span><br><span class="line">        <span class="keyword">if</span> ($data-&gt;rowCount() == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;ID: &#123;$id&#125;&lt;br /&gt;First name:"</span>.$row[<span class="string">'first_name'</span>].<span class="string">"&lt;br /&gt; Surname:"</span>.$row[<span class="string">'last_name'</span>].<span class="string">"&lt;/pre&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Generate Anti-CSRF token</span></span><br><span class="line">generateSessionToken();</span><br></pre></td></tr></table></figure></p>
 <h2 id="XML注入攻击"><a href="#XML注入攻击" class="headerlink" title="XML注入攻击"></a>XML注入攻击</h2><p>XML是一种用于标记电子文件使其具有结构性的标记语言，大家应该都不陌生。<strong>当允许应用引用外部实体时，通过XML实体注入构造恶意内容，可导致读取任意文件、执行系统命令、探测内网端口、攻击内网网站等危害</strong>。<br>为了写好Payload，我们先看下XML中entity的定义语法:<code>&lt;!DOCTYPE filename [ &lt;!ENTITY entity-name “entry-content&quot;&gt;]&gt;</code>。<br>如果要引用一个外部资源，可以借助各种协议，比如这里我们简单构造个“可读取任意文件”的Payload模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># file:///path/to/file.ext</span><br><span class="line"># http://url/file.ext</span><br><span class="line"># php://filter/read=convert.base64-encode/resource=conf.php</span><br><span class="line"></span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE xdsec [</span><br><span class="line">&lt;!ELEMENT methodname ANY &gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;</span><br><span class="line">&lt;user&gt;</span><br><span class="line">&lt;name&gt;Striker&lt;/name&gt;</span><br><span class="line">&lt;wechat&gt;strikersb&lt;/wechat&gt;</span><br><span class="line">&lt;public_wechat&gt;sec_fe&lt;/public_wechat&gt;</span><br><span class="line">&lt;website&gt;&amp;xxe;&lt;/website&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure></p>
 <p>为了演示‘读取文件’漏洞，我们写一个简单的PHP处理脚本：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">$xml = file_get_contents(<span class="string">"php://input"</span>);</span><br><span class="line">$data = simplexml_load_string($xml);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> $key =&gt; $value)&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"您的"</span> . translate($key) . <span class="string">"是"</span> . $value . <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">translate</span><span class="params">($str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> ($str)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"name"</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"名字"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"wechat"</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"微信"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"public_wechat"</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"微信公众号"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"website"</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"网站"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设这里我们期望用户输入的是：</span></span><br><span class="line"><span class="comment"># &lt;?xml version="1.0" encoding="utf-8"</span></span><br><span class="line"><span class="comment"># &lt;user&gt;</span></span><br><span class="line"><span class="comment">#    &lt;name&gt;Striker&lt;/name&gt;</span></span><br><span class="line"><span class="comment">#    &lt;wechat&gt;strikersb&lt;/wechat&gt;</span></span><br><span class="line"><span class="comment">#    &lt;public_wechat&gt;sec_fe&lt;/public_wechat&gt;</span></span><br><span class="line"><span class="comment">#    &lt;website&gt;http://www.hackersb.cn&lt;/website&gt;</span></span><br><span class="line"><span class="comment"># &lt;/user&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.cn/blogimg/xml_injection_read_file.png" alt><br>上图中可以看到已成功读取了<code>/etc/passwd</code>文件。事实上，借助XEE（XML External Entity Injection）还有几种可用且公开的攻击方式，比如协助扫描内网信息，<a href="http://www.91ri.org/9539.html" target="_blank" rel="noopener">拒绝服务POC</a>，其他更多的危害各位可以参考OWASP出的文档<code>https://www.owasp.org/images/5/5d/XML_Exteral_Entity_Attack.pdf</code>。<strong>防御XML注入攻击几点原则</strong>：</p>
+<p><img src="http://www.sdwangblog.top/blogimg/xml_injection_read_file.png" alt><br>上图中可以看到已成功读取了<code>/etc/passwd</code>文件。事实上，借助XEE（XML External Entity Injection）还有几种可用且公开的攻击方式，比如协助扫描内网信息，<a href="http://www.91ri.org/9539.html" target="_blank" rel="noopener">拒绝服务POC</a>，其他更多的危害各位可以参考OWASP出的文档<code>https://www.owasp.org/images/5/5d/XML_Exteral_Entity_Attack.pdf</code>。<strong>防御XML注入攻击几点原则</strong>：</p>
 <ul>
 <li><strong>检查所使用的底层xml解析库，默认禁止外部实体的解析</strong>；</li>
 <li><strong>使用第三方应用代码及时升级补丁，同时增强对系统的监控，防止此问题被人利用</strong>；</li>
@@ -380,7 +380,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -511,10 +511,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -527,15 +523,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

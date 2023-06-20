@@ -16,25 +16,25 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言HTTP连接是HTTP报文传输的关键通道，编写HTTP应用程序的程序员需要理解HTTP连接的来龙去脉以及如何使用这些连接。事实上，几乎所有的HTTP通信都是由TCP/IP承载的，TCP/IP是常用的分组交换网络分层协议集，网络协议栈具体内容如下图示。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_protocal_stack.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_tcp_ip_data.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/udp_data.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_data_between_protocol.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tcp_protocol_format.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tcp_three_hands.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/socket_abstract_level.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tcp_socket_affairs.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/blind_relay.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/proxy_connection_modify_signal_blind.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/multi_blind_relay.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tcp_close_shutdown.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tcp_four_hands.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/wireshark_tcp_four_hands.png">
-<meta property="og:updated_time" content="2018-01-01T15:36:40.315Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_protocal_stack.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_tcp_ip_data.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/udp_data.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_data_between_protocol.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tcp_protocol_format.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tcp_three_hands.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/socket_abstract_level.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tcp_socket_affairs.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/blind_relay.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/proxy_connection_modify_signal_blind.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/multi_blind_relay.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tcp_close_shutdown.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tcp_four_hands.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/wireshark_tcp_four_hands.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之连接管理">
 <meta name="twitter:description" content="前言HTTP连接是HTTP报文传输的关键通道，编写HTTP应用程序的程序员需要理解HTTP连接的来龙去脉以及如何使用这些连接。事实上，几乎所有的HTTP通信都是由TCP/IP承载的，TCP/IP是常用的分组交换网络分层协议集，网络协议栈具体内容如下图示。">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/http_protocal_stack.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/http_protocal_stack.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -190,24 +190,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>HTTP连接是HTTP报文传输的关键通道，编写HTTP应用程序的程序员需要理解HTTP连接的来龙去脉以及如何使用这些连<br>接。事实上，几乎所有的HTTP通信都是由TCP/IP承载的，TCP/IP是常用的分组交换网络分层协议集，网络协议栈具体内容如下图示。<br><img src="http://www.sdwangblog.cn/blogimg/http_protocal_stack.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>HTTP连接是HTTP报文传输的关键通道，编写HTTP应用程序的程序员需要理解HTTP连接的来龙去脉以及如何使用这些连<br>接。事实上，几乎所有的HTTP通信都是由TCP/IP承载的，TCP/IP是常用的分组交换网络分层协议集，网络协议栈具体内容如下图示。<br><img src="http://www.sdwangblog.top/blogimg/http_protocal_stack.png" alt></p>
 <a id="more"></a>
 <h2 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h2><h3 id="TCP的可靠数据管道"><a href="#TCP的可靠数据管道" class="headerlink" title="TCP的可靠数据管道"></a>TCP的可靠数据管道</h3><p>HTTP连接实际上就是TCP连接和一些使用连接的规则，TCP为HTTP提供了一条<strong>可靠的比特传输管道</strong>。HTTP处于此协议栈<br>的最顶层，其安全版本HTTPS就是在HTTP和TCP之间插入了一个（称为TLS或SSL）的密码加密层。当HTTP要传送一条<br>（请求/响应）报文时，会以流的形式将报文数据的内容通过一条打开的TCP连接按序传输。</p>
 <p>TCP收到数据流后，会将数据流砍成被称作<strong>段</strong>的小数据块——TCP协议在建立连接的时候通常要协商双方的MSS【最大报文<br>段值】，每一方都有用于告知他期望接受的MSS选项（出现在三次握手的SYN报文段，其值在传输过程中会变化，能客观反<br>映信道和两个主机处理能力的变化情况）。假设客户端能力很强，一般情况下当通信双方约定好MSS后，会尽量按照MSS传<br>输数据，以期达到信道利用率最大化，需要注意的是，当信道条件改变后，如果通信双方不随之改变发送数据量，就会出<br>现信道利用率下降或者过度利用的情况（信道拥塞进而数据被丢弃）。</p>
-<p>那么通信双方可接受的MSS选项值来自/参考自哪里呢？MSS值一般为MTU【最大传输单元，网络层IP数据报的长度限制】<br>减去IP分组首部（通常为20字节）和TCP段首部（通常为20字节）的大小。MTU值取决于你的上网方式，比如以太网（数<br>据链路层）的1500，PPPoE/ADSL的1492等。考虑到以太网的普及性，MSS的值通常情况为1460=1500-20-20（多数情况MSS最好取512倍数）。<br><strong>TCP报文段的分段与重组是在运输层完成的。</strong><br><img src="http://www.sdwangblog.cn/blogimg/http_tcp_ip_data.png" alt></p>
-<h3 id="TCP流是分段的、由IP分组传送"><a href="#TCP流是分段的、由IP分组传送" class="headerlink" title="TCP流是分段的、由IP分组传送"></a>TCP流是分段的、由IP分组传送</h3><p>TCP的数据是通过<strong>IP分组(或IP数据报)</strong> 的小数据块来发送的，即将段封装在IP分组中通过因特网进行传输。IP分片的原因<br>是MTU的限制，当传输层为TCP协议时，根据上面的TCP分段原理，显然每段TCP报文+IP首部都不可能超过MTU，没必要<br>发生IP分片；但如UDP（用户数据报协议）不提供可靠传输，它仅会在应用层（常用的有DNS#53,TFTP#69,SNMP#161）<br>数据加上8个字节UDP报文头，然后直接传递到网络层，此时数据报的长度很可能会超过MTU，网络层IP分片就体现出意义了。<br><img src="http://www.sdwangblog.cn/blogimg/udp_data.png" alt></p>
-<p>网络层根据MTU对这种”身长头短”的传输层数据进行IP分片后继传给数据链路层，IP分片时不会”智能”的识别待分片数据的<br>上层头部在哪里，载荷又在哪里，他会直接将整个数据切成N片后加上IP首部。<strong>如此，IP分片后就只有第一片会带有UDP首<br>部或ICMP首部，其余的分片只有IP首部，到了端点后再根据IP头部中信息在网络层进行重组。</strong><br><img src="http://www.sdwangblog.cn/blogimg/http_data_between_protocol.png" alt></p>
+<p>那么通信双方可接受的MSS选项值来自/参考自哪里呢？MSS值一般为MTU【最大传输单元，网络层IP数据报的长度限制】<br>减去IP分组首部（通常为20字节）和TCP段首部（通常为20字节）的大小。MTU值取决于你的上网方式，比如以太网（数<br>据链路层）的1500，PPPoE/ADSL的1492等。考虑到以太网的普及性，MSS的值通常情况为1460=1500-20-20（多数情况MSS最好取512倍数）。<br><strong>TCP报文段的分段与重组是在运输层完成的。</strong><br><img src="http://www.sdwangblog.top/blogimg/http_tcp_ip_data.png" alt></p>
+<h3 id="TCP流是分段的、由IP分组传送"><a href="#TCP流是分段的、由IP分组传送" class="headerlink" title="TCP流是分段的、由IP分组传送"></a>TCP流是分段的、由IP分组传送</h3><p>TCP的数据是通过<strong>IP分组(或IP数据报)</strong> 的小数据块来发送的，即将段封装在IP分组中通过因特网进行传输。IP分片的原因<br>是MTU的限制，当传输层为TCP协议时，根据上面的TCP分段原理，显然每段TCP报文+IP首部都不可能超过MTU，没必要<br>发生IP分片；但如UDP（用户数据报协议）不提供可靠传输，它仅会在应用层（常用的有DNS#53,TFTP#69,SNMP#161）<br>数据加上8个字节UDP报文头，然后直接传递到网络层，此时数据报的长度很可能会超过MTU，网络层IP分片就体现出意义了。<br><img src="http://www.sdwangblog.top/blogimg/udp_data.png" alt></p>
+<p>网络层根据MTU对这种”身长头短”的传输层数据进行IP分片后继传给数据链路层，IP分片时不会”智能”的识别待分片数据的<br>上层头部在哪里，载荷又在哪里，他会直接将整个数据切成N片后加上IP首部。<strong>如此，IP分片后就只有第一片会带有UDP首<br>部或ICMP首部，其余的分片只有IP首部，到了端点后再根据IP头部中信息在网络层进行重组。</strong><br><img src="http://www.sdwangblog.top/blogimg/http_data_between_protocol.png" alt></p>
 <h3 id="保持TCP连接的正确运行"><a href="#保持TCP连接的正确运行" class="headerlink" title="保持TCP连接的正确运行"></a>保持TCP连接的正确运行</h3><p>在任意时刻计算机都可以有几条TCP连接处于打开状态。TCP连接是通过4个值来唯一定义一条连接的：<br><code>&lt;源IP地址、源端口号、目的IP地址、目的端口号&gt;</code></p>
-<p>在了解TCP连接具体是如何打开前，我们先祭上TCP报文段的数据格式：<br><img src="http://www.sdwangblog.cn/blogimg/tcp_protocol_format.png" alt><br>基于上图的数据格式，我们来逐步认知http连接是如何建立，即TCP三次握手过程：</p>
+<p>在了解TCP连接具体是如何打开前，我们先祭上TCP报文段的数据格式：<br><img src="http://www.sdwangblog.top/blogimg/tcp_protocol_format.png" alt><br>基于上图的数据格式，我们来逐步认知http连接是如何建立，即TCP三次握手过程：</p>
 <ol>
 <li>当客户端要请求新的TCP连接时，它会先向服务器发送一个小的TCP分组（通常是40-60字节），该分组TCP首部中SYN=1，<br>ACK=0，随机产生序列号seq number=681205075，客户端发出该报文后进入SYN_SEND状态；默认服务器端httpd守护进程<br>已开启，即服务进程/线程堵塞在accept阶段；</li>
 <li>如果服务器接受了连接，就会对一些连接参数进行计算，并向客户端回送一个TCP分组，该分组TCP首部中SYN=1，ACK=1，<br>随机产生序列号seq number=1841041670，还有一个ack number=客户端的seq number+1；服务器回送报文后进入SYN_<br>RECV状态；</li>
-<li>客户端接收到此TCP分组后检查ack_number，ACK?=1是否正确，如果正确客户端向服务器回送一条确认信息（现代TCP栈<br>都允许客户端在这个确认分组中发送数据），通知它连接已成功建立。此信息中ACK=1,ack number=1841041671 客户端进<br>入ESTABLISHED状态；服务器收到确认信息并检查数据后进入ESTABLISHED状态；<br><img src="http://www.sdwangblog.cn/blogimg/tcp_three_hands.png" alt><br><strong>tcpdump的三次握手抓包结果如下图示</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tcpdump -S host www.baidu.com</span><br><span class="line">13:43:51.919325 IP 172.20.35.61.53231 &gt; 61.135.169.121.https: Flags [S], seq 681205075, win 65535, options [mss 1460,nop,wscale 5,nop,nop,TS val 1113623684 ecr 0,sackOK,eol], length 0 </span><br><span class="line"></span><br><span class="line">13:43:51.963803 IP 61.135.169.121.https &gt; 172.20.35.61.53231: Flags [S.], seq 1841041670, ack 681205076, win 8192, options [mss 1452,nop,wscale 5,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,sackOK,eol], length 0</span><br><span class="line"></span><br><span class="line">13:43:51.963835 IP 172.20.35.61.53231 &gt; 61.135.169.121.https: Flags [.], ack 1841041671, win 8192, options [nop,nop,TS val 1113623684 ecr 0] length 0</span><br></pre></td></tr></table></figure>
+<li>客户端接收到此TCP分组后检查ack_number，ACK?=1是否正确，如果正确客户端向服务器回送一条确认信息（现代TCP栈<br>都允许客户端在这个确认分组中发送数据），通知它连接已成功建立。此信息中ACK=1,ack number=1841041671 客户端进<br>入ESTABLISHED状态；服务器收到确认信息并检查数据后进入ESTABLISHED状态；<br><img src="http://www.sdwangblog.top/blogimg/tcp_three_hands.png" alt><br><strong>tcpdump的三次握手抓包结果如下图示</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tcpdump -S host www.baidu.com</span><br><span class="line">13:43:51.919325 IP 172.20.35.61.53231 &gt; 61.135.169.121.https: Flags [S], seq 681205075, win 65535, options [mss 1460,nop,wscale 5,nop,nop,TS val 1113623684 ecr 0,sackOK,eol], length 0 </span><br><span class="line"></span><br><span class="line">13:43:51.963803 IP 61.135.169.121.https &gt; 172.20.35.61.53231: Flags [S.], seq 1841041670, ack 681205076, win 8192, options [mss 1452,nop,wscale 5,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,nop,sackOK,eol], length 0</span><br><span class="line"></span><br><span class="line">13:43:51.963835 IP 172.20.35.61.53231 &gt; 61.135.169.121.https: Flags [.], ack 1841041671, win 8192, options [nop,nop,TS val 1113623684 ecr 0] length 0</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p><strong>建立连接时，仍然需要第三次握手的原因是为了防止已失效的连接请求报文突然又传回到服务器端，而产生错误；</strong><br>所谓的已失效的连接请求报文段（超时重传），假设客户端A发出连接请求，在某个网络节点长时间停滞，以致延误到连接<br>释放以后的某个时间才到达服务器B。本来这是早已失效的报文段，但是B接收到此失效的连接请求报文段后，误以为是A又<br>发出的一次连接请求。假定不采用三次握手，那么只要B发出确认，新的连接就建立了。但此时A没有发出连接请求，并不<br>会理睬B的确认，也不会向B发送数据，B就一直等待A来发送数据，白白浪费许多资源。</p>
 <p><strong>TCP建立连接可能要花费些时间，时间的长短取决于服务器距离的远近，服务器的负载情况以及因特网的拥挤程度等等。</strong></p>
-<h3 id="用TCP套接字编程"><a href="#用TCP套接字编程" class="headerlink" title="用TCP套接字编程"></a>用TCP套接字编程</h3><p>套接字socket API允许用户创建TCP的端点数据结构，将这些端点与服务器的TCP端点进行连接，并对数据进行读写。TCP<br>API隐藏了所有底层网络协议的握手细节，以及TCP数据流与IP分组间的分段和重装细节。他的出现使得程序员能方便的使<br>用TCP/IP协议栈，为其直接网络开发提供了所需接口，比如bind,listen,accept,write。<br>Socket 是对TCP/IP协议的抽象，它处于如下的层次关系：<br><img src="http://www.sdwangblog.cn/blogimg/socket_abstract_level.png" alt><br>我们从Web服务器等待连接（堵塞在accept操作）开始，客户端根据URL判定出IP地址和端口号，并建立一条到服务器的<br>TCP连接（见上文的三次握手过程）。一旦建立了连接，客户端就会发送HTTP请求，服务器则会读取请求。当服务器获取<br>了整条请求报文后，就会对请求进行处理，执行所请求的动作，并将数据写回到客户端。客户端读取数据并对响应数据进行处理，如下图示。<br><img src="http://www.sdwangblog.cn/blogimg/tcp_socket_affairs.png" alt><br>关于TCP套接字编程的具体实践，我们另开章节说明。</p>
+<h3 id="用TCP套接字编程"><a href="#用TCP套接字编程" class="headerlink" title="用TCP套接字编程"></a>用TCP套接字编程</h3><p>套接字socket API允许用户创建TCP的端点数据结构，将这些端点与服务器的TCP端点进行连接，并对数据进行读写。TCP<br>API隐藏了所有底层网络协议的握手细节，以及TCP数据流与IP分组间的分段和重装细节。他的出现使得程序员能方便的使<br>用TCP/IP协议栈，为其直接网络开发提供了所需接口，比如bind,listen,accept,write。<br>Socket 是对TCP/IP协议的抽象，它处于如下的层次关系：<br><img src="http://www.sdwangblog.top/blogimg/socket_abstract_level.png" alt><br>我们从Web服务器等待连接（堵塞在accept操作）开始，客户端根据URL判定出IP地址和端口号，并建立一条到服务器的<br>TCP连接（见上文的三次握手过程）。一旦建立了连接，客户端就会发送HTTP请求，服务器则会读取请求。当服务器获取<br>了整条请求报文后，就会对请求进行处理，执行所请求的动作，并将数据写回到客户端。客户端读取数据并对响应数据进行处理，如下图示。<br><img src="http://www.sdwangblog.top/blogimg/tcp_socket_affairs.png" alt><br>关于TCP套接字编程的具体实践，我们另开章节说明。</p>
 <h3 id="对TCP性能的考虑"><a href="#对TCP性能的考虑" class="headerlink" title="对TCP性能的考虑"></a>对TCP性能的考虑</h3><p>HTTP紧挨着TCP，位于其上层，所以HTTP事务的性能很大程度上取决于底层的TCP通道性能，此处将介绍些重要的、对这<br>些TCP连接的性能考虑。注意，与建立TCP连接，传输请求和响应的时间相比，事务处理时间可能很短。除非客户端或服<br>务器超载，或正在处理复杂的动态资源，否则HTTP时延就是由TCP网络时延构成的。</p>
 <p>最常见的TCP相关时延：</p>
 <ul>
@@ -238,11 +238,11 @@
 <li>从技术上将讲，应该忽略所有来自HTTP/1.0设备的Connection首部字段（包括Connection:Keep-Alive），因为他们可能是<br>较老的代理服务器误转发的；</li>
 <li>除非重复发送请求会产生其他一些副作用，否则如果在客户端收到完整的响应之前连接就关闭了，客户端就一定要做好重试请求的<br>准备；</li>
 </ul>
-<h4 id="Connection首部和盲中继"><a href="#Connection首部和盲中继" class="headerlink" title="Connection首部和盲中继"></a>Connection首部和盲中继</h4><p>所谓盲中继，相较于正常代理，它只是单纯的转发请求，并不能执行Connection首部的规则，从而发生如下情形：<br><img src="http://www.sdwangblog.cn/blogimg/blind_relay.png" alt><br>如上图，当客户端与服务器之间存在哑代理时，Connection：Keep-Alive这个首部是直接转发给服务器的，服务器<br>接收了这个请求之后，会误以为代理希望进行keep-alive会话。对服务器而言这没什么，它同意进行keep-alive会<br>话时就会回送一个Connection：Keep-Alive响应首部。同样盲代理不会解析响应，直接将全部响应转发回客户端。<br>因为客户端收到了这个首部，就会认为代理同意进行keep-alive对话，此时客户端和服务器都认为他们在进行keep<br>-alive对话。<br>由于哑代理对keep-alive一无所知，在转发请求和回送服务器响应之后就认为这次事务结束了，挂在那里等待连接关<br>闭（行为模式）。客户端收到响应报文后会立即转向下一条请求，在keep-alive连接上向代理发送另一条请求，而代<br>理并不认为同一条连接上会有其他请求的到来，请求被忽略，浏览器一直处于挂起状态（一直转圈），不会有任何进展，<br>直到客户端或服务器连接超时，并将其关闭为止。为了避免这种情况，现代的代理是绝不能转发Connection首部和所<br>有名字出现在Connection值中的首部。</p>
+<h4 id="Connection首部和盲中继"><a href="#Connection首部和盲中继" class="headerlink" title="Connection首部和盲中继"></a>Connection首部和盲中继</h4><p>所谓盲中继，相较于正常代理，它只是单纯的转发请求，并不能执行Connection首部的规则，从而发生如下情形：<br><img src="http://www.sdwangblog.top/blogimg/blind_relay.png" alt><br>如上图，当客户端与服务器之间存在哑代理时，Connection：Keep-Alive这个首部是直接转发给服务器的，服务器<br>接收了这个请求之后，会误以为代理希望进行keep-alive会话。对服务器而言这没什么，它同意进行keep-alive会<br>话时就会回送一个Connection：Keep-Alive响应首部。同样盲代理不会解析响应，直接将全部响应转发回客户端。<br>因为客户端收到了这个首部，就会认为代理同意进行keep-alive对话，此时客户端和服务器都认为他们在进行keep<br>-alive对话。<br>由于哑代理对keep-alive一无所知，在转发请求和回送服务器响应之后就认为这次事务结束了，挂在那里等待连接关<br>闭（行为模式）。客户端收到响应报文后会立即转向下一条请求，在keep-alive连接上向代理发送另一条请求，而代<br>理并不认为同一条连接上会有其他请求的到来，请求被忽略，浏览器一直处于挂起状态（一直转圈），不会有任何进展，<br>直到客户端或服务器连接超时，并将其关闭为止。为了避免这种情况，现代的代理是绝不能转发Connection首部和所<br>有名字出现在Connection值中的首部。</p>
 <p>为了防止这个问题，网景的浏览器及代理实现者们提出了一个对盲中继问题的变通做法——浏览器会向代理发送非标准的<br>Proxy-Connection扩展首部，而不是官方支持的著名Connection首部。</p>
 <ul>
 <li>如果代理是哑代理，它会将无意义的Proxy-Connection首部直接被发给服务器，服务器由于不识别会直接忽略到此首部，这样<br>服务器的响应报文中不会带有Connection：Keep-Alive首部，当响应到达客户端的时候，客户端发现响应中没有Connection：<br>Keep-Alive首部，就认为服务器拒绝了持久连接的请求。</li>
-<li>如果代理是聪明的代理，它发现Proxy-Connection首部时会将其替换成Connection首部，然后将其发送给服务器以收到预期<br>的效果（聪明的代理可以维持持久连接）。<br><img src="http://www.sdwangblog.cn/blogimg/proxy_connection_modify_signal_blind.png" alt><br><strong>在客户端和服务器端只有一个代理时可以使用这种方案解决问题，但如果哑代理的任意一侧还有一个聪明的代理，这个问题会再次露头。</strong><br><img src="http://www.sdwangblog.cn/blogimg/multi_blind_relay.png" alt></li>
+<li>如果代理是聪明的代理，它发现Proxy-Connection首部时会将其替换成Connection首部，然后将其发送给服务器以收到预期<br>的效果（聪明的代理可以维持持久连接）。<br><img src="http://www.sdwangblog.top/blogimg/proxy_connection_modify_signal_blind.png" alt><br><strong>在客户端和服务器端只有一个代理时可以使用这种方案解决问题，但如果哑代理的任意一侧还有一个聪明的代理，这个问题会再次露头。</strong><br><img src="http://www.sdwangblog.top/blogimg/multi_blind_relay.png" alt></li>
 </ul>
 <h4 id="HTTP-1-1持久连接"><a href="#HTTP-1-1持久连接" class="headerlink" title="HTTP/1.1持久连接"></a>HTTP/1.1持久连接</h4><p>HTTP1.1逐渐停止了对keep-alive连接的支持，用一种名为持久连接(persistent connection)的改进型设计取<br>代了它。持久连接的目的与keep-alive连接的目的相同，但工作机制更优。</p>
 <p>HTTP/1.1的持久连接默认是开启的，除非特别指明——首部中包含Connection：close，才会在事务结束之后关闭连接。<br>当然服务器和客户端仍可以随时关闭空闲的连接。</p>
@@ -261,7 +261,7 @@
 <li>HTTP客户端不应该用管道化的方式发送会产生副作用的请求（比如POST，非幂等请求），总之，出错时管道化方式会阻碍客户端了解服<br>务器执行的是一系列管道化请求中的哪一些；</li>
 </ul>
 <h2 id="关闭连接的奥秘"><a href="#关闭连接的奥秘" class="headerlink" title="关闭连接的奥秘"></a>关闭连接的奥秘</h2><p>所有HTTP客户端、服务器或代理都可以在任意时刻关闭一条TCP传输连接。通常会在一条报文结束时关闭连接，但出错<br>的时候，也可能在首部行的中间，或奇怪的地方关闭连接。但是，服务器永远都无法确定在他关闭”空闲”连接的那一刻，<br>在线路的另一头客户端有没有要发送数据。如果出现这种情况，客户端就会在写入半截请求报文时发现出现了连接错误。</p>
-<h3 id="正常的关闭连接"><a href="#正常的关闭连接" class="headerlink" title="正常的关闭连接"></a>正常的关闭连接</h3><p>TCP连接是全双工的，即TCP连接的每一端都有一个输入队列和一个输出队列，用于数据的读或写。应用程序可以关闭<br>TCP输入和输出信道中的任意一个——套接字调用shutdown，”半关闭”，或者将两者都关闭——套接字调用close，”全关闭”。<br><img src="http://www.sdwangblog.cn/blogimg/tcp_close_shutdown.png" alt><br>简单的HTTP应用程序可以只使用完全关闭，但当应用程序开始与很多其他类型的HTTP客户端、服务器和代理进行对话<br>且开始使用管道化持久连接时，使用半关闭来防止对等实体收到非预期的写入错误就变得非常重要了。</p>
+<h3 id="正常的关闭连接"><a href="#正常的关闭连接" class="headerlink" title="正常的关闭连接"></a>正常的关闭连接</h3><p>TCP连接是全双工的，即TCP连接的每一端都有一个输入队列和一个输出队列，用于数据的读或写。应用程序可以关闭<br>TCP输入和输出信道中的任意一个——套接字调用shutdown，”半关闭”，或者将两者都关闭——套接字调用close，”全关闭”。<br><img src="http://www.sdwangblog.top/blogimg/tcp_close_shutdown.png" alt><br>简单的HTTP应用程序可以只使用完全关闭，但当应用程序开始与很多其他类型的HTTP客户端、服务器和代理进行对话<br>且开始使用管道化持久连接时，使用半关闭来防止对等实体收到非预期的写入错误就变得非常重要了。</p>
 <p>总之，关闭连接的输出信道总是安全的。连接的另一端的对等实体会在从其缓冲区中读出所有数据之后收到一条通知，<br>说明流结束了，这样他就知道你将连接关闭了。关闭连接的输入信道比较危险，除非你知道另一端不打算再发送其他<br>数据了。如果另一端向你已关闭的输入信道发送数据，操作系统就会向另一端的机器回送一条TCP“连接被对端重置的<br>报文”。大部分操作系统会将这种情况视为严重错误处理，删除对端还未读取的所有缓存数据，对管道化连接来说，<br>这是非常糟糕的事情。<br>比如你已经在一条持久连接上发送了10条管道式请求，响应也已经收到了，正在操作系统缓冲区存放（但应用程序还<br>未将其读走）。现在假设你发送了第11条请求，但服务器认为这条连接使用时间已经足够长了，决定将其关闭。那么<br>第11条请求就会被发送到一条已关闭的连接上去，并会向你回送一条重置信息，这个重置信息会使操作系统清空你的<br>输入缓冲区，尽管其中大部分都已经成功抵达你的机器了。</p>
 <p>要实现正常关闭的应用程序，首先应该关闭它们的输出信道，然后等待连接另一端的对等实体关闭它的输出信道。当<br>两端都告诉对方它们不会再发送任何数据之后，连接就会被完全关闭，而不会有重置的危险。但不幸的是，无法确保<br>对等实体会实现半关闭，或对其进行检查。因此，想要正常关闭连接的应用程序应该先半关闭其输出信道，然后周期<br>性地检查其输入信道的状态（查找数据，或流的末尾）。如果在一定时间区间内对端没有关闭输入信道，应用程序可<br>以强制关闭连接，以节省资源。</p>
 <p><strong>附加性地，以本地抓包结果(服务器端主动断开连接)为例，简单说下TCP的四次挥手释放连接过程：</strong></p>
@@ -271,10 +271,10 @@
 <li>服务器接收到此TCP分组后检查ack_number，ACK?=1是否正确，如果正确服务器进入FIN_WAIT2状态，继续等<br>待客户端的FIN报文；</li>
 <li>当客户端确定可以中断连接（比如响应已接收）时，会向服务器再发送一个小TCP分组(FIN报文)，该分组TCP首<br>部中FIN=1,ACK=1，随机产生seq number=1054，还有一个ack number=6832(同上一步)；客户端回送报文后进<br>入LAST_ACK状态；</li>
 <li>服务器接收到此TCP分组后检查ack_number，ACK?=1后，向客户端回送一个TCP分组，此分组TCP首部中ACK=1<br>，随机序列号seq number=6832，还有一个ack number=1055；服务器回送报文后进入TIME_WAIT状态；</li>
-<li>客户端接收到此TCP分组后检查ack_number，ACK?=1是否正确，如果正确客户端进入CLOSED状态；服务器在等<br>待2MSL后依然没有收到回复，证明客户端已正常关闭，服务器也进入CLOSED状态，此次TCP连接就这样关闭；<br><img src="http://www.sdwangblog.cn/blogimg/tcp_four_hands.png" alt><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># tcpdump抓包的断开连接请求的报文只有三个，是延迟确认的缘故，细节可参见图Wireshark的某个四次挥手抓包结果</span><br><span class="line">21:17:53.705561 IP 115.239.210.27.https &gt; 192.168.0.109.57839: Flags [F.], seq 2036653049, ack 3646916475, win 812, length 0</span><br><span class="line"></span><br><span class="line">21:17:53.705576 IP 192.168.0.109.57839 &gt; 115.239.210.27.https: Flags [.], ack 2036653050, win 8183, length 0</span><br><span class="line"></span><br><span class="line">21:18:39.330418 IP 192.168.0.109.57839 &gt; 115.239.210.27.https: Flags [.], ack 2036653050, win 8183, length 0</span><br></pre></td></tr></table></figure>
+<li>客户端接收到此TCP分组后检查ack_number，ACK?=1是否正确，如果正确客户端进入CLOSED状态；服务器在等<br>待2MSL后依然没有收到回复，证明客户端已正常关闭，服务器也进入CLOSED状态，此次TCP连接就这样关闭；<br><img src="http://www.sdwangblog.top/blogimg/tcp_four_hands.png" alt><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># tcpdump抓包的断开连接请求的报文只有三个，是延迟确认的缘故，细节可参见图Wireshark的某个四次挥手抓包结果</span><br><span class="line">21:17:53.705561 IP 115.239.210.27.https &gt; 192.168.0.109.57839: Flags [F.], seq 2036653049, ack 3646916475, win 812, length 0</span><br><span class="line"></span><br><span class="line">21:17:53.705576 IP 192.168.0.109.57839 &gt; 115.239.210.27.https: Flags [.], ack 2036653050, win 8183, length 0</span><br><span class="line"></span><br><span class="line">21:18:39.330418 IP 192.168.0.109.57839 &gt; 115.239.210.27.https: Flags [.], ack 2036653050, win 8183, length 0</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><img src="http://www.sdwangblog.cn/blogimg/wireshark_tcp_four_hands.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/wireshark_tcp_four_hands.png" alt></p>
 
       
 
@@ -456,7 +456,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -587,10 +587,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -603,15 +599,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

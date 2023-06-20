@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="Go 语言的基本语法在很多特性上和C语言非常相近。本节我们就学习下Go 语言的变量、常量、数据类型、运算符以及流程控制的相关知识点。Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要指定它们的类型，或者给予足够的信息，让 Go 语言能够推导出它们的类型（自动类型推断）。 Go 语言变量Go 语言声明变量的一般形式为var identifier type，type类型可以是其预定">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/golang_slice.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/golang_slice_share_memory.png">
-<meta property="og:updated_time" content="2020-11-26T03:26:15.883Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/golang_slice.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/golang_slice_share_memory.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“Go语言基本语法”">
 <meta name="twitter:description" content="Go 语言的基本语法在很多特性上和C语言非常相近。本节我们就学习下Go 语言的变量、常量、数据类型、运算符以及流程控制的相关知识点。Go 语言是静态类型的编程语言，所以我们在声明变量或常量的时候，都需要指定它们的类型，或者给予足够的信息，让 Go 语言能够推导出它们的类型（自动类型推断）。 Go 语言变量Go 语言声明变量的一般形式为var identifier type，type类型可以是其预定">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/golang_slice.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/golang_slice.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -205,11 +205,11 @@
 <h3 id="Go-语言数组"><a href="#Go-语言数组" class="headerlink" title="Go 语言数组"></a>Go 语言数组</h3><p>Go 语言数组同样是一个由固定长度的特定类型元素组成的序列，这种类型可以是任意的基础数据类型、或自定义类型。声明数组的方式有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1) var arr [5] float32                                 // 默认情况下，数组的每个元素都会被初始化为元素类型对应的零值</span><br><span class="line"></span><br><span class="line">2) var arr = [5]float32&#123;1000.0, 2.0, 3.4, 7.0, 50.0&#125;   // 声明并初始化数组</span><br><span class="line">   var arr = [5]float32&#123;0:1000.0, 2:3.4&#125;               // 声明并初始化数组中指定元素，其余为元素类型的默认零值</span><br><span class="line">   var arr = [...]float32&#123;1000.0, 2.0, 3.4, 7.0, 50.0&#125; // Go 语言会根据元素的个数来设置数组的大小</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//打印索引和元素</span><br><span class="line">for i, v := range arr&#123;</span><br><span class="line">  fmt.Printf(&quot;%d %d \n&quot;, i, v)                        // v是对应索引的值拷贝，具有只读性质</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>Go 语言中如果两个数组类型相同（包括数组的长度，数组中元素的类型），我们可以直接通过较运算符（==和!=）来判断它们是否相等，只有当两个数组的所有元素都是相等的时候数组才是相等的</strong>。<br>Go 语言中允许使用多维数组，常用的多维数组声明方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var arr [SIZE1][SIZE2]...[SIZEN] float32</span><br><span class="line"></span><br><span class="line">//二维数组是最简单的多维数组，本质上是由一维数组组成的</span><br><span class="line">1) var arr [4][2] int</span><br><span class="line"></span><br><span class="line">2) var arr = [4][2]int&#123;&#123;10, 11&#125;, &#123;20, 21&#125;, &#123;30, 31&#125;, &#123;40, 41&#125;&#125;</span><br><span class="line">   var arr = [4][2]int&#123;1: &#123;20, 21&#125;, 3: &#123;40, 41&#125;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Go 语言还支持快速的 <strong>数组截取(结果为切片)</strong>，<code>arr[开始索引(包含), 结束索引(不包含)]</code>。</p>
-<h3 id="Go-语言切片-Slice"><a href="#Go-语言切片-Slice" class="headerlink" title="Go 语言切片(Slice)"></a>Go 语言切片(Slice)</h3><p>Go 语言切片<strong>默认指向一段连续的内存空间（切片的底层数组），使用上类似可变长数组</strong>，本质上是个如下图示的结构体，声明切片的方式有：<br><img src="http://www.sdwangblog.cn/blogimg/golang_slice.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1) var s [] int                                 // 声明空(nil)切片 len(s) = cap(s) = 0</span><br><span class="line"></span><br><span class="line">2) var s = make([]int, length, capacity)        // 使用 make() 函数创建切片</span><br><span class="line"></span><br><span class="line">3) var s = []int&#123;1,2,3&#125;                       // 声明并初始化切片 len(s) = cap(s) = 3</span><br><span class="line"></span><br><span class="line">4) var s = arr[startIndex:endIndex]           // 数组截取以创建新的分片，注意s是数组arr的引用</span><br></pre></td></tr></table></figure></p>
+<h3 id="Go-语言切片-Slice"><a href="#Go-语言切片-Slice" class="headerlink" title="Go 语言切片(Slice)"></a>Go 语言切片(Slice)</h3><p>Go 语言切片<strong>默认指向一段连续的内存空间（切片的底层数组），使用上类似可变长数组</strong>，本质上是个如下图示的结构体，声明切片的方式有：<br><img src="http://www.sdwangblog.top/blogimg/golang_slice.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1) var s [] int                                 // 声明空(nil)切片 len(s) = cap(s) = 0</span><br><span class="line"></span><br><span class="line">2) var s = make([]int, length, capacity)        // 使用 make() 函数创建切片</span><br><span class="line"></span><br><span class="line">3) var s = []int&#123;1,2,3&#125;                       // 声明并初始化切片 len(s) = cap(s) = 3</span><br><span class="line"></span><br><span class="line">4) var s = arr[startIndex:endIndex]           // 数组截取以创建新的分片，注意s是数组arr的引用</span><br></pre></td></tr></table></figure></p>
 <p>Go 语言的内建函数<code>append()</code>可以为切片动态追加元素，如果空间不足以容纳足够多的元素，切片就会进行 <strong>“扩容”（创建新的大小连续存储空间，并将原值COPY过去）</strong>。<br>切片容量的扩展规律默认是按容量的 <strong>2 倍数</strong>进行扩充（如果我们一次追加的元素过多，以至于使新长度比原容量的 2 倍还要大，那么新容量就会以新长度为基准），但当切片的长度 &gt;=1024 时，Go 语言将按容量的 <strong>1.25 倍</strong>作为新扩充基准。最终，新容量往往会比新长度大一些，当然相等也是可能的。更多细节可参见<code>runtime</code>包中 <code>slice.go</code> 文件里的<code>growslice()</code>等相关函数的具体实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var s []int</span><br><span class="line">for i:=0; i&lt;10; i++&#123;</span><br><span class="line">  s = append(s, i)</span><br><span class="line">  fmt.Printf(&quot;len: %d  cap: %d pointer: %p\n&quot;, len(s), cap(s), s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Go 语言的内置函数<code>copy()</code>可以将一个数组切片复制到另一个数组切片中，如果加入的两个数组切片不一样大，就会按照其中较小的那个数组切片的元素个数进行复制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">copy( destSlice, srcSlice []T) int</span><br><span class="line"></span><br><span class="line">其中，目标切片必须分配过空间且足够承载复制的元素个数，并且来源和目标的类型必须一致，copy() 函数的返回值表示实际发生复制的元素个数</span><br></pre></td></tr></table></figure></p>
 <p><strong>切片具有共享存储结构的特性（包括数组截取和切片截取）</strong>，我们来看个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">year := []string&#123;&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;&#125;</span><br><span class="line"></span><br><span class="line">Q2 := year[3:6]</span><br><span class="line">fmt.Println(Q2, len(Q2), cap(Q2))                   // [Apr May Jun] 3 9</span><br><span class="line"></span><br><span class="line">summer := year[5:8]</span><br><span class="line">fmt.Println(summer, len(summer), cap(summer))       // [Jun Jul Aug] 3 7</span><br><span class="line">summer[0] = &quot;Unknown&quot;</span><br><span class="line">fmt.Print(Q2)                                       // [Apr May Unknown]</span><br></pre></td></tr></table></figure></p>
-<p>上例的切片变量内存结构示意图如下，这部分大家容易在实际编程中犯错，使用时慎重(<strong>配合gc，及时将不再使用的slice置为nil</strong>)。<br><img src="http://www.sdwangblog.cn/blogimg/golang_slice_share_memory.png" alt></p>
+<p>上例的切片变量内存结构示意图如下，这部分大家容易在实际编程中犯错，使用时慎重(<strong>配合gc，及时将不再使用的slice置为nil</strong>)。<br><img src="http://www.sdwangblog.top/blogimg/golang_slice_share_memory.png" alt></p>
 <h3 id="Go-语言Map"><a href="#Go-语言Map" class="headerlink" title="Go 语言Map"></a>Go 语言Map</h3><p>Go 语言Map 是一种无序的键值对集合，也称为关联数组或字典（底层使用hash表来实现）。声明 map 的方式有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1) var mapLit map[string] int                      // 声明空(nil) map，cannot assignment</span><br><span class="line">   var mapLit = map[string] int&#123;&#125;                  // 初始化空map，can assignment</span><br><span class="line"></span><br><span class="line">2) var mapLit = make(map[string] int [,cap])       // 使用  make() 函数创建map，可选性标明初始容量 capacity(不支持cap())</span><br><span class="line"></span><br><span class="line">3) var mapLit = map[string] int&#123;&quot;one&quot;:1, &quot;tow&quot;:2&#125;  // 声明并初始化 map</span><br></pre></td></tr></table></figure></p>
 <p>其中，map 的 key 类型是受限的，value 则可以是任意类型。key 类型宥于限制的根本原因在于哈希表的映射过程（键值 -&gt; hash function哈希值 -&gt; (低几位定位)哈希桶 -&gt; 查找哈希值 + 判等键值）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. Go 语言键类型的值必须支持 判等 操作，所以不能是函数类型、字典类型和切片类型；</span><br><span class="line">   如果键类型是接口类型，那么键值的实际类型也不能是上述三种类型(引发panic)；</span><br><span class="line">   如果键的类型 是数组类型，请确保该类型的元素类型不是函数类型、字典类型或切片类型</span><br><span class="line"></span><br><span class="line">2. 求哈希和判等操作的速度越快，对应类型就越适合作为键类型；</span><br><span class="line">   优先选用数值类型和指针类型，通常情况下类型的宽度越小越好。如果非要选择字符串类型的话，最好对键值的长度进行额外的约束；</span><br><span class="line">   不建议使用派生（高级数据）类型作为字典的键类型，不仅仅是因为对它们的值求哈希，以及判等的速度较慢，更是因为在它们的值中存在变数；</span><br></pre></td></tr></table></figure></p>
 <p>当 value 类型为函数时，结合 Go 的 Dock type 接口方式，可以方便地实现单一方法对象的工程模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 计算参数 N 次幂</span><br><span class="line">m := map[int]func(op int) int&#123;&#125;</span><br><span class="line">m[1] = func(op int) int&#123; return op&#125;</span><br><span class="line">m[2] = func(op int) int&#123; return op*op&#125;</span><br><span class="line">m[3] = func(op int) int&#123; return op*op*op&#125;</span><br><span class="line">fmt.Println(m[1](2), m[2](2), m[3](2))             // 输出 2, 4, 8</span><br></pre></td></tr></table></figure></p>
@@ -410,7 +410,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -541,10 +541,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -557,15 +553,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

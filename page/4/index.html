@@ -253,7 +253,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着RESTful风格的接口普及，程序员默认都会使用json作为数据传递的方式。json格式的数据冗余少，兼容性高，从提出到现在已被广泛的使用，可以说成为了Web的一种标准。无论我们服务端使用什么语言，我们拿到json格式的数据之后都需要做 <strong>jsonDecode(),将json串转换为json对象，而对象默认会存储于Hash Table，而Hash Table很容易被碰撞攻击。也就是说，我们只要将攻击数据（大量的经过“特殊构造”的碰撞数据）放在json中，服务端程序在做jsonDecode()时必定中招，中招后CPU会立刻飙升至100%，从而能达到DoS的目的</strong>。</p>
-<h2 id="背景知识：哈希表"><a href="#背景知识：哈希表" class="headerlink" title="背景知识：哈希表"></a>背景知识：哈希表</h2><p>哈希表是一种查找效率极高的数据结构，PHP中的哈希表用于表示Array数据类型，在Zend虚拟机内部也用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。<br>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为 <strong>碰撞（collision）</strong>。哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，<strong>第一种是根据某种原则将被碰撞数据定为到其它桶</strong>，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；<strong>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树）</strong>，所有碰撞的数据以某种数据结构的形式组织起来。<br>PHP是使用 <strong>单链表存储碰撞的数据</strong>，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。<br><img src="http://www.sdwangblog.cn/blogimg/php_hash_collision.png" alt></p>
+<h2 id="背景知识：哈希表"><a href="#背景知识：哈希表" class="headerlink" title="背景知识：哈希表"></a>背景知识：哈希表</h2><p>哈希表是一种查找效率极高的数据结构，PHP中的哈希表用于表示Array数据类型，在Zend虚拟机内部也用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。<br>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为 <strong>碰撞（collision）</strong>。哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，<strong>第一种是根据某种原则将被碰撞数据定为到其它桶</strong>，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；<strong>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树）</strong>，所有碰撞的数据以某种数据结构的形式组织起来。<br>PHP是使用 <strong>单链表存储碰撞的数据</strong>，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。<br><img src="http://www.sdwangblog.top/blogimg/php_hash_collision.png" alt></p>
         
           <a class="article-more-a" href="/2019/03/10/一种高级的DoS攻击-Hash碰撞攻击/#more">more >></a>
         
@@ -413,7 +413,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>作为软件开发从业人员，想必使用 MySQL 都相当有些年头了。在应用实践过程中，相信大家也都遇到过一些疑问，但通常Google下就”止步“了，可能一直停留在“指哪打哪”的使用者层面。<br>我亦曾有心想去探究MySQL的基础架构，鸟瞰其全貌，却无力深入MySQL内核源码。最近购买听讲了丁奇的《MySQL实战45讲》，忽然感觉脑子中某些东西逐渐清晰了起来，”心不慌了，气也不短了“。本系列文章算是《MySQL实战45讲》的听讲笔记（包括一些个人思考）整理，如有侵权，还望告知。</p>
-<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.cn/blogimg/mysql_logistic_structure.png" alt></p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
         
           <a class="article-more-a" href="/2019/03/07/一条SQL语句是如何执行的/#more">more >></a>
         
@@ -489,8 +489,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>书接上文，本节我们继续探讨doc(x)文件的解析读取。了解了<a href="http://www.sdwangblog.cn/2018/11/07/PHP%E5%86%99%E5%85%A5Word%E6%96%87%E4%BB%B6/">PHP如何写入Doc(x)文件</a>后，我们知道生成doc文件的内容形式可以有两种：原生的二进制格式和兼容的网页格式。“因地制宜”，对于原生的二进制格式同样可以使用Microsoft Office自带的ActiveX/<a href="http://www.php.net/manual/en/class.com.php" target="_blank" rel="noopener">COM组件</a>解析，而对于兼容的网页格式，不同的生成过程对应的逆向过程就是解析方法了（不考虑部分信息丢失），此不再赘述。对比而言，生成docx文件的内容形式就相对统一多了，它是我们本节讨论的主角。</p>
-<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx 是一个微软开发的基于XML的文字处理文件, 解压缩后文件（夹）内容如下图示。其中，最重要的就是/word/document.xml文件，它存储着文档的真实文本内容。<br><img src="http://www.sdwangblog.cn/blogimg/content_structure_docx_file.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>书接上文，本节我们继续探讨doc(x)文件的解析读取。了解了<a href="http://www.sdwangblog.top/2018/11/07/PHP%E5%86%99%E5%85%A5Word%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">PHP如何写入Doc(x)文件</a>后，我们知道生成doc文件的内容形式可以有两种：原生的二进制格式和兼容的网页格式。“因地制宜”，对于原生的二进制格式同样可以使用Microsoft Office自带的ActiveX/<a href="http://www.php.net/manual/en/class.com.php" target="_blank" rel="noopener">COM组件</a>解析，而对于兼容的网页格式，不同的生成过程对应的逆向过程就是解析方法了（不考虑部分信息丢失），此不再赘述。对比而言，生成docx文件的内容形式就相对统一多了，它是我们本节讨论的主角。</p>
+<h2 id="读出Docx-File"><a href="#读出Docx-File" class="headerlink" title="读出Docx File"></a>读出Docx File</h2><p>Docx 是一个微软开发的基于XML的文字处理文件, 解压缩后文件（夹）内容如下图示。其中，最重要的就是/word/document.xml文件，它存储着文档的真实文本内容。<br><img src="http://www.sdwangblog.top/blogimg/content_structure_docx_file.png" alt></p>
         
           <a class="article-more-a" href="/2018/11/08/PHP读出Docx文件/#more">more >></a>
         
@@ -727,8 +727,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们之所以 <strong>“建立安全的会话管理机制”</strong>，是因为Http是一种无状态协议，而为了用户使用便利性，我们需要维护web应用程序的状态。大家知道，实际应用中的会话管理，不仅要维持各个请求之间的状态，还需要维持会话期间针对每个特定用户使用到的数据，即 <strong>session数据</strong>。传统的<a href="http://www.sdwangblog.cn/2018/09/26/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E7%9A%84%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B8%80%E4%B9%8BSession%E6%9C%AC%E8%B4%A8/">Session机制</a>在面对高并发网络请求时，被这小小的session数据逼得不得不使出“百般解数”，苦不堪言。现在请思考个问题，假若暂时不考虑session数据的存储，建立会话管理的本质是什么？。。。。。。没错，是 <strong>“认证”，即知晓当前请求者是否为web应用已合法登录的某用户</strong>。</p>
-<p>比如说，小F首次登录系统成功（注册也是一种可以适用的场景）之后, 服务器端给他颁发一个 <strong>令牌</strong>（token，最简单的token组成:uid(用户唯一的身份标识)、time(当前时间的时间戳)、sign(签名，由token的前几位+盐以哈希算法压缩成定长的十六进制字符串)拼接而成）如下图示例， <strong>服务器端可以不保存这个token</strong>；当小F再次发送http请求时，会通过Http header/body将这个token值附带而来，服务器会再用同样的算法对数据 <strong>计算签名并和token中的签名做比较</strong>，如果认证通过就说明小F已经登录过了，并且可直接取到小F的userId，否则就是没通过有效性认证。<br><img src="http://www.sdwangblog.cn/blogimg/simple_token_sign.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们之所以 <strong>“建立安全的会话管理机制”</strong>，是因为Http是一种无状态协议，而为了用户使用便利性，我们需要维护web应用程序的状态。大家知道，实际应用中的会话管理，不仅要维持各个请求之间的状态，还需要维持会话期间针对每个特定用户使用到的数据，即 <strong>session数据</strong>。传统的<a href="http://www.sdwangblog.top/2018/09/26/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E7%9A%84%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6%E4%B8%80%E4%B9%8BSession%E6%9C%AC%E8%B4%A8/" target="_blank" rel="noopener">Session机制</a>在面对高并发网络请求时，被这小小的session数据逼得不得不使出“百般解数”，苦不堪言。现在请思考个问题，假若暂时不考虑session数据的存储，建立会话管理的本质是什么？。。。。。。没错，是 <strong>“认证”，即知晓当前请求者是否为web应用已合法登录的某用户</strong>。</p>
+<p>比如说，小F首次登录系统成功（注册也是一种可以适用的场景）之后, 服务器端给他颁发一个 <strong>令牌</strong>（token，最简单的token组成:uid(用户唯一的身份标识)、time(当前时间的时间戳)、sign(签名，由token的前几位+盐以哈希算法压缩成定长的十六进制字符串)拼接而成）如下图示例， <strong>服务器端可以不保存这个token</strong>；当小F再次发送http请求时，会通过Http header/body将这个token值附带而来，服务器会再用同样的算法对数据 <strong>计算签名并和token中的签名做比较</strong>，如果认证通过就说明小F已经登录过了，并且可直接取到小F的userId，否则就是没通过有效性认证。<br><img src="http://www.sdwangblog.top/blogimg/simple_token_sign.png" alt></p>
         
           <a class="article-more-a" href="/2018/10/07/如何建立安全的会话管理机制二之Token机制/#more">more >></a>
         
@@ -927,7 +927,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：<strong>用户（张三）只在需要登录时输入一次用户名和密码，成功登录后，他就可以访问可以访问所有相互信任的应用系统（财务系统、OA 系统、订单服务等），这就是单点登录（Single Sign On，简称SSO）</strong>。它是目前比较流行的企业业务整合的解决方案之一。<br><img src="http://www.sdwangblog.cn/blogimg/sso_scene_example.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：<strong>用户（张三）只在需要登录时输入一次用户名和密码，成功登录后，他就可以访问可以访问所有相互信任的应用系统（财务系统、OA 系统、订单服务等），这就是单点登录（Single Sign On，简称SSO）</strong>。它是目前比较流行的企业业务整合的解决方案之一。<br><img src="http://www.sdwangblog.top/blogimg/sso_scene_example.png" alt></p>
         
           <a class="article-more-a" href="/2018/09/20/单点登录怎么实现？/#more">more >></a>
         
@@ -997,7 +997,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1128,10 +1128,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -1144,15 +1140,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

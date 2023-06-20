@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="接口本身是调用方和实现方约定的一种 合作协议（对其他类型行为的抽象和概括），接口实现者不需要关心接口会被怎样使用，调用者也不需要关心接口的实现细节。Go 语言的接口设计是非侵入式的，接口编写者无须知道接口被哪些类型实现，接口实现者只需知道实现的是什么样子的接口，但无须指明实现(implements)哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现。 Go 语言接口声">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_interface_ifface.png">
-<meta property="og:updated_time" content="2021-01-06T06:40:24.670Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/go_interface_ifface.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“接口类型的合理运用”">
 <meta name="twitter:description" content="接口本身是调用方和实现方约定的一种 合作协议（对其他类型行为的抽象和概括），接口实现者不需要关心接口会被怎样使用，调用者也不需要关心接口的实现细节。Go 语言的接口设计是非侵入式的，接口编写者无须知道接口被哪些类型实现，接口实现者只需知道实现的是什么样子的接口，但无须指明实现(implements)哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现。 Go 语言接口声">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/go_interface_ifface.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/go_interface_ifface.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -186,7 +186,7 @@
 <blockquote>
 <p>补充几个名词，对于一个接口类型的变量，我们赋给它的值可以被叫做它的实际值（动态值），而该值的类型可以被叫做这个变量的实际类型（动态类型），比如上例接口变量writer的静态类型永远是DataWriter，但它的动态类型却会随着我们赋予的动态值而变化，当前的动态类型就是*file。</p>
 </blockquote>
-<p>前面我们提到，“接口类型本身是无法被值化的”，在我们赋予它实际值之前，它的值就是零值nil。一旦它被赋予了某个实现类型的值，它的值就不再是nil了（<strong>注意这里不仅仅是副本与原值的事情）。当我们给一个接口变量赋值的时候，该变量的动态类型会与它的动态值一起被存储在一个专用的数据结构中</strong>，如下图示。严格来讲，这样一个变量的值其实是这个专用数据结构的一个实例，而不是我们赋给该变量的那个实际值（的副本）。我们就把这个专用的数据机构叫<strong>iface吧（Go 语言的runtime包中它就叫这个名字），iface的实例会包含两个指针，一个是指向类型信息（包含了动态值的类型、以及它实现的接口方法和调用它们的途径等等）的指针，另一个是指向动态值的指针</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/go_interface_ifface.png" alt></p>
+<p>前面我们提到，“接口类型本身是无法被值化的”，在我们赋予它实际值之前，它的值就是零值nil。一旦它被赋予了某个实现类型的值，它的值就不再是nil了（<strong>注意这里不仅仅是副本与原值的事情）。当我们给一个接口变量赋值的时候，该变量的动态类型会与它的动态值一起被存储在一个专用的数据结构中</strong>，如下图示。严格来讲，这样一个变量的值其实是这个专用数据结构的一个实例，而不是我们赋给该变量的那个实际值（的副本）。我们就把这个专用的数据机构叫<strong>iface吧（Go 语言的runtime包中它就叫这个名字），iface的实例会包含两个指针，一个是指向类型信息（包含了动态值的类型、以及它实现的接口方法和调用它们的途径等等）的指针，另一个是指向动态值的指针</strong>。<br><img src="http://www.sdwangblog.top/blogimg/go_interface_ifface.png" alt></p>
 <blockquote>
 <p>怎样才能让一个接口变量的值真正为nil呢？要么只声明它但不做初始化，要么直接把字面量nil赋给它。</p>
 </blockquote>
@@ -384,7 +384,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -515,10 +515,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -531,15 +527,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

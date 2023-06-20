@@ -16,17 +16,17 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="提到事务，你肯定会想到事务的四大特性——A(Atomicity)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/unrepeatable_read_sample.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/delusion_read_sample.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_four_isolation_level.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sample_innoddb_mvcc_phantom.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sample_innoddb_insert_lock_format.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/innodb_cross_insert_deadlock_sample.png">
-<meta property="og:updated_time" content="2021-03-30T06:26:16.933Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/delusion_read_sample.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_four_isolation_level.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sample_innoddb_mvcc_phantom.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sample_innoddb_insert_lock_format.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_cross_insert_deadlock_sample.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="InnoDB中的事务隔离级别和锁关系">
 <meta name="twitter:description" content="提到事务，你肯定会想到事务的四大特性——A(Atomicity)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/unrepeatable_read_sample.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -189,13 +189,13 @@
 <p><strong>当隔离级别为Read committed，就可以避免脏读</strong>。事务B（财务给singo发工资）在更新数据的时候，会对该行数据增加排他锁直到事务结束才会释放锁。所以在事务B没有提交之前，事务A（singo查询工资账户）都能不对数据进行读取。<strong>Read committed是大多数数据库的默认级别，比如Sql Server , Oracle</strong>。</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">singo拿着工资卡去消费，系统读取到卡里确实有2000元，而此时她的老婆也正好在逛某宝，要把singo工资卡的2000元转到卖家账户，并在singo之前提交了事务，当singo扣款时，发现工资卡余额不足而扣款失败，singo十分纳闷，明明卡里有钱，为何......</span><br></pre></td></tr></table></figure>
-<p><img src="http://www.sdwangblog.cn/blogimg/unrepeatable_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“不可重复读”：事务A（singo消费）在读取某行的一瞬间，事务B（singo的老婆网上转账）是不能修改改行数据，但只要事务A读取完该行数据，事务B就可以对该行数据增加排他锁并进行修改</strong>。如何解决不可重复读，请看下一个隔离级别。</p>
+<p><img src="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“不可重复读”：事务A（singo消费）在读取某行的一瞬间，事务B（singo的老婆网上转账）是不能修改改行数据，但只要事务A读取完该行数据，事务B就可以对该行数据增加排他锁并进行修改</strong>。如何解决不可重复读，请看下一个隔离级别。</p>
 <h3 id="Repeatable-read-可重复读"><a href="#Repeatable-read-可重复读" class="headerlink" title="Repeatable read 可重复读"></a>Repeatable read 可重复读</h3><p><strong>可重复读是指，一个事务执行过程中看到的数据总是跟这个事务在启动时看到的数据是一致的。在这种隔离级别下，事务对当前被读取的数据不加锁（在 InnoDB的 MVCC机制下，只会在第一次执行语句时生成一个read view, 之后就不会重复生成了）；事务在更新某数据前（就是发生更新的瞬间），必须先对其加 行级X排他锁，直到事务结束才释放</strong>。</p>
 <p><strong>当隔离级别设置为Repeatable read时，就可以避免不可重复读</strong>。当singo拿着工资卡去消费时，一旦系统开始读取工资卡信息（即事务开始），singo的老婆就不可能对该记录进行修改，也就是singo的老婆不能在此时转账。<strong>Repeatable read 是MySQL的默认级别</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">singo的老婆工作在银行部门，她时常通过银行内部系统查看singo的信用卡消费记录。有一天，她正在查询到singo当月信用卡的总消费金额（select sum(amount) from transaction where card_no=卡号 and month = 本月）为80元，而singo此时正好在外面胡吃海塞后在收银台买单，新增了一条1000元的消费记录（insert into transaction ... ），并提交了事务，随后singo的老婆将singo当月信用卡消费的明细打印到A4纸上，却发现消费总额为1080元，singo的老婆很诧异，以为出现了幻觉。。。</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.cn/blogimg/delusion_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“幻读”，事务A（select sum(amount) from transaction where card_no=卡号 and month = 本月）如果查询到20条符合条件的记录，事务B（insert transaction … ）由于没有任何事务对表加锁（如果在插入记录时检查到 duplicate key（或者有一个被标记删除的duplicate key）则会加LOCK_S锁），操作自然能顺利执行，当事务A再次执行查询时返回的结果就变成了21条，所以事务A的两次范围查询结果并不相同就是我们所谓的 “幻读”</strong>。如何解决幻读，请看下一个隔离级别。</p>
+<p><img src="http://www.sdwangblog.top/blogimg/delusion_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“幻读”，事务A（select sum(amount) from transaction where card_no=卡号 and month = 本月）如果查询到20条符合条件的记录，事务B（insert transaction … ）由于没有任何事务对表加锁（如果在插入记录时检查到 duplicate key（或者有一个被标记删除的duplicate key）则会加LOCK_S锁），操作自然能顺利执行，当事务A再次执行查询时返回的结果就变成了21条，所以事务A的两次范围查询结果并不相同就是我们所谓的 “幻读”</strong>。如何解决幻读，请看下一个隔离级别。</p>
 <h3 id="Serializable-串行化"><a href="#Serializable-串行化" class="headerlink" title="Serializable 串行化"></a>Serializable 串行化</h3><p><strong>串行化，是最高的事务隔离级别，同时代价也花费最高，性能很低，一般很少使用。在这种隔离级别下，事务在读取数据时，必须先对其加 行级S共享锁，直到事务结束才释放；事务在更新数据时，必须先对其加 行级X排他锁，直到事务结束才释放</strong>（Lock-Based CC）。</p>
 <p>Serializable隔离级别解决了脏读、不可重复读、幻读等读现象，但以直接Lock-Based CC的方式(类似于Java多线程中的锁)来避免并行访问，执行效率极低。</p>
-<h2 id="设置当前隔离级别"><a href="#设置当前隔离级别" class="headerlink" title="设置当前隔离级别"></a>设置当前隔离级别</h2><p>每个隔离级别都有它自己的适用场景，你要根据自己的业务情况来选用。上述依次介绍的MySQL四种隔离级别，<strong>随着数据库隔离级别的提高（锁的越严实），数据的并发能力也是逐步下降，如何在并发性和隔离性之间做一个很好的权衡是个至关重要的问题</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/innodb_four_isolation_level.png" alt><br>你可以在命令行使用–transaction-isolation选项，或在选项文件(my.cnf)里设置该选项——<code>transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}</code>，为所有连接设置默认隔离级别。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看默认事务隔离级别</span><br><span class="line">mysql&gt; show variables like &apos;tx_isolation&apos;;</span><br><span class="line">+---------------+-----------------+</span><br><span class="line">| tx_isolation  | REPEATABLE-READ |</span><br><span class="line">+---------------+-----------------+</span><br><span class="line"></span><br><span class="line">#使用SET TRNSACTION改变单个会话或者所有新进连接的事务隔离级别</span><br><span class="line">mysql &gt; SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br><span class="line">#使用SESSION关键字表示为当前连接上执行的事务设置隔离级别；使用GLOBAL关键字在全局上所有新连接设置隔离级别(需要SUPER权限)</span><br><span class="line"></span><br><span class="line">#查询全局和会话事务隔离级别</span><br><span class="line">mysql &gt; SELECT @@global.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@session.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure></p>
+<h2 id="设置当前隔离级别"><a href="#设置当前隔离级别" class="headerlink" title="设置当前隔离级别"></a>设置当前隔离级别</h2><p>每个隔离级别都有它自己的适用场景，你要根据自己的业务情况来选用。上述依次介绍的MySQL四种隔离级别，<strong>随着数据库隔离级别的提高（锁的越严实），数据的并发能力也是逐步下降，如何在并发性和隔离性之间做一个很好的权衡是个至关重要的问题</strong>。<br><img src="http://www.sdwangblog.top/blogimg/innodb_four_isolation_level.png" alt><br>你可以在命令行使用–transaction-isolation选项，或在选项文件(my.cnf)里设置该选项——<code>transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}</code>，为所有连接设置默认隔离级别。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看默认事务隔离级别</span><br><span class="line">mysql&gt; show variables like &apos;tx_isolation&apos;;</span><br><span class="line">+---------------+-----------------+</span><br><span class="line">| tx_isolation  | REPEATABLE-READ |</span><br><span class="line">+---------------+-----------------+</span><br><span class="line"></span><br><span class="line">#使用SET TRNSACTION改变单个会话或者所有新进连接的事务隔离级别</span><br><span class="line">mysql &gt; SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br><span class="line">#使用SESSION关键字表示为当前连接上执行的事务设置隔离级别；使用GLOBAL关键字在全局上所有新连接设置隔离级别(需要SUPER权限)</span><br><span class="line"></span><br><span class="line">#查询全局和会话事务隔离级别</span><br><span class="line">mysql &gt; SELECT @@global.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@session.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>补充说明，<code>begin/start transaction</code>命令并不是一个事务的起点，在执行它们后的第一个操作InnoDB表的语句，事务才真正启动。如果你想要马上启动一个事务，可以使用<code>start transaction with consistent snapshot</code>命令。</p>
 </blockquote>
@@ -214,7 +214,7 @@
 <li><strong>当前读</strong>：加悲观锁处理当前数据(update、insert、delete、select for update等语句)；<h2 id="InnoDB的-RR隔离级别与幻读现象"><a href="#InnoDB的-RR隔离级别与幻读现象" class="headerlink" title="InnoDB的 RR隔离级别与幻读现象"></a>InnoDB的 RR隔离级别与幻读现象</h2>在 InnoDB的 RR隔离级别，MVCC 显然<strong>解决了快照读的幻读问题</strong>（版本号），那能否避免当前读的幻读问题呢？不妨来实验一下。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show create table class_teacher;</span><br><span class="line">+---------------+-------------------------------------+</span><br><span class="line">| class_teacher | CREATE TABLE `class_teacher` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `class_name` varchar(64) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `teacher_id` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `index_teacher_id` (`teacher_id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 |</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p><img src="http://www.sdwangblog.cn/blogimg/sample_innoddb_mvcc_phantom.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/sample_innoddb_mvcc_phantom.png" alt></p>
 <blockquote>
 <p>TIP：insert 操作等待时长的控制参数为 innodb_lock_wait_timeout，默认 50s; 等待超时后事务是否回滚的控制参数为 innodb_rollback_on_timeout，默认为 OFF(死锁除外)。</p>
 </blockquote>
@@ -233,7 +233,7 @@
 <blockquote>
 <p>介绍下INSERT操作加锁模式：<br>inserted 行加排他锁——record lock 不会阻塞其他会话插入间隙。<br>inserting 前会加插入意向间隙锁（与LOCK_S | LOCK_GAP | LOCK_X锁模式冲突），它预示多事务并发插入相同的 GAP，只要插入不是相同位置就允许并发，这样 insert操作无须加真正的gap lock。<br>假设发生了唯一键冲突，重复记录行将会加上读锁。当多个会话并发插入相同行且某个会话已经获得该行排他锁，就将导致死锁。</p>
 </blockquote>
-<p><img src="http://www.sdwangblog.cn/blogimg/sample_innoddb_insert_lock_format.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/sample_innoddb_insert_lock_format.png" alt></p>
 <h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>根据加锁的范围，InnoDB锁类型大致可分为全局锁、表级锁和行锁三类：</p>
 <ul>
 <li><p><strong>全局锁</strong>：对整个数据库实例加锁，使得整个库处于只读状态，这会让其他线程的以下语句都阻塞：数据更新语句（数据的增删改）、数据定义语句（包括建表、修改表结构等）和更新类事务的提交语句。典型使用场景是 <strong>全库逻辑备份</strong>；</p>
@@ -249,7 +249,7 @@
 </ul>
 <p>你还可以使用命令行查看数据库当前加锁信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from information_schema.INNODB_LOCKS;</span><br><span class="line">mysql &gt; select * from information_schema.INNODB_LOCK_WAITS;</span><br></pre></td></tr></table></figure></p>
 <h2 id="花絮彩蛋"><a href="#花絮彩蛋" class="headerlink" title="花絮彩蛋"></a>花絮彩蛋</h2><p>至此大家应该对“InnoDB的事务隔离级别和加锁机制”都有了一定程度的了解，那。。。不妨来尝试分析下面这个“死锁案例”的发生原因（后附有执行过程解析图）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  1 |      10 |</span><br><span class="line">|  5 |      50 |</span><br><span class="line">|  7 |      70 |</span><br><span class="line">| 11 |     110 |</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; begin; delete from test_zq where test_id=80;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; begin; delete from test_zq where test_id=90;</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; insert test_zq select 8,80;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; insert test_zq select 9,90;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">#事务管理器选择回滚事务 2，事务 1 插入操作执行成功</span><br><span class="line">mysql(事务1) &gt;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.cn/blogimg/innodb_cross_insert_deadlock_sample.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/innodb_cross_insert_deadlock_sample.png" alt></p>
 <h2 id="一些优化锁性能的建议"><a href="#一些优化锁性能的建议" class="headerlink" title="一些优化锁性能的建议"></a>一些优化锁性能的建议</h2><ul>
 <li>尽量使用较低的隔离级别；</li>
 <li>精心设计索引， 并尽量使用索引访问数据， 使加锁更精确， 从而减少锁冲突的机会；</li>
@@ -441,7 +441,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -572,10 +572,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -588,15 +584,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

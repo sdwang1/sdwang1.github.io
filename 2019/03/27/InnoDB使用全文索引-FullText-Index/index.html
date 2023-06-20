@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言近期项目中有个小优化：要求某表列支持“模糊搜索”——形如like &amp;#39;%XX%&amp;#39;，我们知道，InnoDB B+树索引满足最左前缀原则，也就是说，形如like &amp;#39;%XX%&amp;#39;的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 全文索引，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-30T06:39:56.205Z">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="InnoDB使用全文索引(FullText Index)">
 <meta name="twitter:description" content="前言近期项目中有个小优化：要求某表列支持“模糊搜索”——形如like &amp;#39;%XX%&amp;#39;，我们知道，InnoDB B+树索引满足最左前缀原则，也就是说，形如like &amp;#39;%XX%&amp;#39;的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 全文索引，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对">
@@ -175,7 +175,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.cn/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.top/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
 <h2 id="InnoDB全文索引简介"><a href="#InnoDB全文索引简介" class="headerlink" title="InnoDB全文索引简介"></a>InnoDB全文索引简介</h2><p>InnoDB引擎对FULLTEXT索引的支持是MySQL5.6新引入的特性，语法层面上大多数兼容之前 <strong>MyISAM引擎</strong> 的全文索引模式。<strong>所谓全文索引，是一种通过建立倒排索引，快速匹配文档的方式</strong>。MySQL支持以下三种全文检索模式：</p>
 <ul>
 <li><strong>自然语言模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-natural-language.html" target="_blank" rel="noopener">IN NATURAL LANGUAGE MODE</a>）</strong>，即通过<code>MATCH (column...) AGAINST (val)</code>传递某个特定的字符串来进行检索。<strong>默认模式</strong>；</li>
@@ -389,7 +389,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -520,10 +520,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -536,15 +532,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

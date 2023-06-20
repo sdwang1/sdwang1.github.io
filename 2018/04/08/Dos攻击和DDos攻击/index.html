@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="Dos攻击Dos攻击是Denial of Service的简称，指故意的攻击网络协议实现的缺陷或直接通过野蛮手段残忍地耗尽被攻击对象的资源（网络带宽、文件系统容量、开放的进程或允许的连接数），目的是让目标计算机或网络无法提供正常的服务或资源访问，使目标系统服务系统停止响应甚至崩溃，而在此攻击中并不包括侵入目标服务器或目标网络设备。 Dos攻击原理Dos攻击是利用TCP协议通信前协商——三次握手的“">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/dos_tcp_three_hands.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/ddos_attack_show.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/github_ddos_attack.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/reflection_ddos_attack.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/github_ddos_attack_memcached.png">
-<meta property="og:updated_time" content="2019-03-08T02:58:56.959Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/dos_tcp_three_hands.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/ddos_attack_show.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/github_ddos_attack.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/reflection_ddos_attack.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/github_ddos_attack_memcached.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.575Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dos攻击和DDos攻击">
 <meta name="twitter:description" content="Dos攻击Dos攻击是Denial of Service的简称，指故意的攻击网络协议实现的缺陷或直接通过野蛮手段残忍地耗尽被攻击对象的资源（网络带宽、文件系统容量、开放的进程或允许的连接数），目的是让目标计算机或网络无法提供正常的服务或资源访问，使目标系统服务系统停止响应甚至崩溃，而在此攻击中并不包括侵入目标服务器或目标网络设备。 Dos攻击原理Dos攻击是利用TCP协议通信前协商——三次握手的“">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/dos_tcp_three_hands.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/dos_tcp_three_hands.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -182,10 +182,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Dos攻击"><a href="#Dos攻击" class="headerlink" title="Dos攻击"></a>Dos攻击</h2><p><a href="https://baike.baidu.com/item/dos%E6%94%BB%E5%87%BB" target="_blank" rel="noopener">Dos攻击</a>是Denial of Service的简称，<strong>指故意的攻击网络协议实现的缺陷或直接通过野蛮手段残忍地耗尽被攻击对象的资源（网络带宽、文件系统容量、开放的进程或允许的连接数），目的是让目标计算机或网络无法提供正常的服务或资源访问</strong>，使目标系统服务系统停止响应甚至崩溃，而在此攻击中并不包括侵入目标服务器或目标网络设备。</p>
-<h3 id="Dos攻击原理"><a href="#Dos攻击原理" class="headerlink" title="Dos攻击原理"></a>Dos攻击原理</h3><p>Dos攻击是利用TCP协议通信前协商——三次握手的“缺陷”进行的。正常情况下：1. 客户端发送一个SYN(seq=x)数据包，并进入SYN_SENT状态；2. 服务器收到该SYN包后，回应一个ACK(x+1)确认包,同时自己也发送一个SYN(seq=y)包，此时服务器进入SYN_RECV状态；3. 客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手以正式进行通信。<br><img src="http://www.sdwangblog.cn/blogimg/dos_tcp_three_hands.png" alt></p>
+<h3 id="Dos攻击原理"><a href="#Dos攻击原理" class="headerlink" title="Dos攻击原理"></a>Dos攻击原理</h3><p>Dos攻击是利用TCP协议通信前协商——三次握手的“缺陷”进行的。正常情况下：1. 客户端发送一个SYN(seq=x)数据包，并进入SYN_SENT状态；2. 服务器收到该SYN包后，回应一个ACK(x+1)确认包,同时自己也发送一个SYN(seq=y)包，此时服务器进入SYN_RECV状态；3. 客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手以正式进行通信。<br><img src="http://www.sdwangblog.top/blogimg/dos_tcp_three_hands.png" alt></p>
 <a id="more"></a>
 <p>当黑客要进行Dos攻击事件，<strong>他会操纵僵尸主机向被攻击的服务器发送SYN数据包，当服务器回复ACK确认包后，僵尸主机不再回应，这样服务器就会保持这个半连接的存在进行等待</strong>。每一个这样的半连接都会耗费服务器的资源，如果有数量极大的半连接，服务器就会停止正常工作了。<br>当第一次dos攻击的时候，服务器处于SYN_RECV状态。此时该一直维持到无响应为止，等待第三次握手的过程是浪费服务器资源的。半连接队列条目存活的最长时间，即服务器从收到SYN包到确认这个报文无效的最长时间（所有重传请求包的最长等待时间总和）叫做半连接存活时间。<br>在信息安全的三要素——<strong>保密性、完整性和可用性</strong> 中，DoS针对的目标正是 <strong>可用性</strong>。常见的DOS攻击工具有TearDrop、Land、Jolt、IGMPNuker、Boink、Smurf、Bonk、OOB等。</p>
-<h2 id="DDos攻击"><a href="#DDos攻击" class="headerlink" title="DDos攻击"></a>DDos攻击</h2><p>由于较小的网络规模和较慢的网络速度的限制，Dos攻击者（<strong>1VS1，高CPU占用率</strong>）很难使用高带宽的资源来发出过多的请求，而且 <strong>易于被识别出攻击源（ACL访问控制列表</strong>）。为此，Dos攻击者“提升”出了一种新的攻击方式DDos攻击（Distributed Denial of Service，分布式拒绝服务）。<br>分布式拒绝服务(DDoS：Distributed Denial of Service)攻击，是 <strong>指攻击者利用大量“肉鸡”（被攻击者入侵过或可间接利用的“僵尸主机”）向受害主机发送大量看似合法的网络包，从而造成网络阻塞或服务器资源耗尽而导致拒绝服务</strong>。<br>相较于Dos攻击（<strong>“单挑”</strong>），DDos攻击（<strong>”群殴“</strong>）这种“人多力量大”地控制很多台机器并利用他们的高带宽攻击目标，更容易将目标网站攻下。另外，DDoS攻击方式 <strong>较为自动化</strong>，攻击者可以把他的程序安装到网络中的多台机器上，所采用的这种攻击方式很难被攻击对象察觉，直到攻击者发下统一的攻击命令，这些机器才同时发起进攻。现在这种方式被认为是最有效的攻击形式，并且非常难以抵挡。<br><img src="http://www.sdwangblog.cn/blogimg/ddos_attack_show.png" alt></p>
+<h2 id="DDos攻击"><a href="#DDos攻击" class="headerlink" title="DDos攻击"></a>DDos攻击</h2><p>由于较小的网络规模和较慢的网络速度的限制，Dos攻击者（<strong>1VS1，高CPU占用率</strong>）很难使用高带宽的资源来发出过多的请求，而且 <strong>易于被识别出攻击源（ACL访问控制列表</strong>）。为此，Dos攻击者“提升”出了一种新的攻击方式DDos攻击（Distributed Denial of Service，分布式拒绝服务）。<br>分布式拒绝服务(DDoS：Distributed Denial of Service)攻击，是 <strong>指攻击者利用大量“肉鸡”（被攻击者入侵过或可间接利用的“僵尸主机”）向受害主机发送大量看似合法的网络包，从而造成网络阻塞或服务器资源耗尽而导致拒绝服务</strong>。<br>相较于Dos攻击（<strong>“单挑”</strong>），DDos攻击（<strong>”群殴“</strong>）这种“人多力量大”地控制很多台机器并利用他们的高带宽攻击目标，更容易将目标网站攻下。另外，DDoS攻击方式 <strong>较为自动化</strong>，攻击者可以把他的程序安装到网络中的多台机器上，所采用的这种攻击方式很难被攻击对象察觉，直到攻击者发下统一的攻击命令，这些机器才同时发起进攻。现在这种方式被认为是最有效的攻击形式，并且非常难以抵挡。<br><img src="http://www.sdwangblog.top/blogimg/ddos_attack_show.png" alt></p>
 <h2 id="Dos-DDos的攻击方式"><a href="#Dos-DDos的攻击方式" class="headerlink" title="Dos/DDos的攻击方式"></a>Dos/DDos的攻击方式</h2><p>一般来说，DoS 攻击可以具体分成两种形式：带宽消耗型以及资源消耗型。它们都是透过大量合法或伪造的请求占用大量网络以及器材资源，以达到瘫痪网络以及系统的目的。</p>
 <ul>
 <li><strong>SYN FLOOD</strong>：利用特殊程序设置TCP的Header，向服务器端不断地成倍 <strong>发送只有SYN标志的TCP连接请求。当服务器接收的时候，认为它们都是待建立的连接请求，于是为这些请求建立会话并排到服务器连接缓冲区(Backlog Queue)中。如果你的SYN请求超过了服务器能容纳的限度——缓冲区队列满，那么服务器就不再接收新的请求了，其他合法用户的连接都被拒绝掉</strong>。</li>
@@ -200,15 +200,15 @@
 <li>利用被攻击主机所提供服务程序或传输协议的本身实现缺陷，反复发送畸形的攻击数据引发系统错误的分配大量系统资源，使主机处于挂起状态甚至死机；</li>
 </ul>
 <p>对于正常用户来说，常见的现象就是“网站无法访问，xxx.com拒绝了我们的连接请求”。。。。</p>
-<h3 id="GitHub遭受的DDos攻击是个啥"><a href="#GitHub遭受的DDos攻击是个啥" class="headerlink" title="GitHub遭受的DDos攻击是个啥"></a>GitHub遭受的DDos攻击是个啥</h3><p>据外媒消息，美国东部时间2018年2月28日下午12点15分左右，GitHub 遭遇了可能是迄今为止最大的 DDoS 攻击，最高访问量为 1.35Tbps。<br><img src="http://www.sdwangblog.cn/blogimg/github_ddos_attack.png" alt><br>当地时间2月28日起，GitHub 经历了两次间歇性不可访问。攻击发生 10 分钟后，GitHub 向 CDN 服务商 Akamai 请求协助，访问 GitHub 的流量交由后者接管。攻击在 Akamai 介入 8 分钟后结束，GitHub 确认该网站上用户数据的机密性或完整性未受到威胁。</p>
+<h3 id="GitHub遭受的DDos攻击是个啥"><a href="#GitHub遭受的DDos攻击是个啥" class="headerlink" title="GitHub遭受的DDos攻击是个啥"></a>GitHub遭受的DDos攻击是个啥</h3><p>据外媒消息，美国东部时间2018年2月28日下午12点15分左右，GitHub 遭遇了可能是迄今为止最大的 DDoS 攻击，最高访问量为 1.35Tbps。<br><img src="http://www.sdwangblog.top/blogimg/github_ddos_attack.png" alt><br>当地时间2月28日起，GitHub 经历了两次间歇性不可访问。攻击发生 10 分钟后，GitHub 向 CDN 服务商 Akamai 请求协助，访问 GitHub 的流量交由后者接管。攻击在 Akamai 介入 8 分钟后结束，GitHub 确认该网站上用户数据的机密性或完整性未受到威胁。</p>
 <p><strong>本次是GitHub遭受攻击的手段是DDos攻击手段中的反射型DDoS攻击。反射型DDos攻击也被称为放大攻击</strong>。攻击者并不直接攻击目标服务 IP，而是 <strong>利用互联网的某些特殊服务开放的服务器</strong>，通过伪造被攻击者的 IP 地址、向有开放服务的服务器发送构造的请求报文，该服务器会将数倍于请求报文的回复数据发送到被攻击 IP，从而对后者间接形成 DDoS 攻击。<br>执行反射攻击，需要具备四个因素：一个用于执行IP地址欺骗的服务器、一个脆弱的、易于反射／放大的协议——任何设计不完善的、基于UDP请求的协议都可能被利用、反射服务器列表——支持脆弱协议的服务器、一个受害者的IP地址。攻击的整体思路如下：</p>
 <ul>
 <li>攻击者发送虚假的UDP请求，将请求包中的源IP地址替换成受害者的IP地址，这些请求包中通常不会出现攻击者自己的IP地址；</li>
 <li>每个请求包都发往一个随机的反射服务器；</li>
-<li>反射服务器接收到这些虚假的请求包，遵从约定的协议规则，发送响应；无疑，这些响应都是针对受害目标的；<br><img src="http://www.sdwangblog.cn/blogimg/reflection_ddos_attack.png" alt><br>如图所示，<strong>攻击者不直接把攻击包发给受害者，而是冒充受害者给放大器发包，然后通过放大器再反射给受害者。受害目标最终会收到大量的响应包，而这些包都不是它请求的。在攻击足够大的情况下，受害目标可能会发生网络拥塞或中断风暴</strong>。<br>在反射型攻击中，攻击者利用了网络协议的缺陷或者漏洞进行 IP 欺骗，主要是因为很多协议（例如 ICMP，UDP 等）对源 IP 不进行认证。同时要达到更好的攻击效果，黑客一般会选择具有放大效果(传送给受害目标的响应可能远远大于伪造的请求)的协议服务进行攻击。<strong>简而言之，就是利用 IP 欺骗进行反射和放大，从而达到四两拨千斤的效果</strong>。</li>
+<li>反射服务器接收到这些虚假的请求包，遵从约定的协议规则，发送响应；无疑，这些响应都是针对受害目标的；<br><img src="http://www.sdwangblog.top/blogimg/reflection_ddos_attack.png" alt><br>如图所示，<strong>攻击者不直接把攻击包发给受害者，而是冒充受害者给放大器发包，然后通过放大器再反射给受害者。受害目标最终会收到大量的响应包，而这些包都不是它请求的。在攻击足够大的情况下，受害目标可能会发生网络拥塞或中断风暴</strong>。<br>在反射型攻击中，攻击者利用了网络协议的缺陷或者漏洞进行 IP 欺骗，主要是因为很多协议（例如 ICMP，UDP 等）对源 IP 不进行认证。同时要达到更好的攻击效果，黑客一般会选择具有放大效果(传送给受害目标的响应可能远远大于伪造的请求)的协议服务进行攻击。<strong>简而言之，就是利用 IP 欺骗进行反射和放大，从而达到四两拨千斤的效果</strong>。</li>
 </ul>
 <p>上面介绍提到过，想要完成攻击，需要有一个开放服务的支持UDP协议的服务器，而本次针对GitHub的攻击利用的是我们很熟知的Memcached。那么，<strong>为什么是Memcached</strong>?<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">由于Memcache（版本低于1.5.6）默认监听UDP，天然满足反射DDoS条件。</span><br><span class="line"></span><br><span class="line">很多用户将服务监听在0.0.0.0，且未进行iptables规则配置，这导致可以被任意来源IP请求</span><br><span class="line"></span><br><span class="line">Memcache作为企业应用组建，其业务特性保证了具有较高上传带宽。</span><br><span class="line"></span><br><span class="line">Memcache不需要认证即可进行交互。</span><br><span class="line"></span><br><span class="line">Memcached反射的倍数达到数万倍，非常利于用于放大报文倍数行成超大流量的DDoS攻击</span><br></pre></td></tr></table></figure></p>
-<p><strong>本次针对GitHub的攻击，其实是攻击者把自己的IP地址伪装成GitHub的IP地址，然后向Memcached缓存服务器的UDP端口11211，发出大量假请求，Memcached对请求回应。大量的并发回应报文汇聚到被伪造的IP地址源（也就是GitHub），形成反射型分布式拒绝服务攻击</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/github_ddos_attack_memcached.png" alt><br><strong>如何避免自己的Memcached被利用</strong>？</p>
+<p><strong>本次针对GitHub的攻击，其实是攻击者把自己的IP地址伪装成GitHub的IP地址，然后向Memcached缓存服务器的UDP端口11211，发出大量假请求，Memcached对请求回应。大量的并发回应报文汇聚到被伪造的IP地址源（也就是GitHub），形成反射型分布式拒绝服务攻击</strong>。<br><img src="http://www.sdwangblog.top/blogimg/github_ddos_attack_memcached.png" alt><br><strong>如何避免自己的Memcached被利用</strong>？</p>
 <ul>
 <li>将服务器放置于可信域内；</li>
 <li>一定要放置有外网时不要监听 0.0.0.0；</li>
@@ -409,7 +409,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -540,10 +540,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -556,15 +552,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

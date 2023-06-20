@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="我们一直强调：任何装置在Linux底下都是档案，甚至连资料沟通的界面也有专门的档案在负责，接下来就让我们一起打开新世界的大门吧～～ Linux文件类型Linux下面的文件类型主要如下：  普通文件：’-‘，分为纯文本和二进制文件，比如C语言源代码、SHELL脚本、二进制的可执行文件等； 目录文件：’d’； 字符设备或块设备文件：’c’/‘b’，这类文件通常用mknode创建，rm删除，通常在/de">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_fhs_classification.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_fhs_directory_tree.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_filesystem_partition.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_file_storage_structure.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_hard_soft_link.png">
-<meta property="og:updated_time" content="2019-03-06T05:53:20.449Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_fhs_classification.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_fhs_directory_tree.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_filesystem_partition.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_file_storage_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_hard_soft_link.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文件系统二之Linux的目录配置">
 <meta name="twitter:description" content="我们一直强调：任何装置在Linux底下都是档案，甚至连资料沟通的界面也有专门的档案在负责，接下来就让我们一起打开新世界的大门吧～～ Linux文件类型Linux下面的文件类型主要如下：  普通文件：’-‘，分为纯文本和二进制文件，比如C语言源代码、SHELL脚本、二进制的可执行文件等； 目录文件：’d’； 字符设备或块设备文件：’c’/‘b’，这类文件通常用mknode创建，rm删除，通常在/de">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/linux_fhs_classification.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/linux_fhs_classification.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -196,14 +196,14 @@
 <li>数据输送文件（FIFO,pipe）: ‘p’，他主要的目的在解决多个程序同时存取一个文件所造成的错误问题。</li>
 </ul>
 <p>通常情况，针对档案的档名的长度限制为：单一档案或目录的最大容许档名为255bytes，若以每个中文字占用2bytes来说，最大档名大约在128个中文字之内。由于Linux在文字界面下的一些指令操作关系，档名最好可以避免一些特殊字元，比如<code>*,?,&lt;,&gt;,&amp;,!,[],|,\,&#39;,&quot;,(),{}&quot;</code>等。<br>至于档案副档名/后缀名，不同于Windows，Linux档案没有所谓的副档名。<strong>一个Linux档案能不能被执行，与他的档名没有一点关系，只要你的权限当中具有x，即代表这个档案具有可被执行的能力，当然能否真正的执行成功，还要看档案的内容</strong>。</p>
-<h2 id="Linux目录配置的依据——FHS"><a href="#Linux目录配置的依据——FHS" class="headerlink" title="Linux目录配置的依据——FHS"></a>Linux目录配置的依据——FHS</h2><p>考虑到Linux的开源性，Filesystem Hierarchy Standard标准出炉了，它的主要目的是希望让使用者可以了解到已安装软件通常放置于哪个目录下。FHS【一直在持续改版】依据档案系统使用的频繁性与是否允许使用者随意改动，将目录定义为如下四种交互作用的形态：<br><img src="http://www.sdwangblog.cn/blogimg/linux_fhs_classification.png" alt><br>事实上，FHS针对目录树架构仅定义出三层目录下应该放置什么资料而已，分别如下：</p>
+<h2 id="Linux目录配置的依据——FHS"><a href="#Linux目录配置的依据——FHS" class="headerlink" title="Linux目录配置的依据——FHS"></a>Linux目录配置的依据——FHS</h2><p>考虑到Linux的开源性，Filesystem Hierarchy Standard标准出炉了，它的主要目的是希望让使用者可以了解到已安装软件通常放置于哪个目录下。FHS【一直在持续改版】依据档案系统使用的频繁性与是否允许使用者随意改动，将目录定义为如下四种交互作用的形态：<br><img src="http://www.sdwangblog.top/blogimg/linux_fhs_classification.png" alt><br>事实上，FHS针对目录树架构仅定义出三层目录下应该放置什么资料而已，分别如下：</p>
 <ul>
 <li>/(root)：与开机系统有关，为减少出错概率，其所在分割槽越小越好；</li>
 <li>/usr(unix software resource)：与软件安装/执行有关；</li>
 <li>/var(variable)：与系统运作过程有关；</li>
 </ul>
-<p>如果我们将整个目录树以图示的方法来显示，并且将较为重要的档案资料列出来的话，如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/linux_fhs_directory_tree.png" alt><br>另外，每个目录不止能使用本地端的partition的档案系统，也可以使用网路上的filesystem，举例来说，可以利用Network File System(NFS)服务器挂载特定目录等。</p>
-<h2 id="Linux档案系统"><a href="#Linux档案系统" class="headerlink" title="Linux档案系统"></a>Linux档案系统</h2><p>在<a href="http://www.sdwangblog.cn/2017/09/07/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%80%E4%B9%8B%E4%B8%BB%E6%9C%BA%E8%A7%84%E5%88%99%E4%B8%8E%E7%A3%81%E7%9B%98%E5%88%86%E9%9A%94/">Linux文件系统一之一主机规则与磁盘分隔</a>中，我们知道：目录是档案系统逻辑上的划分，而分区是物理存储上的划分，二者可通过 <strong>挂载</strong> 操作关联；Linux磁盘分区都必须挂载到目录树中的某个具体目录才能进行读写操作【任何一个分区都必须挂载到某个目录】；<br>事实上，磁碟分割完成后还需要进行格式化【格式化成作业系统能够利用的 <strong>档案系统格式filesystem</strong> 】，之后作业系统才能够使用这个档案系统。<strong>Linux的正统系统档案为Ext2（Linux second extended file system,ext2fs），它是一种使用inode为基础的档案系统</strong>，此档案系统（管理程式）的组成结构如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/linux_filesystem_partition.png" alt><br>档案系统格式化时就将 inode 与 block 规划好了，除非重新格式化(或者利用 resize2fs 等指令变更档案系统大小)，否则 inode 与 block 固定后就不再变动：</p>
+<p>如果我们将整个目录树以图示的方法来显示，并且将较为重要的档案资料列出来的话，如下图示：<br><img src="http://www.sdwangblog.top/blogimg/linux_fhs_directory_tree.png" alt><br>另外，每个目录不止能使用本地端的partition的档案系统，也可以使用网路上的filesystem，举例来说，可以利用Network File System(NFS)服务器挂载特定目录等。</p>
+<h2 id="Linux档案系统"><a href="#Linux档案系统" class="headerlink" title="Linux档案系统"></a>Linux档案系统</h2><p>在<a href="http://www.sdwangblog.top/2017/09/07/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%80%E4%B9%8B%E4%B8%BB%E6%9C%BA%E8%A7%84%E5%88%99%E4%B8%8E%E7%A3%81%E7%9B%98%E5%88%86%E9%9A%94/" target="_blank" rel="noopener">Linux文件系统一之一主机规则与磁盘分隔</a>中，我们知道：目录是档案系统逻辑上的划分，而分区是物理存储上的划分，二者可通过 <strong>挂载</strong> 操作关联；Linux磁盘分区都必须挂载到目录树中的某个具体目录才能进行读写操作【任何一个分区都必须挂载到某个目录】；<br>事实上，磁碟分割完成后还需要进行格式化【格式化成作业系统能够利用的 <strong>档案系统格式filesystem</strong> 】，之后作业系统才能够使用这个档案系统。<strong>Linux的正统系统档案为Ext2（Linux second extended file system,ext2fs），它是一种使用inode为基础的档案系统</strong>，此档案系统（管理程式）的组成结构如下图示：<br><img src="http://www.sdwangblog.top/blogimg/linux_filesystem_partition.png" alt><br>档案系统格式化时就将 inode 与 block 规划好了，除非重新格式化(或者利用 resize2fs 等指令变更档案系统大小)，否则 inode 与 block 固定后就不再变动：</p>
 <ul>
 <li>MBR载入核心档时，即从磁盘的<code>启动区（Boot block）</code>加载程序，该程序负责进一步的操作系统的加载和启动。为了方便管理，即使某个分区中没有安装操作系统，Linux也会在该分区预留启动区；</li>
 <li>启动之后是<code>超级区（Super Block）</code>，它存储文件系统的相关信息，包括<code>文件系统的类型，inode的数目，数据块的数目</code>等；</li>
@@ -216,7 +216,7 @@
 <li>inode：也叫索引节点，是文件基本信息(如读写属性、owner等)的存放地和数据块指针存放地；</li>
 <li>数据块：文件的具体内容存放地；</li>
 </ul>
-<p><strong>当Linux查看某个文件时，系统会首先透过挂载点资讯找到根目录的inode，且inode规范的权限可以读取根目录block内容，然后根据目录树结构一层层找到该文件的目录项，从inode table的其Inode Structure查出文件属性【iNumber，File Type，Owner ID，Link count，Last modify time，Last access time等】及Block numbers，再从数据块中读取数据信息</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/linux_file_storage_structure.png" alt></p>
+<p><strong>当Linux查看某个文件时，系统会首先透过挂载点资讯找到根目录的inode，且inode规范的权限可以读取根目录block内容，然后根据目录树结构一层层找到该文件的目录项，从inode table的其Inode Structure查出文件属性【iNumber，File Type，Owner ID，Link count，Last modify time，Last access time等】及Block numbers，再从数据块中读取数据信息</strong>。<br><img src="http://www.sdwangblog.top/blogimg/linux_file_storage_structure.png" alt></p>
 <p><strong>注意：inode并不是组织文件的唯一方式</strong>。</p>
 <ul>
 <li>最简单的组织文件的方法，是把文件依次顺序的放入存储设备，DVD就采取了类似的方式。但果有删除操作，删除造成的空余空间夹杂在正常文件之间，很难利用和管理。</li>
@@ -233,7 +233,7 @@
 <li>Symbolic Link（符号连接，快捷方式），symbolic link是在建立一个独立档案，而这个档案会让资料的读取指向他link的那个档案名称【<code>指向一个路径（字符串）</code>】。所以，对连接文件的使用、引用都是直接调用源文件，当源文件删除时，符号连接的文件将成为无源之水——仅仅剩下个文件名了，当然删除这个连接，也不会影响到源文件。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#ln [-sf]来源档 目标档</span><br><span class="line">选项与参数：</span><br><span class="line">-s  ：如果不加任何参数就进行连接，那就是hard link，至于 -s 就是symbolic link</span><br><span class="line">-f  ：如果 目标档 存在时，就主动的将目标档直接移除后再建立！</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>具体关系可以看下图：<br><img src="http://www.sdwangblog.cn/blogimg/linux_hard_soft_link.png" alt><br><strong>总结一下</strong>：1. 硬连接只能用于文件的创建，不能应用于目录，而符号／软链接则二者皆可；2. 硬链接的二者指向同一个inode，不能跨文件系统，而软链接则可以跨文件系统；3. 创建硬链接会增加文件系统被链接的次数，而软链接则不会；4. 软链接的大小为指定的路径所包含的字符个数</p>
+<p>具体关系可以看下图：<br><img src="http://www.sdwangblog.top/blogimg/linux_hard_soft_link.png" alt><br><strong>总结一下</strong>：1. 硬连接只能用于文件的创建，不能应用于目录，而符号／软链接则二者皆可；2. 硬链接的二者指向同一个inode，不能跨文件系统，而软链接则可以跨文件系统；3. 创建硬链接会增加文件系统被链接的次数，而软链接则不会；4. 软链接的大小为指定的路径所包含的字符个数</p>
 <h2 id="磁碟的分割，格式化、检验与挂载"><a href="#磁碟的分割，格式化、检验与挂载" class="headerlink" title="磁碟的分割，格式化、检验与挂载"></a>磁碟的分割，格式化、检验与挂载</h2><p>如果我们想要在系统里新增一颗磁碟时，应该有哪些动作需要做呢：</p>
 <ol>
 <li>对磁碟进行分割，建立可用的partition;</li>
@@ -443,7 +443,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -574,10 +574,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -590,15 +586,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

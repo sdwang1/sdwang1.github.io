@@ -16,14 +16,14 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="在Linux系统中，每个元件/装置都以档案的型态存在，那分割槽的档名又是什么？正常的实体机器大概是用的都是/dev/sd[a-]的磁盘碟名，至于虚拟机器环境底下，为了加速，可能会使用/dev/vd[a-p]这种装置档名。物理形态上，磁碟盘上面又可细分出磁区（sector）与磁轨（Track）两种单位，其中磁区的物理量设计有两种大小，分别是512bytes与4Kbytes。 磁盘规则早期的Linux">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_gbt.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_root_directory_example.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/linux_relation_directory_disk.png">
-<meta property="og:updated_time" content="2019-03-06T05:27:46.247Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_gbt.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_root_directory_example.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/linux_relation_directory_disk.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.568Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文件系统一之主机规则与磁盘分隔">
 <meta name="twitter:description" content="在Linux系统中，每个元件/装置都以档案的型态存在，那分割槽的档名又是什么？正常的实体机器大概是用的都是/dev/sd[a-]的磁盘碟名，至于虚拟机器环境底下，为了加速，可能会使用/dev/vd[a-p]这种装置档名。物理形态上，磁碟盘上面又可细分出磁区（sector）与磁轨（Track）两种单位，其中磁区的物理量设计有两种大小，分别是512bytes与4Kbytes。 磁盘规则早期的Linux">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/linux_gbt.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/linux_gbt.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -186,7 +186,7 @@
 <li>分割表(partition table)：记录整个硬盘分割的状态，有64bytes；由于分割表所在区块仅有64bytes，因此最多能有四组记录区，每组记录区记录了该区段的起始与结束的磁柱号码。这四个分割的记录被称为主要（Primary）或延伸（Extended）分割槽；</li>
 </ul>
 <a id="more"></a>
-<p>既然分割表只有四组资料的空间，那么是否代表一颗磁碟最多只能分割出四个分割槽呢？当然不是，<strong>在Windows/Linux系统中，我们是通过延伸分割的方式来处理</strong>：既然第一个磁区所在的分割只能记录四个资料，那我是否可利用额外的磁区来记录更多的分割资讯，比如：<br><img src="http://www.sdwangblog.cn/blogimg/linux_gbt.png" alt></p>
+<p>既然分割表只有四组资料的空间，那么是否代表一颗磁碟最多只能分割出四个分割槽呢？当然不是，<strong>在Windows/Linux系统中，我们是通过延伸分割的方式来处理</strong>：既然第一个磁区所在的分割只能记录四个资料，那我是否可利用额外的磁区来记录更多的分割资讯，比如：<br><img src="http://www.sdwangblog.top/blogimg/linux_gbt.png" alt></p>
 <p>在上图中，磁碟的四个分割记录仅使用到两个，P1为主要分割，P2为延伸分割。延伸分割的目的是使用额外的磁区来记录分割资讯，延伸分割本身并不能拿来格式化【实际上延伸分割并不是只占一个区块，而是分布在每个分割槽的最前面几个磁区来记载分割资讯，这里只是简化了】。然后我们可以透过延伸分割指向的那个区块继续做分割的记录。<br>如上图右下方的那区块又继续分割出五个分割槽，这五个由延伸分割继续切出来的分割槽被称为 <strong>逻辑分割槽</strong>。注意下，由于逻辑分割是由延续分割继续分割出来的【其实所谓的 <strong>分割</strong> 只是针对分割表进行设定而已】，所以它可以使用的磁柱范围就是延伸分割所设定的范围，即图中的101～400。<br><strong>至此，MBR主要分割、延伸分割与逻辑分割的特性我们可做如下简单定义</strong>：</p>
 <ul>
 <li>主要分割(主分区)与延伸分割(扩展分区)最多可以有四个（硬碟的限制）；</li>
@@ -207,8 +207,8 @@
 <li>Linux安装的时候，你可以选择将开机管理程序安装在MBR或者各别分割槽的启动扇区，而且Linux的Loader可以手动设定选单，所以你可以在Linux的boot Loader中加入Windows的开机选项；</li>
 <li>Windows在安装的时候，它的安装程序会主动覆盖掉MBR以及自己所在分割槽的启动扇区，你没有机会选择，并且也米有提供选单的功能；</li>
 </ul>
-<h2 id="目录树结构（directory-tree）"><a href="#目录树结构（directory-tree）" class="headerlink" title="目录树结构（directory tree）"></a>目录树结构（directory tree）</h2><p>我們前面有说到 <strong>Linux內的所有資料都是以档案的型态来呈现的</strong>，所以整个Linux系统最重要的地方就是在于目录树结构。所谓的目录树架构(directory tree)就是用一个树状结构来组织文件。树的顶端为根目录(/)，节点为目录或文件，而末端的叶子为包含数据的文件。当我们给出一个文件的完整路径时，我们从根目录出发，经过沿途各个目录，最终到达文件的一种档案架构。目录树的呈现方式如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/linux_root_directory_example.png" alt><br>我们现在知道整个Linux系统使用的是目录树架构，但是我们的档案资料其实是存放在档案分割槽当中的，那 <strong>如何结合目录树的架构与磁碟内的资料</strong> 呢？这个时候就涉及到 <strong>挂载（mount）</strong> 的问题了。</p>
-<h3 id="档案系统与目录树的关系（挂载）"><a href="#档案系统与目录树的关系（挂载）" class="headerlink" title="档案系统与目录树的关系（挂载）"></a>档案系统与目录树的关系（挂载）</h3><p>所谓 <strong>挂载</strong> 就是利用一个目录当成进入点，将磁碟分割槽的资料放置到该目录下；也就是说进入该目录就可以读取该分割槽。这个动作我们称为【挂载】，那个进入点的目录被称为【挂载点】，由于整个Linux系统最重要的是根目录，因此根目录一定要挂载到某个分槽，至于其他目录可依使用者需求来挂载到不同的分割槽。比如下图：<br><img src="http://www.sdwangblog.cn/blogimg/linux_relation_directory_disk.png" alt></p>
+<h2 id="目录树结构（directory-tree）"><a href="#目录树结构（directory-tree）" class="headerlink" title="目录树结构（directory tree）"></a>目录树结构（directory tree）</h2><p>我們前面有说到 <strong>Linux內的所有資料都是以档案的型态来呈现的</strong>，所以整个Linux系统最重要的地方就是在于目录树结构。所谓的目录树架构(directory tree)就是用一个树状结构来组织文件。树的顶端为根目录(/)，节点为目录或文件，而末端的叶子为包含数据的文件。当我们给出一个文件的完整路径时，我们从根目录出发，经过沿途各个目录，最终到达文件的一种档案架构。目录树的呈现方式如下图示：<br><img src="http://www.sdwangblog.top/blogimg/linux_root_directory_example.png" alt><br>我们现在知道整个Linux系统使用的是目录树架构，但是我们的档案资料其实是存放在档案分割槽当中的，那 <strong>如何结合目录树的架构与磁碟内的资料</strong> 呢？这个时候就涉及到 <strong>挂载（mount）</strong> 的问题了。</p>
+<h3 id="档案系统与目录树的关系（挂载）"><a href="#档案系统与目录树的关系（挂载）" class="headerlink" title="档案系统与目录树的关系（挂载）"></a>档案系统与目录树的关系（挂载）</h3><p>所谓 <strong>挂载</strong> 就是利用一个目录当成进入点，将磁碟分割槽的资料放置到该目录下；也就是说进入该目录就可以读取该分割槽。这个动作我们称为【挂载】，那个进入点的目录被称为【挂载点】，由于整个Linux系统最重要的是根目录，因此根目录一定要挂载到某个分槽，至于其他目录可依使用者需求来挂载到不同的分割槽。比如下图：<br><img src="http://www.sdwangblog.top/blogimg/linux_relation_directory_disk.png" alt></p>
 <h2 id="安装Linux"><a href="#安装Linux" class="headerlink" title="安装Linux"></a>安装Linux</h2><p>由于使用的是公司电脑，简单粗暴可<a href="https://blog.csdn.net/u010246789/article/details/51754660" target="_blank" rel="noopener">Windows安装Linux虚拟机（CentOS7）</a>即可。<br>如果安装后启动时需要GRUB修复，或者Reset GRUB密码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ chroot /mnt/sysimage</span><br><span class="line">$ grub2-install /dev/vda</span><br><span class="line">Installing for i386-pc platform.</span><br><span class="line">Installation finished. No error reported.</span><br><span class="line">$ exit</span><br><span class="line"></span><br><span class="line">$ reboot</span><br><span class="line">$ vim /etc/grub.d/40_custom</span><br><span class="line">#!/bin/sh</span><br><span class="line">exec tail -n +3 $0</span><br><span class="line"># This file provides an easy way to add custom menu entries.  Simply type the</span><br><span class="line"># menu entries you want to add after this comment.  Be careful not to change</span><br><span class="line"># the &apos;exec tail&apos; line above.</span><br><span class="line">menuentry &quot;Windows 7&quot; &#123;</span><br><span class="line">   set root=&apos;(hd0,3)&apos;</span><br><span class="line">   chainloader +1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ vim /etc/default/grub</span><br><span class="line">GRUB_TIMEOUT=30 #將 5 秒改成 30 秒長一些</span><br><span class="line">$ grub2-mkconfig -o /boot/gub2/grub.cfg</span><br></pre></td></tr></table></figure></p>
 <p>在终端界面登入Linux后，先查看下语系的支持情况（某些情况输入指令后显示结果为乱码），我们要让他支持中文编码输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ locale</span><br><span class="line">LANG=zh_TW.utf8              # 語言語系的輸出</span><br><span class="line">LC_CTYPE=&quot;zh_TW.utf8&quot;        # 底下為許多資訊的輸出使用的特別語系</span><br><span class="line">LC_NUMERIC=zh_TW.UTF-8</span><br><span class="line">LC_TIME=zh_TW.UTF-8          # 時間方面的語系資料</span><br><span class="line">LC_COLLATE=&quot;zh_TW.utf8&quot;</span><br><span class="line">....中間省略....</span><br><span class="line">LC_ALL=                      # 全部的資料同步更新的設定值</span><br><span class="line">$ LANG=en_US.utf8</span><br><span class="line">$ export LC_ALL=en_US.utf8</span><br></pre></td></tr></table></figure></p>
 <p>然后查看<a href="https://blog.csdn.net/jasonhector/article/details/78657532" target="_blank" rel="noopener">DNS配置</a>是否正常（某些情况执行yum命令时报错：Could not resolve host）。</p>
@@ -395,7 +395,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -526,10 +526,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -542,15 +538,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

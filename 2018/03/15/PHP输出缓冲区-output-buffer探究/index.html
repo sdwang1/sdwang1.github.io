@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="以下内容主要转载自深入理解php的输出缓冲区(output buffer)。 前言PHP的输出流包含很多字节，通常都是程序员要PHP输出的文本，这些文本大多是echo语句或者printf()函数输出的。大家可能知道PHP中有一个名为“输出缓冲层”的东西【ob_start,ob_end_flush等系列函数】，那么它到底是个什么东西？PHP内部是怎么实现它的？以及在PHP程序中怎么使用它？事先声明，">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/php_output_cache_level.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/php-fpm_output_ini.png">
-<meta property="og:updated_time" content="2018-11-13T10:43:09.137Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/php_output_cache_level.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/php-fpm_output_ini.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.856Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP输出缓冲区(output buffer)探究">
 <meta name="twitter:description" content="以下内容主要转载自深入理解php的输出缓冲区(output buffer)。 前言PHP的输出流包含很多字节，通常都是程序员要PHP输出的文本，这些文本大多是echo语句或者printf()函数输出的。大家可能知道PHP中有一个名为“输出缓冲层”的东西【ob_start,ob_end_flush等系列函数】，那么它到底是个什么东西？PHP内部是怎么实现它的？以及在PHP程序中怎么使用它？事先声明，">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/php_output_cache_level.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/php_output_cache_level.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -187,7 +187,7 @@
 <li>输出缓冲层的行为跟你使用的SAPI(web or cli)相关，不同的SAPI可能有不同的行为；</li>
 </ul>
 <a id="more"></a>
-<p>我们先通过一个图片来看看这些层的关系：<br><img src="http://www.sdwangblog.cn/blogimg/php_output_cache_level.png" alt><br>上面这张图片展示了PHP中三种缓冲区层的逻辑关系，上面两层就是我们通常所认识到的“输出缓冲区”，最后一个是SAPI中的输出缓冲区。这些都是PHP中的逻辑层，当输出字节离开PHP进入计算机体系结构的更底层时，缓冲区又会不断出现（fast-cgi缓冲区，web服务器缓冲区，OS缓冲区，终端缓冲区，TCP/IP栈缓冲区。。。）。接下来，我们就自上而下讨论下PHP中这三种缓冲区层：</p>
+<p>我们先通过一个图片来看看这些层的关系：<br><img src="http://www.sdwangblog.top/blogimg/php_output_cache_level.png" alt><br>上面这张图片展示了PHP中三种缓冲区层的逻辑关系，上面两层就是我们通常所认识到的“输出缓冲区”，最后一个是SAPI中的输出缓冲区。这些都是PHP中的逻辑层，当输出字节离开PHP进入计算机体系结构的更底层时，缓冲区又会不断出现（fast-cgi缓冲区，web服务器缓冲区，OS缓冲区，终端缓冲区，TCP/IP栈缓冲区。。。）。接下来，我们就自上而下讨论下PHP中这三种缓冲区层：</p>
 <h2 id="用户输出缓冲区（user-output-buffers）"><a href="#用户输出缓冲区（user-output-buffers）" class="headerlink" title="用户输出缓冲区（user output buffers）"></a>用户输出缓冲区（user output buffers）</h2><p>对于用户输出缓冲区，我们先通过一个示例看看它是怎么工作的，以及你可以用它来做什么【<strong>注意CLI模式下已经禁用了默认PHP输出缓冲层</strong>】。下面这个示例就使用了默认PHP输出缓冲层：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///launched via php -d output_buffering=32 -d implicit_flush=1 -S 127.0.0.1:8080 -t /var/www */</span></span><br><span class="line"><span class="keyword">echo</span> str_repeat(<span class="string">'a'</span>, <span class="number">31</span>);</span><br><span class="line">sleep(<span class="number">3</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'b'</span>;</span><br><span class="line">sleep(<span class="number">3</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'c'</span>;</span><br></pre></td></tr></table></figure></p>
 <p>在这个示例中，启动PHP的时候将默认输出缓冲区的大小设置为32字节，程序运行后会先向其中写入31个字节，然后进入睡眠状态。此时屏幕是空的，什么都不会输出，跟预计一样。3秒之后睡眠结束，再写入了一个字节，这个字节填满了缓冲区，它会立即刷新自身，把里面的数据传递给SAPI层的缓冲区，因为我们将<code>implicit_flush</code>设置为1，所以SAPI层的缓冲区也会立即刷新到下一层。（暂不考虑服务器层缓冲区时）字符串’aaaaaaaaaa{31个a}b’会出现在屏幕上，然后脚本再次进入睡眠状态。2秒之后，再输出一个字节，此时缓冲区中有31个空字节，但是PHP脚本已执行完毕，所以包含这1个字节的缓冲区也会立即刷新，从而会在屏幕上输出字符串’c’。<br><strong>从这个示例我们可以看到默认PHP输出缓冲区是如何工作的。我们没有调用任何跟缓冲区相关的函数，但这并不意味这它不存在，你要认识到它就存在当前程序的运行环境中（在非CLI模式中才有效）。</strong></p>
 <p>对于用户输出缓冲区，它通过调用<code>ob_start()</code>创建，我们可以创建很多这种缓冲区（至到内存耗尽为止），这些缓冲区组成一个堆栈结构，每个新建缓冲区都会堆叠到之前的缓冲区上，每当它被填满或者溢出，都会自动执行刷新操作，然后把其中的数据传递给下一个缓冲区。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ob_start(<span class="function"><span class="keyword">function</span><span class="params">($ctc)</span> </span>&#123; <span class="keyword">static</span> $a = <span class="number">0</span>; <span class="keyword">return</span> $a++ . <span class="string">'- '</span> . $ctc . <span class="string">"\n"</span>;&#125;, <span class="number">10</span>);</span><br><span class="line">ob_start(<span class="function"><span class="keyword">function</span><span class="params">($ctc)</span> </span>&#123; <span class="keyword">return</span> ucfirst($ctc); &#125;, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"fo"</span>;</span><br><span class="line">sleep(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'o'</span>;</span><br><span class="line">sleep(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"barbazz"</span>;</span><br><span class="line">sleep(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"hello"</span>;</span><br><span class="line"><span class="comment">/* 0- FooBarbazz\n 1- Hello\n */</span></span><br></pre></td></tr></table></figure></p>
@@ -206,7 +206,7 @@
 <li>有些PHP的内部函数也使用了输出缓冲区，它们会叠加到其他的缓冲区上，这些函数会填满自己的缓冲区然后刷新，或者是返回里面的内容。<code>print_r()、highlight_file()和highlight_file::handle()</code>都是这类函数。你不应该在输出缓冲区的回调函数中使用这些函数。这种行为会导致未定义的错误，或者至少得不到你期望的结果。</li>
 </ul>
 <h2 id="默认PHP输出缓冲层（Default-output-layer）"><a href="#默认PHP输出缓冲层（Default-output-layer）" class="headerlink" title="默认PHP输出缓冲层（Default output layer）"></a>默认PHP输出缓冲层（Default output layer）</h2><p><strong>⚠️CLI的SAPI有点特殊</strong>。CLI会将php.ini配置中的<code>output_buffer</code>选项强制设置为0，这表示禁用默认PHP输出缓冲区。所以在CLI中，默认情况下你要输出的东西会直接传递到SAPI层，除非你手动调用<code>ob_()</code>类函数。并且在CLI中，<code>implicit_flush</code>的值也会被设置为1，即一旦有任何输出写入到SAPI缓冲区层，它都会立即刷新（flush，意思是把这些数据写入到更低层，并且缓冲区会被清空）。换句话说就是：任何时候当你写入任何数据到CLI SAPI中时，CLI SAPI都会立即将这些数据扔到它的下一层去，一般会是标准输出管道，write()和fflush()这两个函数就是负责干这个事情的。</p>
-<p>如果你使用不同于CLI的SAPI，比如PHP-FPM，你会用到这三个跟缓冲区相关的php.ini配置选项：<code>output_buffering、implicit_flush及output_handler</code>。<strong>需要注意的是，不能在运行时使用ini_set()改这几个选项的值。这些选项的值会在PHP程序启动的时候，还没有运行任何脚本之前解析，所以也许在运行时可以使用ini_set()改变它们的值，但改变后的值并不会生效，一切都已经太迟了，因为输出缓冲区层已经启动并已激活。你只能通过编辑php.ini文件或者是在执行PHP程序的时候使用-d选项才能改变它们的值。</strong> 本地<code>php -i</code>输出如下图。<br><img src="http://www.sdwangblog.cn/blogimg/php-fpm_output_ini.png" alt></p>
+<p>如果你使用不同于CLI的SAPI，比如PHP-FPM，你会用到这三个跟缓冲区相关的php.ini配置选项：<code>output_buffering、implicit_flush及output_handler</code>。<strong>需要注意的是，不能在运行时使用ini_set()改这几个选项的值。这些选项的值会在PHP程序启动的时候，还没有运行任何脚本之前解析，所以也许在运行时可以使用ini_set()改变它们的值，但改变后的值并不会生效，一切都已经太迟了，因为输出缓冲区层已经启动并已激活。你只能通过编辑php.ini文件或者是在执行PHP程序的时候使用-d选项才能改变它们的值。</strong> 本地<code>php -i</code>输出如下图。<br><img src="http://www.sdwangblog.top/blogimg/php-fpm_output_ini.png" alt></p>
 <ul>
 <li>默认情况下，PHP发行版会在php.ini中把<code>output_buffering</code>设置为4096个字节。如果你不使用任何php.ini文件（或者也不会在启动PHP的时候使用-d选项），它的默认值将为0，这表示禁用输出缓冲区。事实上，在web应用环境中通过socket一个字节一个字节的传输消息的方式对性能并不好，更好的方式是把所有内容一次性传输给服务器，或者至少是一块一块地传输【<strong>层与层之间的数据交换的次数越少，性能越好</strong>】。默认的4k的设置是一个合适的值，这意味着你可以先写入4096个ASCII字符，然后再跟下面的SAPI层通信。你应该总是保持输出缓冲区处于可用状态，PHP会负责在请求结束后把它们中的内容传输给终端用户，你不用做任何事情。</li>
 <li><code>implicit_flush</code>已在前面谈论CLI的时候提到过。对于其他的SAPI，<code>implicit_flush</code>默认被设置为关闭(off)，这是正确的设置，因为只要有新数据写入就刷新SAPI的做法很可能并非你所希望的。对于FastCGI协议，刷新操作(flushing)是每次写入后都发送一个FastCGI数组包(packet)，所以发送数据包之前先把FastCGI的缓冲区写满会更好一些。如果你想手动刷新SAPI的缓冲区，使用PHP的flush()函数。如果你想写一次就刷新一次，你可以设置INI配置中的<code>implicit_flush</code>选项，或者调用一次<code>ob_implicit_flush(true)</code>函数。</li>
@@ -399,7 +399,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -530,10 +530,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -546,15 +542,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

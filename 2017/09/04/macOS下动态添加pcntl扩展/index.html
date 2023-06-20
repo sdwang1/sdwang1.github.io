@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="初始目的是想给本地的邮件发送队列写一个守护进程，故需要添加PHP的pcntl扩展。本以为只是简单的安装下pcntl.so的支持扩展，应该是分分钟搞定的事情，没想到一念之差，折腾半天。。。 检查php扩展模块的支持情况本地PHP开发环境：Nginx+php-fpm+php5.6;PHP源码包目录：~/dev/soft/php-5.6.30php编译安装路径：/usr/local/php12#查看ph">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/phpinfo_pcntl.png">
-<meta property="og:updated_time" content="2019-02-21T07:04:28.464Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/phpinfo_pcntl.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.841Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS下动态添加pcntl扩展">
 <meta name="twitter:description" content="初始目的是想给本地的邮件发送队列写一个守护进程，故需要添加PHP的pcntl扩展。本以为只是简单的安装下pcntl.so的支持扩展，应该是分分钟搞定的事情，没想到一念之差，折腾半天。。。 检查php扩展模块的支持情况本地PHP开发环境：Nginx+php-fpm+php5.6;PHP源码包目录：~/dev/soft/php-5.6.30php编译安装路径：/usr/local/php12#查看ph">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/phpinfo_pcntl.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/phpinfo_pcntl.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -193,7 +193,7 @@
 <p>2.编译、安装pcntl扩展<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#编译时指定enable-pcntl，当然也可以不指定</span><br><span class="line">$ ./configure --with-php-config=/usr/local/php/bin/php-config</span><br><span class="line">$ sudo make</span><br><span class="line">$ sudo make install</span><br><span class="line"></span><br><span class="line">#修改php.ini以支持pcntl</span><br><span class="line">$ echo &quot;extension=pcntl.so&quot; &gt;&gt; /usr/local/php/etc/php.ini</span><br></pre></td></tr></table></figure></p>
 <p>在make install，或者make后直接将module文件夹中的pcntl.so移动到PHP的扩展目录时可能会报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Installing shared extensions:     /usr/lib/php/extensions/no-debug-non-zts-20160303/</span><br><span class="line">cp: /usr/lib/php/extensions/no-debug-non-zts-20160303/#INST@31145#: Operation not permitted</span><br><span class="line">make: *** [install-modules] Error 1</span><br></pre></td></tr></table></figure></p>
 <p>这是因为macos系统的Rootless特性导致的(The problem was due to OS X 10.11 El Capitan’s Rootless feature. )，要禁用这个特性可以参考<a href="https://www.quora.com/How-do-I-turn-off-the-rootless-in-OS-X-El-Capitan-10-11" target="_blank" rel="noopener">这个文章</a>（不推荐）。如果不想禁用这个特性，可以将pnctl.so文件放置在一个合适位置，然后在php.ini中添加扩展的时候指定好路径。<br>3.在php.ini中添加pcntl扩展，测试是否已成功添加pcntl支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#php -i 查看php.ini的位置</span><br><span class="line">$ echo &quot;extension=pcntl.so&quot; &gt;&gt; /usr/local/php/etc/php.ini</span><br><span class="line"></span><br><span class="line">#重启php-fpm</span><br><span class="line">$ sudo kill -9 $(pidof php-fpm)</span><br><span class="line">$ sudo /usr/local/php/sbin/php-fpm -c /usr/local/php/etc/php.ini -y /usr/local/php/etc/php-fpm.conf</span><br><span class="line"></span><br><span class="line">$ php -m</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.cn/blogimg/phpinfo_pcntl.png" alt><br>为确保安心，我得吧得吧的把PHP源码包中的test_pcntl.php也测试了下，经观测，似乎一切正常。</p>
+<p><img src="http://www.sdwangblog.top/blogimg/phpinfo_pcntl.png" alt><br>为确保安心，我得吧得吧的把PHP源码包中的test_pcntl.php也测试了下，经观测，似乎一切正常。</p>
 <p>走到这里，我以为一切就”尘埃落定”了，可以开始放心地在本地代码中使用pcntl。然后悲剧正式开始了，CLI方式下报了如下错误信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PHP Warning:  PHP Startup: Unable to load dynamic library &apos;/usr/local/opt/php56-pcntl/pcntl.so&apos; - dlopen(/usr/local/opt/php56-pcntl/pcntl.so, 9): Symbol not found: _compiler_globals</span><br><span class="line">  Referenced from: /usr/local/opt/php56-pcntl/pcntl.so</span><br><span class="line">  Expected in: flat namespace</span><br><span class="line"> in /usr/local/opt/php56-pcntl/pcntl.so in Unknown on line 0</span><br></pre></td></tr></table></figure></p>
 <p>这条错误信息看得我是相当茫然：</p>
 <ol>
@@ -395,7 +395,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -526,10 +526,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -542,15 +538,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言事情的初衷：让本地的一个简单的SQL自助查询工具绕过对方的应用防火墙（由于是应用层而非网络层的入侵，或许称为Web IPS更合适）检测。Web防火墙对于”SQL注入”攻击的检测能力要看具体的厂家技术特点了，比如基础的关键字权重累计，算法识别，以及随着机器学习推进的应用网页的自动学习检测等等。此处我们只是打算绕过最简单的”关键字识别”防御检测，可以考虑的方法有很多种，比如base64_encod">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/UTF-8_encode.png">
-<meta property="og:updated_time" content="2019-03-06T02:03:34.466Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/UTF-8_encode.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符编码：ASCII，Unicode和UTF-8">
 <meta name="twitter:description" content="前言事情的初衷：让本地的一个简单的SQL自助查询工具绕过对方的应用防火墙（由于是应用层而非网络层的入侵，或许称为Web IPS更合适）检测。Web防火墙对于”SQL注入”攻击的检测能力要看具体的厂家技术特点了，比如基础的关键字权重累计，算法识别，以及随着机器学习推进的应用网页的自动学习检测等等。此处我们只是打算绕过最简单的”关键字识别”防御检测，可以考虑的方法有很多种，比如base64_encod">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/UTF-8_encode.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/UTF-8_encode.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -189,7 +189,7 @@
 <h2 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h2><p>UTF-8 就是在互联网上使用最广的一种 Unicode 的实现方式，其他实现方式还包括 UTF-16（字符用两个字节或四个字节表示）和UTF-32（字符用四个字节表示）（互联网上基本不用）。<strong>UTF-8 是 Unicode 的实现方式之一</strong>。<br>UTF-8 最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。其编码规则只有二条：</p>
 <ul>
 <li>对于单字节的符号，字节的第一位设为0，后面7位为这个符号的 Unicode 码。因此对于英语字母，UTF-8 编码和 ASCII 码是相同的；</li>
-<li>对于n字节的符号（n &gt; 1），第一个字节的前n位都设为1，第n + 1位设为0，后面字节的前两位一律设为10，剩下的没有提及的二<br>进制位，全部为这个符号的 Unicode 码。<br>下表总结了编码规则，字母x表示可用编码的位：<br><img src="http://www.sdwangblog.cn/blogimg/UTF-8_encode.png" alt></li>
+<li>对于n字节的符号（n &gt; 1），第一个字节的前n位都设为1，第n + 1位设为0，后面字节的前两位一律设为10，剩下的没有提及的二<br>进制位，全部为这个符号的 Unicode 码。<br>下表总结了编码规则，字母x表示可用编码的位：<br><img src="http://www.sdwangblog.top/blogimg/UTF-8_encode.png" alt></li>
 </ul>
 <p>根据上表，比如<code>王</code>的Unicode是738B（111001110001011）处在第三行的范围（0000 0800 - 0000 FFFF），因此王的UTF-8编码需要三个字节，即格式是——1110xxxx 10xxxxxx 10xxxxxx，从王的最后一个二进制位开始，依次从后向前填入格式中的x，多出位补0，即得到了王的UTF-8编码——11100111 10001110 10001011，转换成十六进制就是E78E8B。</p>
 <h3 id="使用UTF-8"><a href="#使用UTF-8" class="headerlink" title="使用UTF-8"></a>使用UTF-8</h3><p>目前，PHP仍未在底层实现上对Unicode支持。虽然有很多途径可以确保UTF-8字符串能够被正确地处理，但通常需要对Web应用进行全方面的检查，从HTML到SQL再到PHP。</p>
@@ -382,7 +382,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -513,10 +513,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -529,15 +525,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

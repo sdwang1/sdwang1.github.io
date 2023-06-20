@@ -16,15 +16,15 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：用户（张三）只在需要登录时输入一次用户名和密码，成功登">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_scene_example.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_kerberos.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_phase1.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sso_cas_phase2.png">
-<meta property="og:updated_time" content="2019-06-05T06:39:56.183Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sso_scene_example.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sso_kerberos.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sso_cas_phase1.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sso_cas_phase2.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.996Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单点登录怎么实现？">
 <meta name="twitter:description" content="前言假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：用户（张三）只在需要登录时输入一次用户名和密码，成功登">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/sso_scene_example.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/sso_scene_example.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -180,7 +180,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：<strong>用户（张三）只在需要登录时输入一次用户名和密码，成功登录后，他就可以访问可以访问所有相互信任的应用系统（财务系统、OA 系统、订单服务等），这就是单点登录（Single Sign On，简称SSO）</strong>。它是目前比较流行的企业业务整合的解决方案之一。<br><img src="http://www.sdwangblog.cn/blogimg/sso_scene_example.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：<strong>用户（张三）只在需要登录时输入一次用户名和密码，成功登录后，他就可以访问可以访问所有相互信任的应用系统（财务系统、OA 系统、订单服务等），这就是单点登录（Single Sign On，简称SSO）</strong>。它是目前比较流行的企业业务整合的解决方案之一。<br><img src="http://www.sdwangblog.top/blogimg/sso_scene_example.png" alt></p>
 <a id="more"></a>
 <h2 id="SSO技术实现"><a href="#SSO技术实现" class="headerlink" title="SSO技术实现"></a>SSO技术实现</h2><p>SSO的核心是认证中心，但要实现用户一次登录，到处访问的效果，完善技术实现需要建立在 <strong>用户系统(负责用户名、密码等账户信息管理，包括增加、修改、启用、停用用户帐号)；认证中心(负责凭证 token 的生成、加密、颁发、验证、销毁、登入 Login、登出 Logout)；权限系统（负责角色管理、资源设置、授权设置、鉴定权限</strong>，具体实现可参考Role-Based Access Control——【用户】可以属于多个【角色】，【角色】可以认为是【权限】的合集，【权限】描述的是对【资源】的可【操作】能力）；<strong>企业门户(作为应用系统的集成门户 (Portal)，集成了多个应用系统的功能，为用户提供链接导航、用户信息和登出功能等</strong>)的基础上。</p>
 <p>SSO的技术实现要想做好并不容易，作为 <strong>认证中心</strong>，我们认为需求优先级应该先是 <strong>单点登录和单点注销登录</strong>，然后是应用接入的门槛，最后是数据安全性，安全性对于SSO也非常重要。下面介绍几种主要的实现SSO的技术。</p>
@@ -198,7 +198,7 @@
 <li><strong>TGS(Ticket Granting Service)：票据授权服务，根据客户端TGT，发放ST</strong>；</li>
 <li><strong>ST(Service Ticket)：服务票据，由KDC的的TGS发放，作为访问某个service的凭证。如果Application server能正确接受ST，说明client和server间的信任关系已建立，通常为一张数字加密的证书</strong>；</li>
 </ul>
-<p>Kerberos认证流程如下图，详细的请参见<a href="http://web.mit.edu/kerberos/dialogue.html" target="_blank" rel="noopener">MIT的Kerberos经典对话</a>来细致理解：<br><img src="http://www.sdwangblog.cn/blogimg/sso_kerberos.png" alt></p>
+<p>Kerberos认证流程如下图，详细的请参见<a href="http://web.mit.edu/kerberos/dialogue.html" target="_blank" rel="noopener">MIT的Kerberos经典对话</a>来细致理解：<br><img src="http://www.sdwangblog.top/blogimg/sso_kerberos.png" alt></p>
 <ul>
 <li><p>假设客户端用户来访问应用服务Application 1 server <code>www.a.com/pageA</code>，pageA是某个需要登录才能访问的页面，而Application 1 server发现用户没有登录验证(no ST,no TGT)，应用服务器就将它 <strong>重定向到认证中心KDC <code>www.sso.com/login</code></strong>;</p>
 </li>
@@ -227,7 +227,7 @@
 <li>所有用户使用的密钥都存储于中心服务器，危及服务器的安全行为将危及所有用户的密钥；</li>
 <li>一个危险客户机也将危及用户密码；</li>
 </ul>
-<h4 id="CAS协议"><a href="#CAS协议" class="headerlink" title="CAS协议"></a>CAS协议</h4><p><a href="https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol.html" target="_blank" rel="noopener">CAS（Central Authentication Server）</a>原理与Kerberos流程基本雷同，当前版本3.x，但由于管理协议没有标准化，也会有些“非同凡响”的实现方式。下图为 CAS Browser-Server Web flow diagram：<br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase1.png" alt><br>此时，如果用户来访问受信任的系统<code>www.b.com/pageB</code>，由于浏览器已经有了认证中心的cookie（TGT），就不再需要用户登录了，直接发送给<a href="http://www.sso.com即可。" target="_blank" rel="noopener">www.sso.com即可。</a><br><img src="http://www.sdwangblog.cn/blogimg/sso_cas_phase2.png" alt></p>
+<h4 id="CAS协议"><a href="#CAS协议" class="headerlink" title="CAS协议"></a>CAS协议</h4><p><a href="https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol.html" target="_blank" rel="noopener">CAS（Central Authentication Server）</a>原理与Kerberos流程基本雷同，当前版本3.x，但由于管理协议没有标准化，也会有些“非同凡响”的实现方式。下图为 CAS Browser-Server Web flow diagram：<br><img src="http://www.sdwangblog.top/blogimg/sso_cas_phase1.png" alt><br>此时，如果用户来访问受信任的系统<code>www.b.com/pageB</code>，由于浏览器已经有了认证中心的cookie（TGT），就不再需要用户登录了，直接发送给<a href="http://www.sso.com即可。" target="_blank" rel="noopener">www.sso.com即可。</a><br><img src="http://www.sdwangblog.top/blogimg/sso_cas_phase2.png" alt></p>
 
       
 
@@ -409,7 +409,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -540,10 +540,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -556,15 +552,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

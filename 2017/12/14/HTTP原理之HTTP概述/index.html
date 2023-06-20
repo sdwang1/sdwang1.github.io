@@ -16,17 +16,17 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="HTTP事务一个HTTP事务是由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端）的响应结果组成的。这种通信是通过名为HTTP报文（HTTP message）的格式化数据块进行的，如下图示。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_affair.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/http_message.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/proxy.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/'Web cache.png'">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/gateway.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/tunnel.png">
-<meta property="og:updated_time" content="2017-12-31T08:51:26.946Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_affair.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/http_message.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/proxy.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/'Web cache.png'">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/gateway.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/tunnel.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:16.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之HTTP概述">
 <meta name="twitter:description" content="HTTP事务一个HTTP事务是由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端）的响应结果组成的。这种通信是通过名为HTTP报文（HTTP message）的格式化数据块进行的，如下图示。">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/http_affair.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/http_affair.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -182,9 +182,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="HTTP事务"><a href="#HTTP事务" class="headerlink" title="HTTP事务"></a>HTTP事务</h2><p>一个HTTP事务是由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端）的响应结果组成的。这种通信<br>是通过名为HTTP报文（HTTP message）的格式化数据块进行的，如下图示。<br><img src="http://www.sdwangblog.cn/blogimg/http_affair.png" alt></p>
+        <h2 id="HTTP事务"><a href="#HTTP事务" class="headerlink" title="HTTP事务"></a>HTTP事务</h2><p>一个HTTP事务是由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端）的响应结果组成的。这种通信<br>是通过名为HTTP报文（HTTP message）的格式化数据块进行的，如下图示。<br><img src="http://www.sdwangblog.top/blogimg/http_affair.png" alt></p>
 <a id="more"></a>
-<p>其中URI（Uniform Resource Identifier）即为服务器资源名，URI有两种形式：URL（统一资源定位符）和URN（统一资<br>源名），现在几乎所有的URI都是URL。<br>HTTP报文是由一行行的简单字符串组成，纯文本格式，人们可以方便地对其进行读写。从Web客户端发往Web服务器的<br>HTTP报文称为<code>请求报文</code>（request message），从服务器端发往客户端的报文称为<code>响应报文</code>（response message）。<br>HTTP请求和响应报文的格式很类似，都包括以下三个部分：起始行——请求报文中用来说明要做些什么，响应报文中说明<br>出现了什么情况；首部字段——可存在零个或多个，跟随在起始行后，每个首部字段都包含一个名字和一个键值，二者之<br>间用（:）分隔，首部以一个空行结束；主体——空行之后就是可选的报文主体，其中包含了所有类型的数据。<br><img src="http://www.sdwangblog.cn/blogimg/http_message.png" alt><br>那么，HTTP报文是如何从一个地方搬迁/发送到另一个地方去的呢？大体步骤如下：</p>
+<p>其中URI（Uniform Resource Identifier）即为服务器资源名，URI有两种形式：URL（统一资源定位符）和URN（统一资<br>源名），现在几乎所有的URI都是URL。<br>HTTP报文是由一行行的简单字符串组成，纯文本格式，人们可以方便地对其进行读写。从Web客户端发往Web服务器的<br>HTTP报文称为<code>请求报文</code>（request message），从服务器端发往客户端的报文称为<code>响应报文</code>（response message）。<br>HTTP请求和响应报文的格式很类似，都包括以下三个部分：起始行——请求报文中用来说明要做些什么，响应报文中说明<br>出现了什么情况；首部字段——可存在零个或多个，跟随在起始行后，每个首部字段都包含一个名字和一个键值，二者之<br>间用（:）分隔，首部以一个空行结束；主体——空行之后就是可选的报文主体，其中包含了所有类型的数据。<br><img src="http://www.sdwangblog.top/blogimg/http_message.png" alt><br>那么，HTTP报文是如何从一个地方搬迁/发送到另一个地方去的呢？大体步骤如下：</p>
 <ol>
 <li>浏览器从URL中解析出服务器的主机名；</li>
 <li>浏览器将服务器的主机名转换成服务器的IP地址；</li>
@@ -194,10 +194,10 @@
 <li>服务器向浏览器发送一条HTTP响应报文；</li>
 <li>关闭连接，浏览器显示文档。<br>HTTP是应用层协议，它无需操心网络通信的具体细节，他把联网的细节都交给了通用、可靠的因特网传输协议TCP/IP。</li>
 </ol>
-<h2 id="Web的结构组件"><a href="#Web的结构组件" class="headerlink" title="Web的结构组件"></a>Web的结构组件</h2><h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><p>代理位于客户端和服务器之间，接受所有客户端的HTTP请求，并将这些请求转发给服务器（可能会对请求进行修改之后转<br>发）。对用户来说，这些应用程序就是一个代理，代表用户访问服务器。出于安全考虑，通常会将代理作为转发所有Web<br>流量的可信性中间节点使用。代理还可以对请求和响应进行过滤，比如企业中对下载的应用程序进行病毒检测。<br><img src="http://www.sdwangblog.cn/blogimg/proxy.png" alt></p>
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>Web缓存（Web cache）或代理缓存（proxy cache）是一种特殊的HTTP代理服务器，可以将经过代理传送的常用文档复<br>制保存起来。下一个请求同一个文档的客户端就可以享受缓存的私有副本所提供的服务了（客户端从附近的缓存下载文档<br>会比从远程Web服务器下载快得多）。<br><img src="http://www.sdwangblog.cn/blogimg/&#39;Web cache.png&#39;" alt></p>
-<h3 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h3><p>网关（gateway）是一种特殊的服务器，作为其他服务器的中间实体使用，通常用于将HTTP流量转换为其他协议。例如一<br>个HTTP/FTP网关会通过HTTP请求接收对FTP URI的请求，但通过FTP协议来获取文档，得到的文档会封装成一条HTTP报<br>文，发送给客户端。<br><img src="http://www.sdwangblog.cn/blogimg/gateway.png" alt></p>
-<h3 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h3><p>隧道（tunnel）建立起来后，会在两条连接之间对原始数据进行盲转发的HTTP应用程序。HTTP隧道通常用来在一条或多<br>条HTTP连接上转发非HTTP数据，转发时不会窥探数据。常见用途是通过HTTP连接承载加密的安全套接字曾（SSL）流量<br>的SSL隧道，这样SSL流量就可以穿过只允许Web流量通过的防火墙了（即还是经由http连接向默认的80端口发送流量，<br>而HTTPS是经过SSL层加密后向默认443端口发送加密HTTP报文）。<br><img src="http://www.sdwangblog.cn/blogimg/tunnel.png" alt></p>
+<h2 id="Web的结构组件"><a href="#Web的结构组件" class="headerlink" title="Web的结构组件"></a>Web的结构组件</h2><h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><p>代理位于客户端和服务器之间，接受所有客户端的HTTP请求，并将这些请求转发给服务器（可能会对请求进行修改之后转<br>发）。对用户来说，这些应用程序就是一个代理，代表用户访问服务器。出于安全考虑，通常会将代理作为转发所有Web<br>流量的可信性中间节点使用。代理还可以对请求和响应进行过滤，比如企业中对下载的应用程序进行病毒检测。<br><img src="http://www.sdwangblog.top/blogimg/proxy.png" alt></p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>Web缓存（Web cache）或代理缓存（proxy cache）是一种特殊的HTTP代理服务器，可以将经过代理传送的常用文档复<br>制保存起来。下一个请求同一个文档的客户端就可以享受缓存的私有副本所提供的服务了（客户端从附近的缓存下载文档<br>会比从远程Web服务器下载快得多）。<br><img src="http://www.sdwangblog.top/blogimg/&#39;Web cache.png&#39;" alt></p>
+<h3 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h3><p>网关（gateway）是一种特殊的服务器，作为其他服务器的中间实体使用，通常用于将HTTP流量转换为其他协议。例如一<br>个HTTP/FTP网关会通过HTTP请求接收对FTP URI的请求，但通过FTP协议来获取文档，得到的文档会封装成一条HTTP报<br>文，发送给客户端。<br><img src="http://www.sdwangblog.top/blogimg/gateway.png" alt></p>
+<h3 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h3><p>隧道（tunnel）建立起来后，会在两条连接之间对原始数据进行盲转发的HTTP应用程序。HTTP隧道通常用来在一条或多<br>条HTTP连接上转发非HTTP数据，转发时不会窥探数据。常见用途是通过HTTP连接承载加密的安全套接字曾（SSL）流量<br>的SSL隧道，这样SSL流量就可以穿过只允许Web流量通过的防火墙了（即还是经由http连接向默认的80端口发送流量，<br>而HTTPS是经过SSL层加密后向默认443端口发送加密HTTP报文）。<br><img src="http://www.sdwangblog.top/blogimg/tunnel.png" alt></p>
 <h3 id="Agent代理"><a href="#Agent代理" class="headerlink" title="Agent代理"></a>Agent代理</h3><p>用户Agent代理（简称Agent代理）是代表用户发起HTTP请求的客户端程序，比如Web浏览器，Web机器人。</p>
 <p>至此，我们应该对HTTP事务有了一定感性认知，下面我们就抽丝剥茧，正式开启逐层（根据网络五层协议）逐步的了解HTTP原理之路。</p>
 
@@ -381,7 +381,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -512,10 +512,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -528,15 +524,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

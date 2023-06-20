@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="在 Go 语言中，我们可以为 Go 程序编写三类测试：功能测试（test）、基准测试（benchmark，也称性能测试）以及示例测试（example）。前两类测试见名知意，而示例测试严格来讲也是一种功能测试，只不过它更关注程序打印出来的内容（相较于，在什么情况下因什么样的输入应该产生什么样的输出）。一般情况下，一个测试源码文件只会针对某个命令源码文件，或库源码文件做测试，所以我们总会（并且应该）把">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_tool_pprof_web.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_pprof_http.png">
-<meta property="og:updated_time" content="2021-03-02T07:08:22.136Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/go_tool_pprof_web.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/go_pprof_http.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“测试的基本规则和性能分析”">
 <meta name="twitter:description" content="在 Go 语言中，我们可以为 Go 程序编写三类测试：功能测试（test）、基准测试（benchmark，也称性能测试）以及示例测试（example）。前两类测试见名知意，而示例测试严格来讲也是一种功能测试，只不过它更关注程序打印出来的内容（相较于，在什么情况下因什么样的输入应该产生什么样的输出）。一般情况下，一个测试源码文件只会针对某个命令源码文件，或库源码文件做测试，所以我们总会（并且应该）把">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/go_tool_pprof_web.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/go_tool_pprof_web.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -202,10 +202,10 @@
 </ul>
 <p>编译并执行该源码文件，在当前目录下会生成<code>cpu.prof</code>、<code>mem.prof</code>和<code>goroutine.prof</code> 三个概要(profile)文件。<br>使用<a href="https://wiki.jikexueyuan.com/project/go-command-tutorial/0.12.html" target="_blank" rel="noopener"><code>go tool pprof [binary] [binaryCertain.prof]</code></a>命令可以分析指定的概要文件并使得我们能够以交互式的方式访问其中的信息，这里以 CPU性能分析 <code>cpu.prof</code>文件为例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$ go tool pprof main cpu.prof</span><br><span class="line">File: main</span><br><span class="line">Type: cpu</span><br><span class="line">... ...</span><br><span class="line">Entering interactive mode (type &quot;help&quot; for commands, &quot;o&quot; for options)</span><br><span class="line">(pprof) top                                              //top[N]以本地取样计数为顺序列出函数或方法及相关信息</span><br><span class="line">Showing nodes accounting for 40ms, 100% of 40ms total</span><br><span class="line">      flat[函数执行耗时]  flat%[耗时占比]   sum%        cum[调用累计耗时]   cum%</span><br><span class="line">      30ms              75.00%           75.00%      30ms             75.00%  main.fillMatrix</span><br><span class="line">      10ms              25.00%           100%        10ms             25.00%  runtime.nanotime1</span><br><span class="line">         0              0%               100%        30ms             75.00%  main.main</span><br><span class="line">... ...</span><br><span class="line">(pprof) list fillM                                      //列出名称与参数“routine_regexp”相匹配的函数或方法的相关源代码</span><br><span class="line">Total: 40ms</span><br><span class="line">ROUTINE ======================== main.fillMatrix in /Users/hannah/Zonetime/Go/test/src/main.go</span><br><span class="line">      30ms       30ms (flat, cum) 75.00% of Total</span><br><span class="line">         .          .     16:func fillMatrix(m *[row][col]int)  &#123;</span><br><span class="line">         .          .     17:   s := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line">         .          .     18:</span><br><span class="line">         .          .     19:   for i := 0; i &lt; row; i++&#123;</span><br><span class="line">         .          .     20:           for j := 0; j &lt; col; j++&#123;</span><br><span class="line">      30ms       30ms     21:                   m[i][j] = s.Intn(100000)</span><br><span class="line">         .          .     22:           &#125;</span><br><span class="line">         .          .     23:   &#125;</span><br><span class="line">         .          .     24:&#125;</span><br><span class="line">         .          .     25:</span><br><span class="line">         .          .     26:func calculate(m *[row][col]int)  &#123;</span><br><span class="line">(pprof) svg                                          //前提需安装graphviz</span><br><span class="line">Generating report in profile001.svg</span><br><span class="line">(pprof) exit</span><br></pre></td></tr></table></figure></p>
 <p><code>(pprof) help</code>可以查看它所有支持的命令和选项。<br>除了在命令行中使用交互模式查看分析数据外，我们还可以在网页中查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go tool pprof -http=:9999 cpu.prof</span><br><span class="line">Serving web UI on http://localhost:9999</span><br></pre></td></tr></table></figure></p>
-<p>访问 <code>localhost:9999</code>就可以看到如下页面，便于直观地进行数据分析。<br><img src="http://www.sdwangblog.cn/blogimg/go_tool_pprof_web.png" alt></p>
+<p>访问 <code>localhost:9999</code>就可以看到如下页面，便于直观地进行数据分析。<br><img src="http://www.sdwangblog.top/blogimg/go_tool_pprof_web.png" alt></p>
 <h3 id="net-http-pprof以-HTTP-方式输出-Profile"><a href="#net-http-pprof以-HTTP-方式输出-Profile" class="headerlink" title="net/http/pprof以 HTTP 方式输出 Profile"></a><code>net/http/pprof</code>以 HTTP 方式输出 Profile</h3><p>通过在应用程序中导入<code>import _ &quot;net/http/pprof&quot;</code>并启动http server（应用程序本就是http server时就不必了）来获取性能数据(profile)，<strong>引入方式简单，适合于持续性运行的应用</strong>（比如在线服务）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import _ &quot;net/http/pprof&quot;</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">  //若原有 http server且使用了默认的http.DefaultServeMux，这趴就不需要</span><br><span class="line">  //若应用使用了自定义的 Mux则需要手动注册一些路由规则【对于DefaultServeMux, pprof包会自动注册handler】，比如pprof.Index、pprof.Profile等</span><br><span class="line">  go func() &#123;</span><br><span class="line">    log.Println(http.ListenAndServe(&quot;0.0.0.0:8005&quot;, nil))</span><br><span class="line">  &#125;()</span><br><span class="line"></span><br><span class="line">  //业务代码毋动</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>使用过程示例（上例改造，限于释义）如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line">  <span class="string">"math/rand"</span></span><br><span class="line">  <span class="string">"net/http"</span></span><br><span class="line">  _ <span class="string">"net/http/pprof"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">  row = <span class="number">1000</span></span><br><span class="line">  col = <span class="number">2000</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fillMatrix</span><span class="params">(m *[row][col]<span class="keyword">int</span>)</span></span>  &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(m *[row][col]<span class="keyword">int</span>)</span></span>  &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span>&#123;</span><br><span class="line">      x := [row][col]<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">      fillMatrix(&amp;x)</span><br><span class="line">      calculate(&amp;x)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  log.Println(http.ListenAndServe(<span class="string">"0.0.0.0:8005"</span>, <span class="literal">nil</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>编译并执行该源码文件（启动HTTP服务），浏览器访问 <code>http://127.0.0.1:8085/debug/pprof</code>就可以如下索引页面，点击链接即可进入子页面查看对应的性能数据。<br><img src="http://www.sdwangblog.cn/blogimg/go_pprof_http.png" alt></p>
+<p>编译并执行该源码文件（启动HTTP服务），浏览器访问 <code>http://127.0.0.1:8085/debug/pprof</code>就可以如下索引页面，点击链接即可进入子页面查看对应的性能数据。<br><img src="http://www.sdwangblog.top/blogimg/go_pprof_http.png" alt></p>
 <ul>
 <li>profile（CPU Profiling）: 默认进行 30s 的 CPU Profiling 并导出文件，可由GET参数seconds=10指定采样时间；</li>
 <li>block（Block Profiling）: 查看导致阻塞的 goroutine 堆栈(如 channel, mutex等)【<code>runtime.SetBlockProfileRate</code>】；</li>
@@ -399,7 +399,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -530,10 +530,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -546,15 +542,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

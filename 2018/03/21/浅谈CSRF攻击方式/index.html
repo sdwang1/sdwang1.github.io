@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="CSRF是什么CSRF（Cross-site request forgery）跨站请求伪造，也被称为on click attack/session riding(CSRF/XSRF)。简单来说，CSRF攻击者盗用了你的身份，以你的名义发送恶意请求，造成个人隐私泄露以及财产安全问题。 CSRF的原理下图简单阐述了CSRF攻击的思想：">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/csrf_theory.png">
-<meta property="og:updated_time" content="2018-09-21T10:11:50.744Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/csrf_theory.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.995Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈CSRF攻击方式">
 <meta name="twitter:description" content="CSRF是什么CSRF（Cross-site request forgery）跨站请求伪造，也被称为on click attack/session riding(CSRF/XSRF)。简单来说，CSRF攻击者盗用了你的身份，以你的名义发送恶意请求，造成个人隐私泄露以及财产安全问题。 CSRF的原理下图简单阐述了CSRF攻击的思想：">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/csrf_theory.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/csrf_theory.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -178,7 +178,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="CSRF是什么"><a href="#CSRF是什么" class="headerlink" title="CSRF是什么"></a>CSRF是什么</h2><p>CSRF（Cross-site request forgery）跨站请求伪造，也被称为on click attack/session riding(CSRF/XSRF)。简单来说，<code>CSRF攻击者盗用了你的身份，以你的名义发送恶意请求</code>，造成个人隐私泄露以及财产安全问题。</p>
-<h2 id="CSRF的原理"><a href="#CSRF的原理" class="headerlink" title="CSRF的原理"></a>CSRF的原理</h2><p>下图简单阐述了CSRF攻击的思想：<br><img src="http://www.sdwangblog.cn/blogimg/csrf_theory.png" alt></p>
+<h2 id="CSRF的原理"><a href="#CSRF的原理" class="headerlink" title="CSRF的原理"></a>CSRF的原理</h2><p>下图简单阐述了CSRF攻击的思想：<br><img src="http://www.sdwangblog.top/blogimg/csrf_theory.png" alt></p>
 <a id="more"></a>
 <p>从上图可以看出，要完成一次CSRF攻击，受害者必须依次完成两个步骤：1. 登陆受信任网站A，并在本地生成Cookie；2. 在不登出A（本地Cookie有效）的情况下，访问危险网站B。</p>
 <p>我们举个例子详细说说具体的CSRF攻击，比如说受害者 Bob 在银行有一笔存款，通过对银行的网站发送请求 <code>http://bank.example/withdraw?account=bob&amp;amount=1000&amp;for=bob2</code> （不局限GET/POST请求，params是否放到request_body）可以使 Bob 把 1000 的存款转到 bob2 的账号下。<br>假设黑客 Mallory 自己在该银行也有账户，他知道上文中的 URL 可以把钱进行转帐操作。Mallory 想到使用 CSRF 的攻击方式获得一笔横财（<code>http://bank.example/withdraw?account=bob&amp;amount=10000&amp;for=Mallory</code>），他先自己做一个网站，在网站中放入如下js代码，并且通过广告等诱使 Bob 来访问他的网站。当 Bob 访问该网站时，上述 url 就会从 Bob 的浏览器发向银行，而这个请求会附带 Bob 浏览器中的 cookie 一起发向银行服务器。大多数情况下，该请求会失败，因为他要求 Bob 的认证信息（该请求发送到网站后，服务器会先验证该请求是否来自一个合法的 session，并且该 session 的用户 Bob 已经成功登陆。）。但是如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session 尚未过期，浏览器的 cookie 之中含有 Bob 的认证信息。这时悲剧发生了，这个 url 请求就会得到响应，钱将从 Bob 的账号转移到 Mallory 的账号，而 Bob 当时毫不知情。等以后 Bob 发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹，而 Mallory 则可以拿到钱后逍遥法外。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">　　&lt;head&gt;</span><br><span class="line">　　　　&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">　　　　　　function steal()</span><br><span class="line">　　　　　　&#123;</span><br><span class="line">          　　　　 iframe = document.frames[&quot;steal&quot;];</span><br><span class="line">　　     　　      iframe.document.Submit(&quot;transfer&quot;);</span><br><span class="line">　　　　　　&#125;</span><br><span class="line">　　　　&lt;/script&gt;</span><br><span class="line">　　&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">　　&lt;body onload=&quot;steal()&quot;&gt;</span><br><span class="line">　　　　&lt;iframe name=&quot;steal&quot; display=&quot;none&quot;&gt;</span><br><span class="line">　　　　　　&lt;form method=&quot;POST&quot; name=&quot;transfer&quot;　action=&quot;http://bank.example/withdraw&quot;&gt;</span><br><span class="line">　　　　　　　　&lt;input type=&quot;hidden&quot; name=&quot;account&quot; value=&quot;bob&quot;&gt;</span><br><span class="line">　　　　　　　　&lt;input type=&quot;hidden&quot; name=&quot;amount&quot; value=&quot;10000&quot;&gt;</span><br><span class="line">             &lt;input type=&quot;hidden&quot; name=&quot;for&quot; value=&quot;Mallory&quot;&gt;</span><br><span class="line">　　　　　　&lt;/form&gt;</span><br><span class="line">　　　　&lt;/iframe&gt;</span><br><span class="line">　　&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
@@ -380,7 +380,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -511,10 +511,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -527,15 +523,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

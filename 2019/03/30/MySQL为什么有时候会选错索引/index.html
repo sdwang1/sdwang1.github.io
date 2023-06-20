@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在执行一条SQL语句时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？ 是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。 问题1描述假设现有如下所示的表结构t，表中有a、b两个字段，">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png">
-<meta property="og:updated_time" content="2019-06-04T06:33:32.419Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/wrong_index_ab_index_structure.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.856Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL为什么有时候会选错索引？">
 <meta name="twitter:description" content="前言前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在执行一条SQL语句时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？ 是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。 问题1描述假设现有如下所示的表结构t，表中有a、b两个字段，">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/wrong_index_ab_index_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -177,7 +177,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.top/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" target="_blank" rel="noopener">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
 <p>是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。</p>
 <h2 id="问题1描述"><a href="#问题1描述" class="headerlink" title="问题1描述"></a>问题1描述</h2><p>假设现有如下所示的表结构<code>t</code>，表中有a、b两个字段，其上被分别创建了普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
 <p>然后，我们向表t中插入10万行记录，取值按整数递增，即数据从(1,1,1),(2,2,2),(3,3,3)直到(100000,100000,100000)。接下来，我们分析一条SQL语句<code>select * from t where a between 10000 and 20000;</code></p>
@@ -186,7 +186,7 @@
 <p>如上所示，这条查询语句的执行“不出意料”的key字段值是‘a’，表示优化器选择了索引a。继续实验。。。：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql(事务1) &gt; start transaction with consistent snapshot;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; delete from t;</span><br><span class="line">mysql(事务2) &gt; source data.sql;      //插入10万条数据(1,1),(2,2)...(100000,100000)</span><br><span class="line">mysql(事务2) &gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows  | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | ALL  | a             | NULL | NULL    | NULL | 94599 |    39.24 | Using where |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+-------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.12 sec)</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; commit；</span><br></pre></td></tr></table></figure></p>
 <p>上例中事务1就是简单开启了一个事务，事务2则是把数据都删除后又插入了10万行数据，然后再次执行查询语句<code>select * from t where a between 10000 and 20000;</code>。“猫腻乍现”，该次查询key字段值竟然是null，扫描结果为94599行，显然是走了全表扫描。为了进一步说明问题，我们将原查询语句加上force index(a)再和事务2中的查询语句执行情况做对比：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; explain select * from t force index(a) where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 37116 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.01 sec)</span><br></pre></td></tr></table></figure></p>
 <p>可以看到，当我们使用了force index的时候，MySQL才“正确地”选择了索引‘a’。 说起来，上面的例子对应的就是我们日常不断的删除历史数据和新增数据的场景，而如此稀松平常之事，MySQL竟然也会选错索引，是不是有点奇怪呢？</p>
-<h2 id="优化器的逻辑"><a href="#优化器的逻辑" class="headerlink" title="优化器的逻辑"></a>优化器的逻辑</h2><p>在<a href="http://www.sdwangblog.cn/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">一条SQL语句是如何执行的</a>一文中，我们知道选择索引是优化器的工作。优化器选择索引的目的是为了找到一个最优的执行方案，并以最小的代价去执行语句。不难猜到，<strong>扫描行数就是影响执行代价的因素之一</strong>，扫描的行数越少，意味着访问磁盘数据的次数越少，消耗的CPU资源就越少。<br><strong>当然，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表，是否排序等因素进行综合判断</strong>。上例中简单的查询语句<code>select * from t where a between 10000 and 20000;</code>并没有涉及到临时表和排序，它选错索引就是在判断扫描行的时候出了问题。 那么，<strong>扫描行数是怎么判断的呢</strong>？</p>
+<h2 id="优化器的逻辑"><a href="#优化器的逻辑" class="headerlink" title="优化器的逻辑"></a>优化器的逻辑</h2><p>在<a href="http://www.sdwangblog.top/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" target="_blank" rel="noopener">一条SQL语句是如何执行的</a>一文中，我们知道选择索引是优化器的工作。优化器选择索引的目的是为了找到一个最优的执行方案，并以最小的代价去执行语句。不难猜到，<strong>扫描行数就是影响执行代价的因素之一</strong>，扫描的行数越少，意味着访问磁盘数据的次数越少，消耗的CPU资源就越少。<br><strong>当然，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表，是否排序等因素进行综合判断</strong>。上例中简单的查询语句<code>select * from t where a between 10000 and 20000;</code>并没有涉及到临时表和排序，它选错索引就是在判断扫描行的时候出了问题。 那么，<strong>扫描行数是怎么判断的呢</strong>？</p>
 <p>MySQL在真正开始执行语句之前并不能精确地知道满足这个条件的记录有多少条，而只能根据统计信息来估算记录数，<strong>这个统计信息就是索引的“区分度”——一个索引上不同的值越多，这个索引的区分度就越好。一个索引上不同值的个数，我们称之为“基数”（cardinality），即基数越大，索引区分度越好</strong>。我们可以使用<code>show index</code>命令查看一个索引的基数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show index from t;</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| Table | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">| t     |          0 | PRIMARY  |            1 | id          | A         |       94599 |     NULL | NULL   |      | BTREE      |         |               |</span><br><span class="line">| t     |          1 | a        |            1 | a           | A         |       94599 |     NULL | NULL   | YES  | BTREE      |         |               |</span><br><span class="line">| t     |          1 | b        |            1 | b           | A         |       94599 |     NULL | NULL   | YES  | BTREE      |         |               |</span><br><span class="line">+-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span><br><span class="line">3 rows in set (0.08 sec)</span><br></pre></td></tr></table></figure></p>
 <p>那么，<strong>MySQL是怎样得到索引的基数的呢</strong>？诚然，如果我们把整张表取出来一行行统计，的确可以得到精确的计算结果，但执行代价将会很高，<strong>MySQL选取了采样统计的计算方法。在采样统计的时候，InnoDB默认会选择N个数据页，统计这些页面上的不同值并得到一个平均值，然后乘以这个索引的页面数，就得到了这个索引的基数。数据表内容是会持续更新的，索引的统计信息当然也不会固定不变。所以，当变更的数据行数超过1/M的时候，InnoDB会自动触发重新做一次索引统计</strong>。<br>MySQL中有两种存储索引统计的方式，可以通过设置参数innodb_stats_presistent的值来选择：</p>
 <ul>
@@ -198,7 +198,7 @@
 <p>由上可知，<strong>如果使用索引a，每次从索引a上拿到一个值，都要回到主键索引上查出整行数据，这个代价优化器也会算进去；相反如果选择扫描94599行，是直接在主键索引上扫描的，没有额外的代价</strong>。优化器会估算这两个选择的代价，从结果上看，优化器认为直接扫描主键索引更快(cost 19337&lt; cost 44540)。归咎到底，原因还是MySQL没能准确的判断出扫描行数。为此，我们可以使用<code>analyze table t</code>命令来重新统计索引信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; analyze table t;</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">| Table   | Op      | Msg_type | Msg_text |</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">| octet.t | analyze | status   | OK       |</span><br><span class="line">+---------+---------+----------+----------+</span><br><span class="line">1 row in set (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; explain select * from t where a between 10000 and 20000;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 10001 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+------+---------+------+-------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.01 sec)</span><br></pre></td></tr></table></figure></p>
 <p>Bingo!！使用<code>analyze table</code>命令恢复索引信息后，explain结果再次回到了数据表最原始状态的完美执行情况(rows=10001)。<strong>在实践中，如果你发现explain结果预估的rows与实际情况差距较大，就可以采用这个方法来处理</strong>。</p>
 <h2 id="问题描述2"><a href="#问题描述2" class="headerlink" title="问题描述2"></a>问题描述2</h2><p>前面我们说了，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表，是否排序等因素进行综合判断。依然基于这个表，我们看看另外一个查询语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;</span><br></pre></td></tr></table></figure></p>
-<p>从条件上看，当前数据表中并没有符合条件的记录，因此会返回空集合。在开始执行这条语句前，设想一下，如果让你来选索引，会选择哪一个呢？<br>为了便于分析，先来看一下a、b这两个索引的结构图：<br><img src="http://www.sdwangblog.cn/blogimg/wrong_index_ab_index_structure.png" alt></p>
+<p>从条件上看，当前数据表中并没有符合条件的记录，因此会返回空集合。在开始执行这条语句前，设想一下，如果让你来选索引，会选择哪一个呢？<br>为了便于分析，先来看一下a、b这两个索引的结构图：<br><img src="http://www.sdwangblog.top/blogimg/wrong_index_ab_index_structure.png" alt></p>
 <ul>
 <li>如果使用索引a进行查询，首先会扫描索引a的前1000个值，取得对应的主键ID；然后在主键索引上查出每一行，并根据字段b进行过滤，这样查询需要扫描1000行；</li>
 <li>如果使用索引b进行查询，首先会扫描索引b的最后50001个值，与上面的执行过程雷同，同样会回到主键索引上取记录行再过滤，这样查询需要扫描50001行；</li>
@@ -404,7 +404,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -535,10 +535,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -551,15 +547,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言文字界面的Shell作为Linux的”任督二脉”，目前我们的Linux（以CentOS 7.x为例）有多少我们可以使用的shells呢？你可以自行检查下/etc/shells档案【记录了系统上合法的Shell】。虽然各家shell功能都差不多，但在某些语法的下达方面则有所不同，籍此我们就先选择学习下Linux预设的shell——bash吧。1234567891011$ cat /etc/she">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/flowchart_loginshell_read_profile.png">
-<meta property="og:updated_time" content="2019-03-06T03:06:33.827Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/flowchart_loginshell_read_profile.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:18.005Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="认识与学习BASH">
 <meta name="twitter:description" content="前言文字界面的Shell作为Linux的”任督二脉”，目前我们的Linux（以CentOS 7.x为例）有多少我们可以使用的shells呢？你可以自行检查下/etc/shells档案【记录了系统上合法的Shell】。虽然各家shell功能都差不多，但在某些语法的下达方面则有所不同，籍此我们就先选择学习下Linux预设的shell——bash吧。1234567891011$ cat /etc/she">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/flowchart_loginshell_read_profile.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/flowchart_loginshell_read_profile.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -307,7 +307,7 @@
 <li><p>~/.bash_profile【login shell才会读】<br>bash读取完整体环境设定档/etc/profile并籍此呼叫其他设定档后，接下来会读取使用者的个人设定档。在login shell的<br>bash环境中所读取的个人偏好设定档主要有三个：~/.bash_profile,~/.bash_login,~/.profile; 其實 bash 的login shell<br>設定只會讀取上面三個檔案的其中一個，而讀取的順序則是依照上面的順序。</p>
 </li>
 </ul>
-<p>我们来整合下login shell的读取流程：<br><img src="http://www.sdwangblog.cn/blogimg/flowchart_loginshell_read_profile.png" alt><br>实线的方向是主线流程，虚线方向则是被呼叫的设定档。从上可知，CentOS的login shell环境下，最终被读取的设定档是『<br>~/.bashrc 』，所以可将自己的偏好设定写入该档案。</p>
+<p>我们来整合下login shell的读取流程：<br><img src="http://www.sdwangblog.top/blogimg/flowchart_loginshell_read_profile.png" alt><br>实线的方向是主线流程，虚线方向则是被呼叫的设定档。从上可知，CentOS的login shell环境下，最终被读取的设定档是『<br>~/.bashrc 』，所以可将自己的偏好设定写入该档案。</p>
 <ul>
 <li>~/.bashrc【non-login shell会读】<br>当你取得non-login shell时，该bash设定档只会读取~/.bashrc而已。预设的~/.bashrc内容如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#以下为以root身份取得的资料，如果是一般使用者~/.bashrc会有些不同</span><br><span class="line">$ cat ~/.bashrc</span><br><span class="line"># .bashrc</span><br><span class="line"></span><br><span class="line"># User specific aliases and functions</span><br><span class="line">alias rm=&apos;rm -i&apos;             &lt;==使用者的個人設定</span><br><span class="line">alias cp=&apos;cp -i&apos;</span><br><span class="line">alias mv=&apos;mv -i&apos;</span><br><span class="line"></span><br><span class="line"># Source global definitions</span><br><span class="line">if [ -f /etc/bashrc ]; then  &lt;==整體的環境設定</span><br><span class="line">        . /etc/bashrc</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 </li>
@@ -674,7 +674,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -805,10 +805,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -821,15 +817,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

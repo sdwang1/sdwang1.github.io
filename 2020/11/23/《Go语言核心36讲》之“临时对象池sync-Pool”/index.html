@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="sync.Pool类型被称为临时对象池，它的值可以用来存储临时对象——不需要持续使用的某一类值，这类值对程序来说可有可无，但有的话明显更好。它的创建和销毁可以在任何时候发生，完全不会影响到程序功能，同时它们也无需被区分，其中任何一个值都可以代替另一个。实际上，Pool 里装的对象可以在任何时候被删除而不通知，在高负载下可以动态的扩容，在不活跃时对象池会收缩，可能sync.Cache是一个更合适它的">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/go_sync_pool_struct.png">
-<meta property="og:updated_time" content="2021-01-29T10:37:30.291Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/go_sync_pool_struct.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“临时对象池Sync.Pool”">
 <meta name="twitter:description" content="sync.Pool类型被称为临时对象池，它的值可以用来存储临时对象——不需要持续使用的某一类值，这类值对程序来说可有可无，但有的话明显更好。它的创建和销毁可以在任何时候发生，完全不会影响到程序功能，同时它们也无需被区分，其中任何一个值都可以代替另一个。实际上，Pool 里装的对象可以在任何时候被删除而不通知，在高负载下可以动态的扩容，在不活跃时对象池会收缩，可能sync.Cache是一个更合适它的">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/go_sync_pool_struct.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/go_sync_pool_struct.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -180,7 +180,7 @@
         <p><code>sync.Pool</code>类型被称为临时对象池，它的值可以用来存储临时对象——<strong>不需要持续使用的某一类值，这类值对程序来说可有可无，但有的话明显更好。它的创建和销毁可以在任何时候发生，完全不会影响到程序功能，同时它们也无需被区分，其中任何一个值都可以代替另一个</strong>。实际上，Pool 里装的对象可以在任何时候被删除而不通知，在高负载下可以动态的扩容，在不活跃时对象池会收缩，可能<strong><code>sync.Cache</code>是一个更合适它的名字——当作针对某种数据的缓存来用</strong>。<br>与 Go 语言的很多同步工具一样，sync.Pool类型也属于结构体类型，它的值<strong>在被真正使用之后，就不应该再被复制了</strong>。<br><code>sync.Pool</code>类型只有两个方法：<code>func (p *Pool) Get() interface{}</code>、<code>func (p *Pool) Put(x interface{})</code>。前者可能会<strong>从当前的池中删除掉任何一个值，然后把这个值作为结果返回，如果此时当前池中没有任何值则就会使用当前池的New字段创建一个新值，并直接将其返回（不会被存入当前的临时对象池中）。后者则用于在当前池中存放临时对象，它接受一个interface{}类型的参数</strong>，使用示例如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"bytes"</span></span><br><span class="line">  <span class="string">"io"</span></span><br><span class="line">  <span class="string">"os"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">  <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bufPool = sync.Pool&#123;</span><br><span class="line">  <span class="comment">// initialize Pool</span></span><br><span class="line">  New: <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">new</span>(bytes.Buffer)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  Log(os.Stdout, <span class="string">"path"</span>, <span class="string">"/search?q=flowers"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Log</span><span class="params">(w io.Writer, key, val <span class="keyword">string</span>)</span></span>  &#123;</span><br><span class="line">  b := bufPool.Get().(*bytes.Buffer)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Write real logger format string into buffer</span></span><br><span class="line">  b.Reset()</span><br><span class="line">  b.WriteString(time.Unix(<span class="number">1136214245</span>, <span class="number">0</span>).UTC().Format(time.RFC3339))</span><br><span class="line">  b.WriteByte(<span class="string">' '</span>)</span><br><span class="line">  b.WriteString(key)</span><br><span class="line">  b.WriteByte(<span class="string">'='</span>)</span><br><span class="line">  b.WriteString(val)</span><br><span class="line"></span><br><span class="line">  w.Write(b.Bytes())</span><br><span class="line">  bufPool.Put(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <h2 id="sync-Pool-结构体"><a href="#sync-Pool-结构体" class="headerlink" title="sync.Pool 结构体"></a><code>sync.Pool</code> 结构体</h2><p><code>sync.Pool</code> 基础数据结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">type Pool struct &#123;</span><br><span class="line">  noCopy noCopy          // 防止当前类型被copy</span><br><span class="line"></span><br><span class="line">  local  unsafe.Pointer  // local fixed-size per-P pool, actual type is [P]poolLocal</span><br><span class="line">  localSize  uintptr     // size of the local array</span><br><span class="line"></span><br><span class="line">  victim  unsafe.Pointer // local from previous cycle</span><br><span class="line">  victimSize  uintptr    // size of victims array</span><br><span class="line"></span><br><span class="line">  // New optionally specifies a function to generate</span><br><span class="line">  // a value when Get would otherwise return nil.</span><br><span class="line">  // It may not be changed concurrently with calls to Get.</span><br><span class="line">  New func() interface&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Local per-P Pool appendix.</span><br><span class="line">type poolLocalInternal struct &#123;</span><br><span class="line">  private interface&#123;&#125;   // Can be used only by the respective P.</span><br><span class="line">  shared  poolChain     // Local P can pushHead/popHead; any P can popTail.</span><br><span class="line">  Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type poolLocal struct &#123;</span><br><span class="line">  poolLocalInternal</span><br><span class="line"></span><br><span class="line">  // Prevents false sharing on widespread platforms with</span><br><span class="line">  // 128 mod (cache line size) = 0 .</span><br><span class="line">  pad [128 - unsafe.Sizeof(poolLocalInternal&#123;&#125;)%128]byte</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>来一张全景图，更有利于全局角度看这个结构体：<br><img src="http://www.sdwangblog.cn/blogimg/go_sync_pool_struct.png" alt><br>如上图示，<code>sync.Pool</code>中有一个多层的数据结构，其顶层是一个<code>poolLocal</code>数组，称之为<strong>本地池列表，这个列表的长度总是与 Go 语言调度器中的 P 的数量相同</strong>。在本地池列表中的每个本地池都包含了三个字段（组件）：存储私有临时对象的字段private、代表了共享临时对象列表的字段shared，以及一个sync.Mutex类型的嵌入字段。<br>当调用临时对象池的<code>Put()/Get()</code>方法时，总会<strong>先试图从该临时对象池的本地池列表中获取与之对应的本地池，每个本地池都对应着一个P——调用它的代码所在的 goroutine 关联的那个 P</strong>。<br><code>sync.Pool</code>的<code>Put()</code>总会先试图把新的临时对象，<strong>存储到对应的本地池的private字段中，以便在后面获取临时对象的时候，可以快速地拿到一个可用的值。只有当这个private字段已经存有某个值时，该方法才会去访问本地池的shared字段</strong>。<br>相应地，<code>sync.Pool</code>的<code>Get()</code>总会<strong>先试图从对应的本地池的private字段处获取一个临时对象。只有当这个private字段的值为nil时，它才会去访问本地池的shared字段</strong>。当然，由于shared字段是共享的（原则上可以被任何 goroutine 中的代码访问到），所以此时<strong>必须受到互斥锁的保护</strong>。<br>源码中本地池嵌入的<code>sync.Mutex</code>字段就是这里用到的互斥锁，即本地池本身就拥有互斥锁的功能：<code>Put()</code>会在互斥锁的保护下，把新的临时对象追加到共享临时对象列表的末尾；<code>Get()</code>也会在互斥锁的保护下，试图把该共享临时对象列表中的最后一个元素值取出并作为结果。<br>当然，这里的<strong>共享临时对象列表也可能是空的</strong>，这可能是由于这个本地池中的所有临时对象都已经被取走了，也可能是当前的临时对象池刚被清理过。无论原因是什么，<strong>Get方法都会去访问当前的临时对象池中的所有本地池，它会去逐个搜索它们的共享临时对象列表，只要发现某个共享临时对象列表中包含元素值就把该列表的最后一个元素值取出并作为结果返回，若仍无法拿到一个可用的临时对象就会使出最后的手段——调用可创建临时对象的那个函数</strong>。</p>
+<p>来一张全景图，更有利于全局角度看这个结构体：<br><img src="http://www.sdwangblog.top/blogimg/go_sync_pool_struct.png" alt><br>如上图示，<code>sync.Pool</code>中有一个多层的数据结构，其顶层是一个<code>poolLocal</code>数组，称之为<strong>本地池列表，这个列表的长度总是与 Go 语言调度器中的 P 的数量相同</strong>。在本地池列表中的每个本地池都包含了三个字段（组件）：存储私有临时对象的字段private、代表了共享临时对象列表的字段shared，以及一个sync.Mutex类型的嵌入字段。<br>当调用临时对象池的<code>Put()/Get()</code>方法时，总会<strong>先试图从该临时对象池的本地池列表中获取与之对应的本地池，每个本地池都对应着一个P——调用它的代码所在的 goroutine 关联的那个 P</strong>。<br><code>sync.Pool</code>的<code>Put()</code>总会先试图把新的临时对象，<strong>存储到对应的本地池的private字段中，以便在后面获取临时对象的时候，可以快速地拿到一个可用的值。只有当这个private字段已经存有某个值时，该方法才会去访问本地池的shared字段</strong>。<br>相应地，<code>sync.Pool</code>的<code>Get()</code>总会<strong>先试图从对应的本地池的private字段处获取一个临时对象。只有当这个private字段的值为nil时，它才会去访问本地池的shared字段</strong>。当然，由于shared字段是共享的（原则上可以被任何 goroutine 中的代码访问到），所以此时<strong>必须受到互斥锁的保护</strong>。<br>源码中本地池嵌入的<code>sync.Mutex</code>字段就是这里用到的互斥锁，即本地池本身就拥有互斥锁的功能：<code>Put()</code>会在互斥锁的保护下，把新的临时对象追加到共享临时对象列表的末尾；<code>Get()</code>也会在互斥锁的保护下，试图把该共享临时对象列表中的最后一个元素值取出并作为结果。<br>当然，这里的<strong>共享临时对象列表也可能是空的</strong>，这可能是由于这个本地池中的所有临时对象都已经被取走了，也可能是当前的临时对象池刚被清理过。无论原因是什么，<strong>Get方法都会去访问当前的临时对象池中的所有本地池，它会去逐个搜索它们的共享临时对象列表，只要发现某个共享临时对象列表中包含元素值就把该列表的最后一个元素值取出并作为结果返回，若仍无法拿到一个可用的临时对象就会使出最后的手段——调用可创建临时对象的那个函数</strong>。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>临时对象池的内部有一个多层的数据结构支撑着对临时对象的存储，它的顶层是<strong>本地池列表，其中包含了与某个 P 对应的那些本地池，并且其长度与 P 的数量总是相同的。在每个本地池中，都包含一个私有的临时对象和一个共享的临时对象列表</strong>。前者只能被其对应的 P 所关联的那个 goroutine 中的代码访问到，而后者却没有这个约束。从另一个角度讲，前者用于临时对象的快速存取，而后者则用于临时对象的池内共享。<br>这样的内部结构和存取方式，让临时对象池成为了一个特点鲜明的同步工具。<strong>它存储的临时对象都应该是独立的、平等的和可重用的，拥有较长生命周期的值【生命周期受GC影响】，且不应该被某个 goroutine 中的代码长期的持有和使用</strong>。</p>
 
       
@@ -363,7 +363,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -494,10 +494,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -510,15 +506,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

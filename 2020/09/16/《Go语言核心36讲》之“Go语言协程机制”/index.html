@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="Go 语言通过编译器运行时（runtime），从语言上支持了并发的特性。谈及Go 语言并发特性前，我们先来了解几个概念。 进程、线程、协程 进程：进程是程序在操作系统中的一次执行过程，系统进行资源分配（有独立的内存空间）和调度的一个独立单位。 线程：线程是进程的一个执行实体，是CPU调度和分派的基本单位(Kernel Space Entity, KSE)。线程依附于进程存在（一个进程可以创建和撤销">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/goroutine_gpm.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/goroutine_gpm2.png">
-<meta property="og:updated_time" content="2021-01-06T06:34:09.349Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/goroutine_gpm.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/goroutine_gpm2.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.856Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Go语言核心36讲》之“Go语言协程机制”">
 <meta name="twitter:description" content="Go 语言通过编译器运行时（runtime），从语言上支持了并发的特性。谈及Go 语言并发特性前，我们先来了解几个概念。 进程、线程、协程 进程：进程是程序在操作系统中的一次执行过程，系统进行资源分配（有独立的内存空间）和调度的一个独立单位。 线程：线程是进程的一个执行实体，是CPU调度和分派的基本单位(Kernel Space Entity, KSE)。线程依附于进程存在（一个进程可以创建和撤销">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/goroutine_gpm.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/goroutine_gpm.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -194,7 +194,7 @@
 <li><strong>M(Machine)，OS 内核线程抽象，表示真正执行计算的资源，在绑定有效的P后，进入schedule循环</strong>。<br><strong>M 的数量是不定的，由 Go Runtime调整</strong>，为了防止创建过多 OS线程导致系统调度不过来，目前默认最大限制为10000 个。</li>
 <li><strong>Sched(Schedule)，Go调度器</strong>，它维护了存储 M和 G的队列以及调度器的一些状态信息等。<strong>调度器循环的机制大致是从各种队列、P的本地队列中获取 G，切换到 G的执行栈上并执行 G的函数，调用 Goexit做清理工作并回到 M，如此反复</strong>。</li>
 </ul>
-<p>理解 M、P、G三者的关系，可以通过“经典的地鼠推车搬砖模型”来说明：<br>工地上由若干砖头(G)，地鼠(M)借助小车(P)把砖头运到火种上去烧制。特别说明，<strong>地鼠(M)如果没有小车(P)是没法运砖的，小车(P)的数量决定了能够干活的地鼠(M)的数量，在Go程序里对应的是活动线程数</strong>。<br><img src="http://www.sdwangblog.cn/blogimg/goroutine_gpm.png" alt><br>简略地，我们通常使用下图来展示 G-P-M 模型：<br><img src="http://www.sdwangblog.cn/blogimg/goroutine_gpm2.png" alt><br>Go 调度器中有两个不同的运行队列：<strong>全局运行队列(GRQ)和本地运行队列(LRQ)</strong>。GPQ 适用于尚未分配给 P的Goroutines，每个 P上都有一个 LPQ，用于管理分配给在 P 的上下文中执行的 Goroutines，这些 Goroutine 轮流被和 P 绑定的 M 进行上下文切换。</p>
+<p>理解 M、P、G三者的关系，可以通过“经典的地鼠推车搬砖模型”来说明：<br>工地上由若干砖头(G)，地鼠(M)借助小车(P)把砖头运到火种上去烧制。特别说明，<strong>地鼠(M)如果没有小车(P)是没法运砖的，小车(P)的数量决定了能够干活的地鼠(M)的数量，在Go程序里对应的是活动线程数</strong>。<br><img src="http://www.sdwangblog.top/blogimg/goroutine_gpm.png" alt><br>简略地，我们通常使用下图来展示 G-P-M 模型：<br><img src="http://www.sdwangblog.top/blogimg/goroutine_gpm2.png" alt><br>Go 调度器中有两个不同的运行队列：<strong>全局运行队列(GRQ)和本地运行队列(LRQ)</strong>。GPQ 适用于尚未分配给 P的Goroutines，每个 P上都有一个 LPQ，用于管理分配给在 P 的上下文中执行的 Goroutines，这些 Goroutine 轮流被和 P 绑定的 M 进行上下文切换。</p>
 <blockquote>
 <p>从宏观上说，G和 M由于 P的存在可以呈现出多对多的关系。当一个正在与某个 M对接并运行着的 G需要因某个时间（比如等待 I/O 或锁的解除）而暂停运行的时候，调度器总会及时地发现并把这个 G与那个 M分离开，以释放计算资源供那些等待运行的 G使用。<br>而当一个 G需要恢复运行的时候，调度器又会尽快地为它寻找空闲的计算资源（包括 M）并安排运行。另外，当 M不够用时，调度器会帮我们向操作系统申请新的系统级线程，而当某个 M已无用时，调度器又会负责把它及时的销毁掉。</p>
 </blockquote>
@@ -384,7 +384,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -515,10 +515,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -531,15 +527,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

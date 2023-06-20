@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言对于现代语言而言，包管理器基本上是标配。Java 有 Maven，Python 有 pip，Ruby 有 gem，Node.js 有 npm。PHP的则是 PEAR，不过 PEAR 坑不少：依赖处理容易出问题；配置非常复杂；难用的命令行接口。这些都无疑推进了更加包容灵活、开源的PHP依赖管理的利器——Composer出现。Composer 是一个依赖管理工具，不是一个包管理器，它涉及到 “pa">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/composer_theory.png">
-<meta property="og:updated_time" content="2019-01-29T08:55:19.317Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/composer_theory.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.997Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用于PHP依赖关系处理的Composer">
 <meta name="twitter:description" content="前言对于现代语言而言，包管理器基本上是标配。Java 有 Maven，Python 有 pip，Ruby 有 gem，Node.js 有 npm。PHP的则是 PEAR，不过 PEAR 坑不少：依赖处理容易出问题；配置非常复杂；难用的命令行接口。这些都无疑推进了更加包容灵活、开源的PHP依赖管理的利器——Composer出现。Composer 是一个依赖管理工具，不是一个包管理器，它涉及到 “pa">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/composer_theory.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/composer_theory.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -253,7 +253,7 @@
 </li>
 </ul>
 <p>Composer 将查看所有你定义的 repositories【资源库，包的来源，资源库类型有Composer，VCS，PEAR，Package几种】 以找到你项目需要的资源包。默认情况下已经将 Packagist.org 注册到 Composer。当然，你也可以在 composer.json 中申明更多的资源库，把它们加入你的项目中。<br>资源库的定义仅可用于“root 包”，而在你依赖的包中定义的资源库将不会被加载。</p>
-<h3 id="Packagist"><a href="#Packagist" class="headerlink" title="Packagist"></a>Packagist</h3><p>packagist 是 Composer 的主要资源库。 Packagist 的目标是成为大家使用库资源的中央存储平台，这意味着你可以require 那里的任何包。<br><img src="http://www.sdwangblog.cn/blogimg/composer_theory.png" alt><br>关于启用Packagist镜像服务，有两种方式：</p>
+<h3 id="Packagist"><a href="#Packagist" class="headerlink" title="Packagist"></a>Packagist</h3><p>packagist 是 Composer 的主要资源库。 Packagist 的目标是成为大家使用库资源的中央存储平台，这意味着你可以require 那里的任何包。<br><img src="http://www.sdwangblog.top/blogimg/composer_theory.png" alt><br>关于启用Packagist镜像服务，有两种方式：</p>
 <ul>
 <li>系统全局配置：将配置信息添加到Composer的全局配置文件composer.json ；<br>在控制台下执行命令<code>composer config -g repo.packagist composer https://packagist.phpcomposer.com</code></li>
 <li>单个项目配置：将配置信息添加到某个项目composer.json文件;<br>在项目根目录执行<code>composer config repo.packagist composer https://packagist.phpcomposer.com</code><br>执行完毕后，当前项目composer.json文件末尾自动添加如下镜像配置信息：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;repositories&quot;: &#123;</span><br><span class="line">    &quot;packagist&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;composer&quot;,</span><br><span class="line">        &quot;url&quot;: &quot;https://packagist.phpcomposer.com&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -451,7 +451,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -582,10 +582,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -598,15 +594,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言初衷是为公司财务的付款功能模块设计审批流，实际需求场景如下：我司财务付款申请的审批流，会根据店铺类型（电商运营）、请款理由、请款金额、付款公司等等因素走不同的审批步骤，比如请款理由为“进货采购”时需要“采购经理”的审批，请款理由为“快递发货”时就需要“物流经理”的审批；请款金额大于限定值时需财务经理加入审批等。随着公司业务场景的扩大，我们的审批流设计经历了三次版本变革，并逐步推进了我司自主设计">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/sample_approval_flow.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/echats_lego_approval_flow.png">
-<meta property="og:updated_time" content="2019-02-15T09:39:07.072Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sample_approval_flow.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/echats_lego_approval_flow.png">
+<meta property="og:updated_time" content="2023-06-20T06:38:52.830Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简单实用的审批流设计实现总结">
 <meta name="twitter:description" content="前言初衷是为公司财务的付款功能模块设计审批流，实际需求场景如下：我司财务付款申请的审批流，会根据店铺类型（电商运营）、请款理由、请款金额、付款公司等等因素走不同的审批步骤，比如请款理由为“进货采购”时需要“采购经理”的审批，请款理由为“快递发货”时就需要“物流经理”的审批；请款金额大于限定值时需财务经理加入审批等。随着公司业务场景的扩大，我们的审批流设计经历了三次版本变革，并逐步推进了我司自主设计">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/sample_approval_flow.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/sample_approval_flow.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -178,14 +178,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>初衷是为公司财务的付款功能模块设计审批流，实际需求场景如下：<br>我司财务付款申请的审批流，会根据店铺类型（电商运营）、请款理由、请款金额、付款公司等等因素走不同的审批步骤，比如请款理由为“进货采购”时需要“采购经理”的审批，请款理由为“快递发货”时就需要“物流经理”的审批；请款金额大于限定值时需财务经理加入审批等。<br>随着公司业务场景的扩大，我们的审批流设计经历了三次版本变革，并逐步推进了我司自主设计的”工作流引擎“的诞生。为了便于比较说明，假设某部门存在某种审批流如下图示：<br><img src="http://www.sdwangblog.cn/blogimg/sample_approval_flow.png" alt></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>初衷是为公司财务的付款功能模块设计审批流，实际需求场景如下：<br>我司财务付款申请的审批流，会根据店铺类型（电商运营）、请款理由、请款金额、付款公司等等因素走不同的审批步骤，比如请款理由为“进货采购”时需要“采购经理”的审批，请款理由为“快递发货”时就需要“物流经理”的审批；请款金额大于限定值时需财务经理加入审批等。<br>随着公司业务场景的扩大，我们的审批流设计经历了三次版本变革，并逐步推进了我司自主设计的”工作流引擎“的诞生。为了便于比较说明，假设某部门存在某种审批流如下图示：<br><img src="http://www.sdwangblog.top/blogimg/sample_approval_flow.png" alt></p>
 <a id="more"></a>
 <h2 id="“石器时代”之静态配置审批流"><a href="#“石器时代”之静态配置审批流" class="headerlink" title="“石器时代”之静态配置审批流"></a>“石器时代”之静态配置审批流</h2><p>静态配置审批流，就是 <strong>针对每种不同对象将其对应的审批路径全部提前写入到配置文件，然后根据发起实体信息选择某条具体的审批路径</strong>。关于配置文件的实现方式，可简单定义为二维数组，每个元素就是一条审批路径，每条审批路径依次包含相关的审批步骤——<strong>定义为step_id，approver tag（某用户、某角色、某部门人员等）</strong>。<br>例如上图某部门的付款审批流可拆分为6条审批路径：1.发起-》复核财务-》部门主管-》财务经理；2.发起-》复核财务-》部门主管-》财务经理-》财务总监；3.发起-》采购经理-》采购总监-》COO-》财务经理；4. 发起-》采购经理-》采购总监-》COO-》财务经理-》财务总监；5.发起-》采购经理-》采购总监-》风控专员-》财务经理；6.发起-》采购经理-》采购总监-》风控专员-》财务经理-》财务总监；当我们“发起付款申请的请款理由为经销订货，请款金额1万元”时，就从配置文件中读取第5条审批路径作为付款申请的审批流。</p>
 <ul>
 <li>优点：实现简单，易于理解，适合小规模不常变更的审批流；</li>
 <li>缺点：1. 静态配置缺乏用户交互，审批流发生变更时需要后台修改配置文件。2. 根据发起实体信息“一口咬定”某条具体的审批路径的方式，扩展性差，比如修改了发起实体、某些场景无法根据发起实体完全确定审批流；3. 审批流（<strong>有向图</strong>）被拆解为多条有向路径，配置文件很容易铺展庞大。</li>
 </ul>
-<h2 id="“青铜时代”之动态定义审批流"><a href="#“青铜时代”之动态定义审批流" class="headerlink" title="“青铜时代”之动态定义审批流"></a>“青铜时代”之动态定义审批流</h2><p>动态定义审批流，允许用户通过Web交互设计审批流（语义化的条件），然后由实体具体情况确定下一步的审批步骤——根据语义化条件确定当前审批步骤，未来步骤都视为不确定。相较于“静态配置审批流”，前端如何合理地通过Web交互设计审批步骤是本方案难点，<strong>设计的每条审批步骤可定义为：previous_edge_id(第一步时为0),condition(语义化的条件),approver tag</strong>。<br>例如上图某部门的付款审批流设计图就可通过开源的Echarts绘制如下所示：<br><img src="http://www.sdwangblog.cn/blogimg/echats_lego_approval_flow.png" alt><br>特别说明的是，<strong>动态定义审批流，在表结构和代码结构设计上，注意审批流抽象设计层和具象实例层的区分</strong>。</p>
+<h2 id="“青铜时代”之动态定义审批流"><a href="#“青铜时代”之动态定义审批流" class="headerlink" title="“青铜时代”之动态定义审批流"></a>“青铜时代”之动态定义审批流</h2><p>动态定义审批流，允许用户通过Web交互设计审批流（语义化的条件），然后由实体具体情况确定下一步的审批步骤——根据语义化条件确定当前审批步骤，未来步骤都视为不确定。相较于“静态配置审批流”，前端如何合理地通过Web交互设计审批步骤是本方案难点，<strong>设计的每条审批步骤可定义为：previous_edge_id(第一步时为0),condition(语义化的条件),approver tag</strong>。<br>例如上图某部门的付款审批流设计图就可通过开源的Echarts绘制如下所示：<br><img src="http://www.sdwangblog.top/blogimg/echats_lego_approval_flow.png" alt><br>特别说明的是，<strong>动态定义审批流，在表结构和代码结构设计上，注意审批流抽象设计层和具象实例层的区分</strong>。</p>
 <ul>
 <li>优点：支持用户交互动态设计审批流（暂不考虑交互美观性），允许审批步骤动态决定，满足大多数使用场景；</li>
 <li>缺点：设计审批步骤的扩展性还待提升，比如除了“审批人”，我司需求场景中还能指定“最高审批人”，“审批挂起天数”等等；</li>
@@ -379,7 +379,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -510,10 +510,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -526,15 +522,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">

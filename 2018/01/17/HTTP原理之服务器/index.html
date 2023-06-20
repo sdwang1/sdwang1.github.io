@@ -16,15 +16,15 @@
 <meta property="og:site_name" content="Sdwang1的博客">
 <meta property="og:description" content="前言基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续探究HTTP事务的目的端——Web服">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/web_server_handle_request.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/parse_http_request_to_struct.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/web_server_IO_structure.png">
-<meta property="og:image" content="http://www.sdwangblog.cn/blogimg/virtual_host_docroot.png">
-<meta property="og:updated_time" content="2019-03-18T10:07:08.880Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/web_server_handle_request.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/parse_http_request_to_struct.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/web_server_IO_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/virtual_host_docroot.png">
+<meta property="og:updated_time" content="2023-06-20T06:37:17.661Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP原理之服务器">
 <meta name="twitter:description" content="前言基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续探究HTTP事务的目的端——Web服">
-<meta name="twitter:image" content="http://www.sdwangblog.cn/blogimg/web_server_handle_request.png">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/web_server_handle_request.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -183,7 +183,7 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于前三篇关于HTTP原理（URL与资源，HTTP报文，连接管理）的介绍，我们已经大体清楚了浏览器发起一次HTTP事务的具体过程及涉及的其中细节：浏览器从URL中解析出服务器IP地址和端口号（如果有的话）——》浏览器建立一条与Web服务器的TCP连接——》浏览器向服务器发送HTTP请求报文——》服务器向浏览器发送HTTP响应报文——》关闭连接。本节我们就继续探究HTTP事务的目的端——Web服务器。</p>
 <p>Web服务器有着各种不同的风格，形状和尺寸，比如可以在PC机上安装并运行的通用软件Web服务器Apache，Nginx等，已经预装并配置好相关程式的Web服务器设备以及某些便携式的嵌入式Web服务器。但不论功能有何差异，所有的Web 服务器都要能接受请求资源的HTTP请求，将内容回送给客户端。</p>
 <a id="more"></a>
-<h2 id="实际的Web服务器在做什么"><a href="#实际的Web服务器在做什么" class="headerlink" title="实际的Web服务器在做什么"></a>实际的Web服务器在做什么</h2><p>Web服务器逻辑实现了HTTP协议，管理着Web资源，并负责提供Web服务器的管理功能。Web服务器逻辑和操作系统共同负责管理TCP连接，底层操作系统负责管理底层计算机系统的硬件细节，并提供了TCP/IP网络支持，负责装载Web资源的文件系统以及控制当前计算活动的进程管理功能。<br><img src="http://www.sdwangblog.cn/blogimg/web_server_handle_request.png" alt></p>
+<h2 id="实际的Web服务器在做什么"><a href="#实际的Web服务器在做什么" class="headerlink" title="实际的Web服务器在做什么"></a>实际的Web服务器在做什么</h2><p>Web服务器逻辑实现了HTTP协议，管理着Web资源，并负责提供Web服务器的管理功能。Web服务器逻辑和操作系统共同负责管理TCP连接，底层操作系统负责管理底层计算机系统的硬件细节，并提供了TCP/IP网络支持，负责装载Web资源的文件系统以及控制当前计算活动的进程管理功能。<br><img src="http://www.sdwangblog.top/blogimg/web_server_handle_request.png" alt></p>
 <h3 id="第一步——接受客户端连接"><a href="#第一步——接受客户端连接" class="headerlink" title="第一步——接受客户端连接"></a>第一步——接受客户端连接</h3><p>如果客户端已经打开了一条到服务器到持久连接，可以使用那条连接来发送请求，否则客户端需要打开一条新的服务器连接。当客户端请求一条到Web服务器的TCP连接时，Web服务器会建立连接，判断连接是哪个客户端，从TCP连接中将IP地址解析出来。一旦新连接建立并被接受，服务器就会将新连接添加到其现存<strong>Web服务器连接列表</strong>中，做好监视连接上数据传输的准备。<br>当然，Web服务器可以随意拒绝或立即关闭任意一条连接，比如IP或主机名未认证或已知恶意客户端。</p>
 <p>关于请求连接的客户端主机名识别（比如将其用于详细的访问控制和日志记录），可以用’反向DNS’对大部分Web服务器进行配置，（主机名查找可能会比较费时，降低Web事务处理的速度），比如配置指令HostnameLookups启用Apache的主机查找功能。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HostnameLookups off</span><br><span class="line">&lt;Files ~ &quot;\.(html|htm|cgi)$&quot;&gt;</span><br><span class="line">    HostnameLookups on</span><br><span class="line">&lt;/Files&gt;</span><br></pre></td></tr></table></figure></p>
 <p>如果客户端支持ident协议，就在TCP端口113监听ident请求。服务器打开自己到客户端ident端口的连接，发送询问用户名的请求。但出于多种原因，在公共网络上这并不能很好的工作。</p>
@@ -194,7 +194,7 @@
 <li>检测到以CRLF结尾的、标识首部结束的空行（如果有的话）；</li>
 <li>如果有的话（长度由Content-Length首部指定），读取请求主体；</li>
 </ul>
-<p>解析请求报文时，Web服务器会不定期地从网络上接收输入数据。网络连接可能随时会出现延迟。Web服务器需要从网络中读取数据，将部分报文数据临时存储在内存中，直到收到足以进行解析的数据并理解其意义为止。<br>有些Web服务器还会用便于进行报文操作的内部数据结构来存储请求报文——快速查询表。<br><img src="http://www.sdwangblog.cn/blogimg/parse_http_request_to_struct.png" alt></p>
+<p>解析请求报文时，Web服务器会不定期地从网络上接收输入数据。网络连接可能随时会出现延迟。Web服务器需要从网络中读取数据，将部分报文数据临时存储在内存中，直到收到足以进行解析的数据并理解其意义为止。<br>有些Web服务器还会用便于进行报文操作的内部数据结构来存储请求报文——快速查询表。<br><img src="http://www.sdwangblog.top/blogimg/parse_http_request_to_struct.png" alt></p>
 <p>Web服务作为IO密集型应用，高性能的Web服务器能够同时支持数十万条连接，某些连接可能快速地向Web服务器发送请求，一些可能在慢慢发送，或者不经常发送请求，还有一些可能空闲，等待任意时刻可能出现的动作。<br>不同的Web服务器结构会以不同的方式为请求服务：</p>
 <ul>
 <li>单线程Web服务器：单线程的Web服务器一次只处理一个请求，直到其完成为止，存在严重的性能问题，只适用于低负荷服务器；</li>
@@ -202,11 +202,11 @@
 <li>复用I/O服务器：为支持大量连接，在复用结构中，要同时监视所有连接上的活动。当连接的状态发生变化时（比如数据可用，<br>或出现错误）就对那条连接进行少量的处理。处理结束后，将连接返回到开放连接列表中，等待下一次的状态变化。只有在有事情<br>可做时才会对连接进行处理，在空闲连接上等待时不会绑定线程和进程。</li>
 <li>复用的多线程Web服务器：有些系统会将多线程与复用功能结合在一起。多个线程（通常是一个物理处理器）中每一个都在观察<br>打开的连接（或打开的连接中的一个子集）并对每条连接执行少量的任务，比如后续文章提到的Nginx。</li>
 </ul>
-<p><img src="http://www.sdwangblog.cn/blogimg/web_server_IO_structure.png" alt></p>
+<p><img src="http://www.sdwangblog.top/blogimg/web_server_IO_structure.png" alt></p>
 <h3 id="第三步——处理请求"><a href="#第三步——处理请求" class="headerlink" title="第三步——处理请求"></a>第三步——处理请求</h3><p>一旦Web服务器收到了请求，就可以根据方法，资源，首部和可选的主体部分对请求进行处理了。</p>
 <h3 id="第四步——对资源的映射及访问"><a href="#第四步——对资源的映射及访问" class="headerlink" title="第四步——对资源的映射及访问"></a>第四步——对资源的映射及访问</h3><p>Web服务器是资源服务器。在Web服务器将内容传送给客户端之前，要将请求中的URI映射为Web服务器上适当的内容或内容生成器，以识别处内容的源头；</p>
 <h4 id="docroot"><a href="#docroot" class="headerlink" title="docroot"></a>docroot</h4><p>Web服务器支持各种不同类型的资源映射，但最简单的资源映射形式就用请求的URI作为名字来访问 Web 服务器文件系统中的文件。通常Web服务器的文件系统中会有一个特殊的文件夹专门用于存放Web内容，这个文件夹被称为文档的根目录（document root 或docroot）。Web服务器从请求报文中获取URI，并将其附加在文档根目录的后面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#配置文件httpd.conf添加一个DocumentRoot就可以为Web服务器设置文档根目录</span><br><span class="line">DocumentRoot /usr/local/httpd/files</span><br><span class="line">#服务器注意不能让相对URL退到docroot之外，比如www.domain.com/../</span><br></pre></td></tr></table></figure></p>
-<p>虚拟托管的Web服务器会在同一台Web服务器上提供多个Web站点，每个站点在服务器上都有自己独有的文档根目录。虚拟托管的Web服务器会根据URI或Host首部的IP地址或主机名来识别要使用的正确文档根目录。<br><img src="http://www.sdwangblog.cn/blogimg/virtual_host_docroot.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#大多数服务器配置虚拟托管文档根目录很简单，比如Apache</span><br><span class="line">&lt;VirtualHost www.joe.com&gt;</span><br><span class="line">    ServerName www.joe.com</span><br><span class="line">    DocumentRoot /doc/joe</span><br><span class="line">    TransferLog /logs/joe.access.log</span><br><span class="line">    ErrorLog /logs/joe.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost www.mary.com&gt;</span><br><span class="line">    ServerName www.mary.com</span><br><span class="line">    DocumentRoot /doc/mary</span><br><span class="line">    TransferLog /logs/marry.access.log</span><br><span class="line">    ErrorLog /logs/marry.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>虚拟托管的Web服务器会在同一台Web服务器上提供多个Web站点，每个站点在服务器上都有自己独有的文档根目录。虚拟托管的Web服务器会根据URI或Host首部的IP地址或主机名来识别要使用的正确文档根目录。<br><img src="http://www.sdwangblog.top/blogimg/virtual_host_docroot.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#大多数服务器配置虚拟托管文档根目录很简单，比如Apache</span><br><span class="line">&lt;VirtualHost www.joe.com&gt;</span><br><span class="line">    ServerName www.joe.com</span><br><span class="line">    DocumentRoot /doc/joe</span><br><span class="line">    TransferLog /logs/joe.access.log</span><br><span class="line">    ErrorLog /logs/joe.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost www.mary.com&gt;</span><br><span class="line">    ServerName www.mary.com</span><br><span class="line">    DocumentRoot /doc/mary</span><br><span class="line">    TransferLog /logs/marry.access.log</span><br><span class="line">    ErrorLog /logs/marry.error_log</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
 <p>Docroot的另一种常见应用是在Web服务器上为人们提供私有的Web站点。通常以/~开始，后面跟用户名的URI映射为此用户的私有文档根目录，比如/～blob/index.html。私有docroot通常是用户主目录下名为public_html的目录，也可以配置为其他值。</p>
 <h4 id="目录列表"><a href="#目录列表" class="headerlink" title="目录列表"></a>目录列表</h4><p>Web服务器可以接受对目录URL的请求，其路径可以解析为一个目录而不是文件。我们可以对大多数Web服务器进行配置，使其在客户端请求目录URL时采取不同的动作：</p>
 <ul>
@@ -407,7 +407,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Shudan Wang
+    		&copy; 2023 Shudan Wang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -538,10 +538,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -554,15 +550,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
