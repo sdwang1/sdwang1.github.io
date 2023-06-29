@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
   <title>了解SSH原理与运用 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open">
+  <meta name="description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open@la">
 <meta name="keywords" content="SSH">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解SSH原理与运用">
 <meta property="og:url" content="http://www.sdwangblog.cn/2017/04/20/了解SSH原理与运用/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open">
+<meta property="og:description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open@la">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.sdwangblog.top/blogimg/ssh_login.png">
-<meta property="og:updated_time" content="2023-06-20T06:37:17.993Z">
+<meta property="og:updated_time" content="2023-06-21T02:57:17.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解SSH原理与运用">
-<meta name="twitter:description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open">
+<meta name="twitter:description" content="前言一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：ssh user@host。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会花时间去了解下SSH的原理了，感谢问题！！！12$  ssh open@la">
 <meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/ssh_login.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
@@ -177,7 +177,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：<code>ssh user@host</code>。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会耐心的花时间去了解下SSH的原理了，感谢<code>问题</code>！！！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  ssh open@lab.lpicn.org</span><br><span class="line">ssh: connect to host lab.lpicn.org port 22: Connection refused</span><br></pre></td></tr></table></figure></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一切的事情起因来源于想要使用某个开源服务，它要求仅支持SSH方式的校验登录。SSH嘛，肯定都是听说过的，很多人直观认知它似乎是一个经常用于远程登录的应用层协议，命令行使用方式也是相当简洁的：<code>ssh user@host</code>。志得满满地输入命令行，直接连接，然后。。。。。。当然如果一切进展顺利就或许不会有这篇文章了，可能也不会花时间去了解下SSH的原理了，感谢<code>问题</code>！！！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  ssh open@lab.lpicn.org</span><br><span class="line">ssh: connect to host lab.lpicn.org port 22: Connection refused</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>连接请求被拒绝了，莫慌，我们逐步分析排查问题：</p>
 <ol>
@@ -189,7 +189,7 @@
 </li>
 </ol>
 <p>事实上，实验做到这一步，基本上可以说明客户端的请求连出应该是没什么问题的，那么问题就很可能出现在ssh服务接入，这就鞭长莫及了。。。。。。</p>
-<p>经历过上文一事，看起来似乎只是欲使用某个开源服务的小插曲，但仔细思考下我对SSH的了解其实也是’只言片语’，故而还想搜索资料总结积累下【其实最主要的原因是，我闲啊🤦‍】。。。。。。注意本文立意”了解”，只涉及初级简单应用，且信息多来自于网络资源，如有侵权望告知，吾会及时修改。</p>
+<p>经历过上文一事，看起来似乎只是欲使用某个开源服务的小插曲，但仔细思考下我对SSH的了解其实也是’只言片语’，故而还想搜索资料总结积累下。<br>注意本文立意”了解”，只涉及初级简单应用，且信息多来自于网络资源，如有侵权望告知，吾会及时修改。</p>
 <p>下文主要内容转载自 <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener"><strong>阮一峰的文章</strong></a> 。</p>
 <h3 id="什么是SSH"><a href="#什么是SSH" class="headerlink" title="什么是SSH"></a>什么是SSH</h3><p>SSH（Secure Shell）安全外壳协议，是IETF建立在应用层基础上的网络安全协议。传统的网络服务程序，如ftp、pop和telnet在网络上用明文传送口令和数据，很容易被别有用心的人截获这些口令和数据。比如冒充真正的服务器接收你传给服务器的数据，然后做些手脚再冒充你把数据传给真正的服务器。这就是所谓的“中间人”（man-in-the-middle）攻击。</p>
 <p>SSH协议，可以把所有的传输数据进行加密，这样”中间人”攻击方式就有可能阻止了，而且也能够防止DNS欺骗和IP欺骗。PS：SSH协议传输的数据是经过压缩的，所以可以加快传输的速度。而SSH能保证安全的原因在于它采用了公钥加密，大致过程如下：<br><img src="http://www.sdwangblog.top/blogimg/ssh_login.png" alt></p>

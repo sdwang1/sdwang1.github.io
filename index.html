@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/03/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
+    </h1>
+  
+
+        
+        <a href="/2022/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2022-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+        
+          <a class="article-more-a" href="/2022/03/07/一条SQL语句是如何执行的/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/03/07/一条SQL语句是如何执行的/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-How-to-watermarking-PDF-more-effectively-[-Reprint-]" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -830,84 +907,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《Go语言核心36讲》之“接口类型的合理运用”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/14/《Go语言核心36讲》之“接口类型的合理运用”/">《Go语言核心36讲》之“接口类型的合理运用”</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/14/《Go语言核心36讲》之“接口类型的合理运用”/" class="archive-article-date">
-  	<time datetime="2020-09-14T06:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>接口本身是调用方和实现方约定的一种 <strong>合作协议</strong>（对其他类型行为的抽象和概括），接口实现者不需要关心接口会被怎样使用，调用者也不需要关心接口的实现细节。<br>Go 语言的接口设计是<strong>非侵入式的，接口编写者无须知道接口被哪些类型实现，接口实现者只需知道实现的是什么样子的接口，但无须指明实现(implements)哪一个接口。编译器知道最终编译时使用哪个类型实现哪个接口，或者接口应该由谁来实现</strong>。</p>
-<h2 id="Go-语言接口声明（定义）"><a href="#Go-语言接口声明（定义）" class="headerlink" title="Go 语言接口声明（定义）"></a>Go 语言接口声明（定义）</h2><p>Go 语言的接口类型与其他数据类型不同（<strong>抽象结构），它是没法被值化的，或者说是没法被实例化的</strong>。更具体地说，我们既不能通过调用new函数或make函数创建出一个接口类型的值，也无法用字面量来表示一个接口类型的值。<br>声明接口类型的方式，看起来与结构体类型有些相似，它们都用花括号包裹一些核心信息。不同的是，结构体类型包裹的是它的字段声明，而接口类型包裹的是它的方法定义。<strong>一个接口的方法集合就是它的全部特征</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type 接口类型名 interface&#123;                      //Go语言的接口在命名时，一般会在单词后面添加 er，如有写操作接口 Writer</span><br><span class="line">  方法名1( 参数列表1 ) 返回值列表1                //当方法名首字母和其接口类型名首字母均为大写时，该方法可以被接口所在包(package)之外的代码访问</span><br><span class="line">  方法名2( 参数列表2 ) 返回值列表2</span><br><span class="line">    …</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>对于任意类型T（包括接口类型），只要它的方法集合中完全包含了一个接口的全部特征（全部的方法），我们就说类型 T 实现了这个接口类型</strong>。这就是一种无侵入式的接口实现方式，还有一个专有名词叫“Duck typing”，中文常译作<a href="https://baike.baidu.com/item/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">“鸭子类型”</a>。</p>
-        
-          <a class="article-more-a" href="/2020/09/14/《Go语言核心36讲》之“接口类型的合理运用”/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/14/《Go语言核心36讲》之“接口类型的合理运用”/">展开全文 >></a>
         </p>
       
 

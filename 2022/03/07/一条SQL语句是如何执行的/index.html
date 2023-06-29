@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>Sdwang1的博客</title>
+  <title>一条SQL语句是如何执行的 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sdwang1的博客">
-<meta property="og:url" content="http://www.sdwangblog.cn/page/3/index.html">
+  <meta name="description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一条SQL语句是如何执行的">
+<meta property="og:url" content="http://www.sdwangblog.cn/2022/03/07/一条SQL语句是如何执行的/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
+<meta property="og:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png">
+<meta property="og:updated_time" content="2023-06-29T02:29:36.747Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sdwang1的博客">
+<meta name="twitter:title" content="一条SQL语句是如何执行的">
+<meta name="twitter:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -150,639 +158,99 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-科学上网工具V2Ray简介及具体搭建过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-一条SQL语句是如何执行的" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">科学上网工具V2Ray简介及具体搭建过程</a>
+    <h1 class="article-title" itemprop="name">
+      一条SQL语句是如何执行的
     </h1>
   
 
         
-        <a href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/" class="archive-article-date">
-  	<time datetime="2020-02-10T08:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-10</time>
+        <a href="/2022/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2022-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>原本在 <a href="https://bwh88.net/cart.php" target="_blank" rel="noopener">搬瓦工</a> 上面购买的 VPS 上面搭建的 VPN 不能用了，具体原因就是 GTW 经过一波加强，可以通过 TCP 阻断来封锁一些用于搭建 VPN 的 VPS。TCP 阻断的结果就是在国内无法通过 tcp 来连接访问国外的 VPS，从而在国内无法 SSH 登录 VPS，但是使用 ping 工具【基于 ICMP】却能 ping 通被 tcp 阻断的服务器。<br>当 VPS 被 TCP 阻断时，原本<a href="https://www.textarea.com/ExpectoPatronum/shiyong-shadowsocks-kexue-shangwang-265/" target="_blank" rel="noopener">基于 shadowsocks 的科学上网</a>方式就不能使用了，本文就是针对被 TCP 阻断的 VPS，通过 <a href="https://guide.v2fly.org/#%E5%A3%B0%E6%98%8E" target="_blank" rel="noopener">V2Ray 来实现科学上网</a>。当然对于没有被 TCP 阻断的 VPS 使用该方法来搭梯子也不容易被封。</p>
-<h2 id="基础条件"><a href="#基础条件" class="headerlink" title="基础条件"></a>基础条件</h2><p>搭建V2Ray的基础条件与SSR基本一致，无(一)甚(贯)特(尿)殊(性)：</p>
+        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+<a id="more"></a>
+<p>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
+<ul>
+<li><strong>Server层：负责建立连接、分析和执行 SQL</strong>。主要包括连接器、查询缓存、解析器、预处理器、优化器、执行器等涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能（比如存储过程、触发器、视图，函数等）都在这一层实现。</li>
+<li><strong>存储引擎：负责数据的存储和读取</strong>，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同。现常用的存储引擎是InnoDB，自MySQL5.5.5版本后成为默认存储引擎。</li>
+</ul>
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。连接过程需先经过 TCP 三次握手，然后会使用<code>$user+$passwd</code>认证客户端身份，认证通过后连接器会在权限表里获取该用户的权限并保存起来，后续该用户在此连接里的任何操作，都会基于连接开始时读到的权限进行权限逻辑的判断。<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># -h 指定 MySQL 服务得 IP 地址，如果是连接本地的 MySQL服务，可以不用这个参数；</span><br><span class="line"># -u 指定用户名，管理员角色名为 root；</span><br><span class="line"># -p 指定密码，如果命令行中不填写密码（为了密码安全，建议不要在命令行写密码），就需要在交互对话里面输入密码</span><br><span class="line">mysql -h$ip -u$user -p</span><br></pre></td></tr></table></figure></p>
+<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show processlist;</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">| Id | User | Host      | db   | Command | Time | State    | Info             |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">|  4 | root | localhost | NULL | Sleep   |   47 |          | NULL             |</span><br><span class="line">|  5 | root | localhost | NULL | Query   |    0 | starting | show processlist |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">#上表显示，共有两个名为 root 的用户连接了Mysql服务，其中 id=4 的是一个空闲连接(Command=Sleep)且空闲时长是47s</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like &apos;wait_timeout&apos;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| wait_timeout  | 28800 |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br><span class="line"></span><br><span class="line">#Mysql定义了空闲连接的最大空闲时长(wait_timeout参数)，如果空闲连接超过这个时长，连接器就会自动将它断开，当然也可以手动断开空闲连接</span><br><span class="line"></span><br><span class="line">mysql&gt; kill connection +4;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>Mysql 的连接跟 HTTP一样，有短连接和长连接的区分：</p>
+<ul>
+<li>短连接是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</li>
+<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接，<strong>推荐使用</strong>。但使用长连接可能会导致 Mysql 占用内存增多，这是因为MySQL在执行查询过程中临时使用内存管理连接对象，这些连接对象资源在连接断开时才会释放。<strong>如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。<blockquote>
+<p>解决方案有两种：</p>
+</blockquote>
+</li>
+</ul>
 <ol>
-<li>购买一台国外VPS服务器：选择自己喜欢的服务商即可【这里有<a href="https://www.vpser.net/ten-dollars-vps" target="_blank" rel="noopener">评比</a>】，不建议选择主流服务商像vultr,搬瓦工等，即使正常使用也很有可能被墙。我这次选择的是<a href="https://www.hostwinds.com/vps/unmanaged-linux" target="_blank" rel="noopener">hostwinds</a>最低配置Linux vps（<strong>建议位置选择Seattle，系统选择以稳定著称的CentOS 7</strong>），4.49美元/月，有1T流量，最重要的是支持免费更换ip，不限次数（<strong>注意购买hostwinds时，不要使用代理ip，直接用本机ip访问hostwinds官网购买，否则会导致购买完成后，vps显示“Pending”状态，不能即时创建服务，需要联系客服进行人工审核</strong>）。</li>
-<li>购买一个域名：V2Ray的节点可以伪装成正常的网站，将其流量与正常的网页流量混淆以避开第三方干扰，自然就需要有域名。我这里选择的是<a href="https://www.namesilo.com/account_domains.php" target="_blank" rel="noopener">namesilo</a>，在域名搜索框搜索自己喜欢的域名，找域名后缀最便宜的购买即可，我的域名后缀是club，1.59美元/年。</li>
+<li>定期断开长连接。使用一段时间，或者程序里判断执行过一个占用内存的大查询后，断开连接，之后查询再重连；</li>
+<li>如果使用的是MySQL版本 &gt;=5.7，可以在每次执行一个较大操作后，通过执行<code>mysql_reset_connection()</code>来重新初始化连接资源——将连接恢复到刚刚创建完时的状态。</li>
 </ol>
-        
-          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">V2Ray</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/10/科学上网工具V2Ray简介及具体搭建过程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel进阶之事件篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/30/Laravel进阶之事件篇/">Laravel进阶之事件篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/30/Laravel进阶之事件篇/" class="archive-article-date">
-  	<time datetime="2019-11-30T07:39:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel 事件提供了简单的观察者模式实现，允许你订阅和监听应用中的事件。事件类通常存放在<code>app/Events</code>目录，监听器存放在<code>app/Listeners</code>。如果你在应用中没有看到这些目录，不要担心，它们会在你使用 Artisan 命令生成事件和监听器的时候自动创建。<br>事件为应用功能模块解耦提供了行之有效的解决办法，因为单个事件可以有多个监听器而这些监听器之间并不相互依赖。例如，你可能想要在每次订单发送时给用户发送一个 Slack 通知，有了事件之后，你大可不必将订单处理代码和 Slack 通知代码耦合在一起，而只需要简单触发一个可以被监听器接收并处理为 Slack 通知的 <code>OrderShipped</code> 事件即可。</p>
-<h2 id="注册事件-监听器"><a href="#注册事件-监听器" class="headerlink" title="注册事件/监听器"></a>注册事件/监听器</h2><p>Laravel 自带的<code>EventServiceProvider</code>为事件监听器注册提供了方便之所。其中 <code>listen</code> 属性包含了事件（键）和对应监听器（值）数组。如果应用需要，你可以添加多个事件到该数组。下面让我们添加一个 <code>OrderShipped</code> 事件：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用的事件监听器映射.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@translator</span> laravelacademy.org</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> $listen = [</span><br><span class="line">    <span class="string">'App\Events\OrderShipped'</span> =&gt; [</span><br><span class="line">        <span class="string">'App\Listeners\SendShipmentNotification'</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/30/Laravel进阶之事件篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel进阶之缓存篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/28/Laravel进阶之缓存篇/">Laravel进阶之缓存篇</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/28/Laravel进阶之缓存篇/" class="archive-article-date">
-  	<time datetime="2019-11-28T07:49:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel 为不同的缓存系统提供了统一的 API，缓存配置位于 <code>config/cache.php</code>，在该文件中你可以指定在应用中默认使用哪个缓存驱动。Laravel 开箱支持主流的缓存后端如 <a href="https://memcached.org/" target="_blank" rel="noopener">Memcached</a> 和 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 等。<br>缓存配置文件还包含其他文档化的选项，确保仔细阅读这些选项。默认情况下，Laravel 被配置成使用文件缓存（<code>file</code> 驱动），这会将序列化数据和缓存对象存储到文件系统。对于大型应用，建议使用内存缓存如 Memcached 或 APC，你甚至可以为同一驱动配置多个缓存配置。</p>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>连接建立完成后，MYSQL在执行 <strong>查询请求</strong> 的时候，会先查询缓存——以Key-Value的形式【Key是查询语句，Value是结果集】直接缓存在内存中。如果查询能直接在缓存中命中Key，Value就会被直接返回给客户端，否则就继续后面的执行阶段，并在执行完成后将结果存入查询缓存中。</p>
+<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#MySQL 8.0 之前的版本，可以通过将参数 query_cache_type = DEMAND，关闭查询缓存</span><br><span class="line">#对于确定使用查询缓存的语句使用 SQL_CACHE 显式指定：</span><br><span class="line"></span><br><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
+<h3 id="解析SQL"><a href="#解析SQL" class="headerlink" title="解析SQL"></a>解析SQL</h3><p>分析器主要用来解析SQL语句是来干嘛的，通常分为以下几步：</p>
+<ol>
+<li>词法分析，根据你输入的字符串识别出关键字出来，构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等；</li>
+<li>语法分析，根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法；</li>
+</ol>
+<h3 id="执行SQL"><a href="#执行SQL" class="headerlink" title="执行SQL"></a>执行SQL</h3><p>执行SQL语句流程主要分为三个阶段：</p>
 <ul>
-<li><p>使用<code>database</code>缓存驱动，你需要（提前）设置一张表存储缓存项。下面是该表的<code>Schema</code>声明：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//亦可使用 php artisan cache:table命令通过相应的schema生成迁移。</span></span><br><span class="line">Schema::create(<span class="string">'cache'</span>, <span class="function"><span class="keyword">function</span><span class="params">($table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;string(<span class="string">'key'</span>)-&gt;unique();</span><br><span class="line">    $table-&gt;text(<span class="string">'value'</span>);</span><br><span class="line">    $table-&gt;integer(<span class="string">'expiration'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<li>prepare 预处理阶段：检查SQL语句中的表或字段是否存在（Mysql 5.7是在词法分析&amp;语法分析之后，prepare 阶段之前做的；Mysql 8.0代码结构变动到此阶段）、扩展表列(*)。</li>
+<li><p>optimize 优化阶段：决定选择使用哪个“最优”（不一定）的执行方案——怎么做，比如表中有多个索引的时决定使用哪个索引，多表关联查询的时决定各表连接顺序等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from core_user where core_user_id=920;</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">| id | select_type | table     | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">|  1 | SIMPLE      | core_user | NULL       | const | PRIMARY       | PRIMARY | 8       | const |    1 |   100.00 | NULL  |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">1 row in set, 1 warning (0.05 sec)</span><br><span class="line"></span><br><span class="line">#执行计划中key 表示执行过程中使用了哪个索引，比如PRIMARY 就是主键索引，NULL 表示没使用索引（全表扫描，type=ALL）</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>使用<code>Memcached</code>缓存，需要安装PHP Memcached扩展。你可以在配置文件<code>config/cache.php</code>中列出所有Memcached服务器：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'memcached'</span> =&gt; [</span><br><span class="line">            <span class="string">'driver'</span> =&gt; <span class="string">'memcached'</span>,</span><br><span class="line">            <span class="string">'persistent_id'</span> =&gt; env(<span class="string">'MEMCACHED_PERSISTENT_ID'</span>),</span><br><span class="line">            <span class="string">'sasl'</span> =&gt; [</span><br><span class="line">                env(<span class="string">'MEMCACHED_USERNAME'</span>),</span><br><span class="line">                env(<span class="string">'MEMCACHED_PASSWORD'</span>),</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'options'</span> =&gt; [</span><br><span class="line">                <span class="comment">// Memcached::OPT_CONNECT_TIMEOUT  =&gt; 2000,</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="string">'servers'</span> =&gt; [</span><br><span class="line">                [</span><br><span class="line">                    <span class="string">'host'</span> =&gt; env(<span class="string">'MEMCACHED_HOST'</span>, <span class="string">'127.0.0.1'</span>),  <span class="comment">//host可设置为UNIX socket路径，此时port应置为0</span></span><br><span class="line">                    <span class="string">'port'</span> =&gt; env(<span class="string">'MEMCACHED_PORT'</span>, <span class="number">11211</span>),</span><br><span class="line">                    <span class="string">'weight'</span> =&gt; <span class="number">100</span>,</span><br><span class="line">                ],</span><br><span class="line">            ],</span><br><span class="line">        ],</span><br></pre></td></tr></table></figure>
+<li><p>execute 执行阶段：确定了执行方案，执行器阶段会首先判断下用户对表T是否有执行查询的权限，如果没有就返回权限错误，否则就打开表，根据表的引擎定义去使用对应引擎提供的读写接口（交互以记录为单位），完成语句执行。</p>
 </li>
 </ul>
-        
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<h2 id="SQL语句的查询流程"><a href="#SQL语句的查询流程" class="headerlink" title="SQL语句的查询流程"></a>SQL语句的查询流程</h2><p>SQL语句大体分为两种：查询语句 or 更新语句（增加、更新、删除）。由于更新流程会涉及到一些重要的日志模块——redo log、binlog、undo log 及各种锁机制，我们就先结合MySQL 基础架构，概览下查询语句<code>SELECT * FROM tb_student A WHERE A.age=&#39;18&#39; AND A.name=&#39;张三&#39;;</code>的执行流程：<br><img src="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png" alt></p>
 
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/28/Laravel进阶之缓存篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpeg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《memcached全面剖析》读书笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/18/《memcached全面剖析》读书笔记/">《memcached全面剖析》读书笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/18/《memcached全面剖析》读书笔记/" class="archive-article-date">
-  	<time datetime="2019-11-18T06:35:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>memcached是一款开源、高性能的分布式内存缓存服务器，采用键/值【K/V】对的形式管理内存。一般的使用目的是通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度，提高可扩展性。它具有以下特点：协议简单、基于libevent的事件处理、内置内存存储方式、memcached不互相通信的分布式，更多有关memcached基础知识可参见<a href="http://www.sdwangblog.top/2017/06/04/PHP%E7%9A%84%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF/" target="_blank" rel="noopener">PHP的缓存技术</a>。</p>
-<h2 id="Memcache的安装与启动"><a href="#Memcache的安装与启动" class="headerlink" title="Memcache的安装与启动"></a>Memcache的安装与启动</h2><p>memcached 支持许多平台，比如Linux, FreeBSD, Solaris(memcached 1.2.5以上版本), Mac OS X等。这里使用Mac OS X进行说明。</p>
-<h3 id="memcached的安装："><a href="#memcached的安装：" class="headerlink" title="memcached的安装："></a>memcached的安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//安装Hombrew： ruby -e &quot;$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)&quot;</span><br><span class="line">$ brew search memcache</span><br><span class="line">==&gt; Formulae</span><br><span class="line">libmemcached 【客户端】                          memcache-top                           memcached 【服务器】</span><br><span class="line">$ brew install memcached</span><br><span class="line">//查看安装结果</span><br><span class="line">$ memcached -h</span><br><span class="line">memcached 1.5.20</span><br><span class="line">-p, --port=&lt;num&gt;          TCP port to listen on (default: 11211)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/11/18/《memcached全面剖析》读书笔记/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Memcached</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/18/《memcached全面剖析》读书笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Laravel学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/15/Laravel学习笔记/">Laravel学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/15/Laravel学习笔记/" class="archive-article-date">
-  	<time datetime="2019-09-15T02:58:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Laravel是一个在当下依然算得上比较流行的PHP框架，就个人而言，虽未曾大规模地使用过（公司使用的是自主研发的PHP框架），但因其盛名零零碎碎地还是有过些了解（亦曾实现过几个教程项目）。私以为它就个“全栈框架”，框架结构算得上合理，其内并没运用什么超前的原理，丰富的第三方库还略嫌笨重，没啥出彩之处。近来机缘巧合，有了进一步接触后才明白：“管中窥豹实乃短见”。</p>
-<p>本系列文章是针对Laravel 的、以实例驱动的、深入浅出的非官方实战指南，适用于有一定开发经验人员来概览Laravel框架。</p>
-<ul>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279573" target="_blank" rel="noopener"><strong>搭建适用于Mac的轻量级开发环境Valet</strong></a></li>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279659" target="_blank" rel="noopener"><strong>创建并运行一个新的Laravel项目</strong></a></li>
-<li><a href="https://www.kancloud.cn/sdwang/learning_laravel/1279660" target="_blank" rel="noopener"><strong>基础篇之路由章</strong></a></li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/15/Laravel学习笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-跳跃表原理及实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/08/跳跃表原理及实现/">跳跃表原理及实现</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/08/跳跃表原理及实现/" class="archive-article-date">
-  	<time datetime="2019-07-08T08:35:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间曾欲<a href="http://www.sdwangblog.top/2019/03/27/InnoDB%E4%BD%BF%E7%94%A8%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95-FullText-Index/" target="_blank" rel="noopener">使用InnoDB全文索引</a>优化表上某字段的模糊查询，但考虑到线上MySQL版本(&gt;=5.6)及参数兼容性(innodb_ft_min_token_size)等因素，最后还是另写了个<a href="#">简略版分词器</a>。在了解全文检索相关技术时，Lucenne、Sphinx及ElasticSearch自然就“不期而遇”了。对于这几种技术，除了Elasticsearch略微有所接触外，其他真的是一无所知，虽有心探究但由于工期因素就暂时加在了“TODO List豪华菜单“。But Now。。。（没错，我又是个闲人了😂）。。。接下来一段时间我们会多聊一聊Elasticearch和Lucene的相关知识。<br>全文检索技术由来已久，绝大多数都基于 <strong>倒排索引【顾名思义，相反于一篇文章包含了哪些词，它从词出发，记载了这个词在哪些文档中出现过】</strong> 来做（曾有过一些其他方案如文件指纹），<strong>通常由词典和倒排表两部分组成</strong>。其中词典结构尤为重要，在一个索引系统中，需要权衡各个因素（索引效率，磁盘空间、内存空间）来找到适合你当前业务的词典（数据）结构进行存储，才能让索引发挥最大能效。对于倒排索引的词典结构，常见的有 <strong>哈希表、B+树、跳跃表、字典树、FST(Finite State Transducers)等几种数据结构（其实只要是快速查找型的数据结构就可以用来做词典结构）</strong>。对于“哈希表、B+树”，大家应该都不陌生，那“跳跃表”又是个什么东东呢？</p>
-        
-          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/08/跳跃表原理及实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-使用FFMPEG生成HLS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/25/使用FFMPEG生成HLS/">使用FFMPEG生成HLS</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/25/使用FFMPEG生成HLS/" class="archive-article-date">
-  	<time datetime="2019-04-25T07:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期处理公司的“知识库模块”开发需求中，接触到了网页视频播放。虽说研究生期间做过“实时视频中交通标志的检测与识别”，但多是用“OpenCV+模式识别”在处理底层视频帧（通常是在看某二进制矩阵或特征向量的说😂），网页流媒体文件播放方面真是新手一枚。经过查资料、写demo的一番折腾，大体上算是有所知晓，今整理汇总于此，望有助于后来者。</p>
-<h2 id="视频档播放原理"><a href="#视频档播放原理" class="headerlink" title="视频档播放原理"></a>视频档播放原理</h2><p><strong>视频档是一种包含不同视频轨和音频轨，甚至有时还带有脚本的集合，亦可称为容器</strong>。具体来说，它就是将已经编码压缩好的视频轨【饭】和音频轨【菜】按照一定的格式（封装格式）放到一个文件【碗/锅】中。其中，<strong>不同的封装格式与视频轨/音频轨的编码方式有对应关系</strong>。我们常见的一些视频档扩展名，比如avi,mkv,wmv,mp4等，就分别表示着一种封装格式(标准)，<strong>大多数情况下扩展名就是封装格式的名字</strong>。</p>
-<ul>
-<li><strong>常见的视频编码格式：主要有两大类：1. MPEG系列</strong>：MPEG1(VCD使用)、MPEG2（DVD使用），MPEG4(DVDRIP使用的都是它的变种，如divx,xvid等)，MPEG4 AVC(正热)；2. <strong>H.26X系列</strong>：H.261、H.262、H.263、H263+、H263++、H.264（与MPEG4 AVC合作的结晶）；</li>
-<li><strong>常见的音频编码格式</strong>：主要有：MPEG Audio Layer 1/2、MPEG Audio Layer 3(MP3)、MPEG-2 AAC、MPEG4-AAC等；</li>
-<li><strong>不同封装格式对视/音频编码格式的支持程度是不一样的</strong>，简要汇总如下表示，详情可参见<a href="https://en.wikipedia.org/wiki/Comparison_of_video_container_formats" target="_blank" rel="noopener">Comparison of video container formats</a>。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">封装格式</th>
-<th style="text-align:left">简介</th>
-<th style="text-align:left">支持视频编码格式</th>
-<th>支持音频编码格式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">AVI(Audio Video Interactive)</td>
-<td style="text-align:left">由Microsoft开发，只能封装单个视频轨和单个音频轨，不能封装字幕，更没有流媒体功能(在线播放)，现已基本被淘汰了</td>
-<td style="text-align:left">MPEG-2, DIVX, XVID, WMV3, WMV4, WMV9, H.264等</td>
-<td>仅支持固定CBR恒定比特率编码的音频</td>
-</tr>
-<tr>
-<td style="text-align:left">RMVB/RM</td>
-<td style="text-align:left">由RealNetWorks开发，通常只能容纳Real Video和Real Audio编码的媒体，具有流媒体功能，现已基本退出历史舞台</td>
-<td style="text-align:left">支持自家的RV10、RV20、RV30和RV40等</td>
-<td>支持自家的Cook 、ATRC 、RAAC等</td>
-</tr>
-<tr>
-<td style="text-align:left">MOV</td>
-<td style="text-align:left">由苹果公司开发，存储内容相当丰富，除了视频、音频外，还可支持图片、甚至虚拟技术等</td>
-<td style="text-align:left">MPEG-2, MPEG4-ASP(XVID), H.264等</td>
-<td>AAC (MPEG-4 Audio),HE-AAC, Apple Lossless, MP3, AMR Narrowband等</td>
-</tr>
-<tr>
-<td style="text-align:left">MKV</td>
-<td style="text-align:left">由CoreCode开发，能容纳多种不同类型编码的视频、音频及字幕流，甚至囊括了RealMedia及QuickTime这类流媒体，可谓目前最开放的格式</td>
-<td style="text-align:left">几乎所有视频编码方案</td>
-<td>几乎所有音频编码方案</td>
-</tr>
-<tr>
-<td style="text-align:left">MP4</td>
-<td style="text-align:left">由MPEG开发，相较于MKV支持度很有限，但平台公开，拥有很高的兼容性，现已成为主推格式</td>
-<td style="text-align:left">HEVC/MPEG-H Part 2/H.265, MPEG-2 Part 2, MPEG-4 ASP, H.264/MPEG-4 AVC, H.263, VC-1等</td>
-<td>MPEG-2/4 (HE)-AAC, MPEG-1/2 Layers I, II, III (MP3), AC-3, Apple Lossless等</td>
-</tr>
-</tbody>
-</table>
-        
-          <a class="article-more-a" href="/2019/04/25/使用FFMPEG生成HLS/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/25/使用FFMPEG生成HLS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-MySQL为什么有时候会选错索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/MySQL为什么有时候会选错索引/">MySQL为什么有时候会选错索引？</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/30/MySQL为什么有时候会选错索引/" class="archive-article-date">
-  	<time datetime="2019-03-30T07:47:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.top/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" target="_blank" rel="noopener">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
-<p>是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。</p>
-<h2 id="问题1描述"><a href="#问题1描述" class="headerlink" title="问题1描述"></a>问题1描述</h2><p>假设现有如下所示的表结构<code>t</code>，表中有a、b两个字段，其上被分别创建了普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
-<p>然后，我们向表t中插入10万行记录，取值按整数递增，即数据从(1,1,1),(2,2,2),(3,3,3)直到(100000,100000,100000)。接下来，我们分析一条SQL语句<code>select * from t where a between 10000 and 20000;</code></p>
-        
-          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/#more">more >></a>
-        
-      
-
       
     </div>
     <div class="article-info article-info-index">
@@ -802,16 +270,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2022/03/07/一条SQL语句是如何执行的/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/04/26/How-to-watermarking-PDF-more-effectively-[-Reprint-]/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">How to watermarking PDF more effectively[Reprint]</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -826,180 +353,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-InnoDB使用全文索引-FullText-Index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">InnoDB使用全文索引(FullText Index)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" class="archive-article-date">
-  	<time datetime="2019-03-27T10:19:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.top/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
-<h2 id="InnoDB全文索引简介"><a href="#InnoDB全文索引简介" class="headerlink" title="InnoDB全文索引简介"></a>InnoDB全文索引简介</h2><p>InnoDB引擎对FULLTEXT索引的支持是MySQL5.6新引入的特性，语法层面上大多数兼容之前 <strong>MyISAM引擎</strong> 的全文索引模式。<strong>所谓全文索引，是一种通过建立倒排索引，快速匹配文档的方式</strong>。MySQL支持以下三种全文检索模式：</p>
-<ul>
-<li><strong>自然语言模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-natural-language.html" target="_blank" rel="noopener">IN NATURAL LANGUAGE MODE</a>）</strong>，即通过<code>MATCH (column...) AGAINST (val)</code>传递某个特定的字符串来进行检索。<strong>默认模式</strong>；</li>
-<li><p><strong>布尔模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html" target="_blank" rel="noopener">IN BOOLEAN MODE</a>）</strong>，可以为检索的字符串增加操作符，例如“+”表示必须包含，“-”表示不包含，<code>*</code>表示通配符（这种情况， 即使传递的字符串较小或出现在停词中也不会被过滤掉），其他还有很多特殊的布尔操作符，可以通过如下参数控制：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%ft_boolean_syntax%&apos;;</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| Variable_name     | Value          |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| ft_boolean_syntax | + -&gt;&lt;()~*:&quot;&quot;&amp;| |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>查询扩展模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-query-expansion.html" target="_blank" rel="noopener">WITH QUERY EXPANSION</a>）</strong>，这种模式是自然语言模式下的一个变种，会执行两次检索，第一次使用给定的短语进行检索，第二次是结合第一次相关性比较高的行进行检索。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL基本架构"><span class="toc-number">1.</span> <span class="toc-text">MySQL基本架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接器"><span class="toc-number">1.1.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询缓存"><span class="toc-number">1.2.</span> <span class="toc-text">查询缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析SQL"><span class="toc-number">1.3.</span> <span class="toc-text">解析SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行SQL"><span class="toc-number">1.4.</span> <span class="toc-text">执行SQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句的查询流程"><span class="toc-number">2.</span> <span class="toc-text">SQL语句的查询流程</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-MongoDB-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/MongoDB-Tutorial/">MongoDB-Tutorial</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/22/MongoDB-Tutorial/" class="archive-article-date">
-  	<time datetime="2019-03-22T02:03:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“</p>
-<p>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
-<h2 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h2><p>MongoDB是由C++语言编写的，基于分布式文件存储的开源数据库系统，旨在为WEB应用提供可扩展的高性能数据存储解决方案。<br>在MongoDB中我们把表（Table）称作集合（Collection），表中每一行数据（Row）称作文档（Document），其他的基本沿用关系型数据库的命名。MongoDB文档（<a href="http://bsonspec.org/" target="_blank" rel="noopener">BSON类型</a>）是个以二进制序列化格式存储的类似JSON对象，其数据结构由键值(key=&gt;value)对组成，字段值可以包含其他文档，数组及文档数组。<br><img src="http://www.sdwangblog.top/blogimg/mongodb_data_structure.png" alt></p>
-        
-          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1022,8 +401,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
