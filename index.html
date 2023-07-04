@@ -152,30 +152,46 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-深入浅出索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/03/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
+      <a class="article-title" href="/2022/05/09/深入浅出索引/">深入浅出索引</a>
     </h1>
   
 
         
-        <a href="/2022/03/07/一条SQL语句是如何执行的/" class="archive-article-date">
-  	<time datetime="2022-03-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-07</time>
+        <a href="/2022/05/09/深入浅出索引/" class="archive-article-date">
+  	<time datetime="2022-05-09T01:56:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
-<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+        <p><strong>索引是存储引擎用于快速找到记录的一种数据结构</strong>，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。</p>
+<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><p>我们可以按照四个角度来分类索引：</p>
+<ul>
+<li>按【数据结构】分类：<strong>B+ tree索引、Hash索引、Full-text索引</strong>。</li>
+<li><p>按【物理存储】分类：<strong>聚簇索引（主键索引）、二级索引（辅助索引）</strong>。</p>
+<blockquote>
+<p>当我们基于 InnoDB 引擎创建一张表的时候，都会创建一个唯一的聚集索引【B+ 树叶子结点存放表中一行行的数据】：</p>
+<ol>
+<li>如果这张表定义了主键索引，那么这个主键索引就作为聚集索引。</li>
+<li>如果这张表没有定义主键索引，那么该表的第一个唯一非空索引作为聚集索引。</li>
+<li>如果这张表也没有唯一非空索引，那么 InnoDB 内部会生成一个隐藏的主键作为聚集索引，这个隐藏的主键是一个6 个字节的列，该列的值会随着数据的插入自增。</li>
+</ol>
+</blockquote>
+</li>
+<li><p>按【字段特性】分类：<strong>主键索引、唯一索引、普通索引、前缀索引</strong>。</p>
+</li>
+<li>按【字段个数】分类：<strong>单列索引、联合索引</strong>。</li>
+</ul>
         
-          <a class="article-more-a" href="/2022/03/07/一条SQL语句是如何执行的/#more">more >></a>
+          <a class="article-more-a" href="/2022/05/09/深入浅出索引/#more">more >></a>
         
       
 
@@ -199,7 +215,84 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2022/03/07/一条SQL语句是如何执行的/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/05/09/深入浅出索引/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/05/07/一条SQL语句是如何执行的/">一条SQL语句是如何执行的</a>
+    </h1>
+  
+
+        
+        <a href="/2022/05/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2022-05-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+        
+          <a class="article-more-a" href="/2022/05/07/一条SQL语句是如何执行的/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/05/07/一条SQL语句是如何执行的/">展开全文 >></a>
         </p>
       
 
@@ -854,88 +947,6 @@
 
 
   
-    <article id="post-《Go语言核心36讲》之“Go语言协程机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/">《Go语言核心36讲》之“Go语言协程机制”</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/" class="archive-article-date">
-  	<time datetime="2020-09-16T02:13:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Go 语言通过编译器运行时（runtime），从语言上支持了并发的特性。谈及Go 语言并发特性前，我们先来了解几个概念。</p>
-<h3 id="进程、线程、协程"><a href="#进程、线程、协程" class="headerlink" title="进程、线程、协程"></a>进程、线程、协程</h3><ul>
-<li>进程：<strong>进程是程序在操作系统中的一次执行过程，系统进行资源分配（有独立的内存空间）和调度的一个独立单位</strong>。</li>
-<li>线程：<strong>线程是进程的一个执行实体，是CPU调度和分派的基本单位(Kernel Space Entity, KSE)。线程依附于进程存在（一个进程可以创建和撤销多个线程），每个线程会共享父进程的资源</strong>。同一个进程的多个线程之间可以并发执行。</li>
-<li>协程：<strong>协程是一种用户态的轻量级线程，有独立的栈空间，共享堆空间，调度由用户自己控制。一个线程上可以跑多个协程，协程间切换只需要保存任务上下文，没有内核开销</strong>。<h3 id="并发-concurrency-、并行-parallelism"><a href="#并发-concurrency-、并行-parallelism" class="headerlink" title="并发(concurrency)、并行(parallelism)"></a>并发(concurrency)、并行(parallelism)</h3>多线程程序在<strong>单个CPU核</strong>上运行时，<strong>通过时间片或者让出控制权来实现任务切换</strong>，达到 “同时” 运行多个任务的目的，这就是所谓的<strong>并发</strong>。实际上任何时刻都只有一个任务被执行，其他任务通过某种算法来排队。<br>多线程程序在<strong>多核CPU</strong>上运行时，可以让<strong>同一进程内的“多个线程”做到真正意义上的同时运行</strong>，这就是<strong>并行</strong>。<h2 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h2>Go语言的并发特性，<strong>通过轻量级协程Goroutine实现</strong>，由Go 运行时（runtime）管理。Go 程序会智能地将 goroutine 中的任务合理地分配给每个CPU。<br>Go 程序从 main 包的 main() 函数开始，<strong>在程序启动时，Go 程序就会为 main() 函数创建一个默认的 goroutine</strong>。我们可以使用 <strong>go 关键字</strong>为普通函数创建一个 goroutine，写法如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//go 关键字放在方法调用前新建一个 goroutine 并执行方法体</span><br><span class="line">go GetThingDone(param1, param2);</span><br><span class="line"></span><br><span class="line">//新建一个匿名方法并执行</span><br><span class="line">go func(param1, param2) &#123;</span><br><span class="line">&#125;(val1, val2)</span><br><span class="line"></span><br><span class="line">//直接新建一个 goroutine 并在 goroutine 中执行代码块</span><br><span class="line">go &#123;</span><br><span class="line">    //do someting...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1037,6 +1048,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1049,11 +1064,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1061,11 +1076,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1078,10 +1093,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1109,15 +1120,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>

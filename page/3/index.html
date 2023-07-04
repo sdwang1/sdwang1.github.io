@@ -152,6 +152,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-《Docker从入门到实践》之基础篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/02/《Docker从入门到实践》之基础篇/">《Docker从入门到实践》之基础篇</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/02/《Docker从入门到实践》之基础篇/" class="archive-article-date">
+  	<time datetime="2020-04-02T07:32:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为一种新兴的虚拟化方式，Docker从2013年发布至今，一直广受瞩目，被认为可能会改变软件行业。那么，Docker到底什么，要解决什么问题，好处又在哪里？<br>传统的虚拟机技术是在宿主机上虚拟出一套硬件后在其上运行一个完整操作系统，再在该系统上运行所需应用进程；而Docker容器里面的进程直接运行于宿主内核（Docker在容器的基础上，进行了进一步封装，从文件系统、网络互联到进程隔离等等），这样Docker就会“体积更轻、跑的更快、同宿主机可创建的个数更多”。<br><img src="http://www.sdwangblog.top/blogimg/virtualMachine_vs_Docker.png" alt></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker包括三个基本概念：镜像（Image）、容器（Container）、仓库（Repository），理解了这三个概念就理解了Docker的整个生命周期。</p>
+        
+          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-科学上网工具V2Ray简介及具体搭建过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -918,84 +995,6 @@
 
 
   
-    <article id="post-MongoDB-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/MongoDB-Tutorial/">MongoDB-Tutorial</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/22/MongoDB-Tutorial/" class="archive-article-date">
-  	<time datetime="2019-03-22T02:03:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于实际业务场景的诉求，鄙人考虑打算做一个“定时任务集中管理系统”，在前期了解开源系统现状时——”Know what，then ask how and why“，<a href="https://github.com/shunfei/cronsun" target="_blank" rel="noopener">cronsun</a>“不期而遇”地闯入了视线。cronsun的部署前提是要安装MongoDB和Etcd3——考虑到以前对MongoDB是有所耳闻，但由于没有业务实践，算起来是“素未谋面”。故而籍此机会，闲暇时间来”捡个西瓜🍉。。。“</p>
-<p>前景提要：NoSQL(Not Only SQL)是对不同于传统的关系型数据库的数据库管理系统的统称。<strong>它适用于超大规模数据的存储，例如谷歌或Facebook每天为他们的用户收集万亿比特的数据，这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。对比而言，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它仍是结构化数据存储在网络和商务应用的主导技术</strong>。<br>NoSQL按存储类型可分为如下几种：列存储——Hbase、Hypertable，文档存储——MongoDB、CouchDB，key-value存储——MemcacheDB、Redis(内存缓存)，图存储——Neo4J、FlockDB，对象存储——db4o、Versant，XML数据库——Berkeley DB X、BaseX。</p>
-<h2 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h2><p>MongoDB是由C++语言编写的，基于分布式文件存储的开源数据库系统，旨在为WEB应用提供可扩展的高性能数据存储解决方案。<br>在MongoDB中我们把表（Table）称作集合（Collection），表中每一行数据（Row）称作文档（Document），其他的基本沿用关系型数据库的命名。MongoDB文档（<a href="http://bsonspec.org/" target="_blank" rel="noopener">BSON类型</a>）是个以二进制序列化格式存储的类似JSON对象，其数据结构由键值(key=&gt;value)对组成，字段值可以包含其他文档，数组及文档数组。<br><img src="http://www.sdwangblog.top/blogimg/mongodb_data_structure.png" alt></p>
-        
-          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NoSQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1097,6 +1096,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1109,11 +1112,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1121,11 +1124,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1138,10 +1141,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1169,15 +1168,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>

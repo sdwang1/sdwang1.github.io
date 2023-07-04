@@ -152,6 +152,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-《Go语言核心36讲》之“Go语言协程机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/">《Go语言核心36讲》之“Go语言协程机制”</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/" class="archive-article-date">
+  	<time datetime="2020-09-16T02:13:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Go 语言通过编译器运行时（runtime），从语言上支持了并发的特性。谈及Go 语言并发特性前，我们先来了解几个概念。</p>
+<h3 id="进程、线程、协程"><a href="#进程、线程、协程" class="headerlink" title="进程、线程、协程"></a>进程、线程、协程</h3><ul>
+<li>进程：<strong>进程是程序在操作系统中的一次执行过程，系统进行资源分配（有独立的内存空间）和调度的一个独立单位</strong>。</li>
+<li>线程：<strong>线程是进程的一个执行实体，是CPU调度和分派的基本单位(Kernel Space Entity, KSE)。线程依附于进程存在（一个进程可以创建和撤销多个线程），每个线程会共享父进程的资源</strong>。同一个进程的多个线程之间可以并发执行。</li>
+<li>协程：<strong>协程是一种用户态的轻量级线程，有独立的栈空间，共享堆空间，调度由用户自己控制。一个线程上可以跑多个协程，协程间切换只需要保存任务上下文，没有内核开销</strong>。<h3 id="并发-concurrency-、并行-parallelism"><a href="#并发-concurrency-、并行-parallelism" class="headerlink" title="并发(concurrency)、并行(parallelism)"></a>并发(concurrency)、并行(parallelism)</h3>多线程程序在<strong>单个CPU核</strong>上运行时，<strong>通过时间片或者让出控制权来实现任务切换</strong>，达到 “同时” 运行多个任务的目的，这就是所谓的<strong>并发</strong>。实际上任何时刻都只有一个任务被执行，其他任务通过某种算法来排队。<br>多线程程序在<strong>多核CPU</strong>上运行时，可以让<strong>同一进程内的“多个线程”做到真正意义上的同时运行</strong>，这就是<strong>并行</strong>。<h2 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h2>Go语言的并发特性，<strong>通过轻量级协程Goroutine实现</strong>，由Go 运行时（runtime）管理。Go 程序会智能地将 goroutine 中的任务合理地分配给每个CPU。<br>Go 程序从 main 包的 main() 函数开始，<strong>在程序启动时，Go 程序就会为 main() 函数创建一个默认的 goroutine</strong>。我们可以使用 <strong>go 关键字</strong>为普通函数创建一个 goroutine，写法如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//go 关键字放在方法调用前新建一个 goroutine 并执行方法体</span><br><span class="line">go GetThingDone(param1, param2);</span><br><span class="line"></span><br><span class="line">//新建一个匿名方法并执行</span><br><span class="line">go func(param1, param2) &#123;</span><br><span class="line">&#125;(val1, val2)</span><br><span class="line"></span><br><span class="line">//直接新建一个 goroutine 并在 goroutine 中执行代码块</span><br><span class="line">go &#123;</span><br><span class="line">    //do someting...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/16/《Go语言核心36讲》之“Go语言协程机制”/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-《Go语言核心36讲》之“接口类型的合理运用”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -864,83 +946,6 @@
 
 
   
-    <article id="post-《Docker从入门到实践》之基础篇" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/02/《Docker从入门到实践》之基础篇/">《Docker从入门到实践》之基础篇</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/02/《Docker从入门到实践》之基础篇/" class="archive-article-date">
-  	<time datetime="2020-04-02T07:32:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为一种新兴的虚拟化方式，Docker从2013年发布至今，一直广受瞩目，被认为可能会改变软件行业。那么，Docker到底什么，要解决什么问题，好处又在哪里？<br>传统的虚拟机技术是在宿主机上虚拟出一套硬件后在其上运行一个完整操作系统，再在该系统上运行所需应用进程；而Docker容器里面的进程直接运行于宿主内核（Docker在容器的基础上，进行了进一步封装，从文件系统、网络互联到进程隔离等等），这样Docker就会“体积更轻、跑的更快、同宿主机可创建的个数更多”。<br><img src="http://www.sdwangblog.top/blogimg/virtualMachine_vs_Docker.png" alt></p>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker包括三个基本概念：镜像（Image）、容器（Container）、仓库（Repository），理解了这三个概念就理解了Docker的整个生命周期。</p>
-        
-          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/02/《Docker从入门到实践》之基础篇/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1042,6 +1047,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1054,11 +1063,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1066,11 +1075,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1083,10 +1092,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1114,15 +1119,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
             
             <div class="clearfix"></div>
