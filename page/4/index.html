@@ -152,6 +152,170 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL为什么有时候会选错索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/30/MySQL为什么有时候会选错索引/">MySQL为什么有时候会选错索引？</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/30/MySQL为什么有时候会选错索引/" class="archive-article-date">
+  	<time datetime="2019-03-30T07:47:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面介绍索引时，我们知道在MySQL中一张表上是可以支持多个索引的。MySQL在<a href="http://www.sdwangblog.top/2019/03/07/%E4%B8%80%E6%9D%A1SQL%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" target="_blank" rel="noopener">执行一条SQL语句</a>时，其优化器会自行选择要使用哪个索引。然世事总非一帆风顺，不知道你有没有碰到过这种情况，一条本来可以执行得很快的语句，由于MySQL选错了索引，而导致执行速度变得很慢？</p>
+<p>是不是很讶异“MySQL内核也会犯错”？让我们一起来看几个例子吧。</p>
+<h2 id="问题1描述"><a href="#问题1描述" class="headerlink" title="问题1描述"></a>问题1描述</h2><p>假设现有如下所示的表结构<code>t</code>，表中有a、b两个字段，其上被分别创建了普通索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们向表t中插入10万行记录，取值按整数递增，即数据从(1,1,1),(2,2,2),(3,3,3)直到(100000,100000,100000)。接下来，我们分析一条SQL语句<code>select * from t where a between 10000 and 20000;</code></p>
+        
+          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-InnoDB使用全文索引-FullText-Index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">InnoDB使用全文索引(FullText Index)</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" class="archive-article-date">
+  	<time datetime="2019-03-27T10:19:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.top/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
+<h2 id="InnoDB全文索引简介"><a href="#InnoDB全文索引简介" class="headerlink" title="InnoDB全文索引简介"></a>InnoDB全文索引简介</h2><p>InnoDB引擎对FULLTEXT索引的支持是MySQL5.6新引入的特性，语法层面上大多数兼容之前 <strong>MyISAM引擎</strong> 的全文索引模式。<strong>所谓全文索引，是一种通过建立倒排索引，快速匹配文档的方式</strong>。MySQL支持以下三种全文检索模式：</p>
+<ul>
+<li><strong>自然语言模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-natural-language.html" target="_blank" rel="noopener">IN NATURAL LANGUAGE MODE</a>）</strong>，即通过<code>MATCH (column...) AGAINST (val)</code>传递某个特定的字符串来进行检索。<strong>默认模式</strong>；</li>
+<li><p><strong>布尔模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html" target="_blank" rel="noopener">IN BOOLEAN MODE</a>）</strong>，可以为检索的字符串增加操作符，例如“+”表示必须包含，“-”表示不包含，<code>*</code>表示通配符（这种情况， 即使传递的字符串较小或出现在停词中也不会被过滤掉），其他还有很多特殊的布尔操作符，可以通过如下参数控制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%ft_boolean_syntax%&apos;;</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| Variable_name     | Value          |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| ft_boolean_syntax | + -&gt;&lt;()~*:&quot;&quot;&amp;| |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>查询扩展模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-query-expansion.html" target="_blank" rel="noopener">WITH QUERY EXPANSION</a>）</strong>，这种模式是自然语言模式下的一个变种，会执行两次检索，第一次使用给定的短语进行检索，第二次是结合第一次相关性比较高的行进行检索。</p>
+</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MongoDB-Tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -201,86 +365,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/22/MongoDB-Tutorial/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
-  	<time datetime="2019-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>提到事务，你肯定会想到事务的四大特性——A(Atomicity)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。<br><strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了便于大家逐步理解这四种隔离级别，我们情景代入式讲讲“singo”的故事😄(假设下例均为聚簇索引的等值查询)。</p>
-<h2 id="事务的四种隔离级别"><a href="#事务的四种隔离级别" class="headerlink" title="事务的四种隔离级别"></a>事务的四种隔离级别</h2><h3 id="Read-uncommitted-读未提交"><a href="#Read-uncommitted-读未提交" class="headerlink" title="Read uncommitted 读未提交"></a>Read uncommitted 读未提交</h3><p><strong>读未提交，是指一个事务还没提交时，它做的变更就能被别的事务看到（一般都不会用）。在这种隔离级别下，事务在读数据时不加锁，在修改数据时只对数据加了行级S共享锁</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">举个例子，公司发工资了，财务把20000元打到singo的账号上，但是该事务并未提交，而singo正好去查看了账户，发现工资已经到账20000元，乐开了花。不幸的是，财务机智的发现了自己手抖，迅速回滚了事务，并修正singo工资金额为2000元后将事务提交，最后singo实际到账工资只有2000元，singo空欢喜一场。</span><br></pre></td></tr></table></figure></p>
-<p>上述现象就是我们所谓的 <strong>“脏读”：事务A（singo查询工资账户）读取某行记时，事务B（财务给singo发工资）也能对这行记录做读取更新（因为事务A未对数据加任何锁）操作。当事务B对该记录进行更新时，事务A能读到事务B对该记录的修改版本（因为事务B只加了共享读锁）</strong>，即使该修改尚未被提交。如何避免脏读，请看下一个隔离级别。</p>
-<h3 id="Read-committed-读提交"><a href="#Read-committed-读提交" class="headerlink" title="Read committed 读提交"></a>Read committed 读提交</h3><p><strong>读提交是指，一个事务提交之后，它做的变更才会被其他事务看到。在这种隔离级别下，事务对当前被读取的数据不加锁(在 InnoDB的 MVCC机制下，每次语句执行过程中都关闭read view并重新创建当前一份read view)；事务在更新某数据前（就是发生更新的瞬间），必须先对其加 行级X排他锁，直到事务结束才释放</strong>。</p>
-<p><strong>当隔离级别为Read committed，就可以避免脏读</strong>。事务B（财务给singo发工资）在更新数据的时候，会对该行数据增加排他锁直到事务结束才会释放锁。所以在事务B没有提交之前，事务A（singo查询工资账户）都能不对数据进行读取。<strong>Read committed是大多数数据库的默认级别，比如Sql Server , Oracle</strong>。</p>
-        
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/12/InnoDB中的事务隔离级别和锁关系/">展开全文 >></a>
         </p>
       
 
@@ -908,82 +992,6 @@
 
 
   
-    <article id="post-单点登录怎么实现？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/20/单点登录怎么实现？/">单点登录怎么实现？</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/20/单点登录怎么实现？/" class="archive-article-date">
-  	<time datetime="2018-09-20T07:38:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设一个场景：公司内部有财务、OA、订单服务等各类相互独立的应用系统，员工张三对这些系统有操作权限，如果张三想要登录某个系统进行业务操作，那么他需要输入相应的账号与密码。想象一下，当公司内部有 15 个应用系统，张三是不是要输入 15 次用户名和密码进行登录，然后分别才能进行业务操作呢？显然这是很不好的体验，因此我们需要引入一个这样的机制：<strong>用户（张三）只在需要登录时输入一次用户名和密码，成功登录后，他就可以访问可以访问所有相互信任的应用系统（财务系统、OA 系统、订单服务等），这就是单点登录（Single Sign On，简称SSO）</strong>。它是目前比较流行的企业业务整合的解决方案之一。<br><img src="http://www.sdwangblog.top/blogimg/sso_scene_example.png" alt></p>
-        
-          <a class="article-more-a" href="/2018/09/20/单点登录怎么实现？/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/20/单点登录怎么实现？/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1085,10 +1093,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1101,11 +1105,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1113,11 +1117,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1130,6 +1134,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1157,7 +1165,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1165,7 +1173,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
             
             <div class="clearfix"></div>

@@ -245,6 +245,83 @@
 
 
   
+    <article id="post-MySQL一行记录是怎么存储的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/05/08/MySQL一行记录是怎么存储的/">MySQL一行记录是怎么存储的?</a>
+    </h1>
+  
+
+        
+        <a href="/2022/05/08/MySQL一行记录是怎么存储的/" class="archive-article-date">
+  	<time datetime="2022-05-08T02:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MySQL 存储行为是由存储引擎实现的，它支持InnoDB、MyISAM、Memory等多种存储引擎，不同存储引擎保存数据文件的方式自然也不同。本文主要以InnoDB 存储引擎（MySQL 5.5.5以后默认）展开讨论。<br>先来看看MySQL 数据库的文件存放在哪个目录？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;datadir&apos;;</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| Variable_name | Value                  |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| datadir       | /usr/local/mysql/data/ |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">1 row in set (0.05 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#每创建一个 D_X 数据库就会在/usr/local/mysql/data/ 目录下创建一个 D_X 目录，用来保存表结构和表数据文件</span><br><span class="line">#比如，我们有一个名为my_test 的database，其下有一张名为t_user 的数据表</span><br><span class="line">[root@book ~]# ls /usr/local/mysql/data/my_test/</span><br><span class="line"> db.opt			t_user.frm		t_user.ibd</span><br></pre></td></tr></table></figure></p>
+<p>可以看到共有三个文件，它们分别代表着：</p>
+        
+          <a class="article-more-a" href="/2022/05/08/MySQL一行记录是怎么存储的/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/05/08/MySQL一行记录是怎么存储的/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-一条SQL语句是如何执行的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -293,6 +370,86 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2022/05/07/一条SQL语句是如何执行的/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/">InnoDB中的事务隔离级别和锁关系</a>
+    </h1>
+  
+
+        
+        <a href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
+  	<time datetime="2022-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>提到事务，你肯定会想到事务的四大特性——A(Atomi<br>  city)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。<br><strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了便于大家逐步理解这四种隔离级别，我们情景代入式讲讲“singo”的故事😄(假设下例均为聚簇索引的等值查询)。</p>
+<h2 id="事务的四种隔离级别"><a href="#事务的四种隔离级别" class="headerlink" title="事务的四种隔离级别"></a>事务的四种隔离级别</h2><h3 id="Read-uncommitted-读未提交"><a href="#Read-uncommitted-读未提交" class="headerlink" title="Read uncommitted 读未提交"></a>Read uncommitted 读未提交</h3><p><strong>读未提交，是指一个事务还没提交时，它做的变更就能被别的事务看到（一般都不会用）。在这种隔离级别下，事务在读数据时不加锁，在修改数据时只对数据加了行级S共享锁</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">举个例子，公司发工资了，财务把20000元打到singo的账号上，但是该事务并未提交，而singo正好去查看了账户，发现工资已经到账20000元，乐开了花。不幸的是，财务机智的发现了自己手抖，迅速回滚了事务，并修正singo工资金额为2000元后将事务提交，最后singo实际到账工资只有2000元，singo空欢喜一场。</span><br></pre></td></tr></table></figure></p>
+<p>上述现象就是我们所谓的 <strong>“脏读”：事务A（singo查询工资账户）读取某行记时，事务B（财务给singo发工资）也能对这行记录做读取更新（因为事务A未对数据加任何锁）操作。当事务B对该记录进行更新时，事务A能读到事务B对该记录的修改版本（因为事务B只加了共享读锁）</strong>，即使该修改尚未被提交。如何避免脏读，请看下一个隔离级别。</p>
+<h3 id="Read-committed-读提交"><a href="#Read-committed-读提交" class="headerlink" title="Read committed 读提交"></a>Read committed 读提交</h3><p><strong>读提交是指，一个事务提交之后，它做的变更才会被其他事务看到。在这种隔离级别下，事务对当前被读取的数据不加锁(在 InnoDB的 MVCC机制下，每次语句执行过程中都关闭read view并重新创建当前一份read view)；事务在更新某数据前（就是发生更新的瞬间），必须先对其加 行级X排他锁，直到事务结束才释放</strong>。</p>
+<p><strong>当隔离级别为Read committed，就可以避免脏读</strong>。事务B（财务给singo发工资）在更新数据的时候，会对该行数据增加排他锁直到事务结束才会释放锁。所以在事务B没有提交之前，事务A（singo查询工资账户）都能不对数据进行读取。<strong>Read committed是大多数数据库的默认级别，比如Sql Server , Oracle</strong>。</p>
+        
+          <a class="article-more-a" href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/">展开全文 >></a>
         </p>
       
 
@@ -789,164 +946,6 @@
 
 
   
-    <article id="post-《Go语言核心36讲》之“sync-WaitGroup和sync-Once”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/02/《Go语言核心36讲》之“sync-WaitGroup和sync-Once”/">《Go语言核心36讲》之“sync.WaitGroup和sync.Once”</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/02/《Go语言核心36讲》之“sync-WaitGroup和sync-Once”/" class="archive-article-date">
-  	<time datetime="2020-11-02T02:24:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前面我们讲到的互斥锁、条件变量和原子操作都是最基本重要的同步工具，Go 语言中除了通道之外，它们也算是最为常用的并发安全工具了。<br>说到通道，在之前的一些场合下，为了“让主 goroutine等待其他 goroutine的运行结束”，我们使用通道的方式看起来似乎有些蹩脚，比如“通过声明一个容量与启动的 goroutine数量相同的通道，让其他的 goroutine在运行结束前向这个通道发送一个元素值，并且让主 goroutine 在最后从这个通道中接收元素值”。<br>实际上，在这种应用场景下，我们可以<strong>使用等待组(sync.WaitGroup)更合理地进行多个任务的同步，等待组可以保证在并发环境中完成指定数量的任务</strong>。</p>
-<h2 id="等待组-sync-WaitGroup"><a href="#等待组-sync-WaitGroup" class="headerlink" title="等待组 sync.WaitGroup"></a>等待组 sync.WaitGroup</h2><p><code>sync.WaitGroup</code>类型是<strong>开箱即用的，并发安全，它一旦被真正使用就不能被复制了</strong>。等待组内部拥有一个计数器(初始默认值为0)，计数器的值可以通过方法调用实现计数器的增加（添加某个并发任务）和减少（某个任务完成时），在另外一个 goroutine 中等待这个等待组的计数器值为 0 时，表示所有任务已经完成。<br><strong>对于一个可寻址的 sync.WaitGroup值wg</strong>：</p>
-<ul>
-<li><strong>使用<code>(wg * WaitGroup) Add(delta int)</code>方法来改变值 wg 维护的计数</strong>；</li>
-<li><strong>使用<code>(wg * WaitGroup) Done()</code>方法让值 wg 的计数器 -1，与调用<code>wg.Add(-1)</code>完全等价</strong>；<br>如果调用 wg.Add(delta) 或者 wg.Done() 后将 wg 维护的计数更改成一个负数，将会产生一个运行时恐慌；</li>
-<li><strong>使用<code>(wg * WaitGroup) Wait()</code>方法让等待组计数器不等于 0 者阻塞直至变 0</strong>；</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/11/02/《Go语言核心36讲》之“sync-WaitGroup和sync-Once”/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/02/《Go语言核心36讲》之“sync-WaitGroup和sync-Once”/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-《Go语言核心36讲》之“共享内存并发机制”" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/">《Go语言核心36讲》之“共享内存并发机制”</a>
-    </h1>
-  
-
-        
-        <a href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/" class="archive-article-date">
-  	<time datetime="2020-10-28T02:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不管是什么编程语言，并发编程的难度都在于协调，而协调就要通过交流（并发单元间通信）。在工程上有两种最常见的并发通信模型：<strong>共享数据和消息</strong>。<br>共享数据是指<strong>多个并发单元分别保持对同一个数据的引用，实现对该数据的共享</strong>，被共享的数据可能有多种形式，实际应用中最常见的就是<strong>共享内存</strong>。<br><strong>共享内存并发机制</strong>，简单来说，就是以同步的方式控制多个线程对共享资源的访问。一个线程在想要访问某一个共享资源（临界区）的时候，需要先申请对该资源的访问权限，且只有在申请成功之后访问才能真正开始。而当线程对共享资源的访问结束时，它还必须归还对该资源的访问权限，若要再次访问仍需申请（访问串行化），通用示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  //process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line"></span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/10/28/《Go语言核心36讲》之“共享内存并发机制”/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1048,10 +1047,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">HTTP原理</a>
               </li>
              
@@ -1064,11 +1059,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
+                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Linux基础篇</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux之常用命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1076,11 +1071,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1093,6 +1088,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Apache</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,7 +1119,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
+                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1128,7 +1127,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">NoSQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">Memcached</a>
               </li>
             
             <div class="clearfix"></div>
