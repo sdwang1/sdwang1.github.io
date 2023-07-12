@@ -152,6 +152,130 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-使用FFMPEG生成HLS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/25/使用FFMPEG生成HLS/">使用FFMPEG生成HLS</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/25/使用FFMPEG生成HLS/" class="archive-article-date">
+  	<time datetime="2019-04-25T07:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期处理公司的“知识库模块”开发需求中，接触到了网页视频播放。虽说研究生期间做过“实时视频中交通标志的检测与识别”，但多是用“OpenCV+模式识别”在处理底层视频帧（通常是在看某二进制矩阵或特征向量的说😂），网页流媒体文件播放方面真是新手一枚。经过查资料、写demo的一番折腾，大体上算是有所知晓，今整理汇总于此，望有助于后来者。</p>
+<h2 id="视频档播放原理"><a href="#视频档播放原理" class="headerlink" title="视频档播放原理"></a>视频档播放原理</h2><p><strong>视频档是一种包含不同视频轨和音频轨，甚至有时还带有脚本的集合，亦可称为容器</strong>。具体来说，它就是将已经编码压缩好的视频轨【饭】和音频轨【菜】按照一定的格式（封装格式）放到一个文件【碗/锅】中。其中，<strong>不同的封装格式与视频轨/音频轨的编码方式有对应关系</strong>。我们常见的一些视频档扩展名，比如avi,mkv,wmv,mp4等，就分别表示着一种封装格式(标准)，<strong>大多数情况下扩展名就是封装格式的名字</strong>。</p>
+<ul>
+<li><strong>常见的视频编码格式：主要有两大类：1. MPEG系列</strong>：MPEG1(VCD使用)、MPEG2（DVD使用），MPEG4(DVDRIP使用的都是它的变种，如divx,xvid等)，MPEG4 AVC(正热)；2. <strong>H.26X系列</strong>：H.261、H.262、H.263、H263+、H263++、H.264（与MPEG4 AVC合作的结晶）；</li>
+<li><strong>常见的音频编码格式</strong>：主要有：MPEG Audio Layer 1/2、MPEG Audio Layer 3(MP3)、MPEG-2 AAC、MPEG4-AAC等；</li>
+<li><strong>不同封装格式对视/音频编码格式的支持程度是不一样的</strong>，简要汇总如下表示，详情可参见<a href="https://en.wikipedia.org/wiki/Comparison_of_video_container_formats" target="_blank" rel="noopener">Comparison of video container formats</a>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">封装格式</th>
+<th style="text-align:left">简介</th>
+<th style="text-align:left">支持视频编码格式</th>
+<th>支持音频编码格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AVI(Audio Video Interactive)</td>
+<td style="text-align:left">由Microsoft开发，只能封装单个视频轨和单个音频轨，不能封装字幕，更没有流媒体功能(在线播放)，现已基本被淘汰了</td>
+<td style="text-align:left">MPEG-2, DIVX, XVID, WMV3, WMV4, WMV9, H.264等</td>
+<td>仅支持固定CBR恒定比特率编码的音频</td>
+</tr>
+<tr>
+<td style="text-align:left">RMVB/RM</td>
+<td style="text-align:left">由RealNetWorks开发，通常只能容纳Real Video和Real Audio编码的媒体，具有流媒体功能，现已基本退出历史舞台</td>
+<td style="text-align:left">支持自家的RV10、RV20、RV30和RV40等</td>
+<td>支持自家的Cook 、ATRC 、RAAC等</td>
+</tr>
+<tr>
+<td style="text-align:left">MOV</td>
+<td style="text-align:left">由苹果公司开发，存储内容相当丰富，除了视频、音频外，还可支持图片、甚至虚拟技术等</td>
+<td style="text-align:left">MPEG-2, MPEG4-ASP(XVID), H.264等</td>
+<td>AAC (MPEG-4 Audio),HE-AAC, Apple Lossless, MP3, AMR Narrowband等</td>
+</tr>
+<tr>
+<td style="text-align:left">MKV</td>
+<td style="text-align:left">由CoreCode开发，能容纳多种不同类型编码的视频、音频及字幕流，甚至囊括了RealMedia及QuickTime这类流媒体，可谓目前最开放的格式</td>
+<td style="text-align:left">几乎所有视频编码方案</td>
+<td>几乎所有音频编码方案</td>
+</tr>
+<tr>
+<td style="text-align:left">MP4</td>
+<td style="text-align:left">由MPEG开发，相较于MKV支持度很有限，但平台公开，拥有很高的兼容性，现已成为主推格式</td>
+<td style="text-align:left">HEVC/MPEG-H Part 2/H.265, MPEG-2 Part 2, MPEG-4 ASP, H.264/MPEG-4 AVC, H.263, VC-1等</td>
+<td>MPEG-2/4 (HE)-AAC, MPEG-1/2 Layers I, II, III (MP3), AC-3, Apple Lossless等</td>
+</tr>
+</tbody>
+</table>
+        
+          <a class="article-more-a" href="/2019/04/25/使用FFMPEG生成HLS/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/25/使用FFMPEG生成HLS/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MySQL为什么有时候会选错索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -202,91 +326,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/30/MySQL为什么有时候会选错索引/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-InnoDB使用全文索引-FullText-Index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">InnoDB使用全文索引(FullText Index)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/27/InnoDB使用全文索引-FullText-Index/" class="archive-article-date">
-  	<time datetime="2019-03-27T10:19:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近期项目中有个小优化：要求某表列支持“模糊搜索”——形如<code>like &#39;%XX%&#39;</code>，我们知道，InnoDB B+树索引满足<a href="http://www.sdwangblog.top/2018/03/22/MYSQL%E7%B4%A2%E5%BC%95%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">最左前缀原则</a>，也就是说，形如<code>like &#39;%XX%&#39;</code>的查询是无法使用到普通索引的。有大佬就提了一嘴：“使用全文索引如何”？ 坦而言之，对于 <strong>全文索引</strong>，我是“只闻其声，未见其人”，具体能不能好使就需“实践得真知”了。事实上，通过这次使用实践，使得我对InnoDB引擎的全文索引(MySQL&gt;5.6)也算有了一定程度的认识，今将一些知识点汇总于此，希望能对大家有所帮助。</p>
-<h2 id="InnoDB全文索引简介"><a href="#InnoDB全文索引简介" class="headerlink" title="InnoDB全文索引简介"></a>InnoDB全文索引简介</h2><p>InnoDB引擎对FULLTEXT索引的支持是MySQL5.6新引入的特性，语法层面上大多数兼容之前 <strong>MyISAM引擎</strong> 的全文索引模式。<strong>所谓全文索引，是一种通过建立倒排索引，快速匹配文档的方式</strong>。MySQL支持以下三种全文检索模式：</p>
-<ul>
-<li><strong>自然语言模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-natural-language.html" target="_blank" rel="noopener">IN NATURAL LANGUAGE MODE</a>）</strong>，即通过<code>MATCH (column...) AGAINST (val)</code>传递某个特定的字符串来进行检索。<strong>默认模式</strong>；</li>
-<li><p><strong>布尔模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html" target="_blank" rel="noopener">IN BOOLEAN MODE</a>）</strong>，可以为检索的字符串增加操作符，例如“+”表示必须包含，“-”表示不包含，<code>*</code>表示通配符（这种情况， 即使传递的字符串较小或出现在停词中也不会被过滤掉），其他还有很多特殊的布尔操作符，可以通过如下参数控制：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show variables like &apos;%ft_boolean_syntax%&apos;;</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| Variable_name     | Value          |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">| ft_boolean_syntax | + -&gt;&lt;()~*:&quot;&quot;&amp;| |</span><br><span class="line">+-------------------+----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>查询扩展模式（<a href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-query-expansion.html" target="_blank" rel="noopener">WITH QUERY EXPANSION</a>）</strong>，这种模式是自然语言模式下的一个变种，会执行两次检索，第一次使用给定的短语进行检索，第二次是结合第一次相关性比较高的行进行检索。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/27/InnoDB使用全文索引-FullText-Index/">展开全文 >></a>
         </p>
       
 
@@ -1117,11 +1156,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">

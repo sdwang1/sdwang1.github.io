@@ -6,23 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>一条SQL语句是如何执行的 | Sdwang1的博客</title>
+  <title>MySQL一行记录是怎么存储的? | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
+  <meta name="description" content="MySQL 存储行为是由存储引擎实现的，它支持InnoDB、MyISAM、Memory等多种存储引擎，不同存储引擎保存数据文件的方式自然也不同。本文主要以InnoDB 存储引擎（MySQL 5.5.5以后默认）展开讨论。先来看看MySQL 数据库的文件存放在哪个目录？12345678910111213mysql&amp;gt; show variables like &amp;apos;datadir&amp;apos;">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一条SQL语句是如何执行的">
-<meta property="og:url" content="http://www.sdwangblog.cn/2022/05/07/一条SQL语句是如何执行的/index.html">
+<meta property="og:title" content="MySQL一行记录是怎么存储的?">
+<meta property="og:url" content="http://www.sdwangblog.cn/2019/05/08/MySQL一行记录是怎么存储的/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
+<meta property="og:description" content="MySQL 存储行为是由存储引擎实现的，它支持InnoDB、MyISAM、Memory等多种存储引擎，不同存储引擎保存数据文件的方式自然也不同。本文主要以InnoDB 存储引擎（MySQL 5.5.5以后默认）展开讨论。先来看看MySQL 数据库的文件存放在哪个目录？12345678910111213mysql&amp;gt; show variables like &amp;apos;datadir&amp;apos;">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png">
-<meta property="og:updated_time" content="2023-07-03T10:19:03.297Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_storage_logical_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row1_varchar.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row2_varchar.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row3_varchar.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row_null.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_row_overflow.jpg">
+<meta property="og:updated_time" content="2023-07-11T06:30:08.577Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一条SQL语句是如何执行的">
-<meta name="twitter:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
-<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
+<meta name="twitter:title" content="MySQL一行记录是怎么存储的?">
+<meta name="twitter:description" content="MySQL 存储行为是由存储引擎实现的，它支持InnoDB、MyISAM、Memory等多种存储引擎，不同存储引擎保存数据文件的方式自然也不同。本文主要以InnoDB 存储引擎（MySQL 5.5.5以后默认）展开讨论。先来看看MySQL 数据库的文件存放在哪个目录？12345678910111213mysql&amp;gt; show variables like &amp;apos;datadir&amp;apos;">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/innodb_storage_logical_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -158,65 +163,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-一条SQL语句是如何执行的" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-MySQL一行记录是怎么存储的" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      一条SQL语句是如何执行的
+      MySQL一行记录是怎么存储的?
     </h1>
   
 
         
-        <a href="/2022/05/07/一条SQL语句是如何执行的/" class="archive-article-date">
-  	<time datetime="2022-05-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-07</time>
+        <a href="/2019/05/08/MySQL一行记录是怎么存储的/" class="archive-article-date">
+  	<time datetime="2019-05-08T02:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
-<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+        <p>MySQL 存储行为是由存储引擎实现的，它支持InnoDB、MyISAM、Memory等多种存储引擎，不同存储引擎保存数据文件的方式自然也不同。本文主要以InnoDB 存储引擎（MySQL 5.5.5以后默认）展开讨论。<br>先来看看MySQL 数据库的文件存放在哪个目录？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &apos;datadir&apos;;</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| Variable_name | Value                  |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">| datadir       | /usr/local/mysql/data/ |</span><br><span class="line">+---------------+------------------------+</span><br><span class="line">1 row in set (0.05 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#每创建一个 D_X 数据库就会在/usr/local/mysql/data/ 目录下创建一个 D_X 目录，用来保存表结构和表数据文件</span><br><span class="line">#比如，我们有一个名为my_test 的database，其下有一张名为t_user 的数据表</span><br><span class="line">[root@book ~]# ls /usr/local/mysql/data/my_test/</span><br><span class="line"> db.opt			t_user.frm		t_user.ibd</span><br></pre></td></tr></table></figure></p>
+<p>可以看到共有三个文件，它们分别代表着：</p>
 <a id="more"></a>
-<p>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
 <ul>
-<li><strong>Server层：负责建立连接、分析和执行 SQL</strong>。主要包括连接器、查询缓存、解析器、预处理器、优化器、执行器等涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能（比如存储过程、触发器、视图，函数等）都在这一层实现。</li>
-<li><strong>存储引擎：负责数据的存储和读取</strong>，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同。现常用的存储引擎是InnoDB，自MySQL5.5.5版本后成为默认存储引擎。</li>
+<li>db.opt：用来存储当前数据库的默认字符集和字符校验规则；</li>
+<li>t_user.frm：用来保存每个表的元数据信息（建表时自动生成），主要包含<strong>表结构定义</strong>；</li>
+<li>t_user.ibd：用来存放<strong>表数据</strong>。表数据既可以保存在共享表空间文件(<strong>ibdata1</strong>)，也可以存放在独立表空间文件(<strong>表名.ibd</strong>)。这个行为是由参数 <code>innodb_file_per_table</code> 控制的，从 MySQL 5.6.6 版本开始，它的默认值就是 1 了（将待存储的数据、索引等信息单独存储在一个独占表空间），即从这个版本之后， MySQL 中每一张表的数据都存放在一个独立的 .ibd 文件。</li>
 </ul>
-<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。连接过程需先经过 TCP 三次握手，然后会使用<code>$user+$passwd</code>认证客户端身份，认证通过后连接器会在权限表里获取该用户的权限并保存起来，后续该用户在此连接里的任何操作，都会基于连接开始时读到的权限进行权限逻辑的判断。<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># -h 指定 MySQL 服务得 IP 地址，如果是连接本地的 MySQL服务，可以不用这个参数；</span><br><span class="line"># -u 指定用户名，管理员角色名为 root；</span><br><span class="line"># -p 指定密码，如果命令行中不填写密码（为了密码安全，建议不要在命令行写密码），就需要在交互对话里面输入密码</span><br><span class="line">mysql -h$ip -u$user -p</span><br></pre></td></tr></table></figure></p>
-<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show processlist;</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">| Id | User | Host      | db   | Command | Time | State    | Info             |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">|  4 | root | localhost | NULL | Sleep   |   47 |          | NULL             |</span><br><span class="line">|  5 | root | localhost | NULL | Query   |    0 | starting | show processlist |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">#上表显示，共有两个名为 root 的用户连接了Mysql服务，其中 id=4 的是一个空闲连接(Command=Sleep)且空闲时长是47s</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like &apos;wait_timeout&apos;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| wait_timeout  | 28800 |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br><span class="line"></span><br><span class="line">#Mysql定义了空闲连接的最大空闲时长(wait_timeout参数)，如果空闲连接超过这个时长，连接器就会自动将它断开，当然也可以手动断开空闲连接</span><br><span class="line"></span><br><span class="line">mysql&gt; kill connection +4;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></p>
-<p>Mysql 的连接跟 HTTP一样，有短连接和长连接的区分：</p>
-<ul>
-<li>短连接是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</li>
-<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接，<strong>推荐使用</strong>。但使用长连接可能会导致 Mysql 占用内存增多，这是因为MySQL在执行查询过程中临时使用内存管理连接对象，这些连接对象资源在连接断开时才会释放。<strong>如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。<blockquote>
-<p>解决方案有两种：</p>
+<h3 id="表空间的结构"><a href="#表空间的结构" class="headerlink" title="表空间的结构"></a>表空间的结构</h3><p>表空间由段(segment)、区(extent)、页(page)、行(row)组成，InnoDB 存储引擎的逻辑存储结构大致如下图：<br><img src="http://www.sdwangblog.top/blogimg/innodb_storage_logical_structure.png" alt></p>
 <ol>
-<li>定期断开长连接。使用一段时间，或者程序里判断执行过一个占用内存的大查询后，断开连接，之后查询再重连；</li>
-<li>如果使用的是MySQL版本 &gt;=5.7，可以在每次执行一个较大操作后，通过执行<code>mysql_reset_connection()</code>来重新初始化连接资源——将连接恢复到刚刚创建完时的状态。</li>
+<li>段(segment)：表空间是由各个段（segment）组成的，段一般分为数据段、索引段和回滚段等。<strong>索引段：存放 B + 树的非叶子节点的区的集合；数据段：存放 B + 树的叶子节点的区的集合；回滚段：存放的是回滚数据的区的集合，MVCC 就利用了回滚段实现了多版本查询数据</strong>。</li>
+<li><p>区(extent)：段是由多个区（extent）组成的。我们知道，InnoDB 存储引擎是用 B+ 树来组织数据的，而B+ 树中每一层都是通过双向链表连接起来的。如果以页为单位来分配存储空间，那么链表中相邻的两个页之间的物理位置并不是连续的，可能离得非常远，那么磁盘查询时就会有大量的随机I/O，随机 I/O 是非常慢的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在表中数据量大的时候，为某个索引分配空间的时候就不再按照页为单位分配了，而是按照区（extent）为单位分配。每个区的大小为 1MB，对于 16KB 的页来说，连续的 64 个页会被划为一个区，这样就使得链表中相邻的页的物理位置也相邻，就能使用顺序 I/O 了。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>页(page)：InnoDB <strong>以页为单位来读写数据</strong>，也就是说，当需要读一条记录的时候，并不是将这个行记录从磁盘读出来，而是以页为单位将其整体读入内存（<strong>默认每个页的大小为16KB，即最多能保证16KB的连续存储空间</strong>）。页的类型有很多，常见的有数据页、undo日志页、溢出页等。</p>
+</li>
+<li>行(row)：数据表中的记录都是按行(row)存放，每行记录根据不同的行格式，有不同的存储结构。</li>
 </ol>
+<h2 id="InnoDB-行格式"><a href="#InnoDB-行格式" class="headerlink" title="InnoDB 行格式"></a>InnoDB 行格式</h2><p>行格式（row_format）就是一条记录的存储结构。InnoDB 提供了4 种行格式：</p>
+<ul>
+<li>Redundant，MySQL 5.0 版本之前用的行格式（<strong>非紧凑型</strong>），现在基本没人用了。</li>
+<li>Compact，MySQL 5.0 之后引入的一种紧凑的行格式，设计的初衷就是为了让一个数据页中可以存放更多的行记录。自MySQL 5.1 版本之后，行格式默认设置成Compact。</li>
+<li>Dynamic、Compressed，它们的行格式都和 Compact 差不多（<strong>紧凑型</strong>）（均是基于 Compact 改进一点东西【<strong>处理行溢出数据</strong>】）。自MySQL 5.7 版本之后，默认使用Dynamic 行格式。</li>
+</ul>
+<p>下文重点介绍 Compact 行格式，因为 Dynamic 和 Compressed 这两个行格式跟 Compact 非常像，弄懂了Compact 行格式，其他行格式也能触类旁通。</p>
+<h3 id="COMPACT-行格式"><a href="#COMPACT-行格式" class="headerlink" title="COMPACT 行格式"></a>COMPACT 行格式</h3><p>一条完整的记录分为「记录的额外信息」和「记录的真实数据」两个部分。记录的额外信息包含变长字段长度列表、NULL 值列表和记录头信息 3 部分；记录的真实数据部分除了我们定义的字段，还有row_id、trx_id、roll_pointer三个隐藏字段。<br><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row.png" alt></p>
+<ul>
+<li>变长字段长度列表：在存储<code>varchar(n)、TEXT、BLOB等</code>变长字段数据的时候，需要把数据占用的大小也存起来（<strong>当数据表没有变长字段的时候，行格式里就不会有该部分信息</strong>），这样读取数据的时候才能根据该「变长字段长度列表」去读取对应长度的数据。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t_user` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `name` VARCHAR(20) DEFAULT NULL,</span><br><span class="line">  `phone` VARCHAR(20) DEFAULT NULL,</span><br><span class="line">  `age` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB DEFAULT CHARACTER SET = ascii ROW_FORMAT = COMPACT;</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM t_user;</span><br><span class="line">+----+------+-------+------+</span><br><span class="line">| id | name | phone | age  |</span><br><span class="line">+----+------+-------+------+</span><br><span class="line">|  1 | a    | 123   |   18 |</span><br><span class="line">|  2 | bb   | 1234  | NULL |</span><br><span class="line">|  3 | ccc  | NULL  | NULL |</span><br><span class="line">+----+------+-------+------+</span><br><span class="line">3 rows in set (0.03 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们来看看这三条记录的行格式中的 「变长字段长度列表」是怎样存储的？<br>第一条记录，name 列的值为 “a”，真实数据占用的字节数是 1 字节（十六进制 0x01）；phone 列的值为 “123”，真实数据占用的字节数是 3 字节（十六进制 0x03）；其他列都不是变长字段。这些变长字段的真实数据占用的字节数会<strong>按照列的顺序逆序存放</strong>，所以「变长字段长度列表」里的内容是「 03 01」：<br><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row1_varchar.png" alt><br>同理，我们知道第二条记录行格式中，「变长字段长度列表」里的内容是「 04 02」：<br><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row2_varchar.png" alt><br>而第三条记录中 phone 列的值是NULL，<strong>NULL 是不会存放在行格式中记录的真实数据部分里的（记录在NULL 值列表）</strong>：<br><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row3_varchar.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">为什么「变长字段长度列表」的信息要按照逆序存放？</span><br><span class="line"></span><br><span class="line">首先，「记录头信息」中指向下一个记录的指针，指向的是下一条记录的「记录头信息」和「真实数据」之间的位置，这样的好处是向左读就是记录头信息，向右读就是真实数据，比较方便。</span><br><span class="line">「变长字段长度列表」中的信息的逆序存放，是为了使得位置靠前的记录的真实数据和数据对应的字段长度信息可以同时在一个 CPU Cache Line 中，可以提高 CPU Cache 的命中率。</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>NULL 值列表：Compact 行格式会把存在允许 NULL 值的列 <strong>用整数个字节位表示——每个列对应一个二进制位（二进制位值为 1，代表该列值为NULL），二进制位按照列的顺序逆序排列【原因同上】</strong>。<br>我们仍以<code>t_user</code>表的三条记录为例，看看它们行格式中的 NULL 值列表是怎样存储的？<br>比如第一条记录，所有列都有值、不存在NULL 值（二进制位「 0 0 0」），InnoDB 是用整数字节的二进制位来表示 NULL 值列表的，现在不足 8 位，需要在高位补 0，最终用二进制来表示是酱紫的：<br><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row_null.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">每个数据库表的行格式都有「NULL 值列表」吗？</span><br><span class="line"></span><br><span class="line">当数据表的字段都定义成 NOT NULL 的时候，这时候表里的行格式就不会有 NULL 值列表了。当然，「NULL 值列表」的空间不是固定 1 字节的。当一条记录有 9 个字段值都是 NULL，那么就会创建 2 字节空间的「NULL 值列表」，以此类推。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>记录头信息，包含的内容很多，几个比较重要的有：<strong>delete_mask(标识此条数据是否被删除)、next_record(下一条记录的位置)、record_type(当前记录的类型，0表示普通记录，1表示B+树非叶子节点记录，2表示最小记录，3表示最大记录)</strong>。</p>
+</li>
+<li>row_id：如果我们建表的时候指定了主键或者唯一约束列，那么就<strong>没有 row_id 隐藏字段</strong>了。否则InnoDB 就会为记录添加 row_id 隐藏字段，占用 6个字节。</li>
+<li>trx_id：表示这个数据是由哪个事务生成的，<strong>必需字段，占用 6个字节</strong>。</li>
+<li>roll_pointer：记录上一个版本的指针，<strong>必需字段，占用 7个字节</strong>。</li>
+</ul>
+<blockquote>
+<p>varchar(n) 中 n 最大值为多少？<br>MySQL 规定除了TEXT、BLOBs 这种大对象类型之外，其他所有的列（不包括隐藏列和记录头信息）占用的字节长度加起来不能超过65535 个字节<br>比如，数据表中单一个字段 varchar(n) = (65535 - 「变长字段长度列表」字节树 - 「NULL 值列表」字节数) / 「数据库表的字符集」</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>连接建立完成后，MYSQL在执行 <strong>查询请求</strong> 的时候，会先查询缓存——以Key-Value的形式【Key是查询语句，Value是结果集】直接缓存在内存中。如果查询能直接在缓存中命中Key，Value就会被直接返回给客户端，否则就继续后面的执行阶段，并在执行完成后将结果存入查询缓存中。</p>
-<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#MySQL 8.0 之前的版本，可以通过将参数 query_cache_type = DEMAND，关闭查询缓存</span><br><span class="line">#对于确定使用查询缓存的语句使用 SQL_CACHE 显式指定：</span><br><span class="line"></span><br><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
-<h3 id="解析SQL"><a href="#解析SQL" class="headerlink" title="解析SQL"></a>解析SQL</h3><p>分析器主要用来解析SQL语句是来干嘛的，通常分为以下几步：</p>
-<ol>
-<li>词法分析，根据你输入的字符串识别出关键字出来，构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等；</li>
-<li>语法分析，根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法；</li>
-</ol>
-<h3 id="执行SQL"><a href="#执行SQL" class="headerlink" title="执行SQL"></a>执行SQL</h3><p>执行SQL语句流程主要分为三个阶段：</p>
-<ul>
-<li>prepare 预处理阶段：检查SQL语句中的表或字段是否存在（Mysql 5.7是在词法分析&amp;语法分析之后，prepare 阶段之前做的；Mysql 8.0代码结构变动到此阶段）、扩展表列(*)。</li>
-<li><p>optimize 优化阶段：决定选择使用哪个“最优”（不一定）的执行方案——怎么做，比如表中有多个索引的时决定使用哪个索引，多表关联查询的时决定各表连接顺序等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from core_user where core_user_id=920;</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">| id | select_type | table     | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">|  1 | SIMPLE      | core_user | NULL       | const | PRIMARY       | PRIMARY | 8       | const |    1 |   100.00 | NULL  |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">1 row in set, 1 warning (0.05 sec)</span><br><span class="line"></span><br><span class="line">#执行计划中key 表示执行过程中使用了哪个索引，比如PRIMARY 就是主键索引，NULL 表示没使用索引（全表扫描，type=ALL）</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>execute 执行阶段：确定了执行方案，执行器阶段会首先判断下用户对表T是否有执行查询的权限，如果没有就返回权限错误，否则就打开表，根据表的引擎定义去使用对应引擎提供的读写接口（交互以记录为单位），完成语句执行。</p>
-</li>
-</ul>
-<h2 id="SQL语句的查询流程"><a href="#SQL语句的查询流程" class="headerlink" title="SQL语句的查询流程"></a>SQL语句的查询流程</h2><p>SQL语句大体分为两种：查询语句 or 更新语句（增加、更新、删除）。由于更新流程会涉及到一些重要的日志模块——redo log、binlog、undo log 及各种锁机制，我们就先结合MySQL 基础架构，概览下查询语句<code>SELECT * FROM tb_student A WHERE A.age=&#39;18&#39; AND A.name=&#39;张三&#39;;</code>的执行流程：<br><img src="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png" alt></p>
+<h2 id="行溢出后，MySQL-怎么处理"><a href="#行溢出后，MySQL-怎么处理" class="headerlink" title="行溢出后，MySQL 怎么处理"></a>行溢出后，MySQL 怎么处理</h2><p>MySQL 中磁盘和内存交互的基本单位是页，页的大小一般是<code>16KB(16384 字节)</code>，而一个 varchar(n) 类型的列最多可以存储<code>65532 字节</code>，一些大对象 如TEXT、BLOB更可能存储更多的数据，这时一个页可能就存不了一条记录。当发生行溢出时，溢出的数据会存放到「溢出页」中。Compressed 和 Dynamic 这两个行格式和 Compact 非常类似，主要区别就在于处理行溢出数据的方式：<br><img src="http://www.sdwangblog.top/blogimg/innodb_row_overflow.jpg" alt></p>
 
       
 
@@ -317,7 +328,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2022/05/07/一条SQL语句是如何执行的/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2019/05/08/MySQL一行记录是怎么存储的/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -331,18 +342,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2022/05/08/MySQL一行记录是怎么存储的/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/05/09/深入浅出索引/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          MySQL一行记录是怎么存储的?
+          深入浅出索引
         
       </div>
     </a>
   
   
-    <a href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">InnoDB中的事务隔离级别和锁关系</div>
+    <a href="/2019/05/07/一条SQL语句是如何执行的/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">一条SQL语句是如何执行的</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -369,8 +380,8 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL基本架构"><span class="toc-number">1.</span> <span class="toc-text">MySQL基本架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接器"><span class="toc-number">1.1.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询缓存"><span class="toc-number">1.2.</span> <span class="toc-text">查询缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析SQL"><span class="toc-number">1.3.</span> <span class="toc-text">解析SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行SQL"><span class="toc-number">1.4.</span> <span class="toc-text">执行SQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句的查询流程"><span class="toc-number">2.</span> <span class="toc-text">SQL语句的查询流程</span></a></li></ol>
-                    </div>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#表空间的结构"><span class="toc-number">1.</span> <span class="toc-text">表空间的结构</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB-行格式"><span class="toc-number"></span> <span class="toc-text">InnoDB 行格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#COMPACT-行格式"><span class="toc-number">1.</span> <span class="toc-text">COMPACT 行格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行溢出后，MySQL-怎么处理"><span class="toc-number"></span> <span class="toc-text">行溢出后，MySQL 怎么处理</span></a>
+                    </li></div>
                 </span>
             </div>
         </div>
@@ -509,11 +520,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">

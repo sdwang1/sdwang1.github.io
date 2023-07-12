@@ -6,28 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>深入浅出索引 | Sdwang1的博客</title>
+  <title>一条SQL语句是如何执行的 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
+  <meta name="description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入浅出索引">
-<meta property="og:url" content="http://www.sdwangblog.cn/2022/05/09/深入浅出索引/index.html">
+<meta property="og:title" content="一条SQL语句是如何执行的">
+<meta property="og:url" content="http://www.sdwangblog.cn/2019/05/07/一条SQL语句是如何执行的/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
+<meta property="og:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_cluster_index.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_abc_joint_index.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q1.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q2.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_explain_type.png">
-<meta property="og:updated_time" content="2023-07-11T02:18:07.849Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png">
+<meta property="og:updated_time" content="2023-07-11T06:29:53.995Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入浅出索引">
-<meta name="twitter:description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
-<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png">
+<meta name="twitter:title" content="一条SQL语句是如何执行的">
+<meta name="twitter:description" content="本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。 MySQL基本架构">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -163,108 +158,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-深入浅出索引" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-一条SQL语句是如何执行的" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      深入浅出索引
+      一条SQL语句是如何执行的
     </h1>
   
 
         
-        <a href="/2022/05/09/深入浅出索引/" class="archive-article-date">
-  	<time datetime="2022-05-09T01:56:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-09</time>
+        <a href="/2019/05/07/一条SQL语句是如何执行的/" class="archive-article-date">
+  	<time datetime="2019-05-07T13:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>索引是存储引擎用于快速找到记录的一种数据结构</strong>，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。</p>
-<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><p>我们可以按照四个角度来分类索引：</p>
+        <p>本系列文章的“导火索”是一次线上死锁案例分析，“前景提要”是曾购买听讲了丁奇的《MySQL实战45讲》（初闻深有感触，并未理论运用于实际），今以此为契机，计划对 MySQL索引、事务、锁、日志等知识进行学习、归纳、整理，如有侵权，还望告知。</p>
+<h2 id="MySQL基本架构"><a href="#MySQL基本架构" class="headerlink" title="MySQL基本架构"></a>MySQL基本架构</h2><p><img src="http://www.sdwangblog.top/blogimg/mysql_logistic_structure.png" alt></p>
+<a id="more"></a>
+<p>大体来说，MySQL可以分为Server层和存储引擎层两部分：</p>
 <ul>
-<li>按【数据结构】分类：<strong>B+ tree索引、Hash索引、Full-text索引</strong>。</li>
-<li><p>按【物理存储】分类：<strong>聚簇索引（主键索引）、二级索引（辅助索引）</strong>。</p>
-<blockquote>
-<p>当我们基于 InnoDB 引擎创建一张表的时候，都会创建一个唯一的聚集索引【B+ 树叶子结点存放表中一行行的数据】：</p>
+<li><strong>Server层：负责建立连接、分析和执行 SQL</strong>。主要包括连接器、查询缓存、解析器、预处理器、优化器、执行器等涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能（比如存储过程、触发器、视图，函数等）都在这一层实现。</li>
+<li><strong>存储引擎：负责数据的存储和读取</strong>，采用插件式架构模式，支持InnoDB、MyISAM、Memory等多个存储引擎。不同存储引擎的表数据存取方式不同，支持功能也不同。现常用的存储引擎是InnoDB，自MySQL5.5.5版本后成为默认存储引擎。</li>
+</ul>
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3><p>连接器负责跟客户端建立连接、获取权限、维持和管理连接。连接过程需先经过 TCP 三次握手，然后会使用<code>$user+$passwd</code>认证客户端身份，认证通过后连接器会在权限表里获取该用户的权限并保存起来，后续该用户在此连接里的任何操作，都会基于连接开始时读到的权限进行权限逻辑的判断。<strong>一个用户成功建立连接后，即使管理员对用户权限做了修改，也不会影响已经存在连接的权限，只有再新建的连接才会使用新的权限设置</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># -h 指定 MySQL 服务得 IP 地址，如果是连接本地的 MySQL服务，可以不用这个参数；</span><br><span class="line"># -u 指定用户名，管理员角色名为 root；</span><br><span class="line"># -p 指定密码，如果命令行中不填写密码（为了密码安全，建议不要在命令行写密码），就需要在交互对话里面输入密码</span><br><span class="line">mysql -h$ip -u$user -p</span><br></pre></td></tr></table></figure></p>
+<p>连接完成后如果没有后续动作，连接就处于空闲状态，可通过<code>show processlist;</code>命令查看。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show processlist;</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">| Id | User | Host      | db   | Command | Time | State    | Info             |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">|  4 | root | localhost | NULL | Sleep   |   47 |          | NULL             |</span><br><span class="line">|  5 | root | localhost | NULL | Query   |    0 | starting | show processlist |</span><br><span class="line">+----+------+-----------+------+---------+------+----------+------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">#上表显示，共有两个名为 root 的用户连接了Mysql服务，其中 id=4 的是一个空闲连接(Command=Sleep)且空闲时长是47s</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like &apos;wait_timeout&apos;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| wait_timeout  | 28800 |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br><span class="line"></span><br><span class="line">#Mysql定义了空闲连接的最大空闲时长(wait_timeout参数)，如果空闲连接超过这个时长，连接器就会自动将它断开，当然也可以手动断开空闲连接</span><br><span class="line"></span><br><span class="line">mysql&gt; kill connection +4;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>Mysql 的连接跟 HTTP一样，有短连接和长连接的区分：</p>
+<ul>
+<li>短连接是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</li>
+<li>长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接，<strong>推荐使用</strong>。但使用长连接可能会导致 Mysql 占用内存增多，这是因为MySQL在执行查询过程中临时使用内存管理连接对象，这些连接对象资源在连接断开时才会释放。<strong>如果长连接累积下来可能导致内存占用太大，被系统强行杀掉（OOM），从现象上看就是MySQL异常重启了</strong>。<blockquote>
+<p>解决方案有两种：</p>
 <ol>
-<li>如果这张表定义了主键索引，那么这个主键索引就作为聚集索引。</li>
-<li>如果这张表没有定义主键索引，那么该表的第一个唯一非空索引作为聚集索引。</li>
-<li>如果这张表也没有唯一非空索引，那么 InnoDB 内部会生成一个隐藏的主键作为聚集索引，这个隐藏的主键是一个6 个字节的列，该列的值会随着数据的插入自增。</li>
+<li>定期断开长连接。使用一段时间，或者程序里判断执行过一个占用内存的大查询后，断开连接，之后查询再重连；</li>
+<li>如果使用的是MySQL版本 &gt;=5.7，可以在每次执行一个较大操作后，通过执行<code>mysql_reset_connection()</code>来重新初始化连接资源——将连接恢复到刚刚创建完时的状态。</li>
 </ol>
 </blockquote>
 </li>
-<li><p>按【字段特性】分类：<strong>主键索引、唯一索引、普通索引、前缀索引</strong>。</p>
-</li>
-<li>按【字段个数】分类：<strong>单列索引、联合索引</strong>。</li>
 </ul>
-<a id="more"></a>
-<h3 id="按数据结构分类"><a href="#按数据结构分类" class="headerlink" title="按数据结构分类"></a>按数据结构分类</h3><p>从数据结构的角度看，Mysql 常见索引有 B+Tree索引、HASH索引、Full-Text索引。每一种存储引擎支持的索引类型不一定相同，下表总结了Mysql 常见的存储引擎InnoDB、MyISAM 和 Memory 分别支持的索引类型。<br><img src="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png" alt><br>InnoDB 是在 MySQL 5.5 之后成为默认的 MySQL 存储引擎，B+Tree 索引类型也是 MySQL 存储引擎采用最多的索引类型。<br>为了便于理解B+Tree 索引的存储和查询的过程，我们先来创建如下表结构 T：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; create table T(</span><br><span class="line">    -&gt; id int(11) not null auto_increment,</span><br><span class="line">    -&gt; k int(11) not null,</span><br><span class="line">    -&gt; name varchar(64),</span><br><span class="line">    -&gt; PRIMARY KEY (`id`),</span><br><span class="line">    -&gt; KEY `k` (`k`)</span><br><span class="line">    -&gt; ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.09 sec)   </span><br><span class="line"></span><br><span class="line">mysql &gt; insert into T(id,k,name)</span><br><span class="line">    -&gt; values(100,1,&apos;hello&apos;)</span><br><span class="line">    -&gt; values(200,2,&apos;word&apos;);</span><br><span class="line">    -&gt; values(300,3,&apos;!&apos;);</span><br><span class="line">    -&gt; values(500,5,&apos; &apos;);</span><br><span class="line">    -&gt; values(600,6,&apos;I&apos;);</span><br><span class="line">Query OK, 5 rows affected (0.09 sec)</span><br></pre></td></tr></table></figure></p>
-<p>B+Tree 是一种多叉树，叶子节点才存放数据，非叶子节点只存放索引，而且每个节点里的数据是<strong>按主键顺序存放的</strong>（索引组织表）。每个叶子节点都有两个指针，分别指向下一个叶子节点和上一个叶子节点，形成一个双向链表。根据表T 中数据分布情况，主键索引(id)和普通索引(k)对应的两棵B+ 树的示例示意图如下：<br><img src="http://www.sdwangblog.top/blogimg/innodb_cluster_index.png" alt><br>如图，<strong>主键索引和非主键索引的叶子结点内容完全不同，主键索引的叶子节点存的是整行数据，非主键索引的叶子节点内容是主键的值。</strong>。<br>根据上面的索引结构说明，我们来讨论一个问题：<strong>基于主键索引和普通索引的查询有什么区别</strong>？</p>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>连接建立完成后，MYSQL在执行 <strong>查询请求</strong> 的时候，会先查询缓存——以Key-Value的形式【Key是查询语句，Value是结果集】直接缓存在内存中。如果查询能直接在缓存中命中Key，Value就会被直接返回给客户端，否则就继续后面的执行阶段，并在执行完成后将结果存入查询缓存中。</p>
+<p><strong>大多数情况下，不建议使用查询缓存，因为查询缓存往往弊大于利——查询缓存的失效非常频繁，只要有对一个表的更新，这个表上所有的查询缓存都会被清空，MySQL8.0已直接将查询缓存整块功能删掉了</strong>。对于更新压力大的数据库，查询缓存的命中率非常低，除非你的业务是一张静态表，很长时间才更新一次，比如系统配置表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#MySQL 8.0 之前的版本，可以通过将参数 query_cache_type = DEMAND，关闭查询缓存</span><br><span class="line">#对于确定使用查询缓存的语句使用 SQL_CACHE 显式指定：</span><br><span class="line"></span><br><span class="line">&gt; select SQL_CACHE * from table where field=xx;</span><br></pre></td></tr></table></figure></p>
+<h3 id="解析SQL"><a href="#解析SQL" class="headerlink" title="解析SQL"></a>解析SQL</h3><p>分析器主要用来解析SQL语句是来干嘛的，通常分为以下几步：</p>
+<ol>
+<li>词法分析，根据你输入的字符串识别出关键字出来，构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等；</li>
+<li>语法分析，根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法；</li>
+</ol>
+<h3 id="执行SQL"><a href="#执行SQL" class="headerlink" title="执行SQL"></a>执行SQL</h3><p>执行SQL语句流程主要分为三个阶段：</p>
 <ul>
-<li><p>如果语句是 <code>select * from T where id=500;</code>，即主键查询方式，则只需对数级时间内搜索 ID 这颗B+ 树；</p>
-<blockquote>
-<p>B+Tree 存储千万级的数据只需要 3-4 层高度就可以满足，这意味着从千万级的表查询目标数据最多需要 3-4 次磁盘 I/O，所以B+Tree 相比于 B 树和二叉树来说，最大的优势在于查询效率很高，因为即使在数据量很大的情况，查询一个数据的磁盘 I/O 依然维持在 3-4次。</p>
-<p>B+Tree 只在叶子节点存储数据，而 B树的非叶子节点也要存储数据，所以 B+Tree的单个节点数据量更小，在相同磁盘I/O次数下就能查询更多的节点。<br>另外 B+Tree 叶子节点采用双链表连接，适合Mysql 中常见的基于范围的顺序查找，而 B 树无法做到这一点。</p>
-</blockquote>
+<li>prepare 预处理阶段：检查SQL语句中的表或字段是否存在（Mysql 5.7是在词法分析&amp;语法分析之后，prepare 阶段之前做的；Mysql 8.0代码结构变动到此阶段）、扩展表列(*)。</li>
+<li><p>optimize 优化阶段：决定选择使用哪个“最优”（不一定）的执行方案——怎么做，比如表中有多个索引的时决定使用哪个索引，多表关联查询的时决定各表连接顺序等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from core_user where core_user_id=920;</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">| id | select_type | table     | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">|  1 | SIMPLE      | core_user | NULL       | const | PRIMARY       | PRIMARY | 8       | const |    1 |   100.00 | NULL  |</span><br><span class="line">+----+-------------+-----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+</span><br><span class="line">1 row in set, 1 warning (0.05 sec)</span><br><span class="line"></span><br><span class="line">#执行计划中key 表示执行过程中使用了哪个索引，比如PRIMARY 就是主键索引，NULL 表示没使用索引（全表扫描，type=ALL）</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>如果语句是 <code>select * from T where k=5;</code>，即普通索引查询方式，则需要先搜索 k 索引树得到其 id 值为500，再到 ID 索引树上搜索对应记录行。这个过程称为 <strong>回表，也就是说，基于非主键索引的查询需要多扫描一颗索引树，因此在应用中我们应该尽量使用主键查询</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#使用主键查询</span><br><span class="line">mysql &gt; select id from T where k=5;</span><br><span class="line"></span><br><span class="line">#这种在二级索引的 B+Tree 就能查询到结果的过程就叫作「覆盖索引」，也就是只需要查一个 B+Tree 就能找到数据</span><br></pre></td></tr></table></figure>
+<li><p>execute 执行阶段：确定了执行方案，执行器阶段会首先判断下用户对表T是否有执行查询的权限，如果没有就返回权限错误，否则就打开表，根据表的引擎定义去使用对应引擎提供的读写接口（交互以记录为单位），完成语句执行。</p>
 </li>
 </ul>
-<h3 id="按字段特性分类"><a href="#按字段特性分类" class="headerlink" title="按字段特性分类"></a>按字段特性分类</h3><ul>
-<li>主键索引，通常在创建表的时候一起创建<code>PRIMARY KEY pk_index(&#39;col&#39;)）</code>，一张表至多一个，列值不允许为 null；</li>
-<li>唯一索引，一张表可以有多个唯一索引<code>UNIQUE index_name(&#39;col&#39;)</code>，列值必须唯一，允许为 null；</li>
-<li>普通索引，<code>INDEX index_name(&#39;col&#39;)</code>；</li>
-<li>前缀索引，对字符类型字段的前几个字符建立索引<code>INDEX index_name(&#39;col&#39;(length))</code>，而不是整个字段上建立索引；</li>
-</ul>
-<h3 id="按字段个数分类"><a href="#按字段个数分类" class="headerlink" title="按字段个数分类"></a>按字段个数分类</h3><p>从字段个数的角度来看，索引分为单列索引、联合索引（复合索引）。比如 创建了一个 (a, b, c) 联合索引<code>INDEX abc(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</code>，它的B+Tree 示意图(为便于作图只画了(a,b)列，扩展成3 列道理一样)如下：<br><img src="http://www.sdwangblog.top/blogimg/innodb_abc_joint_index.png" alt><br>可以看到，联合索引的非叶子节点用两个字段的值作为 B+Tree 的 key 值。当在联合索引查询数据时，是先按 a 排序，在 a 相同的情况再按 b 排序。因此，使用联合索引时存在<strong>最左匹配原则——按照最左优先的方式进行索引匹配</strong>，如果查询条件不符合最左匹配原则，联合索引会失效。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#如果查询条件是以下这几种，就可以匹配上联合索引：</span><br><span class="line">where a=1；</span><br><span class="line">where a=1 and b=2 and c=3；</span><br><span class="line">where a=1 and b=2；</span><br><span class="line"></span><br><span class="line">#如果查询条件是以下这几种，因为不符合最左匹配原则，所以就无法匹配上联合索引：</span><br><span class="line">where b=2；</span><br><span class="line">where c=3；</span><br><span class="line">where b=2 and c=3；</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，<strong>a（1, 2, 2, 3, 4, 5, 6, 7 ,8） 是全局有序的，b（12，7，8，2，3，8，10，5，2）（ 和 c ）是全局无序，局部相对有序的，而利用索引的前提是索引里的 key 是有序的【指定搜索方向】</strong>。</p>
-<h4 id="联合索引范围查询"><a href="#联合索引范围查询" class="headerlink" title="联合索引范围查询"></a>联合索引范围查询</h4><p>联合索引的最左匹配原则会一直向右匹配直到遇到「范围查询」就会停止匹配。也就是<strong>范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引</strong>。<br>范围查询有很多种，那到底哪些范围查询会导致联合索引的最左匹配原则停止匹配呢？</p>
-<blockquote>
-<p>Q1: select * from t_table where a &gt; 1 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">由于联合索引（二级索引）是先按照 a 字段的值排序的，所以符合 a &gt; 1 条件的二级索引记录肯定是相邻，于是在进行索引扫描的时候，可以定位到符合 a &gt; 1 条件的第一条记录，然后沿着记录所在的链表向后扫描，直到某条记录不符合 a &gt; 1 条件位置。所以 a 字段可以在联合索引的 B+Tree 中进行索引查询。</span><br><span class="line"></span><br><span class="line">但在复合 a&gt;1 条件的二级索引记录的范围里，b 字段的值是无序的，我们不能根据查询条件 b = 2 来进一步减少需要扫描的记录数量</span><br><span class="line"></span><br><span class="line">Q1 这条查询语句只有 a 字段用到了联合索引进行索引查询，而 b 字段并没有使用到联合索引</span><br></pre></td></tr></table></figure>
-<p>在使用联合索引查询的时候，我们可以通过执行计划中的key_len 知道优化器具体使用了多少个字段的搜索条件来形成扫描区间的边界条件。比如 上例中a 和 b 都是 int 类型且不为 NULL 的字段，那么 Q1 这条查询语句执行计划如下，可以看到 key_len 为 4 字节（如果字段允许为 NULL，就在字段类型占用的字节数上加 1，也就是 5 字节）：<br><img src="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q1.png" alt></p>
-<blockquote>
-<p>Q1: select * from t_table where a &gt;= 1 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Q2 和 Q1 的查询语句很像，唯一的区别就是 a 字段的查询条件「大于等于」。</span><br><span class="line"></span><br><span class="line">字段 a 显然可以在联合索引的B+Tree 中进行索引查询。</span><br><span class="line"></span><br><span class="line">虽然在符合 a&gt;= 1 条件的二级索引记录的范围里，b 字段的值是「无序」的，但是对于符合 a = 1 的二级索引记录的范围里，b 字段的值是「有序」的。于是，在确定需要扫描的二级索引的范围时，当二级索引记录的 a 字段值为 1 时，可以通过 b = 2 条件减少需要扫描的二级索引记录范围（即从 a=1&amp;b=2 的第一条记录开始扫描，而不需要从 a=1 的记录开始扫描）</span><br><span class="line"></span><br><span class="line">Q2 这条查询语句 a 和 b 字段都用到了联合索引进行索引查询。</span><br></pre></td></tr></table></figure>
-<p><img src="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q2.png" alt></p>
-<blockquote>
-<p>Q1: select * from t_table where a BETWEEN 2 and 8 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">不同的数据库对 BETWEEN ... AND 处理方式是有差异的。在 MySQL 中，BETWEEN 包含了 value1 和 value2 边界值，类似于 &gt;= and =&lt;。</span><br><span class="line"></span><br><span class="line">类似于 Q2 查询语句， Q3 这条查询语句 a 和 b 字段都用到了联合索引进行索引查询</span><br></pre></td></tr></table></figure>
-<p>综上所示，<strong>联合索引的最左匹配原则，在遇到范围查询（如 &gt;、&lt;）的时候，就会停止匹配，也就是范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引。注意，对于 &gt;=、&lt;=、BETWEEN、like 前缀匹配的范围查询，并不会停止匹配，前面具体例子已解释说明</strong>。</p>
-<h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><p>我们知道，对于联合索引（a, b），在执行 <code>select * from table where a &gt; 1 and b = 2;</code>语句的时候，只有 a 字段能用到索引，那在联合索引的 B+Tree 找到第一个满足条件的主键值（ID 为 2）后，还需要判断其他条件是否满足（看 b 是否等于 2），那是在联合索引里判断？还是回主键索引去判断呢？</p>
-<ul>
-<li>在 MySQL 5.6 之前，只能从 ID2 （主键值）开始一个个回表，到「主键索引」上找出数据行，再对比 b 字段值。</li>
-<li>MySQL5.6引入的 <strong>索引下推优化（index condition pushdown），可以在索引遍历过程中对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数</strong>。<br>当你的查询语句的执行计划里，出现 Extra 为<code>Using index condition</code>，就说明使用了索引下推的优化。<h4 id="索引区分度"><a href="#索引区分度" class="headerlink" title="索引区分度"></a>索引区分度</h4>区分度就是某个字段 column 不同值的个数「除以」表的总行数，如果索引的区分度很小【字段的值分布均匀】，那么无论搜索哪个值都可能得到一半数据。在这些情况下，还不如不要索引，因为 MySQL 还有一个查询优化器，查询优化器发现某个值出现在表的数据行中的百分比（惯用的百分比界线是”30%”）很高的时候，它一般会忽略索引，进行全表扫描。<br>故而，实际开发工作中<strong>建立联合索引时，要把区分度大的字段排在前面，这样区分度大的字段越有可能被更多 SQL 使用到</strong>。<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2>索引可以加快查询速度，但也有一些缺点，比如需要占用物理空间（数量越大占用空间越大）、创建索引和维护索引要耗费时间（随着数据量增大）、会降低表的增删改的效率（B+Tree 要进行动态维护）。所以索引不是万能钥匙，需根据场景使用。</li>
-<li>通常会为 <strong>经常用作查询条件、出现在<code>ORDER BY, GROUP BY</code>语句中的字段列建立索引</strong>，索引的价值是快速定位，并非越多越好(<strong>执行时绝大多数只会选用一个</strong>）。</li>
-<li>尽量选择区分度(Cardinality)高的列作为索引，字段不重复的比率越大需要扫描的记录数就越少；</li>
-<li>数据量太小的表不需要创建索引；</li>
-<li>避免对经常更新的字段创建索引，由于要维护B+Tree的有序性，频繁的重建索引会影响数据库性能；</li>
-</ul>
-<h3 id="常见优化索引的方法"><a href="#常见优化索引的方法" class="headerlink" title="常见优化索引的方法"></a>常见优化索引的方法</h3><ul>
-<li>前缀索引优化，使用前缀索引是为了减少索引字段大小（比如身份证号），可以增加一个索引页中存储的索引值，有效提高索引的查询速度。但是有一定的局限性：**<code>order by</code>中无法使用前缀索引、无法把前缀索引用作覆盖索引；</li>
-<li>覆盖索引优化</li>
-<li>主键索引最好是自增的（除去典型的KV 场景）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">InnoDB 创建主键索引默认为聚簇索引，数据被存放在了 B+Tree 的叶子节点上。也就是说，同一个叶子节点内的各个数据是按主键顺序存放的，因此，每次插入的新数据就会按顺序添加到当前索引节点的位置，不需要移动已有的数据，当页面写满，就会自动开辟一个新页面（纯追加操作，不需要重新移动数据）。</span><br><span class="line"></span><br><span class="line">如果使用非自增主键，由于每次插入主键的索引值都是随机的，比如可能会插入到现有数据页中间的某个位置，这将不得不移动其它数据来满足新数据的插入，甚至需要从一个页面复制数据到另外一个页面——页分裂（页分裂可能会造成大量的内存碎片，导致索引结构不紧凑，从而影响查询效率）</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>另外，主键字段的长度不要太大，因为<strong>主键字段长度越小，意味着二级索引的叶子节点越小（二级索引的叶子节点存放的数据是主键值），这样二级索引占用的空间也就越小</strong>。</p>
-<ul>
-<li>索引最好设置为 NOT NULL<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 索引列存在 NULL 就会导致优化器在做索引选择的时候更加复杂，更加难以优化，因为可为 NULL 的列会使索引、索引统计和值比较都更复杂，比如进行索引统计时，count 会省略值为NULL 的行。</span><br><span class="line"></span><br><span class="line">2. NULL 值是一个没有意义的值，但它会占用物理空间。InnoDB 存储记录的时候，如果表中存在允许为 NULL 的字段，那么行格式中至少会用 1 字节空间存储 NULL 值列表。</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row.png" alt></p>
-<ul>
-<li>防止索引失效<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 使用左或者左右模糊匹配（`like %xx, like %xx%`）</span><br><span class="line"></span><br><span class="line">2. 在查询条件中对索引列做了计算、函数、类型转换操作</span><br><span class="line"></span><br><span class="line">3. 联合索引要能正确使用需要遵循最左匹配原则</span><br><span class="line"></span><br><span class="line">4. 在WHERE 子句中，如果在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><img src="http://www.sdwangblog.top/blogimg/innodb_explain_type.png" alt></p>
+<h2 id="SQL语句的查询流程"><a href="#SQL语句的查询流程" class="headerlink" title="SQL语句的查询流程"></a>SQL语句的查询流程</h2><p>SQL语句大体分为两种：查询语句 or 更新语句（增加、更新、删除）。由于更新流程会涉及到一些重要的日志模块——redo log、binlog、undo log 及各种锁机制，我们就先结合MySQL 基础架构，概览下查询语句<code>SELECT * FROM tb_student A WHERE A.age=&#39;18&#39; AND A.name=&#39;张三&#39;;</code>的执行流程：<br><img src="http://www.sdwangblog.top/blogimg/select_sql_execute_flowchart.png" alt></p>
 
       
 
@@ -365,7 +317,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2022/05/09/深入浅出索引/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2019/05/07/一条SQL语句是如何执行的/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -379,9 +331,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/05/08/MySQL一行记录是怎么存储的/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MySQL一行记录是怎么存储的?
+        
+      </div>
+    </a>
   
-    <a href="/2022/05/08/MySQL一行记录是怎么存储的/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">MySQL一行记录是怎么存储的?</div>
+  
+    <a href="/2019/04/25/使用FFMPEG生成HLS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用FFMPEG生成HLS</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -408,7 +369,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的分类"><span class="toc-number">1.</span> <span class="toc-text">索引的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#按数据结构分类"><span class="toc-number">1.1.</span> <span class="toc-text">按数据结构分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按字段特性分类"><span class="toc-number">1.2.</span> <span class="toc-text">按字段特性分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按字段个数分类"><span class="toc-number">1.3.</span> <span class="toc-text">按字段个数分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#联合索引范围查询"><span class="toc-number">1.3.1.</span> <span class="toc-text">联合索引范围查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引下推"><span class="toc-number">1.3.2.</span> <span class="toc-text">索引下推</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引区分度"><span class="toc-number">1.3.3.</span> <span class="toc-text">索引区分度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">2.</span> <span class="toc-text">高效索引策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常见优化索引的方法"><span class="toc-number">2.1.</span> <span class="toc-text">常见优化索引的方法</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL基本架构"><span class="toc-number">1.</span> <span class="toc-text">MySQL基本架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接器"><span class="toc-number">1.1.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询缓存"><span class="toc-number">1.2.</span> <span class="toc-text">查询缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析SQL"><span class="toc-number">1.3.</span> <span class="toc-text">解析SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行SQL"><span class="toc-number">1.4.</span> <span class="toc-text">执行SQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL语句的查询流程"><span class="toc-number">2.</span> <span class="toc-text">SQL语句的查询流程</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -548,11 +509,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">

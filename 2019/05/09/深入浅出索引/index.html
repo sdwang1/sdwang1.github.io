@@ -6,27 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.sdwangblog.cn">
-  <title>InnoDB中的事务隔离级别和锁关系 | Sdwang1的博客</title>
+  <title>深入浅出索引 | Sdwang1的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="提到事务，你肯定会想到事务的四大特性——A(Atomi  city)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级">
+  <meta name="description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="InnoDB中的事务隔离级别和锁关系">
-<meta property="og:url" content="http://www.sdwangblog.cn/2022/03/12/InnoDB中的事务隔离级别和锁关系/index.html">
+<meta property="og:title" content="深入浅出索引">
+<meta property="og:url" content="http://www.sdwangblog.cn/2019/05/09/深入浅出索引/index.html">
 <meta property="og:site_name" content="Sdwang1的博客">
-<meta property="og:description" content="提到事务，你肯定会想到事务的四大特性——A(Atomi  city)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级">
+<meta property="og:description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/delusion_read_sample.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_four_isolation_level.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sample_innoddb_mvcc_phantom.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/sample_innoddb_insert_lock_format.png">
-<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_cross_insert_deadlock_sample.png">
-<meta property="og:updated_time" content="2023-07-07T02:10:42.310Z">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_cluster_index.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_abc_joint_index.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q1.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q2.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row.png">
+<meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_explain_type.png">
+<meta property="og:updated_time" content="2023-07-11T06:30:16.374Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="InnoDB中的事务隔离级别和锁关系">
-<meta name="twitter:description" content="提到事务，你肯定会想到事务的四大特性——A(Atomi  city)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级">
-<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png">
+<meta name="twitter:title" content="深入浅出索引">
+<meta name="twitter:description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
+<meta name="twitter:image" content="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png">
   
     <link rel="alternative" href="/atom.xml" title="Sdwang1的博客" type="application/atom+xml">
   
@@ -162,104 +163,108 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-InnoDB中的事务隔离级别和锁关系" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-深入浅出索引" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      InnoDB中的事务隔离级别和锁关系
+      深入浅出索引
     </h1>
   
 
         
-        <a href="/2022/03/12/InnoDB中的事务隔离级别和锁关系/" class="archive-article-date">
-  	<time datetime="2022-03-12T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-12</time>
+        <a href="/2019/05/09/深入浅出索引/" class="archive-article-date">
+  	<time datetime="2019-05-09T01:56:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>提到事务，你肯定会想到事务的四大特性——A(Atomi<br>  city)C(Consistency)I(Isolation)D(Durability)。我们今天就主要讨论在多个事务并发的情况下，颇为关键的事务隔离性。<br><strong>InnoDB引擎为我们提供了四种隔离级别——由低到高依次为Read uncommitted、Read committed、Repeatable read、Serializable，这四个级别可以逐次解决脏读、不可重复读、幻读这几类问题</strong>。为了便于大家逐步理解这四种隔离级别，我们情景代入式讲讲“singo”的故事😄(假设下例均为聚簇索引的等值查询)。</p>
-<h2 id="事务的四种隔离级别"><a href="#事务的四种隔离级别" class="headerlink" title="事务的四种隔离级别"></a>事务的四种隔离级别</h2><h3 id="Read-uncommitted-读未提交"><a href="#Read-uncommitted-读未提交" class="headerlink" title="Read uncommitted 读未提交"></a>Read uncommitted 读未提交</h3><p><strong>读未提交，是指一个事务还没提交时，它做的变更就能被别的事务看到（一般都不会用）。在这种隔离级别下，事务在读数据时不加锁，在修改数据时只对数据加了行级S共享锁</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">举个例子，公司发工资了，财务把20000元打到singo的账号上，但是该事务并未提交，而singo正好去查看了账户，发现工资已经到账20000元，乐开了花。不幸的是，财务机智的发现了自己手抖，迅速回滚了事务，并修正singo工资金额为2000元后将事务提交，最后singo实际到账工资只有2000元，singo空欢喜一场。</span><br></pre></td></tr></table></figure></p>
-<p>上述现象就是我们所谓的 <strong>“脏读”：事务A（singo查询工资账户）读取某行记时，事务B（财务给singo发工资）也能对这行记录做读取更新（因为事务A未对数据加任何锁）操作。当事务B对该记录进行更新时，事务A能读到事务B对该记录的修改版本（因为事务B只加了共享读锁）</strong>，即使该修改尚未被提交。如何避免脏读，请看下一个隔离级别。</p>
-<h3 id="Read-committed-读提交"><a href="#Read-committed-读提交" class="headerlink" title="Read committed 读提交"></a>Read committed 读提交</h3><p><strong>读提交是指，一个事务提交之后，它做的变更才会被其他事务看到。在这种隔离级别下，事务对当前被读取的数据不加锁(在 InnoDB的 MVCC机制下，每次语句执行过程中都关闭read view并重新创建当前一份read view)；事务在更新某数据前（就是发生更新的瞬间），必须先对其加 行级X排他锁，直到事务结束才释放</strong>。</p>
-<p><strong>当隔离级别为Read committed，就可以避免脏读</strong>。事务B（财务给singo发工资）在更新数据的时候，会对该行数据增加排他锁直到事务结束才会释放锁。所以在事务B没有提交之前，事务A（singo查询工资账户）都能不对数据进行读取。<strong>Read committed是大多数数据库的默认级别，比如Sql Server , Oracle</strong>。</p>
-<a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">singo拿着工资卡去消费，系统读取到卡里确实有2000元，而此时她的老婆也正好在逛某宝，要把singo工资卡的2000元转到卖家账户，并在singo之前提交了事务，当singo扣款时，发现工资卡余额不足而扣款失败，singo十分纳闷，明明卡里有钱，为何......</span><br></pre></td></tr></table></figure>
-<p><img src="http://www.sdwangblog.top/blogimg/unrepeatable_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“不可重复读”：事务A（singo消费）在读取某行的一瞬间，事务B（singo的老婆网上转账）是不能修改改行数据，但只要事务A读取完该行数据，事务B就可以对该行数据增加排他锁并进行修改</strong>。如何解决不可重复读，请看下一个隔离级别。</p>
-<h3 id="Repeatable-read-可重复读"><a href="#Repeatable-read-可重复读" class="headerlink" title="Repeatable read 可重复读"></a>Repeatable read 可重复读</h3><p><strong>可重复读是指，一个事务执行过程中看到的数据总是跟这个事务在启动时看到的数据是一致的。在这种隔离级别下，事务对当前被读取的数据不加锁（在 InnoDB的 MVCC机制下，只会在第一次执行语句时生成一个read view, 之后就不会重复生成了）；事务在更新某数据前（就是发生更新的瞬间），必须先对其加 行级X排他锁，直到事务结束才释放</strong>。</p>
-<p><strong>当隔离级别设置为Repeatable read时，就可以避免不可重复读</strong>。当singo拿着工资卡去消费时，一旦系统开始读取工资卡信息（即事务开始），singo的老婆就不可能对该记录进行修改，也就是singo的老婆不能在此时转账。<strong>Repeatable read 是MySQL的默认级别</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">singo的老婆工作在银行部门，她时常通过银行内部系统查看singo的信用卡消费记录。有一天，她正在查询到singo当月信用卡的总消费金额（select sum(amount) from transaction where card_no=卡号 and month = 本月）为80元，而singo此时正好在外面胡吃海塞后在收银台买单，新增了一条1000元的消费记录（insert into transaction ... ），并提交了事务，随后singo的老婆将singo当月信用卡消费的明细打印到A4纸上，却发现消费总额为1080元，singo的老婆很诧异，以为出现了幻觉。。。</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.top/blogimg/delusion_read_sample.png" alt><br>上述现象就是我们所谓的 <strong>“幻读”，事务A（select sum(amount) from transaction where card_no=卡号 and month = 本月）如果查询到20条符合条件的记录，事务B（insert transaction … ）由于没有任何事务对表加锁（如果在插入记录时检查到 duplicate key（或者有一个被标记删除的duplicate key）则会加LOCK_S锁），操作自然能顺利执行，当事务A再次执行查询时返回的结果就变成了21条，所以事务A的两次范围查询结果并不相同就是我们所谓的 “幻读”</strong>。如何解决幻读，请看下一个隔离级别。</p>
-<h3 id="Serializable-串行化"><a href="#Serializable-串行化" class="headerlink" title="Serializable 串行化"></a>Serializable 串行化</h3><p><strong>串行化，是最高的事务隔离级别，同时代价也花费最高，性能很低，一般很少使用。在这种隔离级别下，事务在读取数据时，必须先对其加 行级S共享锁，直到事务结束才释放；事务在更新数据时，必须先对其加 行级X排他锁，直到事务结束才释放</strong>（Lock-Based CC）。</p>
-<p>Serializable隔离级别解决了脏读、不可重复读、幻读等读现象，但以直接Lock-Based CC的方式(类似于Java多线程中的锁)来避免并行访问，执行效率极低。</p>
-<h2 id="设置当前隔离级别"><a href="#设置当前隔离级别" class="headerlink" title="设置当前隔离级别"></a>设置当前隔离级别</h2><p>每个隔离级别都有它自己的适用场景，你要根据自己的业务情况来选用。上述依次介绍的MySQL四种隔离级别，<strong>随着数据库隔离级别的提高（锁的越严实），数据的并发能力也是逐步下降，如何在并发性和隔离性之间做一个很好的权衡是个至关重要的问题</strong>。<br><img src="http://www.sdwangblog.top/blogimg/innodb_four_isolation_level.png" alt><br>你可以在命令行使用–transaction-isolation选项，或在选项文件(my.cnf)里设置该选项——<code>transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}</code>，为所有连接设置默认隔离级别。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看默认事务隔离级别</span><br><span class="line">mysql&gt; show variables like &apos;tx_isolation&apos;;</span><br><span class="line">+---------------+-----------------+</span><br><span class="line">| tx_isolation  | REPEATABLE-READ |</span><br><span class="line">+---------------+-----------------+</span><br><span class="line"></span><br><span class="line">#使用SET TRNSACTION改变单个会话或者所有新进连接的事务隔离级别</span><br><span class="line">mysql &gt; SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br><span class="line">#使用SESSION关键字表示为当前连接上执行的事务设置隔离级别；使用GLOBAL关键字在全局上所有新连接设置隔离级别(需要SUPER权限)</span><br><span class="line"></span><br><span class="line">#查询全局和会话事务隔离级别</span><br><span class="line">mysql &gt; SELECT @@global.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@session.tx_isolation;</span><br><span class="line">mysql &gt; SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure></p>
+        <p><strong>索引是存储引擎用于快速找到记录的一种数据结构</strong>，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。</p>
+<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><p>我们可以按照四个角度来分类索引：</p>
+<ul>
+<li>按【数据结构】分类：<strong>B+ tree索引、Hash索引、Full-text索引</strong>。</li>
+<li><p>按【物理存储】分类：<strong>聚簇索引（主键索引）、二级索引（辅助索引）</strong>。</p>
 <blockquote>
-<p>补充说明，<code>begin/start transaction</code>命令并不是一个事务的起点，在执行它们后的第一个操作InnoDB表的语句，事务才真正启动。如果你想要马上启动一个事务，可以使用<code>start transaction with consistent snapshot</code>命令。</p>
-</blockquote>
-<h2 id="悲观锁和乐观锁（MVCC）"><a href="#悲观锁和乐观锁（MVCC）" class="headerlink" title="悲观锁和乐观锁（MVCC）"></a>悲观锁和乐观锁（MVCC）</h2><p>数据库提供的锁机制——行锁、表锁、读锁、写锁都是悲观锁类型，为了保证事务的隔离性，就需要一致性锁定读/写。鉴于各式的高并发场景，MySQL、ORACLE、PostgreSQL等成熟的数据库，出于性能考虑，都是使用了以乐观锁为理论基础的<strong>MVCC（Multiversion Concurrency Control,多版本并发控制）——对数据库的任何修改的提交都不会直接覆盖之前的数据，而是产生一个新版本与老版本共存，使得读取数据（除非用SELECT… FOR UPDATE）时可以完全不加锁（读写不冲突）而是根据隔离级别选择要读取哪个版本的数据</strong>。<br>特别说明，MVCC的实现没有固定的规范，每个数据库都会有不同的实现方式，这里主要讨论InnoDB的MVCC实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">悲观锁：认为被它保护的数据是极其不安全的，每时每刻都有可能变动，一个事务拿到悲观锁后，其他任何事务（本系统当前其他事务，及外部系统的事务处理）都不能对该数据进行修改，只能等待锁被释放才可以执行（长事务的性能开销往往无法承受）。</span><br><span class="line"></span><br><span class="line">乐观锁：认为数据的变动不会太频繁，它允许多个事务同时对数据进行变动，通常利用数据版本（ Version ）记录机制负责多个事务对数据进行修改，比如MVCC。</span><br><span class="line"></span><br><span class="line">参见https://mp.weixin.qq.com/s?__biz=MzI3NzE0NjcwMg==&amp;mid=2650123700&amp;idx=2&amp;sn=1522953f2f887653e5cf0c6bfd05e5a0&amp;chksm=f36bb095c41c39839f79deaef71092d860774f00b4266d91f38993412137e4fb6e270a0fa20a&amp;scene=27#wechat_redirect</span><br></pre></td></tr></table></figure></p>
-<h3 id="MVCC在InnoDB中的实现"><a href="#MVCC在InnoDB中的实现" class="headerlink" title="MVCC在InnoDB中的实现"></a>MVCC在InnoDB中的实现</h3><p>InnoDB中的MVCC，是通过在每行记录后保存两个隐藏的列来实现的：<strong>数据行的版本号DB_TRX_ID（创建时间），删除版本号DB_ROLL_PT（过期/删除时间）</strong>，比如下例所示（查询语句看不到隐藏列）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; CREATE TABLE `test_zq` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `test_id` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line"></span><br><span class="line">#使用显式启动事务，避免长连接导致意外的长事务</span><br><span class="line">mysql&gt; show variables like &apos;AUTOCOMMIT&apos;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| autocommit    | ON    |</span><br><span class="line">+---------------+-------+</span><br><span class="line">mysql&gt; set autocommit=1;</span><br></pre></td></tr></table></figure></p>
-<p>MVCC 只在 REPEATABLE READ 和 READ COMMITTED 两个隔离级别下工作，其他两个隔离级别都和 MVCC不兼容（因为 READ UNCOMMITTED 总是读取最新的数据行，而不是符合当前事务版本的数据行；SERIALIZABLE 则会对所有读取的行都加锁）。下面我们看一下在 REPEATABLE READ 隔离级别下，MVCC 具体是如何操作的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#插入数据，记录当前全局事务ID到DB_TRX_ID列</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; insert into `test_zq` (`id`, `test_id`) values(&apos;5&apos;,&apos;68&apos;);</span><br><span class="line">mysql &gt; insert into `test_zq` (`id`, `test_id`) values(&apos;6&apos;,&apos;78&apos;);</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | NULL       |</span><br><span class="line">| 6          | 78           | 1          | NULL       |</span><br><span class="line"></span><br><span class="line">#删除数据，数据并未被直接删除，而是记录了删除版本号（假设当前事务ID为3）到DB_ROLL_PT列</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; delete from `test_zq` where id=6;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | NULL       |</span><br><span class="line">| 6          | 78           | 1          | 3          |</span><br><span class="line"></span><br><span class="line">#更新数据，首先复制一条当前记录行数据，同时标记这行数据DB_TRX_ID列为当前事务版本号（假设当前事务ID为10），最后将原来数据行的DB_ROLL_PT列标记为当前事务版本号</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; update test_zq set test_id = 22 where id = 5;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 68           | 1          | 10         |        //待清理链表</span><br><span class="line">| 6          | 78           | 1          | 3          |</span><br><span class="line">| 5          | 22           | 10         | NULL       |</span><br><span class="line">#当DB_ROLL_PT不为空，且它比当前还没结束的事务ID中最小的一个还要小时，这些多出的“无用数据”会被后台任务（PostgreSQL中叫做“VACUUM”进程，MySQL InnoDB中，叫做“purge“）定时清理掉</span><br></pre></td></tr></table></figure></p>
-<p><strong>InnoDB会根据以下两个条件检查每行记录，只有同时符合下述两个条件的记录才能作为查询结果返回</strong>：</p>
+<p>当我们基于 InnoDB 引擎创建一张表的时候，都会创建一个唯一的聚集索引【B+ 树叶子结点存放表中一行行的数据】：</p>
 <ol>
-<li>查找 <strong>创建版本号&lt;=(早于)当前事务版本号的数据行记录</strong>，这样确保读取到的数据是当前事务开始前已经存在的数据，或是自身事务改变过的数据；</li>
-<li>查找 <strong>删除版本号为NULL或大于当前事务版本号的记录</strong>，这样确保查询出来的数据行记录在事务开启前未被删除；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#假设当前事务版本号为12</span><br><span class="line">mysql &gt; begin;</span><br><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">mysql &gt; commit;</span><br><span class="line">+------------+--------------+------------+------------+</span><br><span class="line">| id         | test_id      | DB_TRX_ID  | DB_ROLL_PT |</span><br><span class="line">| 5          | 22           | 10         | NULL       |</span><br></pre></td></tr></table></figure>
-</li>
+<li>如果这张表定义了主键索引，那么这个主键索引就作为聚集索引。</li>
+<li>如果这张表没有定义主键索引，那么该表的第一个唯一非空索引作为聚集索引。</li>
+<li>如果这张表也没有唯一非空索引，那么 InnoDB 内部会生成一个隐藏的主键作为聚集索引，这个隐藏的主键是一个6 个字节的列，该列的值会随着数据的插入自增。</li>
 </ol>
-<p><strong>通过 MVCC机制，虽然每条记录都需要额外的存储空间（undo log / redo log），更多的行检查工作以及一些额外的维护工作，但可以使大多数读操作都不用加锁(历史版本数据)，读数据操作变得高效简单，并且也能保证只会读取到符合标准的行，只锁住必要行</strong>。<br>对于这种读取历史数据的方式，我们称之为快照读(snapshot read)，相对应地，直接读取数据库当前版本数据的方式，我们称为当前读(current read)：</p>
-<ul>
-<li><strong>快照读</strong>：读取“历史数据”(select * from table …)，<strong>MVCC机制会非阻塞地读取undo中已经提交的数据（DB_ROLL_PT指向某undo log空间）</strong>；</li>
-<li><strong>当前读</strong>：加悲观锁处理当前数据(update、insert、delete、select for update等语句)；<h2 id="InnoDB的-RR隔离级别与幻读现象"><a href="#InnoDB的-RR隔离级别与幻读现象" class="headerlink" title="InnoDB的 RR隔离级别与幻读现象"></a>InnoDB的 RR隔离级别与幻读现象</h2>在 InnoDB的 RR隔离级别，MVCC 显然<strong>解决了快照读的幻读问题</strong>（版本号），那能否避免当前读的幻读问题呢？不妨来实验一下。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; show create table class_teacher;</span><br><span class="line">+---------------+-------------------------------------+</span><br><span class="line">| class_teacher | CREATE TABLE `class_teacher` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `class_name` varchar(64) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `teacher_id` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `index_teacher_id` (`teacher_id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 |</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><img src="http://www.sdwangblog.top/blogimg/sample_innoddb_mvcc_phantom.png" alt></p>
-<blockquote>
-<p>TIP：insert 操作等待时长的控制参数为 innodb_lock_wait_timeout，默认 50s; 等待超时后事务是否回滚的控制参数为 innodb_rollback_on_timeout，默认为 OFF(死锁除外)。</p>
 </blockquote>
-<p>上例中，在 InnoDB RR隔离级别下，事务 A在 update操作后（加 <strong>Next-Key Lock</strong>），事务 B就无法插入新数据（直到事务 A commit或 timeout），这样事务 A在 update操作前后读的数据就保持一致，避免了幻读。</p>
-<h3 id="Next-Key锁"><a href="#Next-Key锁" class="headerlink" title="Next-Key锁"></a>Next-Key锁</h3><p><strong>A next-key lock is a combination of a record lock on the index record and a gap lock on the gap before the index record——记录锁和GAP锁的合并</strong>。<br>记录锁（Record Lock）是锁住记录行的；间隙锁（GAP锁），顾名思义就锁定间隙——某个范围，一旦间隙锁定，其他事务就不能在这个间隙插入/修改记录。<br><strong>InnoDB自动使用 GAP锁/Next-Key锁的条件如下</strong>：</p>
+</li>
+<li><p>按【字段特性】分类：<strong>主键索引、唯一索引、普通索引、前缀索引</strong>。</p>
+</li>
+<li>按【字段个数】分类：<strong>单列索引、联合索引</strong>。</li>
+</ul>
+<a id="more"></a>
+<h3 id="按数据结构分类"><a href="#按数据结构分类" class="headerlink" title="按数据结构分类"></a>按数据结构分类</h3><p>从数据结构的角度看，Mysql 常见索引有 B+Tree索引、HASH索引、Full-Text索引。每一种存储引擎支持的索引类型不一定相同，下表总结了Mysql 常见的存储引擎InnoDB、MyISAM 和 Memory 分别支持的索引类型。<br><img src="http://www.sdwangblog.top/blogimg/mysql_engine_support_index.png" alt><br>InnoDB 是在 MySQL 5.5 之后成为默认的 MySQL 存储引擎，B+Tree 索引类型也是 MySQL 存储引擎采用最多的索引类型。<br>为了便于理解B+Tree 索引的存储和查询的过程，我们先来创建如下表结构 T：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; create table T(</span><br><span class="line">    -&gt; id int(11) not null auto_increment,</span><br><span class="line">    -&gt; k int(11) not null,</span><br><span class="line">    -&gt; name varchar(64),</span><br><span class="line">    -&gt; PRIMARY KEY (`id`),</span><br><span class="line">    -&gt; KEY `k` (`k`)</span><br><span class="line">    -&gt; ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.09 sec)   </span><br><span class="line"></span><br><span class="line">mysql &gt; insert into T(id,k,name)</span><br><span class="line">    -&gt; values(100,1,&apos;hello&apos;)</span><br><span class="line">    -&gt; values(200,2,&apos;word&apos;);</span><br><span class="line">    -&gt; values(300,3,&apos;!&apos;);</span><br><span class="line">    -&gt; values(500,5,&apos; &apos;);</span><br><span class="line">    -&gt; values(600,6,&apos;I&apos;);</span><br><span class="line">Query OK, 5 rows affected (0.09 sec)</span><br></pre></td></tr></table></figure></p>
+<p>B+Tree 是一种多叉树，叶子节点才存放数据，非叶子节点只存放索引，而且每个节点里的数据是<strong>按主键顺序存放的</strong>（索引组织表）。每个叶子节点都有两个指针，分别指向下一个叶子节点和上一个叶子节点，形成一个双向链表。根据表T 中数据分布情况，主键索引(id)和普通索引(k)对应的两棵B+ 树的示例示意图如下：<br><img src="http://www.sdwangblog.top/blogimg/innodb_cluster_index.png" alt><br>如图，<strong>主键索引和非主键索引的叶子结点内容完全不同，主键索引的叶子节点存的是整行数据，非主键索引的叶子节点内容是主键的值。</strong>。<br>根据上面的索引结构说明，我们来讨论一个问题：<strong>基于主键索引和普通索引的查询有什么区别</strong>？</p>
 <ul>
-<li>InnoDB在 REPEATABLE READ事务隔离级别运行，并禁用innodb_locks_unsafe_for_binlog系统变量（默认情况）。</li>
-<li>通过聚簇索引（主键）或 唯一索引访问数据时，InnoDB会降级为 Record lock——锁住记录行，但<strong>当其访问的值不存在（或不确定，比如范围检索）时也会产生 GAP锁</strong>；通过非唯一索引访问数据时，<strong>只要加锁都会产生 GAP锁</strong>；无索引访问数据时，InnoDB会将聚簇索引中的所有行以及间隙都锁起来（无法准确定位），功能上等于锁表（其他事务不能修改、删除、添加记录）；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">For locking reads (SELECT with FOR UPDATE or LOCK IN SHARE MODE), UPDATE, and DELETE statements, locking depends on whether the statement uses a unique index with a unique search condition, or a range-type search condition.</span><br><span class="line"></span><br><span class="line">For a unique index with a unique search condition, InnoDB locks only the index record found, not the gap before it.</span><br><span class="line"></span><br><span class="line">For other search conditions, InnoDB locks the index range scanned, using gap locks or next-key locks to block insertions by other sessions into the gaps covered by the range. For information about gap locks and next-key locks, see Section 15.5.1, “InnoDB Locking”.</span><br></pre></td></tr></table></figure>
+<li><p>如果语句是 <code>select * from T where id=500;</code>，即主键查询方式，则只需对数级时间内搜索 ID 这颗B+ 树；</p>
+<blockquote>
+<p>B+Tree 存储千万级的数据只需要 3-4 层高度就可以满足，这意味着从千万级的表查询目标数据最多需要 3-4 次磁盘 I/O，所以B+Tree 相比于 B 树和二叉树来说，最大的优势在于查询效率很高，因为即使在数据量很大的情况，查询一个数据的磁盘 I/O 依然维持在 3-4次。</p>
+<p>B+Tree 只在叶子节点存储数据，而 B树的非叶子节点也要存储数据，所以 B+Tree的单个节点数据量更小，在相同磁盘I/O次数下就能查询更多的节点。<br>另外 B+Tree 叶子节点采用双链表连接，适合Mysql 中常见的基于范围的顺序查找，而 B 树无法做到这一点。</p>
+</blockquote>
+</li>
+<li><p>如果语句是 <code>select * from T where k=5;</code>，即普通索引查询方式，则需要先搜索 k 索引树得到其 id 值为500，再到 ID 索引树上搜索对应记录行。这个过程称为 <strong>回表，也就是说，基于非主键索引的查询需要多扫描一颗索引树，因此在应用中我们应该尽量使用主键查询</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#使用主键查询</span><br><span class="line">mysql &gt; select id from T where k=5;</span><br><span class="line"></span><br><span class="line">#这种在二级索引的 B+Tree 就能查询到结果的过程就叫作「覆盖索引」，也就是只需要查一个 B+Tree 就能找到数据</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>接下来，我们简单演示下 GAP锁的作用过程。假如当前test_zq表中id值的分布情况如下示例，那么它存在的隐藏间隙有：(-infinity, 1)，(1, 5)，(5, 7)，(7, 11)，(11, +infinity)。<strong>检索条件加间隙锁锁定的区域为：根据检索条件向左寻找最靠近检索条件的记录值A，作为左区间，向右寻找最靠近检索条件的记录值B作为右区间，即锁定的间隙为（A，B）</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  1 |      10 |</span><br><span class="line">|  5 |      50 |</span><br><span class="line">|  7 |      70 |</span><br><span class="line">| 11 |     110 |</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; select * from test_zq where id between 5 and 7 for update;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; BEGIN; INSERT INTO `test_zq` VALUES (4, 40); COMMIT; # 正常执行</span><br><span class="line"></span><br><span class="line">mysql(事务3) &gt; BEGIN; INSERT INTO `test_zq` VALUES (6, 60); COMMIT; # 阻塞</span><br><span class="line"></span><br><span class="line">mysql(事务4) &gt; BEGIN; INSERT INTO `test_zq` VALUES (8, 80); COMMIT; # 阻塞</span><br><span class="line"></span><br><span class="line">mysql(事务5) &gt; BEGIN; INSERT INTO `test_zq` VALUES (9, 90); COMMIT; # 阻塞</span><br><span class="line"></span><br><span class="line">mysql(事务6) &gt; BEGIN; INSERT INTO `test_zq` VALUES (11, 110); COMMIT; # 阻塞</span><br><span class="line"></span><br><span class="line">mysql(事务7) &gt; BEGIN; INSERT INTO `test_zq` VALUES (12, 120); COMMIT; # 正常执行</span><br></pre></td></tr></table></figure></p>
-<p>上例当我们给 (5, 7) 这个区间锁的时候（select … between 5 and 7 for update），<strong>InnoDB的Next-key锁锁定范围为：间隙锁为(5,7)、(7,11) ，记录锁为id=5、7——[5,11]</strong>，而再次插入数据（<strong>插入意向锁</strong>）就有了如上所示的INSERT操作阻塞现象。</p>
+<h3 id="按字段特性分类"><a href="#按字段特性分类" class="headerlink" title="按字段特性分类"></a>按字段特性分类</h3><ul>
+<li>主键索引，通常在创建表的时候一起创建<code>PRIMARY KEY pk_index(&#39;col&#39;)）</code>，一张表至多一个，列值不允许为 null；</li>
+<li>唯一索引，一张表可以有多个唯一索引<code>UNIQUE index_name(&#39;col&#39;)</code>，列值必须唯一，允许为 null；</li>
+<li>普通索引，<code>INDEX index_name(&#39;col&#39;)</code>；</li>
+<li>前缀索引，对字符类型字段的前几个字符建立索引<code>INDEX index_name(&#39;col&#39;(length))</code>，而不是整个字段上建立索引；</li>
+</ul>
+<h3 id="按字段个数分类"><a href="#按字段个数分类" class="headerlink" title="按字段个数分类"></a>按字段个数分类</h3><p>从字段个数的角度来看，索引分为单列索引、联合索引（复合索引）。比如 创建了一个 (a, b, c) 联合索引<code>INDEX abc(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</code>，它的B+Tree 示意图(为便于作图只画了(a,b)列，扩展成3 列道理一样)如下：<br><img src="http://www.sdwangblog.top/blogimg/innodb_abc_joint_index.png" alt><br>可以看到，联合索引的非叶子节点用两个字段的值作为 B+Tree 的 key 值。当在联合索引查询数据时，是先按 a 排序，在 a 相同的情况再按 b 排序。因此，使用联合索引时存在<strong>最左匹配原则——按照最左优先的方式进行索引匹配</strong>，如果查询条件不符合最左匹配原则，联合索引会失效。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#如果查询条件是以下这几种，就可以匹配上联合索引：</span><br><span class="line">where a=1；</span><br><span class="line">where a=1 and b=2 and c=3；</span><br><span class="line">where a=1 and b=2；</span><br><span class="line"></span><br><span class="line">#如果查询条件是以下这几种，因为不符合最左匹配原则，所以就无法匹配上联合索引：</span><br><span class="line">where b=2；</span><br><span class="line">where c=3；</span><br><span class="line">where b=2 and c=3；</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，<strong>a（1, 2, 2, 3, 4, 5, 6, 7 ,8） 是全局有序的，b（12，7，8，2，3，8，10，5，2）（ 和 c ）是全局无序，局部相对有序的，而利用索引的前提是索引里的 key 是有序的【指定搜索方向】</strong>。</p>
+<h4 id="联合索引范围查询"><a href="#联合索引范围查询" class="headerlink" title="联合索引范围查询"></a>联合索引范围查询</h4><p>联合索引的最左匹配原则会一直向右匹配直到遇到「范围查询」就会停止匹配。也就是<strong>范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引</strong>。<br>范围查询有很多种，那到底哪些范围查询会导致联合索引的最左匹配原则停止匹配呢？</p>
 <blockquote>
-<p>补充说明，GAP锁并不是啥”好油“，若检索条件范围过大，InnoDB会将整个范围内所有的索引键值全部锁定，很容易对性能造成影响。</p>
+<p>Q1: select * from t_table where a &gt; 1 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
 </blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">由于联合索引（二级索引）是先按照 a 字段的值排序的，所以符合 a &gt; 1 条件的二级索引记录肯定是相邻，于是在进行索引扫描的时候，可以定位到符合 a &gt; 1 条件的第一条记录，然后沿着记录所在的链表向后扫描，直到某条记录不符合 a &gt; 1 条件位置。所以 a 字段可以在联合索引的 B+Tree 中进行索引查询。</span><br><span class="line"></span><br><span class="line">但在复合 a&gt;1 条件的二级索引记录的范围里，b 字段的值是无序的，我们不能根据查询条件 b = 2 来进一步减少需要扫描的记录数量</span><br><span class="line"></span><br><span class="line">Q1 这条查询语句只有 a 字段用到了联合索引进行索引查询，而 b 字段并没有使用到联合索引</span><br></pre></td></tr></table></figure>
+<p>在使用联合索引查询的时候，我们可以通过执行计划中的key_len 知道优化器具体使用了多少个字段的搜索条件来形成扫描区间的边界条件。比如 上例中a 和 b 都是 int 类型且不为 NULL 的字段，那么 Q1 这条查询语句执行计划如下，可以看到 key_len 为 4 字节（如果字段允许为 NULL，就在字段类型占用的字节数上加 1，也就是 5 字节）：<br><img src="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q1.png" alt></p>
 <blockquote>
-<p>介绍下INSERT操作加锁模式：<br>inserted 行加排他锁——record lock 不会阻塞其他会话插入间隙。<br>inserting 前会加插入意向间隙锁（与LOCK_S | LOCK_GAP | LOCK_X锁模式冲突），它预示多事务并发插入相同的 GAP，只要插入不是相同位置就允许并发，这样 insert操作无须加真正的gap lock。<br>假设发生了唯一键冲突，重复记录行将会加上读锁。当多个会话并发插入相同行且某个会话已经获得该行排他锁，就将导致死锁。</p>
+<p>Q1: select * from t_table where a &gt;= 1 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
 </blockquote>
-<p><img src="http://www.sdwangblog.top/blogimg/sample_innoddb_insert_lock_format.png" alt></p>
-<h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>根据加锁的范围，InnoDB锁类型大致可分为全局锁、表级锁和行锁三类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Q2 和 Q1 的查询语句很像，唯一的区别就是 a 字段的查询条件「大于等于」。</span><br><span class="line"></span><br><span class="line">字段 a 显然可以在联合索引的B+Tree 中进行索引查询。</span><br><span class="line"></span><br><span class="line">虽然在符合 a&gt;= 1 条件的二级索引记录的范围里，b 字段的值是「无序」的，但是对于符合 a = 1 的二级索引记录的范围里，b 字段的值是「有序」的。于是，在确定需要扫描的二级索引的范围时，当二级索引记录的 a 字段值为 1 时，可以通过 b = 2 条件减少需要扫描的二级索引记录范围（即从 a=1&amp;b=2 的第一条记录开始扫描，而不需要从 a=1 的记录开始扫描）</span><br><span class="line"></span><br><span class="line">Q2 这条查询语句 a 和 b 字段都用到了联合索引进行索引查询。</span><br></pre></td></tr></table></figure>
+<p><img src="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q2.png" alt></p>
+<blockquote>
+<p>Q1: select * from t_table where a BETWEEN 2 and 8 and b = 2，联合索引 (a,b) 哪个字段用到了联合索引的 B+Tree？</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">不同的数据库对 BETWEEN ... AND 处理方式是有差异的。在 MySQL 中，BETWEEN 包含了 value1 和 value2 边界值，类似于 &gt;= and =&lt;。</span><br><span class="line"></span><br><span class="line">类似于 Q2 查询语句， Q3 这条查询语句 a 和 b 字段都用到了联合索引进行索引查询</span><br></pre></td></tr></table></figure>
+<p>综上所示，<strong>联合索引的最左匹配原则，在遇到范围查询（如 &gt;、&lt;）的时候，就会停止匹配，也就是范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引。注意，对于 &gt;=、&lt;=、BETWEEN、like 前缀匹配的范围查询，并不会停止匹配，前面具体例子已解释说明</strong>。</p>
+<h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><p>我们知道，对于联合索引（a, b），在执行 <code>select * from table where a &gt; 1 and b = 2;</code>语句的时候，只有 a 字段能用到索引，那在联合索引的 B+Tree 找到第一个满足条件的主键值（ID 为 2）后，还需要判断其他条件是否满足（看 b 是否等于 2），那是在联合索引里判断？还是回主键索引去判断呢？</p>
 <ul>
-<li><p><strong>全局锁</strong>：对整个数据库实例加锁，使得整个库处于只读状态，这会让其他线程的以下语句都阻塞：数据更新语句（数据的增删改）、数据定义语句（包括建表、修改表结构等）和更新类事务的提交语句。典型使用场景是 <strong>全库逻辑备份</strong>；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; flush tables with read lock;</span><br><span class="line"></span><br><span class="line">#只读全库逻辑备份并非良策：1. 如果你在主库上备份，那么在备份期间都不能执行更新，业务基本上就得停摆；2.如果你在从库上备份，那么备份期间从库不能执行主库同步过来的 binlog，会导致主从延迟</span><br><span class="line"></span><br><span class="line">#mysqldump –-single-transaction参数会在导出数据前启动一个事务，确保拿到一致性视图（RR隔离级别），同时 MVCC的支持，这期间数据是可以正常更新的（一致性读是好，但前提是引擎要支持这个隔离级别，否则就需用 FTWRL 命令了）。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>表级锁</strong>：表级别的锁有两种：表锁 和 元数据锁(meta data lock, MDL)；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#表锁的语法是lock tables...read/write，可以用 unlock tables 主动释放锁，也可以在客户端断开时自动释放(类似FTWRL)</span><br><span class="line">#lock tables 语法除了会限制别的线程的读写外，也限定了本线程接下来的操作对象</span><br><span class="line"></span><br><span class="line">#MDL(metadata lock)不需要显式使用，访问表时会被自动加上</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>X排他锁</strong>：也叫写锁，行级锁，一旦加了写锁后，其它事务不能再获得任何锁；</p>
-</li>
-<li><strong>I意向锁</strong>：表级锁，表达一个事务想要获取什么，可分为意向共享锁（表中某几行的共享锁）、意向排他锁（表中某几行的排他锁）。有了意向锁的话，当需要給表加表锁时就不需要逐行遍历是否有行锁，只要判断是否有意向锁即可；</li>
-<li><strong>自增长锁</strong>：用于提升并发插入性能的特殊表锁机制，有几个特点：1.SQL执行完就释放锁，而不是事务执行完；2.对于 insert…select 大数据量插入会影响插入性能，因为会阻塞另外一个事务执行；3.使用不同模式来调整自增加锁的方式（mysql&gt;=5.7 innodb_autoinc_lock_mode参数）；</li>
+<li>在 MySQL 5.6 之前，只能从 ID2 （主键值）开始一个个回表，到「主键索引」上找出数据行，再对比 b 字段值。</li>
+<li>MySQL5.6引入的 <strong>索引下推优化（index condition pushdown），可以在索引遍历过程中对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数</strong>。<br>当你的查询语句的执行计划里，出现 Extra 为<code>Using index condition</code>，就说明使用了索引下推的优化。<h4 id="索引区分度"><a href="#索引区分度" class="headerlink" title="索引区分度"></a>索引区分度</h4>区分度就是某个字段 column 不同值的个数「除以」表的总行数，如果索引的区分度很小【字段的值分布均匀】，那么无论搜索哪个值都可能得到一半数据。在这些情况下，还不如不要索引，因为 MySQL 还有一个查询优化器，查询优化器发现某个值出现在表的数据行中的百分比（惯用的百分比界线是”30%”）很高的时候，它一般会忽略索引，进行全表扫描。<br>故而，实际开发工作中<strong>建立联合索引时，要把区分度大的字段排在前面，这样区分度大的字段越有可能被更多 SQL 使用到</strong>。<h2 id="高效索引策略"><a href="#高效索引策略" class="headerlink" title="高效索引策略"></a>高效索引策略</h2>索引可以加快查询速度，但也有一些缺点，比如需要占用物理空间（数量越大占用空间越大）、创建索引和维护索引要耗费时间（随着数据量增大）、会降低表的增删改的效率（B+Tree 要进行动态维护）。所以索引不是万能钥匙，需根据场景使用。</li>
+<li>通常会为 <strong>经常用作查询条件、出现在<code>ORDER BY, GROUP BY</code>语句中的字段列建立索引</strong>，索引的价值是快速定位，并非越多越好(<strong>执行时绝大多数只会选用一个</strong>）。</li>
+<li>尽量选择区分度(Cardinality)高的列作为索引，字段不重复的比率越大需要扫描的记录数就越少；</li>
+<li>数据量太小的表不需要创建索引；</li>
+<li>避免对经常更新的字段创建索引，由于要维护B+Tree的有序性，频繁的重建索引会影响数据库性能；</li>
 </ul>
-<p>你还可以使用命令行查看数据库当前加锁信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from information_schema.INNODB_LOCKS;</span><br><span class="line">mysql &gt; select * from information_schema.INNODB_LOCK_WAITS;</span><br></pre></td></tr></table></figure></p>
-<h2 id="花絮彩蛋"><a href="#花絮彩蛋" class="headerlink" title="花絮彩蛋"></a>花絮彩蛋</h2><p>至此大家应该对“InnoDB的事务隔离级别和加锁机制”都有了一定程度的了解，那。。。不妨来尝试分析下面这个“死锁案例”的发生原因（后附有执行过程解析图）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; select * from test_zq;</span><br><span class="line">+----+---------+</span><br><span class="line">| id | test_id |</span><br><span class="line">+----+---------+</span><br><span class="line">|  1 |      10 |</span><br><span class="line">|  5 |      50 |</span><br><span class="line">|  7 |      70 |</span><br><span class="line">| 11 |     110 |</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; begin; delete from test_zq where test_id=80;</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; begin; delete from test_zq where test_id=90;</span><br><span class="line"></span><br><span class="line">mysql(事务1) &gt; insert test_zq select 8,80;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql(事务2) &gt; insert test_zq select 9,90;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">#事务管理器选择回滚事务 2，事务 1 插入操作执行成功</span><br><span class="line">mysql(事务1) &gt;</span><br><span class="line">Query OK, 1 row affected (13.66 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.sdwangblog.top/blogimg/innodb_cross_insert_deadlock_sample.png" alt></p>
-<h2 id="一些优化锁性能的建议"><a href="#一些优化锁性能的建议" class="headerlink" title="一些优化锁性能的建议"></a>一些优化锁性能的建议</h2><ul>
-<li>尽量使用较低的隔离级别；</li>
-<li>精心设计索引， 并尽量使用索引访问数据， 使加锁更精确， 从而减少锁冲突的机会；</li>
-<li>选择合理的事务大小，小事务发生锁冲突的几率也更小；</li>
-<li>给记录集显示加锁时，最好一次性请求足够级别的锁。比如要修改数据的话，最好直接申请排他锁，而不是先申请共享锁，修改时再请求排他锁，这样容易产生死锁；</li>
-<li>不同的程序访问一组表时，应尽量约定以相同的顺序访问各表，对一个表而言，尽可能以固定的顺序存取表中的行。这样可以大大减少死锁的机会；</li>
-<li>尽量用相等条件访问数据，这样可以避免间隙锁对并发插入的影响；</li>
-<li>不要申请超过实际需要的锁级别；</li>
-<li>对于一些特定的事务，可以使用表锁来提高处理速度或减少死锁的可能；</li>
+<h3 id="常见优化索引的方法"><a href="#常见优化索引的方法" class="headerlink" title="常见优化索引的方法"></a>常见优化索引的方法</h3><ul>
+<li>前缀索引优化，使用前缀索引是为了减少索引字段大小（比如身份证号），可以增加一个索引页中存储的索引值，有效提高索引的查询速度。但是有一定的局限性：**<code>order by</code>中无法使用前缀索引、无法把前缀索引用作覆盖索引；</li>
+<li>覆盖索引优化</li>
+<li>主键索引最好是自增的（除去典型的KV 场景）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">InnoDB 创建主键索引默认为聚簇索引，数据被存放在了 B+Tree 的叶子节点上。也就是说，同一个叶子节点内的各个数据是按主键顺序存放的，因此，每次插入的新数据就会按顺序添加到当前索引节点的位置，不需要移动已有的数据，当页面写满，就会自动开辟一个新页面（纯追加操作，不需要重新移动数据）。</span><br><span class="line"></span><br><span class="line">如果使用非自增主键，由于每次插入主键的索引值都是随机的，比如可能会插入到现有数据页中间的某个位置，这将不得不移动其它数据来满足新数据的插入，甚至需要从一个页面复制数据到另外一个页面——页分裂（页分裂可能会造成大量的内存碎片，导致索引结构不紧凑，从而影响查询效率）</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
+<p>另外，主键字段的长度不要太大，因为<strong>主键字段长度越小，意味着二级索引的叶子节点越小（二级索引的叶子节点存放的数据是主键值），这样二级索引占用的空间也就越小</strong>。</p>
+<ul>
+<li>索引最好设置为 NOT NULL<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 索引列存在 NULL 就会导致优化器在做索引选择的时候更加复杂，更加难以优化，因为可为 NULL 的列会使索引、索引统计和值比较都更复杂，比如进行索引统计时，count 会省略值为NULL 的行。</span><br><span class="line"></span><br><span class="line">2. NULL 值是一个没有意义的值，但它会占用物理空间。InnoDB 存储记录的时候，如果表中存在允许为 NULL 的字段，那么行格式中至少会用 1 字节空间存储 NULL 值列表。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="http://www.sdwangblog.top/blogimg/innodb_compact_row.png" alt></p>
+<ul>
+<li>防止索引失效<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 使用左或者左右模糊匹配（`like %xx, like %xx%`）</span><br><span class="line"></span><br><span class="line">2. 在查询条件中对索引列做了计算、函数、类型转换操作</span><br><span class="line"></span><br><span class="line">3. 联合索引要能正确使用需要遵循最左匹配原则</span><br><span class="line"></span><br><span class="line">4. 在WHERE 子句中，如果在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="http://www.sdwangblog.top/blogimg/innodb_explain_type.png" alt></p>
 
       
 
@@ -360,7 +365,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2022/03/12/InnoDB中的事务隔离级别和锁关系/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.sdwangblog.cn/2019/05/09/深入浅出索引/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -374,18 +379,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2022/05/07/一条SQL语句是如何执行的/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/05/27/InnoDB 中使用全文索引/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          一条SQL语句是如何执行的
+          InnoDB 中使用全文索引
         
       </div>
     </a>
   
   
-    <a href="/2021/04/26/How-to-watermarking-PDF-more-effectively-[-Reprint-]/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">How to watermarking PDF more effectively[Reprint]</div>
+    <a href="/2019/05/08/MySQL一行记录是怎么存储的/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySQL一行记录是怎么存储的?</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -412,7 +417,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的四种隔离级别"><span class="toc-number">1.</span> <span class="toc-text">事务的四种隔离级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-uncommitted-读未提交"><span class="toc-number">1.1.</span> <span class="toc-text">Read uncommitted 读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-committed-读提交"><span class="toc-number">1.2.</span> <span class="toc-text">Read committed 读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repeatable-read-可重复读"><span class="toc-number">1.3.</span> <span class="toc-text">Repeatable read 可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializable-串行化"><span class="toc-number">1.4.</span> <span class="toc-text">Serializable 串行化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置当前隔离级别"><span class="toc-number">2.</span> <span class="toc-text">设置当前隔离级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#悲观锁和乐观锁（MVCC）"><span class="toc-number">3.</span> <span class="toc-text">悲观锁和乐观锁（MVCC）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MVCC在InnoDB中的实现"><span class="toc-number">3.1.</span> <span class="toc-text">MVCC在InnoDB中的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB的-RR隔离级别与幻读现象"><span class="toc-number">4.</span> <span class="toc-text">InnoDB的 RR隔离级别与幻读现象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Next-Key锁"><span class="toc-number">4.1.</span> <span class="toc-text">Next-Key锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB锁类型"><span class="toc-number">5.</span> <span class="toc-text">InnoDB锁类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#花絮彩蛋"><span class="toc-number">6.</span> <span class="toc-text">花絮彩蛋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些优化锁性能的建议"><span class="toc-number">7.</span> <span class="toc-text">一些优化锁性能的建议</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的分类"><span class="toc-number">1.</span> <span class="toc-text">索引的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#按数据结构分类"><span class="toc-number">1.1.</span> <span class="toc-text">按数据结构分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按字段特性分类"><span class="toc-number">1.2.</span> <span class="toc-text">按字段特性分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#按字段个数分类"><span class="toc-number">1.3.</span> <span class="toc-text">按字段个数分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#联合索引范围查询"><span class="toc-number">1.3.1.</span> <span class="toc-text">联合索引范围查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引下推"><span class="toc-number">1.3.2.</span> <span class="toc-text">索引下推</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引区分度"><span class="toc-number">1.3.3.</span> <span class="toc-text">索引区分度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高效索引策略"><span class="toc-number">2.</span> <span class="toc-text">高效索引策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常见优化索引的方法"><span class="toc-number">2.1.</span> <span class="toc-text">常见优化索引的方法</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -552,11 +557,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
