@@ -3,7 +3,7 @@
 
 本博客使用 Github Page + Hexo 搭建的，主题采用的是[yilia](https://github.com/litten/hexo-theme-yilia) ，在此感谢作者[litten](https://github.com/litten)。
 
-以下为个人参照教程在Mac上的搭建的过程总结，以及中途“小插曲”记录，希望对大家能有帮助。
+首次尝试，仅为个人参照教程在Mac上的搭建的过程总结，以及中途“小插曲”记录，希望对大家能有帮助。
 ### 准备工作
 hexo是一款基于Node.js的静态博客框架，所以需要安装些必须的配置环境；
 - 安装Node.js（个人采用了源码编译安装）；

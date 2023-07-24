@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_joint_index_explain_q2.png">
 <meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_compact_row.png">
 <meta property="og:image" content="http://www.sdwangblog.top/blogimg/innodb_explain_type.png">
-<meta property="og:updated_time" content="2023-07-11T06:30:16.374Z">
+<meta property="og:updated_time" content="2023-07-12T06:23:41.450Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入浅出索引">
 <meta name="twitter:description" content="索引是存储引擎用于快速找到记录的一种数据结构，形象的说就是索引是数据的目录。MySQL索引是在存储引擎层实现的，不同的存储引擎的索引工作方式并不一样，即使多个存储引擎支持同一种类型的索引，其底层实现也可能不同（没有统一的索引标准）。 索引的分类我们可以按照四个角度来分类索引：  按【数据结构】分类：B+ tree索引、Hash索引、Full-text索引。 按【物理存储】分类：聚簇索引（主键索引）">
@@ -249,7 +249,7 @@
 <li>避免对经常更新的字段创建索引，由于要维护B+Tree的有序性，频繁的重建索引会影响数据库性能；</li>
 </ul>
 <h3 id="常见优化索引的方法"><a href="#常见优化索引的方法" class="headerlink" title="常见优化索引的方法"></a>常见优化索引的方法</h3><ul>
-<li>前缀索引优化，使用前缀索引是为了减少索引字段大小（比如身份证号），可以增加一个索引页中存储的索引值，有效提高索引的查询速度。但是有一定的局限性：**<code>order by</code>中无法使用前缀索引、无法把前缀索引用作覆盖索引；</li>
+<li>前缀索引优化，使用前缀索引是为了减少索引字段大小（比如身份证号），可以增加一个索引页中存储的索引值，有效提高索引的查询速度。但是有一定的局限性：<code>order by</code>中无法使用前缀索引、无法把前缀索引用作覆盖索引；</li>
 <li>覆盖索引优化</li>
 <li>主键索引最好是自增的（除去典型的KV 场景）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">InnoDB 创建主键索引默认为聚簇索引，数据被存放在了 B+Tree 的叶子节点上。也就是说，同一个叶子节点内的各个数据是按主键顺序存放的，因此，每次插入的新数据就会按顺序添加到当前索引节点的位置，不需要移动已有的数据，当页面写满，就会自动开辟一个新页面（纯追加操作，不需要重新移动数据）。</span><br><span class="line"></span><br><span class="line">如果使用非自增主键，由于每次插入主键的索引值都是随机的，比如可能会插入到现有数据页中间的某个位置，这将不得不移动其它数据来满足新数据的插入，甚至需要从一个页面复制数据到另外一个页面——页分裂（页分裂可能会造成大量的内存碎片，导致索引结构不紧凑，从而影响查询效率）</span><br></pre></td></tr></table></figure>
 </li>
